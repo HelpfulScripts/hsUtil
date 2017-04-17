@@ -1,0 +1,28 @@
+.navbar-inner {
+	background-image: linear-gradient(to bottom, #ffffff, #f2f8f2);
+}
+
+.form-search > ul.nav > li.module {
+	background-color: #eaf3ea;
+}
+
+input[type="text"]:focus {
+	border-color: rgba(82, 236, 168, 0.8);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 236, 168, 0.6);
+}
+
+ul.methods > li, ul.properties > li {
+	background-color: #faf8fa;
+}
+
+ul.methods > li > h3, ul.properties > li > h3 {
+	background-color: #e3efe3;
+}
+
+.table-striped tbody > tr:nth-child(odd) > td {
+	background-color: #fefefe;
+}
+
+a, a:hover {
+	color: #00A055;
+}

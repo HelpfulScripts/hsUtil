@@ -1,4 +1,4 @@
-/// <reference path="../../../typings/index.d.ts" />
+/// <reference path="../node_modules/typings/index.d.ts" />
 
 import date from './date';
 
