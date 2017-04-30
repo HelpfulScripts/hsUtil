@@ -1,6 +1,7 @@
 /// <reference path="../node_modules/typings/index.d.ts" />
 
-import * as cp from './cpUtils';
+import { exec } from './index';
+
 
 describe("cpUtil", () => {
     let cpOut:string, cpErr:string, cpE:string;
@@ -10,7 +11,7 @@ describe("cpUtil", () => {
     };
 
     function call(cmd:string, done:any) {
-        cp.exec(cmd)
+        exec(cmd)
             .then((result:{out:string, err:string}) => { helper.out(result.out, result.err); done(); })
             .catch((e:string) => { helper.err(e); done(); });
     }

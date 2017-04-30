@@ -1,6 +1,7 @@
 
 /*global module:false*/
 module.exports = function(grunt) {
+    const libs = '../../../../libs/node/';
 
 	// Project configuration.
 	grunt.initConfig({
@@ -22,7 +23,12 @@ module.exports = function(grunt) {
 		// Task configuration.
 		copy: {
 		    pre: {},
-			post: {}
+			post: {
+	            files: [{
+	                expand: true, flatten: true,
+	                src: ['dist/*.js'],    dest: libs+"hsNode/"
+	            }]
+            }
 		},
 		
         tslint: {
@@ -42,10 +48,10 @@ module.exports = function(grunt) {
         ts: {
             options: {
                 module:             "commonjs",
-                moduleResolution:   "node",
+                moduleResolution:   "node"
             },
             src : {
-                outDir:     "dist/src",
+                outDir:     "dist",
                 src: ["src/**/*.ts", "!src/**/*.spec.ts"],
                 tsconfig:   true,
             },
@@ -99,14 +105,14 @@ module.exports = function(grunt) {
 		watch: {
 			gruntfile: {
                 files: ['Gruntfile.js'],
-				tasks: ['makeAll']
+				tasks: ['make']
 			},
 			js: {
-				files: ['src/**/*.ts'],
+				files: ['src/**/*.ts', '!src/**/*.spec.ts'],
 				tasks: ['build']
 			},
 			specs: {
-				files: ['spec/**/*.ts'],
+				files: ['src/**/*.spec.ts'],
 				tasks: ['test']
 			}
 		}
@@ -124,6 +130,7 @@ module.exports = function(grunt) {
     grunt.registerTask('doc', ['clean:docs', 'typedoc']);
     grunt.registerTask('test', ['clean:spec', 'tslint:spec', 'ts:spec', 'jasmine_node']);
     grunt.registerTask('build', ['clean:src', 'tslint:src', 'ts:src']);
-	grunt.registerTask('makeAll', ['build', 'test', 'doc']);
+    grunt.registerTask('deploy', ['copy:post']);
+	grunt.registerTask('make', ['build', 'test', 'doc']);
     grunt.registerTask('default', ['build', 'test', 'watch']);	
 };

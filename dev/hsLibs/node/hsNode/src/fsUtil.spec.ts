@@ -1,6 +1,6 @@
 /// <reference path="../node_modules/typings/index.d.ts" />
 
-import * as util from './fsUtil';
+import { fsUtil } from './';
 
 
 describe("hsFSutil", function() {
@@ -24,7 +24,7 @@ describe("hsFSutil", function() {
 		describe(process.cwd() , () => {
 			beforeEach(done => {
 				called = getCalled(done);
-				util.pathExists(process.cwd()).then(called.resolved).catch(called.rejected);
+				fsUtil.pathExists(process.cwd()).then(called.resolved).catch(called.rejected);
 			});
 			
 			it('should exist', function(done) {
@@ -37,7 +37,7 @@ describe("hsFSutil", function() {
 		describe('./' , () => { 
 			beforeEach(done => {
 				called = getCalled(done);
-				util.pathExists('./').then(called.resolved).catch(called.rejected);
+				fsUtil.pathExists('./').then(called.resolved).catch(called.rejected);
 			});
 			
 			it('should exist', function(done) {
@@ -50,7 +50,7 @@ describe("hsFSutil", function() {
 		describe('/does-not-exists/', () => {
 			beforeEach(done => {
 				called = getCalled(done);
-				util.pathExists('/does-not-exists/').then(called.resolved).catch(called.rejected);
+				fsUtil.pathExists('/does-not-exists/').then(called.resolved).catch(called.rejected);
 			});
 			
 			it('should not exist', function(done) {
@@ -65,7 +65,7 @@ describe("hsFSutil", function() {
 		describe(dir, () => {
 			beforeEach(done => {
 				called = getCalled(done);
-				util.isFile(dir).then(called.resolved).catch(called.rejected);
+				fsUtil.isFile(dir).then(called.resolved).catch(called.rejected);
 			});
 		
 			it('should not be a file', function(done) {
@@ -78,11 +78,11 @@ describe("hsFSutil", function() {
 		describe('Gruntfile.js' , () => {
             let rp:string;
 			beforeEach(done => {
-                util.realPath(dir+'/../../Gruntfile.js')
+                fsUtil.realPath(dir+'/../../Gruntfile.js')
                 .then((path:string) => {
     				called = getCalled(done);
                     rp = path;
-    				util.isFile(rp).then(called.resolved).catch(called.rejected);
+    				fsUtil.isFile(rp).then(called.resolved).catch(called.rejected);
                 });
 			});
 		
@@ -96,7 +96,7 @@ describe("hsFSutil", function() {
 		describe('./Gruntfile.js' , () => { 
 			beforeEach(done => {
 				called = getCalled(done);
-				util.isFile('./Gruntfile.js').then(called.resolved).catch(called.rejected);
+				fsUtil.isFile('./Gruntfile.js').then(called.resolved).catch(called.rejected);
 			});
 			
 			it('should be a file', function(done) {
@@ -109,7 +109,7 @@ describe("hsFSutil", function() {
 		describe('./Gruntfile.js2', () => {
 			beforeEach(done => {
 				called = getCalled(done);
-				util.isFile('./Gruntfile.js2').then(called.resolved).catch(called.rejected);
+				fsUtil.isFile('./Gruntfile.js2').then(called.resolved).catch(called.rejected);
 			});
 			 
 			it('should not be a file an not be rejected', function(done) {
@@ -124,7 +124,7 @@ describe("hsFSutil", function() {
 		describe(process.cwd(), () => {
 			beforeEach(done => {
 				called = getCalled(done);
-				util.isDirectory(process.cwd()).then(called.resolved).catch(called.rejected);
+				fsUtil.isDirectory(process.cwd()).then(called.resolved).catch(called.rejected);
 			});
 		
 			it('should be a directory', function(done) {
@@ -137,7 +137,7 @@ describe("hsFSutil", function() {
 		describe('./' , () => { 
 			beforeEach(done => {
 				called = getCalled(done);
-				util.isDirectory('./').then(called.resolved).catch(called.rejected);
+				fsUtil.isDirectory('./').then(called.resolved).catch(called.rejected);
 			});
 			
 			it('should be a directory', function(done) {
@@ -150,7 +150,7 @@ describe("hsFSutil", function() {
 		describe('./Gruntfile.js', () => {
 			beforeEach(done => {
 				called = getCalled(done);
-				util.isDirectory('./Gruntfile.js').then(called.resolved).catch(called.rejected);
+				fsUtil.isDirectory('./Gruntfile.js').then(called.resolved).catch(called.rejected);
 			});
 			 
 			it('valid file should not be a directory an not be rejected', function(done) {
@@ -163,7 +163,7 @@ describe("hsFSutil", function() {
 		describe('./Gruntfile.js2', () => {
 			beforeEach(done => {
 				called = getCalled(done);
-				util.isDirectory('./Gruntfile.js2').then(called.resolved).catch(called.rejected);
+				fsUtil.isDirectory('./Gruntfile.js2').then(called.resolved).catch(called.rejected);
 			});
 			 
 			it('invalid file should not be a directory an not be rejected', function(done) {
@@ -178,7 +178,7 @@ describe("hsFSutil", function() {
 		describe(__dirname , () => {
 			beforeEach(done => {
 				called = getCalled(done);
-				util.isLink(__dirname).then(called.resolved).catch(called.rejected);
+				fsUtil.isLink(__dirname).then(called.resolved).catch(called.rejected);
 			});
 			
 			it('should not be a link', function(done) {
@@ -191,7 +191,7 @@ describe("hsFSutil", function() {
 		describe(dir+'/../../node_Modules' , () => {
 			beforeEach(done => {
 				called = getCalled(done);
-				util.isLink(dir+'/../../node_Modules').then(called.resolved).catch(called.rejected);
+				fsUtil.isLink(dir+'/../../node_Modules').then(called.resolved).catch(called.rejected);
 			});
 			
 			it('should be a link', function(done) {
@@ -205,7 +205,7 @@ describe("hsFSutil", function() {
 		describe(__dirname+'/abc' , () => {
 			beforeEach(done => {
 				called = getCalled(done);
-				util.isLink(__dirname+'/abc').then(called.resolved).catch(called.rejected);
+				fsUtil.isLink(__dirname+'/abc').then(called.resolved).catch(called.rejected);
 			});
 			
 			it('should reject for invalid names', function(done) {
@@ -221,7 +221,7 @@ describe("hsFSutil", function() {
 		describe(__dirname , () => {
 			beforeEach(done => {
 				called = getCalled(done);
-				util.readDir(__dirname).then(called.resolved).catch(called.rejected);
+				fsUtil.readDir(__dirname).then(called.resolved).catch(called.rejected);
 			});
 			
 			it('should return list of spec files', function(done) {
@@ -236,7 +236,7 @@ describe("hsFSutil", function() {
 		describe(__dirname+'/abcde' , () => {
 			beforeEach(done => {
 				called = getCalled(done);
-				util.readDir(__dirname+'/abcde').then(called.resolved).catch(called.rejected);
+				fsUtil.readDir(__dirname+'/abcde').then(called.resolved).catch(called.rejected);
 			});
 			
 			it('should reject', function(done) {
@@ -253,7 +253,7 @@ describe("hsFSutil", function() {
 		describe(file1 , () => {
 			beforeEach(done => {
 				called = getCalled(done);
-				util.readFile(file1, false).then(called.resolved).catch(called.rejected);
+				fsUtil.readFile(file1, false).then(called.resolved).catch(called.rejected);
 			});
 			
 			it('should read binary file', function(done) {
@@ -267,7 +267,7 @@ describe("hsFSutil", function() {
 		describe(file2 , () => {
 			beforeEach(done => {
 				called = getCalled(done);
-				util.readFile(file2, false).then(called.resolved).catch(called.rejected);
+				fsUtil.readFile(file2, false).then(called.resolved).catch(called.rejected);
 			});
 			
 			it('should reject', function(done) {
@@ -284,7 +284,7 @@ describe("hsFSutil", function() {
 		describe(__dirname+'/fsUtil.spec.js' , () => {
 			beforeEach(done => {
 				called = getCalled(done);
-				util.readTextFile(__dirname+'/fsUtil.spec.js').then(called.resolved).catch(called.rejected);
+				fsUtil.readTextFile(__dirname+'/fsUtil.spec.js').then(called.resolved).catch(called.rejected);
 			});
 			
 			it('should read text file', function(done) {
@@ -301,7 +301,7 @@ describe("hsFSutil", function() {
 		describe(file , () => {
 			beforeEach(done => {
 				called = getCalled(done);
-				util.readJsonFile(file).then(called.resolved).catch(called.rejected);
+				fsUtil.readJsonFile(file).then(called.resolved).catch(called.rejected);
 			});
 			
 			it('should read text file', function(done) {
@@ -318,7 +318,7 @@ describe("hsFSutil", function() {
 		describe(dir+'binFile' , () => {
 			beforeEach(done => {
 				called = getCalled(done);
-				util.writeFile(dir+'binFile', 'test2', false).then(called.resolved).catch(called.rejected);
+				fsUtil.writeFile(dir+'binFile', 'test2', false).then(called.resolved).catch(called.rejected);
 			});
 			
 			it('should resolve', function(done) {
@@ -330,7 +330,7 @@ describe("hsFSutil", function() {
 			describe('check for bin file', function() {
 				beforeEach(done => {
 					called = getCalled(done);
-					util.readFile(dir+'binFile', false).then(called.resolved).catch(called.rejected);
+					fsUtil.readFile(dir+'binFile', false).then(called.resolved).catch(called.rejected);
 				});
 				
 				it('should exist', function(done) {
@@ -350,7 +350,7 @@ describe("hsFSutil", function() {
 		describe(dir+'binFile2' , () => {
 			beforeEach(done => {
 				called = getCalled(done);
-				util.readFile(dir+'binFile2', false).then(called.resolved).catch(called.rejected);
+				fsUtil.readFile(dir+'binFile2', false).then(called.resolved).catch(called.rejected);
 			});
 			
 			it('should reject', function(done) {
@@ -365,7 +365,7 @@ describe("hsFSutil", function() {
 		describe(dir+'txtFile' , () => {
 			beforeEach(done => {
 				called = getCalled(done);
-				util.writeTextFile(dir+'txtFile', 'test2').then(called.resolved).catch(called.rejected);
+				fsUtil.writeTextFile(dir+'txtFile', 'test2').then(called.resolved).catch(called.rejected);
 			});
 			
 			it('should resolve', function(done) {
@@ -377,7 +377,7 @@ describe("hsFSutil", function() {
 			describe('check for text file', function() {
 				beforeEach(done => {
 					called = getCalled(done);
-					util.readTextFile(dir+'txtFile').then(called.resolved).catch(called.rejected);
+					fsUtil.readTextFile(dir+'txtFile').then(called.resolved).catch(called.rejected);
 				});
 				
 				it('should exist', function(done) {
@@ -399,7 +399,7 @@ describe("hsFSutil", function() {
 		describe(dir+'jsnFile' , () => {
 			beforeEach(done => {
 				called = getCalled(done);
-				util.writeJsonFile(dir+'jsnFile', {"name":"test2"}).then(called.resolved).catch(called.rejected);
+				fsUtil.writeJsonFile(dir+'jsnFile', {"name":"test2"}).then(called.resolved).catch(called.rejected);
 			});
 			
 			it('should resolve', function(done) {
@@ -411,7 +411,7 @@ describe("hsFSutil", function() {
 			describe('check for json file', function() {
 				beforeEach(done => {
 					called = getCalled(done);
-					util.readJsonFile(dir+'jsnFile').then(called.resolved).catch(called.rejected);
+					fsUtil.readJsonFile(dir+'jsnFile').then(called.resolved).catch(called.rejected);
 				});
 				
 				it('should exist', function(done) {
@@ -431,7 +431,7 @@ describe("hsFSutil", function() {
 		describe(dir+'jsn2File' , () => {
 			beforeEach(done => {
 				called = getCalled(done);
-				util.writeJsonFile(dir+'jsn2File', 'test2').then(called.resolved).catch(called.rejected);
+				fsUtil.writeJsonFile(dir+'jsn2File', 'test2').then(called.resolved).catch(called.rejected);
 			});
 			
 			it('should resolve', function(done) {
@@ -443,7 +443,7 @@ describe("hsFSutil", function() {
 			describe('check for json file', function() {
 				beforeEach(done => {
 					called = getCalled(done);
-					util.readJsonFile(dir+'jsn2File').then(called.resolved).catch(called.rejected);
+					fsUtil.readJsonFile(dir+'jsn2File').then(called.resolved).catch(called.rejected);
 				});
 				
 				it('should exist', function(done) {

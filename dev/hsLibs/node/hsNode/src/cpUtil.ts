@@ -26,7 +26,7 @@ import log from './log';
  * @param {object} options the options to pass along to the shell
  * @return {Promise} promise to provide the stdout and stderr streams form the child process.
  */
-export function exec(command:string, options?:any) {
+function exec(command:string, options?:any) {
     return new Promise((resolve:(result:{out:string, err:string})=>void, reject:(e:string)=>void) => {
         cp.exec(command, options, (error:string, stdout:string, stderr:string) => {
             if (error) {
@@ -39,3 +39,4 @@ export function exec(command:string, options?:any) {
     });
 }
 
+export { exec };

@@ -15,7 +15,6 @@ import log from './log';
  * - {@link hsNode.fsUtil#methods_readDir readDir}
  * - {@link hsNode.fsUtil#methods_readFile readFile}
  * - {@link hsNode.fsUtil#methods_readTextFile readTextFile}
- * - {@link hsNode.fsUtil#methods_readTextFile readTextFile}
  * - {@link hsNode.fsUtil#methods_readJsonFile readJsonFile}
  * - {@link hsNode.fsUtil#methods_writeFile writeFile}
  * - {@link hsNode.fsUtil#methods_writeTextFile writeTextFile}
@@ -65,7 +64,7 @@ function lstat(thePath:string) {
  * @param {string} thePath the path to check
  * @return {Promise} promise to provide the real canonical system path.
  */
-export function realPath(thePath:string) {
+function realPath(thePath:string) {
 	return new Promise((resolve:(path:string)=>void, reject:(err:any)=>void) => {
 		fs.realpath(thePath, (err:any, resolvedPath:string) => err? reject(err) : resolve(resolvedPath) );
 	});
@@ -81,7 +80,7 @@ export function realPath(thePath:string) {
  * @param {string} thePath the path to check
  * @return {Promise} promise to provide `true` or `false`
  */
-export function pathExists(thePath:string) {
+function pathExists(thePath:string) {
 	return stat(thePath).then((stats:any) => stats.path).catch(() => false);
 };
 
@@ -93,7 +92,7 @@ export function pathExists(thePath:string) {
  * @param {string} thePath the path to check
  * @return {Promise} promise to provide `true` or `false`
  */
-export function isFile(thePath:string) {
+function isFile(thePath:string) {
 	return stat(thePath).then((stats:any) => stats.isFile()? stats.path : false).catch(() => false);
 };
 
@@ -105,19 +104,19 @@ export function isFile(thePath:string) {
  * @param {string} thePath the path to check
  * @return {Promise} promise to provide `true` or `false`
  */
-export function isDirectory(thePath:string) {
+function isDirectory(thePath:string) {
 	return stat(thePath).then((stats:any) => stats.isDirectory()? stats.path : false).catch(() => false);
 };
 
 /**
  * @ngdoc object
- * @name isDirectory
+ * @name isLink
  * @methodOf hsNode.fsUtil
  * @description determines if `thePath` is a directory and promises to provide `true` or `false`.
  * @param {string} thePath the path to check
  * @return {Promise} promise to provide `true` or `false`
  */
-export function isLink(thePath:string) {
+function isLink(thePath:string) {
 	return lstat(thePath).then((stats:any) => stats.isSymbolicLink()? stats.path : false).catch(() => false);
 };
 
@@ -129,7 +128,7 @@ export function isLink(thePath:string) {
  * @param {string} thePath the path to check
  * @return {Promise} promise to provide a list of directory entries.
  */
-export function readDir(thePath:string) {
+function readDir(thePath:string) {
 	return Promise.resolve(thePath)
 		.then(realPath)
 		.then(thePath => new Promise((resolve:(files:any)=>void, reject:(err:any)=>void) => {
@@ -153,7 +152,7 @@ export function readDir(thePath:string) {
  * @param {boolean=} [isText=true] `true`|`false` if file should be read as `utf8`|binary 
  * @return {Promise} promise to provide file content.
  */
-export function readFile(thePath:string, isText=true) {
+function readFile(thePath:string, isText=true) {
 	return new Promise((resolve, reject) => {
 		let encoding = isText? 'utf8' : undefined;
 		fs.readFile(thePath, encoding, (err:any, data:any) => {
@@ -171,7 +170,7 @@ export function readFile(thePath:string, isText=true) {
  * @param {string} thePath the path to read
  * @return {Promise} promise to provide file content.
  */
-export function readTextFile(thePath:string) { 
+function readTextFile(thePath:string) { 
 	return readFile(thePath, true); 
 };
 
@@ -183,7 +182,7 @@ export function readTextFile(thePath:string) {
  * @param {string} thePath the path to read
  * @return {Promise} promise to provide file content.
  */
-export function readJsonFile(thePath:string) {
+function readJsonFile(thePath:string) {
     return Promise.resolve(thePath)
 	.then(readTextFile)
 	.then(JSON.parse);
@@ -199,7 +198,7 @@ export function readJsonFile(thePath:string) {
  * @param {boolean} isText `true`|`false` if file should be read as `utf8`|binary 
  * @return {Promise} promise to provide nothing.
  */
-export function writeFile(thePath:string, content:string, isText:boolean) {
+function writeFile(thePath:string, content:string, isText:boolean) {
 	return new Promise((resolve, reject) => {
 		var encoding = isText? 'utf8' : undefined;
 	    fs.writeFile(thePath, content, encoding, (err:any) => err? reject(err) : resolve());
@@ -215,7 +214,7 @@ export function writeFile(thePath:string, content:string, isText:boolean) {
  * @param {object} content the content to write
  * @return {Promise} promise to provide nothing.
  */
-export function writeStream(thePath:string, content:string) {
+function writeStream(thePath:string, content:string) {
 	return new Promise((resolve, reject) => {
         let s = fs.createWriteStream(thePath, {flags:'w', mode:0o666});
         s.on('error', (src:any) => reject(src));
@@ -232,7 +231,7 @@ export function writeStream(thePath:string, content:string) {
  * @param {string} thePath the path to write
  * @return {Promise} promise to provide nothing.
  */
-export function writeTextFile(thePath:string, content:string) { 
+function writeTextFile(thePath:string, content:string) { 
 	return writeFile(thePath, content, true);
 };
 
@@ -245,8 +244,24 @@ export function writeTextFile(thePath:string, content:string) {
  * @param {object} obj the object to write
  * @return {Promise} promise to provide nothing.
  */
-export function writeJsonFile(thePath:string, obj:any) {
+function writeJsonFile(thePath:string, obj:any) {
     return Promise.resolve(obj)
 	.then(JSON.stringify)
 	.then(data => writeTextFile(thePath, data)); 
 }
+
+export const fsUtil = { 
+    realPath:       realPath, 
+    pathExists:     pathExists, 
+    isFile:         isFile, 
+    isDirectory:    isDirectory, 
+    isLink:         isLink, 
+    readDir:        readDir, 
+    readFile:       readFile, 
+    readTextFile:   readTextFile, 
+    readJsonFile:   readJsonFile, 
+    writeFile:      writeFile, 
+    writeStream:    writeStream, 
+    writeTextFile:  writeTextFile, 
+    writeJsonFile:  writeJsonFile 
+};
