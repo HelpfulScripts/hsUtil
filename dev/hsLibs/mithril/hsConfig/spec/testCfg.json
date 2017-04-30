@@ -1,0 +1,9 @@
+{
+    "hsTiles": {
+        "spacing":  "10px",
+        "dims": {
+            "width":    "100px",
+            "height":   "100px",
+        }
+    }
+}
