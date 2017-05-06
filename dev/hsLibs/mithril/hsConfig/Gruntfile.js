@@ -21,7 +21,7 @@ module.exports = function(grunt) {
 		
 		// Task configuration.
 		copy: {
-		    pre: {},
+		    pre: {}, 
 			post: {}
 		},
 		
@@ -63,10 +63,10 @@ module.exports = function(grunt) {
                     target: 'es6',
                     tsconfig: 'typedoc.json',
                     module: 'commonjs',
+                    json:   './docs/docs.json',
                     out:    './docs',
                     mode:   'modules',
 //                    listInvalidSymbolLinks: true,
-//                    json:   'docs.json',
 //                    theme:  'themes/hs',
                     name:   'hsCrossFrameWork',
                     readme: 'readme.txt'
@@ -97,6 +97,16 @@ module.exports = function(grunt) {
 			}
 		},
 
+        webpack: {
+            example: { // webpack options 
+                entry: './dist/index.js',
+                output: {
+                    filename: 'index.js',
+                    path: require('path').resolve(__dirname, 'example')
+                },
+            }
+		},
+
 		watch: {
 			gruntfile: {
                 files: ['Gruntfile.js'],
@@ -111,7 +121,7 @@ module.exports = function(grunt) {
 				tasks: ['test']
 			}
 		}
-	});
+	}); 
 	
 	// These plugins provide necessary tasks.
 	grunt.loadNpmTasks('grunt-contrib-watch');
@@ -121,10 +131,11 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-typedoc');
     grunt.loadNpmTasks('grunt-tslint');
     grunt.loadNpmTasks('grunt-ts');
+    grunt.loadNpmTasks('grunt-webpack');
 
     grunt.registerTask('doc', ['clean:docs', 'typedoc']);
     grunt.registerTask('test', ['clean:spec', 'tslint:spec', 'ts:spec', 'jasmine_node']);
-    grunt.registerTask('build', ['clean:src', 'tslint:src', 'ts:src']);
+    grunt.registerTask('build', ['clean:src', 'tslint:src', 'ts:src', 'webpack']);
     grunt.registerTask('deploy', ['copy:post']);
 	grunt.registerTask('make', ['build', 'test', 'doc']);
     grunt.registerTask('default', ['build', 'test', 'watch']);	
