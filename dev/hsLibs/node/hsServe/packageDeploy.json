@@ -1,0 +1,12 @@
+{
+  "Title": "helpful scripts http server",
+  "name": "hsServe",
+  "version": "1.0.0",
+  "author": {
+    "name": "helpful scripts",
+    "email": "helpful.scripts@gmail.com"
+  },
+  "scripts": {
+    "start": "node ./node/hsServe/main.js"
+  }
+}

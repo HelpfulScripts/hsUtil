@@ -6,6 +6,10 @@
     "name": "Hauke Schmidt",
     "email": "hauke.schmidt@us.bosch.com"
   },
+  "scripts": {
+    "links": "./dev/createDevLinks.sh",
+    "server": "./srv/node/http"
+  },
   "engines": {
     "node": ">= 5.3.0"
   },
