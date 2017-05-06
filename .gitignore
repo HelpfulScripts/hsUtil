@@ -7,3 +7,4 @@ libs/
 **/log*.txt
 **/coverage/
 /staging
+**/hsServe/hsNode

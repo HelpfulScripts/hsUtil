@@ -1,5 +1,5 @@
 const os      	= require("os");
-import { log }      from "../../hsNode/src";
+import { log }      from "../hsNode";
 import { server }   from "./server";
 
 log.prefix('main');

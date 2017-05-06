@@ -1,7 +1,7 @@
 const http     = require("http");
 
-import { log, fsUtil }  from "../../hsNode/src";
-import { rh }   from "./requesthandler.js";
+import { log, fsUtil }  from "../hsNode";
+import { rh }           from "./requesthandler.js";
 
 const handlers:{list:any[]} = {list: []};
 log.prefix('router');
