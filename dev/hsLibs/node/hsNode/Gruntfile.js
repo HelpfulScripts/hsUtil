@@ -1,7 +1,7 @@
 
 /*global module:false*/
 module.exports = function(grunt) {
-    const libs = '../../../../libs/node/';
+    const staging = '../../../../srv/node/';
 
 	// Project configuration.
 	grunt.initConfig({
@@ -14,6 +14,7 @@ module.exports = function(grunt) {
 				' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
 
 		clean: {
+            all:   ['dist', 'docs'],
 			src:   ['dist/src'],
 			spec:  ['dist/spec'],
             docs:  ['docs'],
@@ -23,10 +24,10 @@ module.exports = function(grunt) {
 		// Task configuration.
 		copy: {
 		    pre: {},
-			post: {
+			stage: {
 	            files: [{
-	                expand: true, flatten: true,
-	                src: ['dist/*.js'],    dest: libs+"hsNode/"
+	                expand: true, cwd: 'dist/',
+	                src: ['*.js'], dest: staging+'hsNode/'
 	            }]
             }
 		},
@@ -68,10 +69,10 @@ module.exports = function(grunt) {
                     target: 'es6',
                     tsconfig: 'typedoc.json',
                     module: 'commonjs',
+                    json:   './docs/docs.json',
                     out:    './docs',
                     mode:   'modules',
 //                    listInvalidSymbolLinks: true,
-//                    json:   'docs.json',
 //                    theme:  'themes/hs',
                     name:   'hsCrossFrameWork',
                     readme: 'readme.txt'
@@ -130,7 +131,8 @@ module.exports = function(grunt) {
     grunt.registerTask('doc', ['clean:docs', 'typedoc']);
     grunt.registerTask('test', ['clean:spec', 'tslint:spec', 'ts:spec', 'jasmine_node']);
     grunt.registerTask('build', ['clean:src', 'tslint:src', 'ts:src']);
-    grunt.registerTask('deploy', ['copy:post']);
+    grunt.registerTask('stage', ['copy:stage']);
 	grunt.registerTask('make', ['build', 'test', 'doc']);
-    grunt.registerTask('default', ['build', 'test', 'watch']);	
+    grunt.registerTask('watch', ['clean', 'make', 'watch']);	
+    grunt.registerTask('default', ['clean', 'make']);	
 };

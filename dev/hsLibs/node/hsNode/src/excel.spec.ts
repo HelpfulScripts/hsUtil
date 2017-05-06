@@ -1,6 +1,4 @@
-/// <reference path="../node_modules/typings/index.d.ts" />
-
-import * as hsExcel from './excel';
+import { hsExcel } from './';
 
 const TEST_FILE = '../../spec/test.xlsx';
 

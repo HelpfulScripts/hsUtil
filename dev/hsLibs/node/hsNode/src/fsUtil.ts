@@ -1,8 +1,7 @@
 const fs 	= require('fs');
 const path	= require('path');
-//const log	= require('./log');
 
-import log from './log';
+import { log } from './';
 
 /**
  * @ngdoc object
@@ -19,6 +18,8 @@ import log from './log';
  * - {@link hsNode.fsUtil#methods_writeFile writeFile}
  * - {@link hsNode.fsUtil#methods_writeTextFile writeTextFile}
  * - {@link hsNode.fsUtil#methods_writeJsonFile writeJsonFile}
+ * - {@link hsNode.fsUtil#methods_appendFile appendFile}
+ * - {@link hsNode.fsUtil#methods_remove remove}
  */
 
 //===============================================================================
@@ -153,7 +154,7 @@ function readDir(thePath:string) {
  * @return {Promise} promise to provide file content.
  */
 function readFile(thePath:string, isText=true) {
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve:(data:any)=>void, reject:(err:any)=>void) => {
 		let encoding = isText? 'utf8' : undefined;
 		fs.readFile(thePath, encoding, (err:any, data:any) => {
 			if (err) { reject(err); }
@@ -198,7 +199,7 @@ function readJsonFile(thePath:string) {
  * @param {boolean} isText `true`|`false` if file should be read as `utf8`|binary 
  * @return {Promise} promise to provide nothing.
  */
-function writeFile(thePath:string, content:string, isText:boolean) {
+function writeFile(thePath:string, content:string, isText:boolean=true) {
 	return new Promise((resolve, reject) => {
 		var encoding = isText? 'utf8' : undefined;
 	    fs.writeFile(thePath, content, encoding, (err:any) => err? reject(err) : resolve());
@@ -250,6 +251,37 @@ function writeJsonFile(thePath:string, obj:any) {
 	.then(data => writeTextFile(thePath, data)); 
 }
 
+/**
+ * @ngdoc object
+ * @name appendFile
+ * @methodOf hsNode.fsUtil
+ * @description appends to a file either as binary or text and promises no return.
+ * @param {string} thePath the path to write to
+ * @param {object} content the content to write
+ * @param {boolean} isText `true`|`false` if file should be read as `utf8`|binary 
+ * @return {Promise} promise to provide nothing.
+ */
+function appendFile(thePath:string, content:string, isText:boolean=true) {
+	return new Promise((resolve, reject) => {
+		var encoding = isText? 'utf8' : undefined;
+	    fs.appendFile(thePath, content, encoding, (err:any) => err? reject(err) : resolve());
+	});
+};
+
+/**
+ * @ngdoc object
+ * @name remove
+ * @methodOf hsNode.fsUtil
+ * @description promises to delete a file or folder.
+ * @param {string} thePath the path to write
+ * @return {Promise} promise to provide nothing.
+ */
+function remove(thePath:string) {
+	return new Promise((resolve:()=>void, reject:(err:any)=>void) => {
+        fs.unlink(thePath, (e:any) => (e? reject(e) : resolve()));
+	});
+}
+
 export const fsUtil = { 
     realPath:       realPath, 
     pathExists:     pathExists, 
@@ -263,5 +295,7 @@ export const fsUtil = {
     writeFile:      writeFile, 
     writeStream:    writeStream, 
     writeTextFile:  writeTextFile, 
-    writeJsonFile:  writeJsonFile 
+    writeJsonFile:  writeJsonFile,
+    appendFile:     appendFile, 
+    remove:         remove 
 };

@@ -1,6 +1,7 @@
 const XLSX	= require('xlsx');
 
-import log from './log';
+import { log } from './';
+console.log(log);
 log.prefix('XL');
 
 /**

@@ -1,6 +1,4 @@
-/// <reference path="../node_modules/typings/index.d.ts" />
-
-import * as hsNode from './node';
+import { hsNode } from './';
 
 describe("node", () => {
     describe("inspect", () => {

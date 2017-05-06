@@ -1,6 +1,4 @@
-/// <reference path="../node_modules/typings/index.d.ts" />
-
-import { exec } from './index';
+import { exec } from './';
 
 
 describe("cpUtil", () => {

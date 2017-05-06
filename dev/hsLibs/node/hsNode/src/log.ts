@@ -53,10 +53,7 @@
  */
 
 /** importing nodejs file system function; needed to create logfiles */
-const fs        = require('fs');
-
-import * as hsNode from './node';
-import date         from "./date";
+import { hsDate, hsNode, fsUtil } from "./";
 
 /**
  * @ngdoc property
@@ -219,29 +216,46 @@ function log() {
 	 * To disable logging, use file=''.
 	 * @description sets a new logfile name template. Logfiles are created using this template 
 	 * at the time of each log entry call. If the file exists, the log entry will be appended.
-	 * @return {string} the current logfile name template
+	 * @return {Promise} promise to return the current logfile name template
 	 */
-	function logFile(file='log-%YYYY-%MM-%DD.txt'):string {
-		if (file !== gLogFile) {
-		    gLogFile = (file==='')? undefined : file;
-		    info(gLogFile? "now logging to file " + date(gLogFile) : "logfile disabled");
-		}
-	    return gLogFile;
+	function logFile(file='log-%YYYY-%MM-%DD.txt'):Promise<string> {
+        return Promise.resolve(file)
+            .then(file => {
+                if (file !== gLogFile) {
+                    gLogFile = (file==='')? undefined : file;
+                }
+                if (!gLogFile) { info("disabling logfile"); return gLogFile; }
+                if (gLogFile.indexOf('/')>=0) { 
+                    const dir = gLogFile.substring(0, gLogFile.lastIndexOf('/'));
+                    return fsUtil.pathExists(dir).then(exists => {
+                        if (!exists) { 
+                            gLogFile = undefined; 
+                            warn(`path ${dir} doesn't exists; logfile disabled`); 
+                        }
+                        else { info(gLogFile? "now logging to file " + hsDate(gLogFile) : "disabling logfile"); }
+                        return gLogFile;
+                    });
+                }
+                info("now logging to file " + hsDate(gLogFile));
+                return gLogFile;
+            });
 	}
 	
 	function out(sym:symbol, msg:any) {	
         const color = { ERROR: '\x1b[31m\x1b[1m', WARN: '\x1b[33m', DEBUG: '\x1b[36m', INFO: '\x1b[32m' };
 		let desc = gLevels[sym];
 	    if (desc.importance >= gLevel.importance) {
-	        const dateStr = date(gDateFormat);
+	        const dateStr = hsDate(gDateFormat);
 	        let line = (typeof msg === 'string')? msg : hsNode.inspect(msg, null, gColors);
 	        line = gColors? ((color[sym]||"") + dateStr + ' ' + gPrefix + desc.desc + '\x1b[0m ' + line) :
                             (dateStr + ' ' + gPrefix + desc.desc + ' ' + line);
 	        console.log(line);
 	        if (msg.stack) { console.log(msg.stack); }
 	        if (gLogFile) {
-	        	const filename = date(gLogFile);
-	        	fs.appendFileSync(filename, line+'\n');
+	        	const filename = hsDate(gLogFile);
+	        	fsUtil.appendFile(filename, line+'\n').catch(e => { 
+                    console.log(`error appending to file ${gLogFile}: ${e}`); 
+                    throw new Error(e); });
 	        }
 	    }
 	}

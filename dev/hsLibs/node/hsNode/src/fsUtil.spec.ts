@@ -1,5 +1,3 @@
-/// <reference path="../node_modules/typings/index.d.ts" />
-
 import { fsUtil } from './';
 
 
@@ -361,6 +359,59 @@ describe("hsFSutil", function() {
 		});
 	});
 	
+	
+	describe('appendFile' , () => {
+		describe(dir+'binFile' , () => {
+			beforeEach(done => {
+				called = getCalled(done);
+				fsUtil.appendFile(dir+'binFile', 'test2', false).then(called.resolved).catch(called.rejected);
+			});
+
+            afterAll(done => {
+                fsUtil.remove(dir+'binFile');
+                done();
+            });
+			
+			it('should resolve', function(done) {
+				expect(called.resolved).toHaveBeenCalled();
+				expect(called.rejected).not.toHaveBeenCalled();
+				done();
+			});
+			
+			describe('check for bin file', function() {
+				beforeEach(done => {
+					called = getCalled(done);
+					fsUtil.readFile(dir+'binFile', false).then(called.resolved).catch(called.rejected);
+				});
+				
+				it('should exist', function(done) {
+					expect(called.resolved).toHaveBeenCalled();
+					expect(called.rejected).not.toHaveBeenCalled();
+					done();
+				});
+				
+				it('should contain payload', function(done) {
+					expect(typeof called.getResult()).toBe('object');
+					expect(called.getResult().toString()).toMatch('test2test2test2test2');
+					done();
+				});
+			});
+		});
+		
+		describe(dir+'binFile2' , () => {
+			beforeEach(done => {
+				called = getCalled(done);
+				fsUtil.readFile(dir+'binFile2', false).then(called.resolved).catch(called.rejected);
+			});
+			
+			it('should reject', function(done) {
+				expect(called.resolved).not.toHaveBeenCalled();
+				expect(called.rejected).toHaveBeenCalled();
+				done();
+			});
+		});
+	});
+	
 	describe('writeTextFile' , () => {
 		describe(dir+'txtFile' , () => {
 			beforeEach(done => {
@@ -460,4 +511,41 @@ describe("hsFSutil", function() {
 			});
 		});
 	});
+
+    describe('delete' , () => {
+		describe(dir+'jsnFile' , () => {
+			beforeEach(done => {
+				called = getCalled(done);
+				fsUtil.writeJsonFile(dir+'jsnFile', {"name":"test2"}).then(called.resolved).catch(called.rejected);
+			});
+			
+			it('should have created jsnFile', function(done) {
+				expect(called.resolved).toHaveBeenCalled();
+				expect(called.rejected).not.toHaveBeenCalled();
+				done();
+			});
+			
+            describe('check for deletion', function() {
+                beforeEach(done => {
+                    called = getCalled(done);
+                    fsUtil.remove(dir+'jsnFile')
+                        .then(called.resolved)
+                        .catch(called.rejected);
+                });
+                
+                it('should have deleted file', function(done) {
+                    expect(called.resolved).toHaveBeenCalled();
+                    expect(called.rejected).not.toHaveBeenCalled();
+                    fsUtil.isFile(dir+'jsnFile')
+                    .then(exists => {
+                        expect(exists).toBe(false);
+                        done();
+                    }).catch(() => {
+                        fail('error deleting file');
+                    });
+                });
+			});
+		});
+    });
+
 });
