@@ -1,6 +1,7 @@
 
 /*global module:false*/
 module.exports = function(grunt) {
+    const staging = '../../../../staging/node/';
 
 	// Project configuration.
 	grunt.initConfig({
@@ -13,6 +14,7 @@ module.exports = function(grunt) {
 				' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
 
 		clean: {
+            all:   ['dist', 'docs'],
 			src:   ['dist/src'],
 			spec:  ['dist/spec'],
             docs:  ['docs'],
@@ -21,8 +23,15 @@ module.exports = function(grunt) {
 		
 		// Task configuration.
 		copy: {
-		    pre: {},
-			post: {}
+		    pre: { files: [{src: ['package.json'], dest: 'dist/src/serverlogs/'}]},
+			deploy: { 
+                files: [{
+	                expand: true, cwd: 'dist/src/',
+	                src: ['**/*.js', '!**/*.spec.js'],    dest: staging+'hsServe/'
+	            },{
+	                src: ['packageDeploy.json'],    dest: staging+'../package.json'
+                }]
+            }
 		},
 		
         tslint: {
@@ -44,14 +53,14 @@ module.exports = function(grunt) {
                 module:             "commonjs",
                 moduleResolution:   "node",
                 allowJs:            true
-           },
+            },
             src : {
-                outDir:     "dist",
+                outDir: "dist", 
                 src: ["src/**/*.ts", "!src/**/*.spec.ts"],
                 tsconfig:   true,
             },
             spec : {
-                outDir:     "dist/spec",
+                outDir: "dist", 
                 src: ["src/**/*.spec.ts"],
                 tsconfig:   true,
             }
@@ -123,9 +132,10 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-ts');
 
     grunt.registerTask('doc', ['clean:docs', 'typedoc']);
-    grunt.registerTask('test', ['clean:spec', 'tslint:spec', 'ts:spec', 'jasmine_node']);
+    grunt.registerTask('test', ['clean:spec', 'copy:pre', 'tslint:spec', 'ts:spec', 'jasmine_node']);
     grunt.registerTask('build', ['clean:src', 'tslint:src', 'ts:src']);
-    grunt.registerTask('deploy', ['copy:post']);
+    grunt.registerTask('deploy', ['copy:deploy']);
 	grunt.registerTask('make', ['build', 'test', 'doc']);
-    grunt.registerTask('default', ['build', 'test', 'watch']);	
+    grunt.registerTask('watch', ['clean:all', 'make', 'watch']);	
+    grunt.registerTask('default', ['clean:all', 'make']);	
 };
