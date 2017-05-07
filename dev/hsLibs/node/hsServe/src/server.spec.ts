@@ -1,7 +1,7 @@
 
 const http	= require('http');
-import { log, fsUtil }      from "../../hsNode/src";
-import { server }   from "./server";
+import { log }      from "../hsNode";
+import { server }           from "./server";
 
 log.prefix('httpServerTest');
 
@@ -10,26 +10,26 @@ describe('httpServer', function() {
 	let gMsg = ''; 
 	let timeout:any;
 	let gServer:any;
-	let gCWD:string;
+//	let gCWD:string;
 	let port = 8880;
 	
+/*    
 	function setCWD(newCWD:string) {
 		gCWD = process.cwd();
-		log.info(`current cwd: ${gCWD}`);
+		console.log(`current cwd: ${gCWD}`);
 		gCWD = process.cwd();
-		fsUtil.realPath(newCWD)
-		.then((path:string) => {
-			log.info(`new cwd: ${path}`);
+		fsUtil.realPath(newCWD).then((path:string) => {
+			console.log(`new cwd: ${path}`);
 			process.chdir(path); 
 		})
 		.catch(console.log);
 	}
 	
 	function resetCWD() {
-		log.info(`restored cwd: ${gCWD}`);
+		console.log(`restored cwd: ${gCWD}`);
 		process.chdir(gCWD); 
 	}
-	
+*/	
 	beforeAll(() => {
 		log.level(log.INFO); 
 	});
@@ -43,16 +43,16 @@ describe('httpServer', function() {
 			gMsg += msg;
 //			gLog('received: '+ msg + '<<'); 
 		};
-		gMsg = '';
 
-		setCWD(__dirname+'/../../../../srv/');
+//		setCWD(__dirname+'/../../../src/serverlogs/');
 
 		gServer = server.start(port);
+		gMsg = '';
 	});
 	
 	afterEach(function(done) {
 		server.stop(gServer);
-		resetCWD();
+//		resetCWD();
 		console.log = gLog; 
 		done();
 	});
@@ -62,11 +62,11 @@ describe('httpServer', function() {
 		done();
 	});	
 	
-	it('should fetch http://127.0.0.1:' + port + '/bin/http/package.json', function(done) {
-		http.get('http://127.0.0.1:' + port + '/bin/http/package.json');
+	it('should fetch http://127.0.0.1:' + port + '/package.json', function(done) {
+		http.get('http://127.0.0.1:' + port + '/package.json');
 		setTimeout(() => {
 			expect(gMsg).toEqual(jasmine.stringMatching('GET ::ffff:127.0.0.1 200 127'));
-			expect(gMsg).toEqual(jasmine.stringMatching('srv/bin/http/package.json'));
+			expect(gMsg).toEqual(jasmine.stringMatching('/package.json'));
 			done();
 		},100);
 	});	

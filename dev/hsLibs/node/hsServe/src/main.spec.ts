@@ -1,6 +1,5 @@
-/// <reference path="../node_modules/typings/index.d.ts" />
-
-import { log, fsUtil }      from "../../hsNode/src";
+import { log }  from "../hsNode";
+// import * as main        from './main';
 
 /*globals Player:false, Song: false*/
 log.prefix('httpMainTest');
@@ -8,7 +7,7 @@ log.prefix('httpMainTest');
 describe('http Main', function() {
 	const PORT = '8884';
 	let gMsg = '';
-	let gCWD:string;
+//	let gCWD:string;
 	let gLog:any;
 	let timeout:any;
 	let main:any;
@@ -24,6 +23,7 @@ describe('http Main', function() {
 		gMsg = '';
 	}
 	
+/*    
 	function setCWD(newCWD:string) {
 		gCWD = process.cwd();
 		log.info(`current cwd: ${gCWD}`);
@@ -39,18 +39,19 @@ describe('http Main', function() {
 		log.info(`restored cwd: ${gCWD}`);
 		process.chdir(gCWD); 
 	}
-	
+*/	
 	beforeEach(done => {
 		myLog(done);
-		setCWD(__dirname+'/../../../../srv/');
+//		setCWD(__dirname+'/../../../../srv/');
 		process.argv[3] =  PORT;
-		main = require(__dirname+'/../../../hsServe/src/main');  
+//		main = require(__dirname+'/../../../src/main');  
+		main = require('./main');  
 		main.start();
 	});
 	
 	afterEach(function(done) {
 		main.stop();
-		resetCWD();
+//		resetCWD();
 		console.log = gLog;
 		done();
 	});

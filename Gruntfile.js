@@ -35,6 +35,6 @@ module.exports = function(grunt) {
             }, function(error, result, code) {});
         });
     }); 	
-    grunt.registerTask('default', []); 	// no default; top level grunt file => explicitly start tasks: 'grunt test'
+    grunt.registerTask('default', []); 	// no default; top level grunt file => explicitly start tasks: 'grunt link'
 
 };
