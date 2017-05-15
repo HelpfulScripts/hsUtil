@@ -4,7 +4,7 @@ export interface Module {
     name:   string;
 }
 
-export const Modules = {
+export const Modules = { 
     list: <Module[]>[],
     loadList() {
         this.list.push({id:0, name:'m1'});

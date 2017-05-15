@@ -1,8 +1,10 @@
 var m = require("mithril");
 
-import { HsSiteOverview } from './view/SiteOverview';
+import { HsSite } from './view/Site';
+import { Modules } from './Modules';
 
+Modules.loadList();
 
 m.route(document.body, '/api', {
-    '/api': HsSiteOverview,   // defines `http://localhost/#!/api
+    '/api': HsSite,   // defines `http://localhost/#!/api
 });

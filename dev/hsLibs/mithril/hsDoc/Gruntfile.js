@@ -25,10 +25,11 @@ module.exports = function(grunt) {
 		copy: {
             build: { cwd:'src/', expand:true, src:['*.html'], dest:'dist/' },
 		    test: { files: [
-                { cwd:'dist/', expand:true, src:['*.js', '*.css', '*.html'], dest:'test/'}
+                { cwd:'dist/',    expand:true, src:['*.js', '*.css', '*.html'], dest:'test/'},
+                { cwd:'example/', expand:true, src:['*.json'], dest:'test/'}
             ]}, 
 			stage: { files: [
-                { expand: true, cwd: 'dist/', src: ['*.js', '*.css', '*.html'], dest: staging },
+                { expand: true, cwd: 'dist/', src: ['*.css', '*.css.map', '*.html'], dest: staging },
                 { src: ['packageDeploy.json'],    dest: staging+'../package.json' },
 	            { src: ['packageDeploy.json'],    dest: staging+'../package.json' }
             ]}
@@ -36,7 +37,7 @@ module.exports = function(grunt) {
 		
         less: {
             options: {
-                sourceMap: false
+                sourceMap: true
             },
             css: {
                 files: {
@@ -138,11 +139,11 @@ module.exports = function(grunt) {
 			},
 			less: {
 				files: ['src/**/*.less'],
-				tasks: ['less', 'stage']
+				tasks: ['build-css', 'copy:stage']
 			},
 			html: {
 				files: ['src/**/*.html'],
-				tasks: ['copy:build', 'stage']
+				tasks: ['build-html', 'copy:stage']
 			},
 			specs: {
 				files: ['src/**/*.spec.ts'],
@@ -163,9 +164,13 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-webpack');
 
     grunt.registerTask('doc', ['clean:docs', 'typedoc']);
-    grunt.registerTask('test', ['clean:spec', 'copy:test', 'tslint:spec', 'ts:spec', 'jasmine_node']);
-    grunt.registerTask('build', ['clean:src', 'copy:build', 'less', 'tslint:src', 'ts:src', 'webpack']);
-    grunt.registerTask('stage', ['copy:stage']);
+    grunt.registerTask('stage', ['webpack', 'copy:stage']);
+    grunt.registerTask('build-html', ['copy:build']);
+    grunt.registerTask('build-css', ['less']);
+    grunt.registerTask('build-js', ['tslint:src', 'ts:src']);
+    grunt.registerTask('build-spec', ['tslint:spec', 'ts:spec']);
+    grunt.registerTask('test', ['clean:spec', 'copy:test', 'build-spec', 'jasmine_node']);
+    grunt.registerTask('build', ['clean:src', 'build-html', 'build-css', 'build-js', 'stage']);
 	grunt.registerTask('make', ['build', 'test', 'doc']);
-    grunt.registerTask('default', ['build', 'test', 'watch']);	
+    grunt.registerTask('default', ['make', 'watch']);	
 };
