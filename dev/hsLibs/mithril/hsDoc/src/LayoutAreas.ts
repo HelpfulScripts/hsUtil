@@ -1,23 +1,23 @@
 import {Component} from './view/Layout';
 
 export abstract class LayoutArea {
-    constructor(public type: string, public areaSize: number) {}
+    constructor(public size: number) {}
 }
 
 abstract class DefinedArea extends LayoutArea{
-    constructor(public type: string, public areaSize: number) { super(type, areaSize); }
+    constructor(size: number) { super(size); } 
 }
 
 class PixelArea extends DefinedArea {
-    constructor(size:number) { super('Pixel', size); }
+    constructor(size:number) { super(size); }
 }
 
 class PercentArea extends DefinedArea {
-    constructor(size:number) { super('Percent', size); }
+    constructor(size:number) { super(size); }
 }
 
 class FillArea extends LayoutArea {
-    constructor() { super('Fill', -1); }
+    constructor() { super(-1); }
 }
 
 export function px(px:number)   { return new PixelArea(px); }
@@ -25,6 +25,18 @@ export function pc(pc:number)   { return new PercentArea(pc); }
 export const FILL = new FillArea();
 
 
+class LayoutDescriptor {
+    firstFixed: number;
+    lastFixed:  number;
+    unit: string;
+
+    constructor(public areaDesc:LayoutArea[]) { 
+    }
+
+    public getSizes(numAreas:number) {
+        
+    }
+}
 
 
 const cParams = {
@@ -41,110 +53,136 @@ const cParams = {
 type styleType = { (): string[]; cssClass: string; };
 type unitParams = {areas:Component[], firstDefined:number, lastDefined:number};
 
+
+
+
+
 abstract class Areas {
-    spacing = 0;
-    constructor(public paramName:string, public areaDesc:any) { };
+    spacing = 0;    
+    constructor(public paramName:string, public areaDesc:any[]) { };
 
     styles(areas:Component[]) {
         this.getStyles(areas);
-/*        
-        this.getStyles(areas).forEach((style:string, i:number) => {
-            (<any>areas[i]).style = style;
-        });
-*/  
         return cParams[this.paramName].cssClass;
     }
     protected abstract getStyles(areas:Component[]):void;
 }
 
 class Pillars extends Areas{
-    constructor(paramName:string, areaDesc:LayoutArea[]) { super(paramName, areaDesc); };
+    firstFixed: number; // number of DefinedArea entries at the beginning
+    lastFixed:  number; // number of DefinedArea entries at the end
+    unit:(num:number)=>any[];
+    fields: string[];
 
-    private getSize(i:number, num:number, params:unitParams) {
-        let sizes = this.areaDesc;
-        let size:any = null;
-        let t = '';
-        if (sizes.length === 0)                 { }
-        else if (sizes.length === 1)            { size = sizes[0].areaSize; t = 'all'; }
-        else if (i<=params.firstDefined)        { size = sizes[i].areaSize; t = 'start'; }
-        else if (num-i-1 < params.lastDefined)  { size = sizes[sizes.length-(num-i)].areaSize; t = 'end'; }
-        return [size, t];
-    } 
+    constructor(paramName:string, areaDesc:LayoutArea[]) { 
+        super(paramName, areaDesc); 
+        this.fields = cParams[paramName].fields;
 
-    private unitPercent(params:unitParams, fields:string[]):any[] {
+console.log('\n');        
+console.log(areaDesc);        
+        let n = areaDesc.length-1;
+        let first = 0;
+        let last  = 0;        
+        // if any of the dimensions are in px, use the pixel method; else use the percent method
+        // get index of first and last undefined area, if any            
+        this.unit = areaDesc.some((area:LayoutArea) => (area instanceof PixelArea))? this.unitPixel : this.unitPercent;        // true if any area is PixelArea
+        areaDesc.some((area:LayoutArea, i:number) => ((areaDesc[i]   instanceof DefinedArea)? ++first<0 : true)); // first = number of consecutive fixed fields at start
+        areaDesc.some((area:LayoutArea, i:number) => ((areaDesc[n-i] instanceof DefinedArea)? ++last<0  : true)); // last  = number of consecutive fixed fields at end
+
+        this.firstFixed = first;
+        this.lastFixed  = Math.min(last, areaDesc.length-first);
+console.log(`${first} ${last}`);        
+    };
+
+    // num: number of areas to layout
+    private getSizes(num:number) {
+        const first = this.firstFixed;
+        const last  = this.lastFixed;
+        const desc  = this.areaDesc;
+        const len = desc.length;
+        function getSize(i:number):{size:number, code:string, fields:{}} {
+            let size:number = null;
+            let t = null;
+            if (i > num-1-last)  { size = desc[len - (num-i)].size; t = 'end'; }   // end sequence
+            else if (i < first)  { size = desc[i].size; t = 'start'; }             // start sequence
+            return {size:size, code:t, fields:{}};
+        } 
+        return [...Array(num).keys()].map(getSize);
+    }
+
+    private unitPercent(num:number):any[] {
+        let f = this.fields;
         let max = 100.0;
-        let num = params.areas.length;
-console.log('percent');
+console.log(`percent ${this.firstFixed} ${this.lastFixed}`);
+console.log(this.areaDesc);
         let defDim = max / num;      // divvy up remaining space
-        let styles:any[] = [];
+        let styles = this.getSizes(num);
+console.log(styles);
  
-        params.areas.forEach((area, i) => {
-            styles[i] = {};
-            let [size, exact] = this.getSize(i, num, params);
-            if (exact) { max = max - size; num--; }
-        });
+console.log(`max:${max}, num:${num}`);        
+        styles.forEach(style => { if (style.size) { max = max - style.size; num--; } });
+console.log(`max:${max}, num:${num}`);        
+console.log(styles);        
 
-        function pass(areas:Component[], styles:any[], idx0:number, idx1:number, breakCond:(cond:string)=>boolean) {
+        function pass(styles:any[], ix0:number, ix1:number, breakCond:(cond:string)=>boolean) {
             let sumDim = 0;
-            areas.some((area, i) => {
-                let [size, exact] = this.getSize(i, num, params);
-                if (breakCond(exact)) { return true; }
-                if (size===null) { size = defDim; };
-                styles[i][fields[idx0]] = sumDim+'%';
+            styles.some(style => {
+                let size = style.size || defDim;
+                if (breakCond(style.code)) { return true; }
+                style.fields[f[ix0]] = sumDim+'%';
                 sumDim += size;
-                styles[i][fields[idx1]] = (100-sumDim)+'%'; 
-                styles[i][fields[5]] = 'auto';
+                style.fields[f[ix1]] = (100-sumDim)+'%'; 
+                style.fields[f[5]] = 'auto';
                 return false;
             });
         }
 
-        pass(params.areas, styles, 2, 3, (e:string) => e==='end');                      // forward pass
-        pass(params.areas.slice().reverse(), styles, 3, 2, (e:string) => e!=='end');    // backward pass
-        return styles;
+        pass(styles, 2, 3, (e:string) => e==='end');              // forward pass
+        pass(styles.reverse(), 3, 2, (e:string) => e!=='end');    // backward pass
+        return styles.reverse();    // reverse a second time for original sequence.
     };
 
-    private unitPixel(params:unitParams, fields:string[]):any[] { // pattern: [px, px, FILL , px, px]
-        let styles:any[] = [];
+    private unitPixel(num:number):any[] { // pattern: [px, px, FILL , px, px]
+        let styles = this.getSizes(num);
+        let f = this.fields;
 console.log('pixel');
+console.log(styles);
        
-        let num = params.areas.length;
         let defDim = 100.0/num;          // used for unspecified widths
-        params.areas.forEach((area, i) => styles[i] = {});
 
         // work forwards through the heights
         let sumDim = 0;
-        params.areas.forEach((area, i) => {
-            let [size, exact] = this.getSize(i, num, params);
-            if (exact==='start' || exact==='all') {   // so far, all heights explicitly set as px
-if (num===3) { console.log([i, size, exact, sumDim]); }           
-                styles[i][fields[2]] = sumDim +'px';
-                sumDim += size + (this.spacing || 0) + (this.spacing || 0);
-                styles[i][fields[3]] = 'auto';
-                styles[i][fields[5]] = size +'px';
-if (num===3) { console.log(styles[i]); }
-            } else if (exact === '') {
-if (num===3) { console.log([i, size, exact, sumDim]); }      
-                styles[i][fields[2]] = (sumDim>0)? (sumDim +'px') : (i*defDim + '%');
+        styles.some((style, i) => {
+            if (style.code==='start') {   // so far, all heights explicitly set as px
+console.log([i, style.size, style.code, sumDim]);         
+                style.fields[f[2]] = sumDim +'px';
+                sumDim += style.size + (this.spacing || 0) + (this.spacing || 0);
+                style.fields[f[3]] = 'auto';
+                style.fields[f[5]] = style.size +'px';
+console.log(style);
+            } else if (style.code === null) {
+console.log([i, style.size, style.code, sumDim]);  
+                style.fields[f[2]] = (sumDim>0)? (sumDim +'px') : (i*defDim + '%');
                 sumDim = -1;
-                styles[i][fields[3]] = (100-(i+1)*defDim) + '%';
-                styles[i][fields[5]] = 'auto';
-if (num===3) { console.log(styles[i]); }
-            } else if (exact==='end') { return true; }
+                style.fields[f[3]] = (100-(i+1)*defDim) + '%';
+                style.fields[f[5]] = 'auto';
+console.log(style);
+            } else if (style.code==='end') { return true; }
             return false;
         });
         
         // work backwards through the heights
         sumDim = 0;
-        params.areas.slice().reverse().some((area, i) => {
-            let [size, exact] = this.getSize(i, num, params);
-            styles[i][fields[3]] = sumDim + 'px';
-            if (exact === 'end') { 
-                sumDim += size + (this.spacing || 0) + (this.spacing || 0);
-                styles[i][fields[2]] = 'auto';
-                styles[i][fields[5]] = size+'px';
+        styles.slice().reverse().some((style, i) => {
+//            let [size, exact] = getSize(i, num, params, this.areaDesc);
+            style.fields[f[3]] = sumDim + 'px';
+            if (style.code === 'end') { 
+                sumDim += style.size + (this.spacing || 0) + (this.spacing || 0);
+                style.fields[f[2]] = 'auto';
+                style.fields[f[5]] = style.size+'px';
             } else {
-                if (sumDim>0 && exact !== 'start') {
-                    styles[i][fields[5]] = 'auto';
+                if (sumDim>0 && style.code !== 'start') {
+                    style.fields[f[5]] = 'auto';
                 }
                 return true; 
             } 
@@ -155,25 +193,14 @@ if (num===3) { console.log(styles[i]); }
     };
     
     protected getStyles(areas:Component[])  { 
-        let fields = cParams[this.paramName].fields;
-        let unit = this.unitPercent;
-        let firstDefined = -1;
-        let lastDefined = 0;
-        // if any of the dimensions are in px, use the pixel method; else use the percent method
-        // get index of first and last defined area
-        this.areaDesc.forEach((area:LayoutArea, i:number) => {
-            unit = (area instanceof PixelArea)? this.unitPixel : unit;
-            if (area instanceof DefinedArea) {
-                if (firstDefined<0) { firstDefined = i; };
-                lastDefined = i;     
-            }
-        });
-        let styles = unit.apply(this, [{areas: areas, firstDefined:firstDefined, lastDefined:lastDefined}, fields]);
+        let f = this.fields;
+        let styles = this.unit(areas.length);
+console.log('getStyles:');
+console.log(styles);
 
         areas.map((area:any, i:number) => {
-            area.style = `${fields[0]}:0%; ${fields[1]}:0%; `;
-            Object.keys(styles[i]).forEach((style:string) => { (<any>area).style += `${style}: ${styles[i][style]};`; });
-//            return `${f[0]}:0; ${f[1]}:0; ${f[2]}:${i*100/num}%; ${f[3]}:${(num-i-1)*100/num}%; ${f[5]}:auto;`;
+            area.style = `${f[0]}:0%; ${f[1]}:0%; `;
+            Object.keys(styles[i].fields).forEach((style:string) => { area.style += `${style}: ${styles[i].fields[style]};`; });
         });     
     };
 };
