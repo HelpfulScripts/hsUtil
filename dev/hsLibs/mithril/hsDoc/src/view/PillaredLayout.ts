@@ -1,6 +1,9 @@
-import {Component} from './view/Layout';
+const m = require("mithril");
 
-export abstract class LayoutArea {
+import { Layout } from './Layout';
+
+
+abstract class LayoutArea {
     constructor(public size: number) {}
 }
 
@@ -38,7 +41,6 @@ class LayoutDescriptor {
     }
 }
 
-
 const cParams = {
     columns: {
         cssClass: '.hs-column-layout',
@@ -50,22 +52,14 @@ const cParams = {
     }
 };
 
-type styleType = { (): string[]; cssClass: string; };
-type unitParams = {areas:Component[], firstDefined:number, lastDefined:number};
-
-
-
-
-
 abstract class Areas {
     spacing = 0;    
     constructor(public paramName:string, public areaDesc:any[]) { };
 
-    styles(areas:Component[]) {
-        this.getStyles(areas);
-        return cParams[this.paramName].cssClass;
+    styles(content:Array<typeof Layout>) {
+        return this.getStyles(content);
     }
-    protected abstract getStyles(areas:Component[]):void;
+    protected abstract getStyles(content:typeof m.Vnode[]):string;
 }
 
 class Pillars extends Areas{
@@ -78,8 +72,6 @@ class Pillars extends Areas{
         super(paramName, areaDesc); 
         this.fields = cParams[paramName].fields;
 
-console.log('\n');        
-console.log(areaDesc);        
         let n = areaDesc.length-1;
         let first = 0;
         let last  = 0;        
@@ -91,7 +83,6 @@ console.log(areaDesc);
 
         this.firstFixed = first;
         this.lastFixed  = Math.min(last, areaDesc.length-first);
-console.log(`${first} ${last}`);        
     };
 
     // num: number of areas to layout
@@ -113,16 +104,10 @@ console.log(`${first} ${last}`);
     private unitPercent(num:number):any[] {
         let f = this.fields;
         let max = 100.0;
-console.log(`percent ${this.firstFixed} ${this.lastFixed}`);
-console.log(this.areaDesc);
         let defDim = max / num;      // divvy up remaining space
         let styles = this.getSizes(num);
-console.log(styles);
- 
-console.log(`max:${max}, num:${num}`);        
+
         styles.forEach(style => { if (style.size) { max = max - style.size; num--; } });
-console.log(`max:${max}, num:${num}`);        
-console.log(styles);        
 
         function pass(styles:any[], ix0:number, ix1:number, breakCond:(cond:string)=>boolean) {
             let sumDim = 0;
@@ -145,8 +130,6 @@ console.log(styles);
     private unitPixel(num:number):any[] { // pattern: [px, px, FILL , px, px]
         let styles = this.getSizes(num);
         let f = this.fields;
-console.log('pixel');
-console.log(styles);
        
         let defDim = 100.0/num;          // used for unspecified widths
 
@@ -154,19 +137,15 @@ console.log(styles);
         let sumDim = 0;
         styles.some((style, i) => {
             if (style.code==='start') {   // so far, all heights explicitly set as px
-console.log([i, style.size, style.code, sumDim]);         
                 style.fields[f[2]] = sumDim +'px';
                 sumDim += style.size + (this.spacing || 0) + (this.spacing || 0);
                 style.fields[f[3]] = 'auto';
                 style.fields[f[5]] = style.size +'px';
-console.log(style);
             } else if (style.code === null) {
-console.log([i, style.size, style.code, sumDim]);  
                 style.fields[f[2]] = (sumDim>0)? (sumDim +'px') : (i*defDim + '%');
                 sumDim = -1;
                 style.fields[f[3]] = (100-(i+1)*defDim) + '%';
                 style.fields[f[5]] = 'auto';
-console.log(style);
             } else if (style.code==='end') { return true; }
             return false;
         });
@@ -174,7 +153,6 @@ console.log(style);
         // work backwards through the heights
         sumDim = 0;
         styles.slice().reverse().some((style, i) => {
-//            let [size, exact] = getSize(i, num, params, this.areaDesc);
             style.fields[f[3]] = sumDim + 'px';
             if (style.code === 'end') { 
                 sumDim += style.size + (this.spacing || 0) + (this.spacing || 0);
@@ -192,16 +170,14 @@ console.log(style);
         return styles;
     };
     
-    protected getStyles(areas:Component[])  { 
+    protected getStyles(content:typeof m.Vnode[])  { 
         let f = this.fields;
-        let styles = this.unit(areas.length);
-console.log('getStyles:');
-console.log(styles);
-
-        areas.map((area:any, i:number) => {
+        let styles = this.unit(content.length);
+        content.map((area:Layout, i:number) => {
             area.style = `${f[0]}:0%; ${f[1]}:0%; `;
-            Object.keys(styles[i].fields).forEach((style:string) => { area.style += `${style}: ${styles[i].fields[style]};`; });
-        });     
+            Object.keys(styles[i].fields).forEach((st:string) => { area.style += `${st}: ${styles[i].fields[st]};`; });
+        });   
+        return cParams[this.paramName].cssClass;
     };
 };
 

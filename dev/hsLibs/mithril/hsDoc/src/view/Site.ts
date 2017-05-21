@@ -1,47 +1,77 @@
 const m = require("mithril");
 
-import { ModulesTitleBar, ModuleNav, ModuleDetail }  from './ModuleView';
 import { Layout } from './Layout';
-import { px, FILL } from '../LayoutAreas';
-import { Modules } from '../Modules';
+import { px, FILL } from './PillaredLayout';
+import { Module, Modules } from '../Modules'; 
 
 
-const TitleHeight   = px(40);   // 
+const TitleHeight   = px(30);   // 
+const FooterHeight  = px(10);   // 
 const LeftNavWidth  = px(150);
+const SiteName      = 'HSDocs';
+const COPYRIGHT     = "(c) Helpful Scripts";
 
-class SiteTitle extends Layout {
-    constructor() { super('.hs-site-title'); }
-    content(vnode: typeof m.Vnode) { return vnode.attrs.name; }
+export class HsSite extends Layout {
+    view(node:typeof m.Vnode):typeof m.Vnode {
+        return this.layout('.hs-site', node, { rows:[TitleHeight, FILL, FooterHeight]}, [
+            m(HeaderBar), 
+            m(MainArea),
+            m(FooterBar)
+        ]);
+    }
 }
 
-class HeaderBar extends Layout{
-    constructor() { super('.hs-site-header'); }
-    attrs():any { return { columns: [LeftNavWidth, FILL]}; }
-    content(vnode: typeof m.Vnode) { return [
-        m(SiteTitle, {name: vnode.attrs.name}),
-        m(ModulesTitleBar, {titles: Modules.list })
-    ]; }
-}
+class HeaderBar extends Layout {
+    view(node:typeof m.Vnode):typeof m.Vnode {
+        return this.layout('.hs-site-header', node, { columns: [LeftNavWidth, FILL]}, [
+            m(SiteTitle),
+            m(ModulesTitleBar)           
+        ]);
+    }
+};
 
-class MainArea extends Layout{
-    constructor() { super('.hs-site-main'); }
-    attrs() { return { columns: [LeftNavWidth, FILL]}; }
-    content()  { 
-        return [
+class FooterBar extends Layout {
+    view(node:typeof m.Vnode):typeof m.Vnode {
+        return this.layout('.hs-site-footer', node, { }, COPYRIGHT);
+    }
+};
+
+class MainArea extends Layout {
+    view(node:typeof m.Vnode):typeof m.Vnode {
+        return this.layout('.hs-site-main', node, { columns: [LeftNavWidth, FILL]}, [
             m(ModuleNav), 
             m(ModuleDetail)
-        ]; 
-    };
+        ]);
+    }
+};
+
+class SiteTitle extends Layout {
+    view(node:typeof m.Vnode):typeof m.Vnode {
+        return this.layout('.hs-site-title', node, { }, SiteName);
+    }
+};
+
+class ModuleName extends Layout {
+    view(node: typeof m.Vnode): typeof m.Vnode {
+        return this.layout('.hs-module-name', node, { }, node.attrs.name);
+    }
 }
 
-export class HsSite extends Layout{
-    constructor() { super('.hs-site'); }
-    gSiteName = 'HSDocs';
-    attrs():any { return { rows:[TitleHeight, FILL]}; }
-    content():typeof m.Vnode  { 
-        return [
-            m(HeaderBar, {name: this.gSiteName}), 
-            m(MainArea)
-        ]; 
-    };
+class ModulesTitleBar extends Layout {
+    view(node: typeof m.Vnode): typeof m.Vnode {
+        return this.layout('.hs-module-title', node, { columns: <any[]>[] }, 
+            Modules.list.map((mdl:Module) => m(ModuleName, {name:mdl.name})));
+    }
 };
+
+class ModuleNav extends Layout { 
+    view(node: typeof m.Vnode): typeof m.Vnode {
+        return this.layout('.hs-module-nav', node, {}, 'mn');
+    }
+}
+
+class ModuleDetail extends Layout {
+    view(node:typeof m.Vnode): typeof m.Vnode {
+        return this.layout('.hs-module-detail', node, {}, 'md');
+    }
+}

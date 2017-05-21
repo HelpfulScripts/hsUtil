@@ -4,31 +4,19 @@
  */
 
 const m = require("mithril");
+import { Rows, Columns } from './PillaredLayout';
 
-import { Rows, Columns } from '../LayoutAreas';
-
-//import { RowLayout, ColumnLayout } from './PillaredLayout';
-
-const CSSLayout             = '.hs-layout';
-//const CSSLayoutTerminal     = '.hs-terminal-layout';
-//const CSSLayoutContainer    = '.hs-container-layout';
+//const CSSLayout             = '.hs-layout';
 
 //export interface Vnode { tag:string; attrs?: {id: string}; children: Vnode[]|string; }
 
 let id = 0;
 
 export abstract class Component {
-    constructor(public cssClass:string) { };
+    id:number;
+    constructor() { this.id = id++; }
     public abstract view(vnode?: typeof m.Vnode): typeof m.Vnode;
 }
-
-let layItOut = function(cssClass:string, attrs:any, areas:Component[]):Component {
-    let css = '';
-    if (attrs.columns)  { css = new Columns(attrs.columns).styles(areas); }
-    if (attrs.rows)     { css = new Rows(attrs.rows).styles(areas); }
-    attrs.columns = attrs.rows = undefined;
-    return m(`${cssClass} ${css}`, attrs, areas);
-};
 
 /**
  * @ngdoc directive
@@ -69,24 +57,52 @@ The following options are supported for `Array`:
     if the unit is px, the remaining n-2 widgets will have their left/right borders at location `i*100/n%`.
 - [1w, 2w, , w2, w1]: multiple widths can be specified in uninterrupted sequence both from the left and the right. 
  */
-
-export class Layout extends Component{
+export abstract class Layout extends Component {
     public style:string;
-    constructor(cssClass:string) { super(`${CSSLayout} ${cssClass}`); };
-    oninit(node: typeof m.Vnode) { 
-        node.mid = id++; 
+    cssClass: string;
+    content: typeof m.Vnode;
+    constructor() { super(); }
+
+    public layout(cssClass:string, node: typeof m.Vnode, attrs:any, content:Array<typeof m.Vnode|string>|string): typeof m.Vnode {
+        function makeContent(content:Array<typeof Layout|string>|string): any {
+            let result:any = [];
+            if (typeof content === 'string') { 
+                result = content; 
+            } else if (content.length>0) {
+                result = content.map((area:string) => 
+                    (typeof area === 'string')? m(TextLayout, {content: area}) : area
+                );
+            }
+            return result;
+        }
+
+        function copyAttrs(attrs:any, node: typeof m.Vnode) {
+            Object.keys(attrs).forEach((key:string) => node.attrs[key] = attrs[key]);
+        }
+
+        const _content = makeContent(content); // --> typeof m.Vnode[]
+        copyAttrs(attrs, node);
+
+        if (node.style) { node.attrs.style = node.style;  }
+        let css = '';
+        if (node.attrs.columns)  { 
+            css = new Columns(node.attrs.columns).styles(_content); 
+            node.attrs.columns = undefined;
+        }
+        if (node.attrs.rows)     { 
+            css = new Rows(node.attrs.rows).styles(_content);       
+            node.attrs.rows = undefined;
+        }
+        return m(`${cssClass} ${css} .hs-layout`, node.attrs, _content);
     }
-    content(node: typeof m.Vnode):typeof m.Vnode  { return m("default"); };
-    attrs(node?: typeof m.Vnode):any { return {}; }
-    view(node?: typeof m.Vnode) { 
-        const attrs = this.attrs(node);
-        attrs.id = node.mid;
-        node.style = node.style || '';
-        attrs.style = node.style; 
-        console.log(`${attrs.id} ${this.cssClass} ${attrs.style}`);
-        return layItOut(`${this.cssClass}`, attrs, this.content(node)); 
-    };
 }
 
+class TextLayout extends Layout {
+    constructor() { super(); }
+    view(node: typeof m.Vnode): typeof m.Vnode { 
+        if (node.style) { node.attrs.style = node.style; }
+        return m('.hs-layout', node.attrs, node.attrs.content); 
+    }
+}
 
 
