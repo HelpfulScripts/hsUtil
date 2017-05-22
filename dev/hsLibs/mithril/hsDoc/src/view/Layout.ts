@@ -4,14 +4,51 @@
  */
 
 const m = require("mithril");
-import { Rows, Columns } from './PillaredLayout';
-
-//const CSSLayout             = '.hs-layout';
-
-//export interface Vnode { tag:string; attrs?: {id: string}; children: Vnode[]|string; }
-
 let id = 0;
 
+/**
+ * 
+ */
+export abstract class LayoutArea {
+    constructor(public size: number) {}
+}
+
+/**
+ * 
+ */
+export abstract class LayoutStyle {
+    static layoutStyles = {};
+    public static register(keyword:string, style:typeof LayoutStyle) {
+        console.log(`registering ${keyword} layout`);
+        LayoutStyle.layoutStyles[keyword] = style;
+    }
+
+    public static createLayout(attrs:any, content:Array<typeof m.Vnode>):string {
+        let css = '';
+        Object.keys(LayoutStyle.layoutStyles).some(key => {
+            if (attrs[key]) { 
+                css = new LayoutStyle.layoutStyles[key](attrs[key]).styles(content); 
+                attrs[key] = undefined;
+                return true;
+            }
+            return false;
+        });
+        return css;
+    }
+
+
+    spacing = 0;    
+    constructor(public areaDesc:LayoutArea[]) { };
+
+    styles(content:Array<typeof Layout>) {
+        return this.getStyles(content);
+    }
+    protected abstract getStyles(content:typeof m.Vnode[]):string;
+}
+
+/**
+ * 
+ */
 export abstract class Component {
     id:number;
     constructor() { this.id = id++; }
@@ -61,6 +98,7 @@ export abstract class Layout extends Component {
     public style:string;
     cssClass: string;
     content: typeof m.Vnode;
+
     constructor() { super(); }
 
     public layout(cssClass:string, node: typeof m.Vnode, attrs:any, content:Array<typeof m.Vnode|string>|string): typeof m.Vnode {
@@ -84,7 +122,8 @@ export abstract class Layout extends Component {
         copyAttrs(attrs, node);
 
         if (node.style) { node.attrs.style = node.style;  }
-        let css = '';
+        let css = LayoutStyle.createLayout(node.attrs, _content);
+/*        
         if (node.attrs.columns)  { 
             css = new Columns(node.attrs.columns).styles(_content); 
             node.attrs.columns = undefined;
@@ -93,6 +132,7 @@ export abstract class Layout extends Component {
             css = new Rows(node.attrs.rows).styles(_content);       
             node.attrs.rows = undefined;
         }
+*/        
         return m(`${cssClass} ${css} .hs-layout`, node.attrs, _content);
     }
 }

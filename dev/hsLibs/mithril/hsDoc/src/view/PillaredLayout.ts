@@ -1,11 +1,7 @@
 const m = require("mithril");
 
-import { Layout } from './Layout';
+import { Layout, LayoutStyle, LayoutArea } from './Layout';
 
-
-abstract class LayoutArea {
-    constructor(public size: number) {}
-}
 
 abstract class DefinedArea extends LayoutArea{
     constructor(size: number) { super(size); } 
@@ -52,25 +48,17 @@ const cParams = {
     }
 };
 
-abstract class Areas {
-    spacing = 0;    
-    constructor(public paramName:string, public areaDesc:any[]) { };
-
-    styles(content:Array<typeof Layout>) {
-        return this.getStyles(content);
-    }
-    protected abstract getStyles(content:typeof m.Vnode[]):string;
-}
-
-class Pillars extends Areas{
+class Pillars extends LayoutStyle{
     firstFixed: number; // number of DefinedArea entries at the beginning
     lastFixed:  number; // number of DefinedArea entries at the end
     unit:(num:number)=>any[];
     fields: string[];
+    cssClass:string;
 
-    constructor(paramName:string, areaDesc:LayoutArea[]) { 
-        super(paramName, areaDesc); 
+    constructor(paramName:string, public areaDesc:LayoutArea[]) { 
+        super(areaDesc); 
         this.fields = cParams[paramName].fields;
+        this.cssClass = cParams[paramName].cssClass;
 
         let n = areaDesc.length-1;
         let first = 0;
@@ -177,15 +165,18 @@ class Pillars extends Areas{
             area.style = `${f[0]}:0%; ${f[1]}:0%; `;
             Object.keys(styles[i].fields).forEach((st:string) => { area.style += `${st}: ${styles[i].fields[st]};`; });
         });   
-        return cParams[this.paramName].cssClass;
+        return this.cssClass;
     };
 };
 
 export class Columns extends Pillars {
-    constructor(areaDesc:LayoutArea[]) { super('columns', areaDesc);  };
+    constructor(public areaDesc:LayoutArea[]) { super('columns', areaDesc);  };
 };
 
 
 export class Rows extends Pillars {
-    constructor(areaDesc:LayoutArea[]) { super('rows', areaDesc);  };
+    constructor(public areaDesc:LayoutArea[]) { super('rows', areaDesc);  };
 };
+
+LayoutStyle.register('columns', Columns);
+LayoutStyle.register('rows',    Rows);
