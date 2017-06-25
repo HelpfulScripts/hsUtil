@@ -29,13 +29,16 @@ function loadExampleList(modules:typeof Modules) {
         .catch(console.log);
 }
 
-function recursiveIndex(content:any, index:any) {
+function recursiveIndex(content:any, index:any, prefix='') {
+    let name:string;
     if (typeof content === 'object' && content.name) {
         content.name = content.name.replace(/["'](.+)["']|(.+)/g, "$1$2");  // remove quotes 
-        index[content.name] = content;
+        name = `${prefix}${content.name}`;
+        index[name] = content;
     }
     if (content.children) {
-        content.children.map((c:any) => recursiveIndex(c, index));
+console.log(`...added ${name}`);        
+        content.children.map((c:any) => recursiveIndex(c, index, name+'.'));
     }
 }
 

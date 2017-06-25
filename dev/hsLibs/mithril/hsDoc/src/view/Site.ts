@@ -42,7 +42,7 @@ class MainArea extends Layout {
         node.attrs.field = undefined;
         return this.layout('.hs-site-main', node, { columns: [LeftNavWidth, FILL]}, [
             m(ModuleNav, {lib:lib}), 
-            m(ModuleDetail, {lib:lib, field:field})
+            m(ModuleDetail, {field:field})
         ]);
     }
 };
@@ -71,7 +71,9 @@ class ModulesMenuBar extends Layout {
 
 class ModulesMenu extends Layout {
     view(node: typeof m.Vnode): typeof m.Vnode {
-        return m('.hs-module-name', { href:`/api/${node.attrs.name}/`, oncreate: m.route.link, onupdate: m.route.link}, node.attrs.name);
+        const name = node.attrs.name;
+        node.attrs.name = undefined;
+        return m('.hs-module-name', { href:`/api/${name}/`, oncreate: m.route.link, onupdate: m.route.link}, name);
     }
 };
 
@@ -80,15 +82,18 @@ class ModulesMenu extends Layout {
 
 class ModuleNav extends Layout { 
     view(node: typeof m.Vnode): typeof m.Vnode {
-        const mdl = Modules.get(node.attrs.lib) || {name:node.attrs.lib, children:[], id:'none'};
-        return this.layout('.hs-module-nav', node, {}, [m(ModuleNavList, {mdl:mdl, lib:node.attrs.lib})]);
+        const lib = node.attrs.lib;
+        const mdl = Modules.get(node.attrs.lib) || {name:lib, children:[], id:'none'};
+        node.attrs.lib = undefined;
+        return this.layout('.hs-module-nav', node, {}, [m(ModuleNavList, {mdl:mdl, lib:lib, prefix:''})]);
         
     } 
 }
 
 class ModuleDetail extends Layout { 
     view(node:typeof m.Vnode): typeof m.Vnode {
-        const field = Modules.get(node.attrs.field);
+        const field = Modules.get(node.attrs.field) || 'hui';
+        node.attrs.field = undefined;
         return this.layout('.hs-module-detail', node, {}, [m(ItemDetail, {field: field})]); 
     }
 }
@@ -98,13 +103,15 @@ class ModuleDetail extends Layout {
 class ModuleNavList {
     view(node: typeof m.Vnode): typeof m.Vnode {
         const mdl = node.attrs.mdl;
+        const name = mdl.name.replace(/["'](.+)["']|(.+)/g, "$1$2");  // remove quotes 
+        const longName = `${node.attrs.prefix}${name}`;  
         const lib = node.attrs.lib;
         node.attrs.mdl = undefined;
         node.attrs.lib = undefined;
-        const name = mdl.name.replace(/["'](.+)["']|(.+)/g, "$1$2");  // remove quotes 
-        const mNode = m('li', {href:`/api/${lib}/${name}`, oncreate: m.route.link, onupdate: m.route.link}, name);
-        return m('li', {}, [mNode, mdl.children?
-            m('li.hs-nav-list', mdl.children.map((c:any) => m(ModuleNavList, {mdl:c, lib:lib}))) 
+        node.attrs.prefix = undefined;
+        const mNode = m('div', {href:`/api/${lib}/${longName}`, oncreate: m.route.link, onupdate: m.route.link}, name);
+        return m('.hs-module-list', {}, [mNode, mdl.children?
+            m('.hs-member-list', mdl.children.map((c:any) => m(ModuleNavList, {mdl:c, lib:lib, prefix:longName+'.'}))) 
             : undefined
         ]);
     }
@@ -123,42 +130,3 @@ class ItemDetail  {
     }
 }
 
-
-
-
-
-class ModuleNavLevel {
-    view(node: typeof m.Vnode): typeof m.Vnode {
-        const mdl = node.attrs.mdl;
-        const indent = node.attrs.indent;  
-//        const field = node.attrs.field;  
- //       field.field = mdl;
-        return m('li.hs-nav-level', Object.keys(mdl).map(key => {
-            return m(ModuleNavItem, {indent: indent, key: key, content: mdl[key]}); 
-        }));
-    }
-}
-
-class ModuleNavItem {
-    view(node: typeof m.Vnode): typeof m.Vnode {
-        const key       = node.attrs.key;
-        const content   = node.attrs.content;
-        const indent    = node.attrs.indent; 
-        const spacer    = Array(indent+1).join('.'); 
-        node.attrs.key = undefined;
-        node.attrs.content = undefined;
-        node.attrs.indent = undefined;
-        if (key === 'children' && content.length > 0) { 
-            return m('li', [
-                m('li', `${spacer} ${content.length} Children`),
-                m('li', content.map((c:any, i:number) => m('li', [
-                    m('li', `${spacer} child ${i}:`),
-                    m(ModuleNavLevel, {mdl:c, indent:(indent+3)})
-            ])))]); 
-        } else if (typeof content === 'object' && content.length > 0) {
-            return m('li', `${spacer} ${key}:[${content.length}]`); 
-        } else {
-            return m('li', `${spacer} ${key}: ${content}`); 
-        }
-    }
-}
