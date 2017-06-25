@@ -1,4 +1,4 @@
-@import "Layout.less";
+@import "../../../hsLayout/src/css/Layout.less";
 
 
 //-------- Top Level Structure --------------------
@@ -18,7 +18,8 @@
 
 
 .hs-site-title {    // the left Header in the top bar
-    width: 100%;     
+    width: 100%;   
+    padding: 5px 10px;  
 }
 
 .hs-module-title {  // the bar containing the module menu
@@ -30,10 +31,19 @@
 }
 
 .hs-module-nav {    // the left detail window providing a nav overview
-    width: 100%;     
+    width: 100%;  
+    font-size:70%;
+    list-style-type: none;   
 }
 
 .hs-module-detail { // the main information window on the right
     width: 100%;     
 }
 
+.hs-nav-list {
+    margin-left:10px;
+}
+
+.hs-item-detail {
+    list-style-type: none;   
+}

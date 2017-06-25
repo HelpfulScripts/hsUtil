@@ -101,6 +101,13 @@ export abstract class Layout extends Component {
 
     constructor() { super(); }
 
+    oninit(node: typeof m.Vnode) {
+        if (node.instance && node.instance.children && node.instance.children.length>0) { node.instance.children[0].hoho = 'haha'; }
+    }
+
+    oncreate(node: typeof m.Vnode) {
+    }
+
     public layout(cssClass:string, node: typeof m.Vnode, attrs:any, content:Array<typeof m.Vnode|string>|string): typeof m.Vnode {
         function makeContent(content:Array<typeof Layout|string>|string): any {
             let result:any = [];
@@ -119,20 +126,11 @@ export abstract class Layout extends Component {
         }
 
         const _content = makeContent(content); // --> typeof m.Vnode[]
+        attrs.id = this.id;
         copyAttrs(attrs, node);
 
         if (node.style) { node.attrs.style = node.style;  }
         let css = LayoutStyle.createLayout(node.attrs, _content);
-/*        
-        if (node.attrs.columns)  { 
-            css = new Columns(node.attrs.columns).styles(_content); 
-            node.attrs.columns = undefined;
-        }
-        if (node.attrs.rows)     { 
-            css = new Rows(node.attrs.rows).styles(_content);       
-            node.attrs.rows = undefined;
-        }
-*/        
         return m(`${cssClass} ${css} .hs-layout`, node.attrs, _content);
     }
 }

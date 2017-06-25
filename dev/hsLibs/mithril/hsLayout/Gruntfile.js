@@ -15,22 +15,22 @@ module.exports = function(grunt) {
 				' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
 
 		clean: {
-			src:   ['dist/'],
+			src:   ['dist/js'],
             docs:  ['docs'],
-            test:  ['dist/test','docs/test']
+            test:  ['dist/test','docs/tests']
 		},
 		
 		// Task configuration.
 		copy: {
             build: { cwd:'src/', expand:true, src:['*.html'], dest:'dist/' },
 		    test: { files: [
-                { cwd:'dist/test/', expand:true, src:['*.js', '*.css', '*.html'], dest:'test/'},
-                { cwd:'example/',   expand:true, src:['*.json'], dest:'test/'}
+                { cwd:'dist/',    expand:true, src:['*.js', '*.css', '*.html'], dest:'test/'},
+                { cwd:'example/', expand:true, src:['*.json'], dest:'test/'}
             ]}, 
 			stage: { files: [
-                { expand: true, cwd: 'dist/', src: ['*.js', '*.css', '*.css.map', '*.html'], dest: staging },
-//                { src: ['packageDeploy.json'],    dest: staging+'../package.json' },
-	            { expand: true, flatten:true, src: ['example/*.json'],    dest: staging+'data/' }
+                { expand: true, cwd: 'dist/', src: ['*.css', '*.css.map', '*.html'], dest: staging },
+                { src: ['packageDeploy.json'],    dest: staging+'../package.json' },
+	            { src: ['packageDeploy.json'],    dest: staging+'../package.json' }
             ]}
 		},
 		
@@ -65,12 +65,12 @@ module.exports = function(grunt) {
                 allowJs:            true
            },
             src : {
-                outDir:     "dist/",
-                src: ["src/**/*.ts"],
+                outDir:     "dist/js",
+                src: ["src/**/*.ts", "!arc/**/*.spec.ts"],
                 tsconfig:   true,
            },
             test : {
-                outDir:     "dist/test/",
+                outDir:     "dist/test",
                 src: ["src/**/*.ts"],
                 tsconfig:   './tsConfigTest.json'
             }
@@ -101,7 +101,7 @@ module.exports = function(grunt) {
 				exclude: [ ], 
 				coverageReporter: { 
 				   type : 'html',
-				   dir : 'test/',
+				   dir : 'dist/tests/',
 				   subdir: '', 
 				   includeAllSources: true
 				},
@@ -131,16 +131,6 @@ module.exports = function(grunt) {
 				    {hs:['dist/test/**/*.spec.js']}
 				]
 			},
-		},
-
-        webpack: {
-            production: { // webpack options 
-                entry: './dist/hsDoc/src/index.js',
-                output: {
-                    filename: 'hsDocs.js',
-                    path: path.resolve(__dirname, './dist')
-                }
-            }
 		},
 
 		watch: {
@@ -177,16 +167,14 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-typedoc');
     grunt.loadNpmTasks('grunt-tslint');
     grunt.loadNpmTasks('grunt-ts');
-    grunt.loadNpmTasks('grunt-webpack');
 
     grunt.registerTask('doc', ['clean:docs', 'typedoc']);
-    grunt.registerTask('stage', ['webpack:production', 'copy:stage']);
     grunt.registerTask('build-html', ['copy:build']);
     grunt.registerTask('build-css', ['less']);
     grunt.registerTask('build-js', ['tslint:src', 'ts:src']);
     grunt.registerTask('build-spec', ['tslint:spec', 'ts:test']);
     grunt.registerTask('test', ['clean:test', 'copy:test', 'build-spec', 'karma']);
-    grunt.registerTask('build', ['clean:src', 'build-html', 'build-css', 'build-js', 'stage']);
-	grunt.registerTask('make', ['build', /*'test', 'doc'*/ ]);
+    grunt.registerTask('build', ['clean:src', 'build-html', 'build-css', 'build-js']);
+	grunt.registerTask('make', ['build', 'test', 'doc']);
     grunt.registerTask('default', ['make', 'watch']);	
 };

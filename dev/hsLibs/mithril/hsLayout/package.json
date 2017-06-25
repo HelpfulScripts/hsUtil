@@ -1,0 +1,19 @@
+{
+  "name": "hsDoc",
+  "version": "0.9.5",
+  "keywords": [],
+  "description": "Helpful Scripts documentation utility",
+  "author": {
+    "name": "Hauke Schmidt",
+    "email": "hauke.schmidt@us.bosch.com"
+  },
+  "scripts": {
+    "start": "grunt"
+  },
+  "engines": {
+    "node": ">= 0.10.0"
+  },
+  "plugins": [
+    "plugins/markdown"
+  ]
+}
