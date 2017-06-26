@@ -7,6 +7,7 @@ export interface Module {
 }
 
 const useDefault = false;
+const dir = './data/';
 
 
 function loadDefaultList(modules:typeof Modules) {
@@ -17,28 +18,31 @@ function loadDefaultList(modules:typeof Modules) {
     });
 }
 
-function loadExampleList(modules:typeof Modules) {
-    return m.request({
-            method: "GET",
-            url: "./data/docs.json"
-        })
-        .then(function(result:any) {
-            console.log('received docs.json');
-            modules.add(result.id, result.name, result);
+function loadDocSet(modules:typeof Modules, file:string) {
+    return m.request({ method: "GET", url: dir+file })
+        .then((r:any) => {
+console.log('received ' + file);
+            modules.add(r.id, r.name, r);
+        });
+}
+
+function loadIndexSet(modules:typeof Modules) {
+    return m.request({ method: "GET", url: dir+"index.json" })
+        .then((result:any) =>  {
+console.log('received index');
+            return Promise.all(result.docs.map((file:string) => loadDocSet(modules, file)));            
         })
         .catch(console.log);
 }
 
-function recursiveIndex(content:any, index:any, prefix='') {
-    let name:string;
+function recursiveIndex(content:any, index:any, lib:string) {
+    content.lib = lib;
     if (typeof content === 'object' && content.name) {
         content.name = content.name.replace(/["'](.+)["']|(.+)/g, "$1$2");  // remove quotes 
-        name = `${prefix}${content.name}`;
-        index[name] = content;
+        index[content.id+''] = content;
     }
     if (content.children) {
-console.log(`...added ${name}`);        
-        content.children.map((c:any) => recursiveIndex(c, index, name+'.'));
+        content.children.map((c:any) => recursiveIndex(c, index, lib));
     }
 }
 
@@ -47,16 +51,19 @@ export const Modules = {
 
 
     add(id:number, name:string, content:any) {
-        this.list.set.push({id:id, name:name, content:content});
-        recursiveIndex(content, this.list.index);
+console.log('add');        
+        this.list.set.push(name);
+        this.list.index[name] = {};
+        recursiveIndex(content, this.list.index[name], name);
+console.log(this.list);        
     },
 
     loadList() { 
-        return (useDefault? loadDefaultList(this) : loadExampleList(this)); 
+        return (useDefault? loadDefaultList(this) : loadIndexSet(this)); 
     },
 
-    get(mdl?:string) { 
-        const result = mdl? this.list.index[mdl] : this.list.set; 
+    get(lib?:string, id=0) { 
+        const result = lib? this.list.index[lib][id+''] : this.list.set; 
         return result;
     }
 };

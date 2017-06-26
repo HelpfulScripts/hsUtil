@@ -1,5 +1,9 @@
 @import "../../../hsLayout/src/css/Layout.less";
 
+.hs-layout {
+    margin:0;
+    padding:0;
+}
 
 //-------- Top Level Structure --------------------
 .hs-site-header {   // the top bar of the site
@@ -15,7 +19,6 @@
 //----------- HeaderBar parts --------------------------------------------------------
 
 .hs-site-title {    // the left Header in the top bar
-    padding: 5px 10px;  
 }
 
 .hs-module-title {  // the bar containing the module menu
@@ -28,18 +31,66 @@
 
 .hs-module-nav {    // the left detail window providing a nav overview
     font-size:70%;
-    list-style-type: none;   
+    list-style-type: none; 
+    padding:0;  
 }
 
-.hs-module-detail { // the main information window on the right
+div.hs-module-detail { // the main information window on the right
+    font-size: 0.6em;
 } 
 
 //----------- MainNav parts --------------------------------------------------------
 
-.hs-member-list {
+.hs-indent {
     margin-left:10px;
 }
 
 .hs-item-detail {
     list-style-type: none;   
+}
+
+
+//----------- Documentation classes --------------------------------------------------------
+
+.hs-library-name{
+    font-size: 1.6em;
+    font-weight: bold;
+//    background-color: #cfc;
+    padding-top: 0.6em;
+    padding-left:10px;
+    height: 1em;
+}
+
+.hs-ext-module {
+    margin-left:5px;
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.hs-ext-module-name {
+    padding-left:5px;
+    font-size: 1.4em;
+    background-color: #eee;
+}
+
+.hs-module-entries {
+    border-top: 1px solid #aaa;
+}
+
+.hs-module-header {
+    padding-right: 5px;
+    text-align: right;
+    font-style: italic;
+    background-color: #eef;
+}
+
+.hs-module-entry {
+    padding-left:5px;
+    background-color: transparent;
+}
+
+.hs-exported {
+    color: #44f;
+    font-weight: bold;
 }
