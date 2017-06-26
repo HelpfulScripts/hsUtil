@@ -1,0 +1,4735 @@
+{
+	"id": 0,
+	"name": "hsLayout",
+	"kind": 0,
+	"flags": {},
+	"children": [
+		{
+			"id": 232,
+			"name": "\"index\"",
+			"kind": 1,
+			"kindString": "External module",
+			"flags": {
+				"isExported": true
+			},
+			"originalName": "/Users/sth1pal/Documents/Development/JavaScript/node.js/ts6/dev/hsLibs/mithril/hsLayout/src/index.ts",
+			"sources": [
+				{
+					"fileName": "index.ts",
+					"line": 1,
+					"character": 0
+				}
+			]
+		},
+		{
+			"id": 1,
+			"name": "\"view/Layout\"",
+			"kind": 1,
+			"kindString": "External module",
+			"flags": {
+				"isExported": true
+			},
+			"originalName": "/Users/sth1pal/Documents/Development/JavaScript/node.js/ts6/dev/hsLibs/mithril/hsLayout/src/view/Layout.ts",
+			"children": [
+				{
+					"id": 29,
+					"name": "Component",
+					"kind": 128,
+					"kindString": "Class",
+					"flags": {
+						"isExported": true
+					},
+					"comment": {},
+					"children": [
+						{
+							"id": 31,
+							"name": "constructor",
+							"kind": 512,
+							"kindString": "Constructor",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 32,
+									"name": "new Component",
+									"kind": 16384,
+									"kindString": "Constructor signature",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"name": "Component",
+										"id": 29
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 53,
+									"character": 14
+								}
+							]
+						},
+						{
+							"id": 30,
+							"name": "id",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 53,
+									"character": 6
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"name": "number"
+							}
+						},
+						{
+							"id": 33,
+							"name": "view",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true,
+								"isPublic": true
+							},
+							"signatures": [
+								{
+									"id": 34,
+									"name": "view",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 35,
+											"name": "vnode",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {
+												"isOptional": true
+											},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "any"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 55,
+									"character": 24
+								}
+							]
+						}
+					],
+					"groups": [
+						{
+							"title": "Constructors",
+							"kind": 512,
+							"children": [
+								31
+							]
+						},
+						{
+							"title": "Properties",
+							"kind": 1024,
+							"children": [
+								30
+							]
+						},
+						{
+							"title": "Methods",
+							"kind": 2048,
+							"children": [
+								33
+							]
+						}
+					],
+					"sources": [
+						{
+							"fileName": "view/Layout.ts",
+							"line": 52,
+							"character": 31
+						}
+					],
+					"extendedBy": [
+						{
+							"type": "reference",
+							"name": "Layout",
+							"id": 36
+						}
+					]
+				},
+				{
+					"id": 36,
+					"name": "Layout",
+					"kind": 128,
+					"kindString": "Class",
+					"flags": {
+						"isExported": true
+					},
+					"comment": {
+						"tags": [
+							{
+								"tag": "ngdoc",
+								"text": "directive"
+							},
+							{
+								"tag": "name",
+								"text": "hsLayout.directive:hsLayout"
+							},
+							{
+								"tag": "restrict",
+								"text": "E"
+							},
+							{
+								"tag": "element",
+								"text": "ANY"
+							},
+							{
+								"tag": "description",
+								"text": "hs-layout directive. Establishes a space in which\n{@link hsLayout.directive:hsWidget widgets} live.\n# Attributes\nAll attributes are optional except where marked as required. For emphasis, optional attributes\nare wrapped in square brackets: `[...]`. When optional, the default value is <u>underlined</u>.\n- [**hs-type** = '<u>tiles</u> | columns | rows | relative']\nsets the type of layout. For options see below\n- [**hs-tiles**] alternative to `hs-type=tiles`; creates a {@link hsLayout.object.HsTileLayout tile layout}\n- [**hs-columns='[<i>Array</i>, ]'**]\nPlease see {@link hsLayout.object.HsColumnsLayout columns layout} on avaliable options for `Array`\n- [**hs-rows='[<i>Array</i>, ]'**]\nPlease see {@link hsLayout.object.HsRowsLayout rows layout} on avaliable options for `Array`\n- [**hs-relative**] create a {@link hsLayout.object.HsRelativeLayout relative layout}\n- [**hs-fill-last-col**] applies to tile layout only; if specified, the last colum of tiles are stretched horizontally\nto fill the remaining space.\n\nElements in `Array` will be used as width indicators for the widgets that are children of this layout.\nAll widths have to be specified either in px or in %.\nThe following options are supported for `Array`:\n- []: An empty array; all widgets will be evenly spaced across the available width.\n- [fw]: All widgets have the specified width (in px or %) and will fill the available space with from the left,\nleaving any remaining unused space on the right.\n- [fw,]: Sets the first (left) widget to a width of `fw`.<br>\nif `fw` is specified in %, the remaining n-1 widgets will have equal relative widths of `(100-fw)/(n-1)%`<br>\nif `fw` is specified in px, the remaining n-1 widgets will have their right borders at location `i*100/n%`, with i=1...n.\n- [,lw]: Sets the last (right) widget to a width of `lw`.<br>\nif `lw` is specified in %, the remaining n-1 widgets will have equal relative widths of `(100-lw)/(n-1)%`<br>\nif `lw` is specified in px, the remaining n-1 widgets will have their left borders at location `i*100/n%`, with i=0...n-1.\n- [fw,,lw]: Sets the first and last widget to a width of `fw`/`lw`.<br>\nBoth have to be specified either in px or in %.<br>\nif the unit is %, the remaining n-2 widgets will have equal relative widths of `(100-lw-fw)/(n-2)%`<br>\nif the unit is px, the remaining n-2 widgets will have their left/right borders at location `i*100/n%`.\n- [1w, 2w, , w2, w1]: multiple widths can be specified in uninterrupted sequence both from the left and the right.\n"
+							}
+						]
+					},
+					"children": [
+						{
+							"id": 40,
+							"name": "constructor",
+							"kind": 512,
+							"kindString": "Constructor",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 41,
+									"name": "new Layout",
+									"kind": 16384,
+									"kindString": "Constructor signature",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"name": "Layout",
+										"id": 36
+									},
+									"overwrites": {
+										"type": "reference",
+										"name": "Component.__constructor",
+										"id": 31
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 100,
+									"character": 28
+								}
+							],
+							"overwrites": {
+								"type": "reference",
+								"name": "Component.__constructor",
+								"id": 31
+							}
+						},
+						{
+							"id": 39,
+							"name": "content",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 100,
+									"character": 11
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"name": "any"
+							}
+						},
+						{
+							"id": 38,
+							"name": "cssClass",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 99,
+									"character": 12
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"name": "string"
+							}
+						},
+						{
+							"id": 54,
+							"name": "id",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 53,
+									"character": 6
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"name": "number"
+							},
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "Component.id",
+								"id": 30
+							}
+						},
+						{
+							"id": 37,
+							"name": "style",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true,
+								"isPublic": true
+							},
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 98,
+									"character": 16
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"name": "string"
+							}
+						},
+						{
+							"id": 48,
+							"name": "layout",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true,
+								"isPublic": true
+							},
+							"signatures": [
+								{
+									"id": 49,
+									"name": "layout",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 50,
+											"name": "cssClass",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "string"
+											}
+										},
+										{
+											"id": 51,
+											"name": "node",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										},
+										{
+											"id": 52,
+											"name": "attrs",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										},
+										{
+											"id": 53,
+											"name": "content",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "union",
+												"types": [
+													{
+														"type": "reference",
+														"name": "Array",
+														"typeArguments": [
+															{
+																"type": "union",
+																"types": [
+																	{
+																		"type": "instrinct",
+																		"name": "any"
+																	},
+																	{
+																		"type": "instrinct",
+																		"name": "string"
+																	}
+																]
+															}
+														]
+													},
+													{
+														"type": "instrinct",
+														"name": "string"
+													}
+												]
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "any"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 111,
+									"character": 17
+								}
+							]
+						},
+						{
+							"id": 45,
+							"name": "oncreate",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 46,
+									"name": "oncreate",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 47,
+											"name": "node",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 108,
+									"character": 12
+								}
+							]
+						},
+						{
+							"id": 42,
+							"name": "oninit",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 43,
+									"name": "oninit",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 44,
+											"name": "node",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 104,
+									"character": 10
+								}
+							]
+						},
+						{
+							"id": 55,
+							"name": "view",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true,
+								"isPublic": true
+							},
+							"signatures": [
+								{
+									"id": 56,
+									"name": "view",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 57,
+											"name": "vnode",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {
+												"isOptional": true
+											},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "any"
+									},
+									"inheritedFrom": {
+										"type": "reference",
+										"name": "Component.view",
+										"id": 33
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 55,
+									"character": 24
+								}
+							],
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "Component.view",
+								"id": 33
+							}
+						}
+					],
+					"groups": [
+						{
+							"title": "Constructors",
+							"kind": 512,
+							"children": [
+								40
+							]
+						},
+						{
+							"title": "Properties",
+							"kind": 1024,
+							"children": [
+								39,
+								38,
+								54,
+								37
+							]
+						},
+						{
+							"title": "Methods",
+							"kind": 2048,
+							"children": [
+								48,
+								45,
+								42,
+								55
+							]
+						}
+					],
+					"sources": [
+						{
+							"fileName": "view/Layout.ts",
+							"line": 97,
+							"character": 28
+						}
+					],
+					"extendedTypes": [
+						{
+							"type": "reference",
+							"name": "Component",
+							"id": 29
+						}
+					],
+					"extendedBy": [
+						{
+							"type": "reference",
+							"name": "TextLayout",
+							"id": 58
+						}
+					]
+				},
+				{
+					"id": 2,
+					"name": "LayoutArea",
+					"kind": 128,
+					"kindString": "Class",
+					"flags": {
+						"isExported": true
+					},
+					"comment": {},
+					"children": [
+						{
+							"id": 3,
+							"name": "constructor",
+							"kind": 512,
+							"kindString": "Constructor",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 5,
+									"name": "new LayoutArea",
+									"kind": 16384,
+									"kindString": "Constructor signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 6,
+											"name": "size",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "number"
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"name": "LayoutArea",
+										"id": 2
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 12,
+									"character": 34
+								}
+							]
+						},
+						{
+							"id": 4,
+							"name": "size",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isConstructorProperty": true,
+								"isExported": true,
+								"isPublic": true
+							},
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 13,
+									"character": 27
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"name": "number"
+							}
+						}
+					],
+					"groups": [
+						{
+							"title": "Constructors",
+							"kind": 512,
+							"children": [
+								3
+							]
+						},
+						{
+							"title": "Properties",
+							"kind": 1024,
+							"children": [
+								4
+							]
+						}
+					],
+					"sources": [
+						{
+							"fileName": "view/Layout.ts",
+							"line": 12,
+							"character": 32
+						}
+					],
+					"extendedBy": [
+						{
+							"type": "reference",
+							"name": "DefinedArea",
+							"id": 83
+						},
+						{
+							"type": "reference",
+							"name": "FillArea",
+							"id": 98
+						}
+					]
+				},
+				{
+					"id": 7,
+					"name": "LayoutStyle",
+					"kind": 128,
+					"kindString": "Class",
+					"flags": {
+						"isExported": true
+					},
+					"comment": {},
+					"children": [
+						{
+							"id": 19,
+							"name": "constructor",
+							"kind": 512,
+							"kindString": "Constructor",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 21,
+									"name": "new LayoutStyle",
+									"kind": 16384,
+									"kindString": "Constructor signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 22,
+											"name": "areaDesc",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"isArray": true,
+												"name": "LayoutArea",
+												"id": 2
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"name": "LayoutStyle",
+										"id": 7
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 40,
+									"character": 16
+								}
+							]
+						},
+						{
+							"id": 20,
+							"name": "areaDesc",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isConstructorProperty": true,
+								"isExported": true,
+								"isPublic": true
+							},
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 41,
+									"character": 31
+								}
+							],
+							"type": {
+								"type": "reference",
+								"isArray": true,
+								"name": "LayoutArea",
+								"id": 2
+							}
+						},
+						{
+							"id": 18,
+							"name": "spacing",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 40,
+									"character": 11
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"name": "number"
+							},
+							"defaultValue": "0"
+						},
+						{
+							"id": 8,
+							"name": "layoutStyles",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 20,
+									"character": 23
+								}
+							],
+							"type": {
+								"type": "reflection",
+								"declaration": {
+									"id": 9,
+									"name": "__type",
+									"kind": 65536,
+									"kindString": "Type literal",
+									"flags": {}
+								}
+							}
+						},
+						{
+							"id": 26,
+							"name": "getStyles",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true,
+								"isProtected": true
+							},
+							"signatures": [
+								{
+									"id": 27,
+									"name": "getStyles",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 28,
+											"name": "content",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"isArray": true,
+												"name": "any"
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "string"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 46,
+									"character": 32
+								}
+							]
+						},
+						{
+							"id": 23,
+							"name": "styles",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 24,
+									"name": "styles",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 25,
+											"name": "content",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"name": "Array",
+												"typeArguments": [
+													{
+														"type": "reference",
+														"name": "Layout",
+														"id": 36
+													}
+												]
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "string"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 43,
+									"character": 10
+								}
+							]
+						},
+						{
+							"id": 14,
+							"name": "createLayout",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isExported": true,
+								"isPublic": true
+							},
+							"signatures": [
+								{
+									"id": 15,
+									"name": "createLayout",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 16,
+											"name": "attrs",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										},
+										{
+											"id": 17,
+											"name": "content",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"name": "Array",
+												"typeArguments": [
+													{
+														"type": "instrinct",
+														"name": "any"
+													}
+												]
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "string"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 26,
+									"character": 30
+								}
+							]
+						},
+						{
+							"id": 10,
+							"name": "register",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isExported": true,
+								"isPublic": true
+							},
+							"signatures": [
+								{
+									"id": 11,
+									"name": "register",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 12,
+											"name": "keyword",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "string"
+											}
+										},
+										{
+											"id": 13,
+											"name": "style",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"name": "LayoutStyle",
+												"id": 7
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 21,
+									"character": 26
+								}
+							]
+						}
+					],
+					"groups": [
+						{
+							"title": "Constructors",
+							"kind": 512,
+							"children": [
+								19
+							]
+						},
+						{
+							"title": "Properties",
+							"kind": 1024,
+							"children": [
+								20,
+								18,
+								8
+							]
+						},
+						{
+							"title": "Methods",
+							"kind": 2048,
+							"children": [
+								26,
+								23,
+								14,
+								10
+							]
+						}
+					],
+					"sources": [
+						{
+							"fileName": "view/Layout.ts",
+							"line": 19,
+							"character": 33
+						}
+					],
+					"extendedBy": [
+						{
+							"type": "reference",
+							"name": "Pillars",
+							"id": 113
+						}
+					]
+				},
+				{
+					"id": 58,
+					"name": "TextLayout",
+					"kind": 128,
+					"kindString": "Class",
+					"flags": {},
+					"children": [
+						{
+							"id": 59,
+							"name": "constructor",
+							"kind": 512,
+							"kindString": "Constructor",
+							"flags": {},
+							"signatures": [
+								{
+									"id": 60,
+									"name": "new TextLayout",
+									"kind": 16384,
+									"kindString": "Constructor signature",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"name": "TextLayout",
+										"id": 58
+									},
+									"overwrites": {
+										"type": "reference",
+										"name": "Layout.__constructor",
+										"id": 40
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 138,
+									"character": 33
+								}
+							],
+							"overwrites": {
+								"type": "reference",
+								"name": "Layout.__constructor",
+								"id": 40
+							}
+						},
+						{
+							"id": 66,
+							"name": "content",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 100,
+									"character": 11
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"name": "any"
+							},
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "Layout.content",
+								"id": 39
+							}
+						},
+						{
+							"id": 65,
+							"name": "cssClass",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 99,
+									"character": 12
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"name": "string"
+							},
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "Layout.cssClass",
+								"id": 38
+							}
+						},
+						{
+							"id": 79,
+							"name": "id",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 53,
+									"character": 6
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"name": "number"
+							},
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "Component.id",
+								"id": 30
+							}
+						},
+						{
+							"id": 64,
+							"name": "style",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isPublic": true
+							},
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 98,
+									"character": 16
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"name": "string"
+							},
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "Layout.style",
+								"id": 37
+							}
+						},
+						{
+							"id": 73,
+							"name": "layout",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isPublic": true
+							},
+							"signatures": [
+								{
+									"id": 74,
+									"name": "layout",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 75,
+											"name": "cssClass",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "string"
+											}
+										},
+										{
+											"id": 76,
+											"name": "node",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										},
+										{
+											"id": 77,
+											"name": "attrs",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										},
+										{
+											"id": 78,
+											"name": "content",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "union",
+												"types": [
+													{
+														"type": "reference",
+														"name": "Array",
+														"typeArguments": [
+															{
+																"type": "union",
+																"types": [
+																	{
+																		"type": "instrinct",
+																		"name": "any"
+																	},
+																	{
+																		"type": "instrinct",
+																		"name": "string"
+																	}
+																]
+															}
+														]
+													},
+													{
+														"type": "instrinct",
+														"name": "string"
+													}
+												]
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "any"
+									},
+									"inheritedFrom": {
+										"type": "reference",
+										"name": "Layout.layout",
+										"id": 48
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 111,
+									"character": 17
+								}
+							],
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "Layout.layout",
+								"id": 48
+							}
+						},
+						{
+							"id": 70,
+							"name": "oncreate",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {},
+							"signatures": [
+								{
+									"id": 71,
+									"name": "oncreate",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 72,
+											"name": "node",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "void"
+									},
+									"inheritedFrom": {
+										"type": "reference",
+										"name": "Layout.oncreate",
+										"id": 45
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 108,
+									"character": 12
+								}
+							],
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "Layout.oncreate",
+								"id": 45
+							}
+						},
+						{
+							"id": 67,
+							"name": "oninit",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {},
+							"signatures": [
+								{
+									"id": 68,
+									"name": "oninit",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 69,
+											"name": "node",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "void"
+									},
+									"inheritedFrom": {
+										"type": "reference",
+										"name": "Layout.oninit",
+										"id": 42
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 104,
+									"character": 10
+								}
+							],
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "Layout.oninit",
+								"id": 42
+							}
+						},
+						{
+							"id": 61,
+							"name": "view",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {},
+							"signatures": [
+								{
+									"id": 62,
+									"name": "view",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 63,
+											"name": "node",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "any"
+									},
+									"overwrites": {
+										"type": "reference",
+										"name": "Component.view",
+										"id": 33
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 140,
+									"character": 8
+								}
+							],
+							"overwrites": {
+								"type": "reference",
+								"name": "Component.view",
+								"id": 33
+							}
+						}
+					],
+					"groups": [
+						{
+							"title": "Constructors",
+							"kind": 512,
+							"children": [
+								59
+							]
+						},
+						{
+							"title": "Properties",
+							"kind": 1024,
+							"children": [
+								66,
+								65,
+								79,
+								64
+							]
+						},
+						{
+							"title": "Methods",
+							"kind": 2048,
+							"children": [
+								73,
+								70,
+								67,
+								61
+							]
+						}
+					],
+					"sources": [
+						{
+							"fileName": "view/Layout.ts",
+							"line": 138,
+							"character": 16
+						}
+					],
+					"extendedTypes": [
+						{
+							"type": "reference",
+							"name": "Layout",
+							"id": 36
+						}
+					]
+				},
+				{
+					"id": 81,
+					"name": "id",
+					"kind": 32,
+					"kindString": "Variable",
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "view/Layout.ts",
+							"line": 7,
+							"character": 6
+						}
+					],
+					"type": {
+						"type": "instrinct",
+						"name": "number"
+					},
+					"defaultValue": "0"
+				},
+				{
+					"id": 80,
+					"name": "m",
+					"kind": 32,
+					"kindString": "Variable",
+					"flags": {},
+					"comment": {
+						"tags": [
+							{
+								"tag": "description",
+								"text": ":\nlayout('.myclass', {columns: [layout.px(10), layout.pc(10), layout.fill], []})\n"
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "view/Layout.ts",
+							"line": 6,
+							"character": 7
+						}
+					],
+					"type": {
+						"type": "instrinct",
+						"name": "any"
+					},
+					"defaultValue": " require(\"mithril\")"
+				}
+			],
+			"groups": [
+				{
+					"title": "Classes",
+					"kind": 128,
+					"children": [
+						29,
+						36,
+						2,
+						7,
+						58
+					]
+				},
+				{
+					"title": "Variables",
+					"kind": 32,
+					"children": [
+						81,
+						80
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "view/Layout.ts",
+					"line": 1,
+					"character": 0
+				}
+			]
+		},
+		{
+			"id": 82,
+			"name": "\"view/PillaredLayout\"",
+			"kind": 1,
+			"kindString": "External module",
+			"flags": {
+				"isExported": true
+			},
+			"originalName": "/Users/sth1pal/Documents/Development/JavaScript/node.js/ts6/dev/hsLibs/mithril/hsLayout/src/view/PillaredLayout.ts",
+			"children": [
+				{
+					"id": 157,
+					"name": "Columns",
+					"kind": 128,
+					"kindString": "Class",
+					"flags": {
+						"isExported": true
+					},
+					"children": [
+						{
+							"id": 158,
+							"name": "constructor",
+							"kind": 512,
+							"kindString": "Constructor",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 160,
+									"name": "new Columns",
+									"kind": 16384,
+									"kindString": "Constructor signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 161,
+											"name": "areaDesc",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"isArray": true,
+												"name": "LayoutArea",
+												"id": 2
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"name": "Columns",
+										"id": 157
+									},
+									"overwrites": {
+										"type": "reference",
+										"name": "Pillars.__constructor",
+										"id": 122
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 172,
+									"character": 38
+								}
+							],
+							"overwrites": {
+								"type": "reference",
+								"name": "Pillars.__constructor",
+								"id": 122
+							}
+						},
+						{
+							"id": 159,
+							"name": "areaDesc",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isConstructorProperty": true,
+								"isExported": true,
+								"isPublic": true
+							},
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 173,
+									"character": 31
+								}
+							],
+							"type": {
+								"type": "reference",
+								"isArray": true,
+								"name": "LayoutArea",
+								"id": 2
+							},
+							"overwrites": {
+								"type": "reference",
+								"name": "Pillars.areaDesc",
+								"id": 123
+							}
+						},
+						{
+							"id": 169,
+							"name": "cssClass",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 56,
+									"character": 12
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"name": "string"
+							},
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "Pillars.cssClass",
+								"id": 121
+							}
+						},
+						{
+							"id": 168,
+							"name": "fields",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 55,
+									"character": 10
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"isArray": true,
+								"name": "string"
+							},
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "Pillars.fields",
+								"id": 120
+							}
+						},
+						{
+							"id": 162,
+							"name": "firstFixed",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 52,
+									"character": 14
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"name": "number"
+							},
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "Pillars.firstFixed",
+								"id": 114
+							}
+						},
+						{
+							"id": 163,
+							"name": "lastFixed",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 53,
+									"character": 13
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"name": "number"
+							},
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "Pillars.lastFixed",
+								"id": 115
+							}
+						},
+						{
+							"id": 183,
+							"name": "spacing",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 40,
+									"character": 11
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"name": "number"
+							},
+							"defaultValue": "0",
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "LayoutStyle.spacing",
+								"id": 18
+							}
+						},
+						{
+							"id": 164,
+							"name": "unit",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 54,
+									"character": 8
+								}
+							],
+							"type": {
+								"type": "reflection",
+								"declaration": {
+									"id": 165,
+									"name": "__type",
+									"kind": 65536,
+									"kindString": "Type literal",
+									"flags": {},
+									"signatures": [
+										{
+											"id": 166,
+											"name": "__call",
+											"kind": 4096,
+											"kindString": "Call signature",
+											"flags": {},
+											"parameters": [
+												{
+													"id": 167,
+													"name": "num",
+													"kind": 32768,
+													"kindString": "Parameter",
+													"flags": {},
+													"type": {
+														"type": "instrinct",
+														"name": "number"
+													}
+												}
+											],
+											"type": {
+												"type": "instrinct",
+												"isArray": true,
+												"name": "any"
+											}
+										}
+									],
+									"sources": [
+										{
+											"fileName": "view/PillaredLayout.ts",
+											"line": 54,
+											"character": 9
+										}
+									]
+								}
+							},
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "Pillars.unit",
+								"id": 116
+							}
+						},
+						{
+							"id": 173,
+							"name": "layoutStyles",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 20,
+									"character": 23
+								}
+							],
+							"type": {
+								"type": "reflection",
+								"declaration": {
+									"id": 174,
+									"name": "__type",
+									"kind": 65536,
+									"kindString": "Type literal",
+									"flags": {}
+								}
+							},
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "LayoutStyle.layoutStyles",
+								"id": 8
+							}
+						},
+						{
+							"id": 170,
+							"name": "getStyles",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true,
+								"isProtected": true
+							},
+							"signatures": [
+								{
+									"id": 171,
+									"name": "getStyles",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 172,
+											"name": "content",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"isArray": true,
+												"name": "any"
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "string"
+									},
+									"overwrites": {
+										"type": "reference",
+										"name": "LayoutStyle.getStyles",
+										"id": 26
+									},
+									"inheritedFrom": {
+										"type": "reference",
+										"name": "Pillars.getStyles",
+										"id": 140
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 161,
+									"character": 23
+								}
+							],
+							"overwrites": {
+								"type": "reference",
+								"name": "LayoutStyle.getStyles",
+								"id": 26
+							},
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "Pillars.getStyles",
+								"id": 140
+							}
+						},
+						{
+							"id": 184,
+							"name": "styles",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 185,
+									"name": "styles",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 186,
+											"name": "content",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"name": "Array",
+												"typeArguments": [
+													{
+														"type": "reference",
+														"name": "Layout",
+														"id": 36
+													}
+												]
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "string"
+									},
+									"inheritedFrom": {
+										"type": "reference",
+										"name": "LayoutStyle.styles",
+										"id": 23
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 43,
+									"character": 10
+								}
+							],
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "LayoutStyle.styles",
+								"id": 23
+							}
+						},
+						{
+							"id": 179,
+							"name": "createLayout",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isExported": true,
+								"isPublic": true
+							},
+							"signatures": [
+								{
+									"id": 180,
+									"name": "createLayout",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 181,
+											"name": "attrs",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										},
+										{
+											"id": 182,
+											"name": "content",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"name": "Array",
+												"typeArguments": [
+													{
+														"type": "instrinct",
+														"name": "any"
+													}
+												]
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "string"
+									},
+									"inheritedFrom": {
+										"type": "reference",
+										"name": "LayoutStyle.createLayout",
+										"id": 14
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 26,
+									"character": 30
+								}
+							],
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "LayoutStyle.createLayout",
+								"id": 14
+							}
+						},
+						{
+							"id": 175,
+							"name": "register",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isExported": true,
+								"isPublic": true
+							},
+							"signatures": [
+								{
+									"id": 176,
+									"name": "register",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 177,
+											"name": "keyword",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "string"
+											}
+										},
+										{
+											"id": 178,
+											"name": "style",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"name": "LayoutStyle",
+												"id": 7
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "void"
+									},
+									"inheritedFrom": {
+										"type": "reference",
+										"name": "LayoutStyle.register",
+										"id": 10
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 21,
+									"character": 26
+								}
+							],
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "LayoutStyle.register",
+								"id": 10
+							}
+						}
+					],
+					"groups": [
+						{
+							"title": "Constructors",
+							"kind": 512,
+							"children": [
+								158
+							]
+						},
+						{
+							"title": "Properties",
+							"kind": 1024,
+							"children": [
+								159,
+								169,
+								168,
+								162,
+								163,
+								183,
+								164,
+								173
+							]
+						},
+						{
+							"title": "Methods",
+							"kind": 2048,
+							"children": [
+								170,
+								184,
+								179,
+								175
+							]
+						}
+					],
+					"sources": [
+						{
+							"fileName": "view/PillaredLayout.ts",
+							"line": 172,
+							"character": 20
+						}
+					],
+					"extendedTypes": [
+						{
+							"type": "reference",
+							"name": "Pillars",
+							"id": 113
+						}
+					]
+				},
+				{
+					"id": 83,
+					"name": "DefinedArea",
+					"kind": 128,
+					"kindString": "Class",
+					"flags": {},
+					"children": [
+						{
+							"id": 84,
+							"name": "constructor",
+							"kind": 512,
+							"kindString": "Constructor",
+							"flags": {},
+							"signatures": [
+								{
+									"id": 85,
+									"name": "new DefinedArea",
+									"kind": 16384,
+									"kindString": "Constructor signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 86,
+											"name": "size",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "number"
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"name": "DefinedArea",
+										"id": 83
+									},
+									"overwrites": {
+										"type": "reference",
+										"name": "LayoutArea.__constructor",
+										"id": 3
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 6,
+									"character": 46
+								}
+							],
+							"overwrites": {
+								"type": "reference",
+								"name": "LayoutArea.__constructor",
+								"id": 3
+							}
+						},
+						{
+							"id": 87,
+							"name": "size",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isConstructorProperty": true,
+								"isPublic": true
+							},
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 13,
+									"character": 27
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"name": "number"
+							},
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "LayoutArea.size",
+								"id": 4
+							}
+						}
+					],
+					"groups": [
+						{
+							"title": "Constructors",
+							"kind": 512,
+							"children": [
+								84
+							]
+						},
+						{
+							"title": "Properties",
+							"kind": 1024,
+							"children": [
+								87
+							]
+						}
+					],
+					"sources": [
+						{
+							"fileName": "view/PillaredLayout.ts",
+							"line": 6,
+							"character": 26
+						}
+					],
+					"extendedTypes": [
+						{
+							"type": "reference",
+							"name": "LayoutArea",
+							"id": 2
+						}
+					],
+					"extendedBy": [
+						{
+							"type": "reference",
+							"name": "PixelArea",
+							"id": 88
+						},
+						{
+							"type": "reference",
+							"name": "PercentArea",
+							"id": 93
+						}
+					]
+				},
+				{
+					"id": 98,
+					"name": "FillArea",
+					"kind": 128,
+					"kindString": "Class",
+					"flags": {},
+					"children": [
+						{
+							"id": 99,
+							"name": "constructor",
+							"kind": 512,
+							"kindString": "Constructor",
+							"flags": {},
+							"signatures": [
+								{
+									"id": 100,
+									"name": "new FillArea",
+									"kind": 16384,
+									"kindString": "Constructor signature",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"name": "FillArea",
+										"id": 98
+									},
+									"overwrites": {
+										"type": "reference",
+										"name": "LayoutArea.__constructor",
+										"id": 3
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 18,
+									"character": 35
+								}
+							],
+							"overwrites": {
+								"type": "reference",
+								"name": "LayoutArea.__constructor",
+								"id": 3
+							}
+						},
+						{
+							"id": 101,
+							"name": "size",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isConstructorProperty": true,
+								"isPublic": true
+							},
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 13,
+									"character": 27
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"name": "number"
+							},
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "LayoutArea.size",
+								"id": 4
+							}
+						}
+					],
+					"groups": [
+						{
+							"title": "Constructors",
+							"kind": 512,
+							"children": [
+								99
+							]
+						},
+						{
+							"title": "Properties",
+							"kind": 1024,
+							"children": [
+								101
+							]
+						}
+					],
+					"sources": [
+						{
+							"fileName": "view/PillaredLayout.ts",
+							"line": 18,
+							"character": 14
+						}
+					],
+					"extendedTypes": [
+						{
+							"type": "reference",
+							"name": "LayoutArea",
+							"id": 2
+						}
+					]
+				},
+				{
+					"id": 102,
+					"name": "LayoutDescriptor",
+					"kind": 128,
+					"kindString": "Class",
+					"flags": {},
+					"children": [
+						{
+							"id": 106,
+							"name": "constructor",
+							"kind": 512,
+							"kindString": "Constructor",
+							"flags": {},
+							"signatures": [
+								{
+									"id": 108,
+									"name": "new LayoutDescriptor",
+									"kind": 16384,
+									"kindString": "Constructor signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 109,
+											"name": "areaDesc",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"isArray": true,
+												"name": "LayoutArea",
+												"id": 2
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"name": "LayoutDescriptor",
+										"id": 102
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 30,
+									"character": 17
+								}
+							]
+						},
+						{
+							"id": 107,
+							"name": "areaDesc",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isConstructorProperty": true,
+								"isPublic": true
+							},
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 32,
+									"character": 31
+								}
+							],
+							"type": {
+								"type": "reference",
+								"isArray": true,
+								"name": "LayoutArea",
+								"id": 2
+							}
+						},
+						{
+							"id": 103,
+							"name": "firstFixed",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 28,
+									"character": 14
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"name": "number"
+							}
+						},
+						{
+							"id": 104,
+							"name": "lastFixed",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 29,
+									"character": 13
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"name": "number"
+							}
+						},
+						{
+							"id": 105,
+							"name": "unit",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 30,
+									"character": 8
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"name": "string"
+							}
+						},
+						{
+							"id": 110,
+							"name": "getSizes",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isPublic": true
+							},
+							"signatures": [
+								{
+									"id": 111,
+									"name": "getSizes",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 112,
+											"name": "numAreas",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "number"
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 35,
+									"character": 19
+								}
+							]
+						}
+					],
+					"groups": [
+						{
+							"title": "Constructors",
+							"kind": 512,
+							"children": [
+								106
+							]
+						},
+						{
+							"title": "Properties",
+							"kind": 1024,
+							"children": [
+								107,
+								103,
+								104,
+								105
+							]
+						},
+						{
+							"title": "Methods",
+							"kind": 2048,
+							"children": [
+								110
+							]
+						}
+					],
+					"sources": [
+						{
+							"fileName": "view/PillaredLayout.ts",
+							"line": 27,
+							"character": 22
+						}
+					]
+				},
+				{
+					"id": 93,
+					"name": "PercentArea",
+					"kind": 128,
+					"kindString": "Class",
+					"flags": {},
+					"children": [
+						{
+							"id": 94,
+							"name": "constructor",
+							"kind": 512,
+							"kindString": "Constructor",
+							"flags": {},
+							"signatures": [
+								{
+									"id": 95,
+									"name": "new PercentArea",
+									"kind": 16384,
+									"kindString": "Constructor signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 96,
+											"name": "size",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "number"
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"name": "PercentArea",
+										"id": 93
+									},
+									"overwrites": {
+										"type": "reference",
+										"name": "DefinedArea.__constructor",
+										"id": 84
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 14,
+									"character": 39
+								}
+							],
+							"overwrites": {
+								"type": "reference",
+								"name": "DefinedArea.__constructor",
+								"id": 84
+							}
+						},
+						{
+							"id": 97,
+							"name": "size",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isConstructorProperty": true,
+								"isPublic": true
+							},
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 13,
+									"character": 27
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"name": "number"
+							},
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "LayoutArea.size",
+								"id": 4
+							}
+						}
+					],
+					"groups": [
+						{
+							"title": "Constructors",
+							"kind": 512,
+							"children": [
+								94
+							]
+						},
+						{
+							"title": "Properties",
+							"kind": 1024,
+							"children": [
+								97
+							]
+						}
+					],
+					"sources": [
+						{
+							"fileName": "view/PillaredLayout.ts",
+							"line": 14,
+							"character": 17
+						}
+					],
+					"extendedTypes": [
+						{
+							"type": "reference",
+							"name": "DefinedArea",
+							"id": 83
+						}
+					]
+				},
+				{
+					"id": 113,
+					"name": "Pillars",
+					"kind": 128,
+					"kindString": "Class",
+					"flags": {},
+					"children": [
+						{
+							"id": 122,
+							"name": "constructor",
+							"kind": 512,
+							"kindString": "Constructor",
+							"flags": {},
+							"signatures": [
+								{
+									"id": 124,
+									"name": "new Pillars",
+									"kind": 16384,
+									"kindString": "Constructor signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 125,
+											"name": "paramName",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "string"
+											}
+										},
+										{
+											"id": 126,
+											"name": "areaDesc",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"isArray": true,
+												"name": "LayoutArea",
+												"id": 2
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"name": "Pillars",
+										"id": 113
+									},
+									"overwrites": {
+										"type": "reference",
+										"name": "LayoutStyle.__constructor",
+										"id": 19
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 56,
+									"character": 20
+								}
+							],
+							"overwrites": {
+								"type": "reference",
+								"name": "LayoutStyle.__constructor",
+								"id": 19
+							}
+						},
+						{
+							"id": 123,
+							"name": "areaDesc",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isConstructorProperty": true,
+								"isPublic": true
+							},
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 58,
+									"character": 49
+								}
+							],
+							"type": {
+								"type": "reference",
+								"isArray": true,
+								"name": "LayoutArea",
+								"id": 2
+							},
+							"overwrites": {
+								"type": "reference",
+								"name": "LayoutStyle.areaDesc",
+								"id": 20
+							}
+						},
+						{
+							"id": 121,
+							"name": "cssClass",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 56,
+									"character": 12
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"name": "string"
+							}
+						},
+						{
+							"id": 120,
+							"name": "fields",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 55,
+									"character": 10
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"isArray": true,
+								"name": "string"
+							}
+						},
+						{
+							"id": 114,
+							"name": "firstFixed",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 52,
+									"character": 14
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"name": "number"
+							}
+						},
+						{
+							"id": 115,
+							"name": "lastFixed",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 53,
+									"character": 13
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"name": "number"
+							}
+						},
+						{
+							"id": 153,
+							"name": "spacing",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 40,
+									"character": 11
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"name": "number"
+							},
+							"defaultValue": "0",
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "LayoutStyle.spacing",
+								"id": 18
+							}
+						},
+						{
+							"id": 116,
+							"name": "unit",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 54,
+									"character": 8
+								}
+							],
+							"type": {
+								"type": "reflection",
+								"declaration": {
+									"id": 117,
+									"name": "__type",
+									"kind": 65536,
+									"kindString": "Type literal",
+									"flags": {},
+									"signatures": [
+										{
+											"id": 118,
+											"name": "__call",
+											"kind": 4096,
+											"kindString": "Call signature",
+											"flags": {},
+											"parameters": [
+												{
+													"id": 119,
+													"name": "num",
+													"kind": 32768,
+													"kindString": "Parameter",
+													"flags": {},
+													"type": {
+														"type": "instrinct",
+														"name": "number"
+													}
+												}
+											],
+											"type": {
+												"type": "instrinct",
+												"isArray": true,
+												"name": "any"
+											}
+										}
+									],
+									"sources": [
+										{
+											"fileName": "view/PillaredLayout.ts",
+											"line": 54,
+											"character": 9
+										}
+									]
+								}
+							}
+						},
+						{
+							"id": 143,
+							"name": "layoutStyles",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isStatic": true
+							},
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 20,
+									"character": 23
+								}
+							],
+							"type": {
+								"type": "reflection",
+								"declaration": {
+									"id": 144,
+									"name": "__type",
+									"kind": 65536,
+									"kindString": "Type literal",
+									"flags": {}
+								}
+							},
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "LayoutStyle.layoutStyles",
+								"id": 8
+							}
+						},
+						{
+							"id": 127,
+							"name": "getSizes",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isPrivate": true
+							},
+							"signatures": [
+								{
+									"id": 128,
+									"name": "getSizes",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 129,
+											"name": "num",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "number"
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"name": "Array",
+										"typeArguments": [
+											{
+												"type": "reflection",
+												"declaration": {
+													"id": 130,
+													"name": "__type",
+													"kind": 65536,
+													"kindString": "Type literal",
+													"flags": {},
+													"children": [
+														{
+															"id": 132,
+															"name": "code",
+															"kind": 32,
+															"kindString": "Variable",
+															"flags": {},
+															"sources": [
+																{
+																	"fileName": "view/PillaredLayout.ts",
+																	"line": 82,
+																	"character": 53
+																}
+															],
+															"type": {
+																"type": "instrinct",
+																"name": "string"
+															}
+														},
+														{
+															"id": 133,
+															"name": "fields",
+															"kind": 32,
+															"kindString": "Variable",
+															"flags": {},
+															"sources": [
+																{
+																	"fileName": "view/PillaredLayout.ts",
+																	"line": 82,
+																	"character": 68
+																}
+															],
+															"type": {
+																"type": "reference",
+																"name": "__type"
+															}
+														},
+														{
+															"id": 131,
+															"name": "size",
+															"kind": 32,
+															"kindString": "Variable",
+															"flags": {},
+															"sources": [
+																{
+																	"fileName": "view/PillaredLayout.ts",
+																	"line": 82,
+																	"character": 40
+																}
+															],
+															"type": {
+																"type": "instrinct",
+																"name": "number"
+															}
+														}
+													],
+													"groups": [
+														{
+															"title": "Variables",
+															"kind": 32,
+															"children": [
+																132,
+																133,
+																131
+															]
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 77,
+									"character": 20
+								}
+							]
+						},
+						{
+							"id": 140,
+							"name": "getStyles",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isProtected": true
+							},
+							"signatures": [
+								{
+									"id": 141,
+									"name": "getStyles",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 142,
+											"name": "content",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"isArray": true,
+												"name": "any"
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "string"
+									},
+									"overwrites": {
+										"type": "reference",
+										"name": "LayoutStyle.getStyles",
+										"id": 26
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 161,
+									"character": 23
+								}
+							],
+							"overwrites": {
+								"type": "reference",
+								"name": "LayoutStyle.getStyles",
+								"id": 26
+							}
+						},
+						{
+							"id": 154,
+							"name": "styles",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {},
+							"signatures": [
+								{
+									"id": 155,
+									"name": "styles",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 156,
+											"name": "content",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"name": "Array",
+												"typeArguments": [
+													{
+														"type": "reference",
+														"name": "Layout",
+														"id": 36
+													}
+												]
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "string"
+									},
+									"inheritedFrom": {
+										"type": "reference",
+										"name": "LayoutStyle.styles",
+										"id": 23
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 43,
+									"character": 10
+								}
+							],
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "LayoutStyle.styles",
+								"id": 23
+							}
+						},
+						{
+							"id": 134,
+							"name": "unitPercent",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isPrivate": true
+							},
+							"signatures": [
+								{
+									"id": 135,
+									"name": "unitPercent",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 136,
+											"name": "num",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "number"
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"isArray": true,
+										"name": "any"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 92,
+									"character": 23
+								}
+							]
+						},
+						{
+							"id": 137,
+							"name": "unitPixel",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isPrivate": true
+							},
+							"signatures": [
+								{
+									"id": 138,
+									"name": "unitPixel",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 139,
+											"name": "num",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "number"
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"isArray": true,
+										"name": "any"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 118,
+									"character": 21
+								}
+							]
+						},
+						{
+							"id": 149,
+							"name": "createLayout",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isPublic": true
+							},
+							"signatures": [
+								{
+									"id": 150,
+									"name": "createLayout",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 151,
+											"name": "attrs",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										},
+										{
+											"id": 152,
+											"name": "content",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"name": "Array",
+												"typeArguments": [
+													{
+														"type": "instrinct",
+														"name": "any"
+													}
+												]
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "string"
+									},
+									"inheritedFrom": {
+										"type": "reference",
+										"name": "LayoutStyle.createLayout",
+										"id": 14
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 26,
+									"character": 30
+								}
+							],
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "LayoutStyle.createLayout",
+								"id": 14
+							}
+						},
+						{
+							"id": 145,
+							"name": "register",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isPublic": true
+							},
+							"signatures": [
+								{
+									"id": 146,
+									"name": "register",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 147,
+											"name": "keyword",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "string"
+											}
+										},
+										{
+											"id": 148,
+											"name": "style",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"name": "LayoutStyle",
+												"id": 7
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "void"
+									},
+									"inheritedFrom": {
+										"type": "reference",
+										"name": "LayoutStyle.register",
+										"id": 10
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 21,
+									"character": 26
+								}
+							],
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "LayoutStyle.register",
+								"id": 10
+							}
+						}
+					],
+					"groups": [
+						{
+							"title": "Constructors",
+							"kind": 512,
+							"children": [
+								122
+							]
+						},
+						{
+							"title": "Properties",
+							"kind": 1024,
+							"children": [
+								123,
+								121,
+								120,
+								114,
+								115,
+								153,
+								116,
+								143
+							]
+						},
+						{
+							"title": "Methods",
+							"kind": 2048,
+							"children": [
+								127,
+								140,
+								154,
+								134,
+								137,
+								149,
+								145
+							]
+						}
+					],
+					"sources": [
+						{
+							"fileName": "view/PillaredLayout.ts",
+							"line": 51,
+							"character": 13
+						}
+					],
+					"extendedTypes": [
+						{
+							"type": "reference",
+							"name": "LayoutStyle",
+							"id": 7
+						}
+					],
+					"extendedBy": [
+						{
+							"type": "reference",
+							"name": "Columns",
+							"id": 157
+						},
+						{
+							"type": "reference",
+							"name": "Rows",
+							"id": 187
+						}
+					]
+				},
+				{
+					"id": 88,
+					"name": "PixelArea",
+					"kind": 128,
+					"kindString": "Class",
+					"flags": {},
+					"children": [
+						{
+							"id": 89,
+							"name": "constructor",
+							"kind": 512,
+							"kindString": "Constructor",
+							"flags": {},
+							"signatures": [
+								{
+									"id": 90,
+									"name": "new PixelArea",
+									"kind": 16384,
+									"kindString": "Constructor signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 91,
+											"name": "size",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "number"
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"name": "PixelArea",
+										"id": 88
+									},
+									"overwrites": {
+										"type": "reference",
+										"name": "DefinedArea.__constructor",
+										"id": 84
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 10,
+									"character": 37
+								}
+							],
+							"overwrites": {
+								"type": "reference",
+								"name": "DefinedArea.__constructor",
+								"id": 84
+							}
+						},
+						{
+							"id": 92,
+							"name": "size",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isConstructorProperty": true,
+								"isPublic": true
+							},
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 13,
+									"character": 27
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"name": "number"
+							},
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "LayoutArea.size",
+								"id": 4
+							}
+						}
+					],
+					"groups": [
+						{
+							"title": "Constructors",
+							"kind": 512,
+							"children": [
+								89
+							]
+						},
+						{
+							"title": "Properties",
+							"kind": 1024,
+							"children": [
+								92
+							]
+						}
+					],
+					"sources": [
+						{
+							"fileName": "view/PillaredLayout.ts",
+							"line": 10,
+							"character": 15
+						}
+					],
+					"extendedTypes": [
+						{
+							"type": "reference",
+							"name": "DefinedArea",
+							"id": 83
+						}
+					]
+				},
+				{
+					"id": 187,
+					"name": "Rows",
+					"kind": 128,
+					"kindString": "Class",
+					"flags": {
+						"isExported": true
+					},
+					"children": [
+						{
+							"id": 188,
+							"name": "constructor",
+							"kind": 512,
+							"kindString": "Constructor",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 190,
+									"name": "new Rows",
+									"kind": 16384,
+									"kindString": "Constructor signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 191,
+											"name": "areaDesc",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"isArray": true,
+												"name": "LayoutArea",
+												"id": 2
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"name": "Rows",
+										"id": 187
+									},
+									"overwrites": {
+										"type": "reference",
+										"name": "Pillars.__constructor",
+										"id": 122
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 177,
+									"character": 35
+								}
+							],
+							"overwrites": {
+								"type": "reference",
+								"name": "Pillars.__constructor",
+								"id": 122
+							}
+						},
+						{
+							"id": 189,
+							"name": "areaDesc",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isConstructorProperty": true,
+								"isExported": true,
+								"isPublic": true
+							},
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 178,
+									"character": 31
+								}
+							],
+							"type": {
+								"type": "reference",
+								"isArray": true,
+								"name": "LayoutArea",
+								"id": 2
+							},
+							"overwrites": {
+								"type": "reference",
+								"name": "Pillars.areaDesc",
+								"id": 123
+							}
+						},
+						{
+							"id": 199,
+							"name": "cssClass",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 56,
+									"character": 12
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"name": "string"
+							},
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "Pillars.cssClass",
+								"id": 121
+							}
+						},
+						{
+							"id": 198,
+							"name": "fields",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 55,
+									"character": 10
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"isArray": true,
+								"name": "string"
+							},
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "Pillars.fields",
+								"id": 120
+							}
+						},
+						{
+							"id": 192,
+							"name": "firstFixed",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 52,
+									"character": 14
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"name": "number"
+							},
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "Pillars.firstFixed",
+								"id": 114
+							}
+						},
+						{
+							"id": 193,
+							"name": "lastFixed",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 53,
+									"character": 13
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"name": "number"
+							},
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "Pillars.lastFixed",
+								"id": 115
+							}
+						},
+						{
+							"id": 213,
+							"name": "spacing",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 40,
+									"character": 11
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"name": "number"
+							},
+							"defaultValue": "0",
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "LayoutStyle.spacing",
+								"id": 18
+							}
+						},
+						{
+							"id": 194,
+							"name": "unit",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 54,
+									"character": 8
+								}
+							],
+							"type": {
+								"type": "reflection",
+								"declaration": {
+									"id": 195,
+									"name": "__type",
+									"kind": 65536,
+									"kindString": "Type literal",
+									"flags": {},
+									"signatures": [
+										{
+											"id": 196,
+											"name": "__call",
+											"kind": 4096,
+											"kindString": "Call signature",
+											"flags": {},
+											"parameters": [
+												{
+													"id": 197,
+													"name": "num",
+													"kind": 32768,
+													"kindString": "Parameter",
+													"flags": {},
+													"type": {
+														"type": "instrinct",
+														"name": "number"
+													}
+												}
+											],
+											"type": {
+												"type": "instrinct",
+												"isArray": true,
+												"name": "any"
+											}
+										}
+									],
+									"sources": [
+										{
+											"fileName": "view/PillaredLayout.ts",
+											"line": 54,
+											"character": 9
+										}
+									]
+								}
+							},
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "Pillars.unit",
+								"id": 116
+							}
+						},
+						{
+							"id": 203,
+							"name": "layoutStyles",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 20,
+									"character": 23
+								}
+							],
+							"type": {
+								"type": "reflection",
+								"declaration": {
+									"id": 204,
+									"name": "__type",
+									"kind": 65536,
+									"kindString": "Type literal",
+									"flags": {}
+								}
+							},
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "LayoutStyle.layoutStyles",
+								"id": 8
+							}
+						},
+						{
+							"id": 200,
+							"name": "getStyles",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true,
+								"isProtected": true
+							},
+							"signatures": [
+								{
+									"id": 201,
+									"name": "getStyles",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 202,
+											"name": "content",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"isArray": true,
+												"name": "any"
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "string"
+									},
+									"overwrites": {
+										"type": "reference",
+										"name": "LayoutStyle.getStyles",
+										"id": 26
+									},
+									"inheritedFrom": {
+										"type": "reference",
+										"name": "Pillars.getStyles",
+										"id": 140
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 161,
+									"character": 23
+								}
+							],
+							"overwrites": {
+								"type": "reference",
+								"name": "LayoutStyle.getStyles",
+								"id": 26
+							},
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "Pillars.getStyles",
+								"id": 140
+							}
+						},
+						{
+							"id": 214,
+							"name": "styles",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 215,
+									"name": "styles",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 216,
+											"name": "content",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"name": "Array",
+												"typeArguments": [
+													{
+														"type": "reference",
+														"name": "Layout",
+														"id": 36
+													}
+												]
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "string"
+									},
+									"inheritedFrom": {
+										"type": "reference",
+										"name": "LayoutStyle.styles",
+										"id": 23
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 43,
+									"character": 10
+								}
+							],
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "LayoutStyle.styles",
+								"id": 23
+							}
+						},
+						{
+							"id": 209,
+							"name": "createLayout",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isExported": true,
+								"isPublic": true
+							},
+							"signatures": [
+								{
+									"id": 210,
+									"name": "createLayout",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 211,
+											"name": "attrs",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "any"
+											}
+										},
+										{
+											"id": 212,
+											"name": "content",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"name": "Array",
+												"typeArguments": [
+													{
+														"type": "instrinct",
+														"name": "any"
+													}
+												]
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "string"
+									},
+									"inheritedFrom": {
+										"type": "reference",
+										"name": "LayoutStyle.createLayout",
+										"id": 14
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 26,
+									"character": 30
+								}
+							],
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "LayoutStyle.createLayout",
+								"id": 14
+							}
+						},
+						{
+							"id": 205,
+							"name": "register",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isExported": true,
+								"isPublic": true
+							},
+							"signatures": [
+								{
+									"id": 206,
+									"name": "register",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 207,
+											"name": "keyword",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "instrinct",
+												"name": "string"
+											}
+										},
+										{
+											"id": 208,
+											"name": "style",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"name": "LayoutStyle",
+												"id": 7
+											}
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "void"
+									},
+									"inheritedFrom": {
+										"type": "reference",
+										"name": "LayoutStyle.register",
+										"id": 10
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/Layout.ts",
+									"line": 21,
+									"character": 26
+								}
+							],
+							"inheritedFrom": {
+								"type": "reference",
+								"name": "LayoutStyle.register",
+								"id": 10
+							}
+						}
+					],
+					"groups": [
+						{
+							"title": "Constructors",
+							"kind": 512,
+							"children": [
+								188
+							]
+						},
+						{
+							"title": "Properties",
+							"kind": 1024,
+							"children": [
+								189,
+								199,
+								198,
+								192,
+								193,
+								213,
+								194,
+								203
+							]
+						},
+						{
+							"title": "Methods",
+							"kind": 2048,
+							"children": [
+								200,
+								214,
+								209,
+								205
+							]
+						}
+					],
+					"sources": [
+						{
+							"fileName": "view/PillaredLayout.ts",
+							"line": 177,
+							"character": 17
+						}
+					],
+					"extendedTypes": [
+						{
+							"type": "reference",
+							"name": "Pillars",
+							"id": 113
+						}
+					]
+				},
+				{
+					"id": 224,
+					"name": "FILL",
+					"kind": 32,
+					"kindString": "Variable",
+					"flags": {
+						"isExported": true
+					},
+					"sources": [
+						{
+							"fileName": "view/PillaredLayout.ts",
+							"line": 24,
+							"character": 17
+						}
+					],
+					"type": {
+						"type": "reference",
+						"name": "FillArea",
+						"id": 98
+					},
+					"defaultValue": " new FillArea()"
+				},
+				{
+					"id": 217,
+					"name": "m",
+					"kind": 32,
+					"kindString": "Variable",
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "view/PillaredLayout.ts",
+							"line": 1,
+							"character": 7
+						}
+					],
+					"type": {
+						"type": "instrinct",
+						"name": "any"
+					},
+					"defaultValue": " require(\"mithril\")"
+				},
+				{
+					"id": 221,
+					"name": "pc",
+					"kind": 64,
+					"kindString": "Function",
+					"flags": {
+						"isExported": true
+					},
+					"signatures": [
+						{
+							"id": 222,
+							"name": "pc",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 223,
+									"name": "pc",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "instrinct",
+										"name": "number"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"name": "PercentArea",
+								"id": 93
+							}
+						}
+					],
+					"sources": [
+						{
+							"fileName": "view/PillaredLayout.ts",
+							"line": 23,
+							"character": 18
+						}
+					]
+				},
+				{
+					"id": 218,
+					"name": "px",
+					"kind": 64,
+					"kindString": "Function",
+					"flags": {
+						"isExported": true
+					},
+					"signatures": [
+						{
+							"id": 219,
+							"name": "px",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 220,
+									"name": "px",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "instrinct",
+										"name": "number"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"name": "PixelArea",
+								"id": 88
+							}
+						}
+					],
+					"sources": [
+						{
+							"fileName": "view/PillaredLayout.ts",
+							"line": 22,
+							"character": 18
+						}
+					]
+				},
+				{
+					"id": 225,
+					"name": "cParams",
+					"kind": 2097152,
+					"kindString": "Object literal",
+					"flags": {},
+					"children": [
+						{
+							"id": 226,
+							"name": "columns",
+							"kind": 2097152,
+							"kindString": "Object literal",
+							"flags": {},
+							"children": [
+								{
+									"id": 227,
+									"name": "cssClass",
+									"kind": 32,
+									"kindString": "Variable",
+									"flags": {},
+									"sources": [
+										{
+											"fileName": "view/PillaredLayout.ts",
+											"line": 42,
+											"character": 16
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "string"
+									},
+									"defaultValue": "\".hs-column-layout\""
+								},
+								{
+									"id": 228,
+									"name": "fields",
+									"kind": 32,
+									"kindString": "Variable",
+									"flags": {},
+									"sources": [
+										{
+											"fileName": "view/PillaredLayout.ts",
+											"line": 43,
+											"character": 14
+										}
+									],
+									"type": {
+										"type": "reference",
+										"name": "Array",
+										"typeArguments": [
+											{
+												"type": "instrinct",
+												"name": "string"
+											}
+										]
+									},
+									"defaultValue": " ['top', 'bottom', 'left', 'right', 'height', 'width']"
+								}
+							],
+							"groups": [
+								{
+									"title": "Variables",
+									"kind": 32,
+									"children": [
+										227,
+										228
+									]
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 41,
+									"character": 11
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"name": "object"
+							}
+						},
+						{
+							"id": 229,
+							"name": "rows",
+							"kind": 2097152,
+							"kindString": "Object literal",
+							"flags": {},
+							"children": [
+								{
+									"id": 230,
+									"name": "cssClass",
+									"kind": 32,
+									"kindString": "Variable",
+									"flags": {},
+									"sources": [
+										{
+											"fileName": "view/PillaredLayout.ts",
+											"line": 46,
+											"character": 16
+										}
+									],
+									"type": {
+										"type": "instrinct",
+										"name": "string"
+									},
+									"defaultValue": "\".hs-row-layout\""
+								},
+								{
+									"id": 231,
+									"name": "fields",
+									"kind": 32,
+									"kindString": "Variable",
+									"flags": {},
+									"sources": [
+										{
+											"fileName": "view/PillaredLayout.ts",
+											"line": 47,
+											"character": 14
+										}
+									],
+									"type": {
+										"type": "reference",
+										"name": "Array",
+										"typeArguments": [
+											{
+												"type": "instrinct",
+												"name": "string"
+											}
+										]
+									},
+									"defaultValue": " ['left', 'right', 'top', 'bottom', 'width', 'height']"
+								}
+							],
+							"groups": [
+								{
+									"title": "Variables",
+									"kind": 32,
+									"children": [
+										230,
+										231
+									]
+								}
+							],
+							"sources": [
+								{
+									"fileName": "view/PillaredLayout.ts",
+									"line": 45,
+									"character": 8
+								}
+							],
+							"type": {
+								"type": "instrinct",
+								"name": "object"
+							}
+						}
+					],
+					"groups": [
+						{
+							"title": "Object literals",
+							"kind": 2097152,
+							"children": [
+								226,
+								229
+							]
+						}
+					],
+					"sources": [
+						{
+							"fileName": "view/PillaredLayout.ts",
+							"line": 40,
+							"character": 13
+						}
+					],
+					"type": {
+						"type": "instrinct",
+						"name": "object"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Classes",
+					"kind": 128,
+					"children": [
+						157,
+						83,
+						98,
+						102,
+						93,
+						113,
+						88,
+						187
+					]
+				},
+				{
+					"title": "Variables",
+					"kind": 32,
+					"children": [
+						224,
+						217
+					]
+				},
+				{
+					"title": "Functions",
+					"kind": 64,
+					"children": [
+						221,
+						218
+					]
+				},
+				{
+					"title": "Object literals",
+					"kind": 2097152,
+					"children": [
+						225
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "view/PillaredLayout.ts",
+					"line": 1,
+					"character": 0
+				}
+			]
+		}
+	],
+	"groups": [
+		{
+			"title": "External modules",
+			"kind": 1,
+			"children": [
+				232,
+				1,
+				82
+			]
+		}
+	]
+}
