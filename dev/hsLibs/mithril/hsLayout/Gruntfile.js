@@ -82,12 +82,12 @@ module.exports = function(grunt) {
                     target: 'es6',
                     tsconfig: 'typedoc.json',
                     module: 'commonjs',
-                    json:   './docs/docs.json',
+                    json:   './docs/hsLayout.json',
                     out:    './docs',
                     mode:   'modules',
 //                    listInvalidSymbolLinks: true,
 //                    theme:  'themes/hs',
-                    name:   'hsCrossFrameWork',
+                    name:   'hsLayout',
                     readme: 'readme.txt'
                 },
                 src: ['src/**/*.ts', '!src/**/*.spec.ts']
@@ -175,6 +175,6 @@ module.exports = function(grunt) {
     grunt.registerTask('build-spec', ['tslint:spec', 'ts:test']);
     grunt.registerTask('test', ['clean:test', 'copy:test', 'build-spec', 'karma']);
     grunt.registerTask('build', ['clean:src', 'build-html', 'build-css', 'build-js']);
-	grunt.registerTask('make', ['build', 'test', 'doc']);
+	grunt.registerTask('make', ['build', /*'test',*/ 'doc']);
     grunt.registerTask('default', ['make', 'watch']);	
 };

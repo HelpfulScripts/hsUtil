@@ -69,12 +69,12 @@ module.exports = function(grunt) {
                     target: 'es6',
                     tsconfig: 'typedoc.json',
                     module: 'commonjs',
-                    json:   './docs/docs.json',
+                    json:   './docs/hsNode.json',
                     out:    './docs',
                     mode:   'modules',
 //                    listInvalidSymbolLinks: true,
 //                    theme:  'themes/hs',
-                    name:   'hsCrossFrameWork',
+                    name:   'hsNode',
                     readme: 'readme.txt'
                 },
                 src: ['src/**/*.ts', '!src/**/*.spec.ts']
