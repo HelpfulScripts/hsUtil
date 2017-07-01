@@ -1,5 +1,3 @@
-const m = require("mithril");
-
 import { Layout, LayoutStyle, LayoutArea } from './Layout';
 
 
@@ -158,7 +156,7 @@ class Pillars extends LayoutStyle{
         return styles;
     };
     
-    protected getStyles(content:typeof m.Vnode[])  { 
+    protected getStyles(content:any[])  { 
         let f = this.fields;
         let styles = this.unit(content.length);
         content.map((area:Layout, i:number) => {

@@ -6,24 +6,17 @@ export interface Module {
     content:    any;
 }
 
-const useDefault = false;
 const dir = './data/';
 
-
-function loadDefaultList(modules:typeof Modules) {
-    return Promise.resolve().then(() => {
-        modules.add(0, 'm1', 'm1 main');
-        modules.add(1, 'm2', 'm2 main');
-        modules.add(2, 'm3', 'm3 main');
-    });
-}
-
 function loadDocSet(modules:typeof Modules, file:string) {
+console.log('requesting ' + dir+file);
     return m.request({ method: "GET", url: dir+file })
         .then((r:any) => {
-console.log('received ' + file);
+console.log('received ' + dir+file);
+if (file==='hsLayout.json') { console.log(r); }
             modules.add(r.id, r.name, r);
-        });
+        })
+        .catch(console.log);
 }
 
 function loadIndexSet(modules:typeof Modules) {
@@ -51,19 +44,26 @@ export const Modules = {
 
 
     add(id:number, name:string, content:any) {
-console.log('add');        
         this.list.set.push(name);
         this.list.index[name] = {};
         recursiveIndex(content, this.list.index[name], name);
-console.log(this.list);        
     },
 
     loadList() { 
-        return (useDefault? loadDefaultList(this) : loadIndexSet(this)); 
+        return loadIndexSet(this); 
     },
 
     get(lib?:string, id=0) { 
-        const result = lib? this.list.index[lib][id+''] : this.list.set; 
-        return result;
+        if (lib) {
+            if (this.list.index[lib]) { 
+                return this.list.index[lib][id+'']; 
+            } else {
+                console.log(`list ${lib} not loaded yet`);
+                return this.list.set; 
+            }
+        } else {
+            console.log('redirected to /');
+            return this.list.set; 
+        }
     }
 };

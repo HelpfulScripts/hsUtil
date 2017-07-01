@@ -77,7 +77,6 @@ class ModuleEntries {
 }
 
 function exportAscending(a:any, b:any) {
-console.log(`${a.name}, ${a.flags.isExported} : ${b.name}, ${b.flags.isExported}`);    
     if (a.flags && b.flags) {
         if (a.flags.isExported && b.flags.isExported) { return a.name > b.name; }
         else if (a.flags.isExported) { return -1; }
