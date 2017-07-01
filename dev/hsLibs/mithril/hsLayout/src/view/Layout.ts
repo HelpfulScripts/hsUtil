@@ -1,10 +1,12 @@
 /**
+ * @description Layout.ts
+ */
+
+/**
  * @description:
  * layout('.myclass', {columns: [layout.px(10), layout.pc(10), layout.fill], []})
  */
-
 const m = require("mithril");
-let id = 0;
 
 /**
  * 
@@ -50,8 +52,8 @@ export abstract class LayoutStyle {
  * 
  */
 export abstract class Component {
-    id:number;
-    constructor() { this.id = id++; }
+//    id:number;
+    constructor() { /*this.id = id++;*/ }
     public abstract view(vnode?: typeof m.Vnode): typeof m.Vnode;
 }
 
@@ -95,19 +97,26 @@ The following options are supported for `Array`:
 - [1w, 2w, , w2, w1]: multiple widths can be specified in uninterrupted sequence both from the left and the right. 
  */
 export abstract class Layout extends Component {
+    /**
+     * holds structural elements in style form: left, right, top, bottom, width, height
+     */
     public style:string;
-    cssClass: string;
-    content: typeof m.Vnode;
-
-    constructor() { super(); }
-
-    oninit(node: typeof m.Vnode) {
+    
+    /**
+     * constructs a Layout component.
+     */
+    constructor() { super(); } 
+/*
+    private oninit(node: typeof m.Vnode) {
         if (node.instance && node.instance.children && node.instance.children.length>0) { node.instance.children[0].hoho = 'haha'; }
     }
 
-    oncreate(node: typeof m.Vnode) {
+    private oncreate(node: typeof m.Vnode) {
     }
-
+*/
+    /**
+     * lays out the component.
+     */
     public layout(cssClass:string, node: typeof m.Vnode, attrs:any, content:Array<typeof m.Vnode|string>|string): typeof m.Vnode {
         function makeContent(content:Array<typeof Layout|string>|string): any {
             let result:any = [];
@@ -120,24 +129,16 @@ export abstract class Layout extends Component {
             }
             return result;
         }
-
-        function copyAttrs(attrs:any, node: typeof m.Vnode) {
-            Object.keys(attrs).forEach((key:string) => node.attrs[key] = attrs[key]);
-        }
-
         const _content = makeContent(content); // --> typeof m.Vnode[]
-        attrs.id = this.id;
-        copyAttrs(attrs, node);
-
-        if (node.style) { node.attrs.style = node.style;  }
-        let css = LayoutStyle.createLayout(node.attrs, _content);
-        return m(`${cssClass} ${css} .hs-layout`, node.attrs, _content);
+        if (node.style) { attrs.style = node.style; }
+        let css = LayoutStyle.createLayout(attrs, _content);
+        return m(`${cssClass} ${css} .hs-layout`, attrs, _content);
     }
 }
 
 class TextLayout extends Layout {
     constructor() { super(); }
-    view(node: typeof m.Vnode): typeof m.Vnode { 
+    view(node: typeof m.Vnode): typeof m.Vnode {
         if (node.style) { node.attrs.style = node.style; }
         return m('.hs-layout', node.attrs, node.attrs.content); 
     }

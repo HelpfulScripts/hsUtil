@@ -30,7 +30,7 @@ module.exports = function(grunt) {
 			stage: { files: [
                 { expand: true, cwd: 'dist/', src: ['*.css', '*.css.map', '*.html'], dest: staging },
                 { src: ['packageDeploy.json'],    dest: staging+'../package.json' },
-	            { src: ['packageDeploy.json'],    dest: staging+'../package.json' }
+	            { expand: true, cwd: 'docs', src: ['*.json'],   dest: staging+'data/' }
             ]}
 		},
 		
@@ -140,15 +140,15 @@ module.exports = function(grunt) {
 			},
 			js: {
 				files: ['src/**/*.ts', '!src/**/*.spec.ts', '!src/**/*.less'],
-				tasks: ['build']
+				tasks: ['make']
 			},
 			less: {
 				files: ['src/**/*.less'],
-				tasks: ['build-css', 'copy:stage']
+				tasks: ['build-css', 'stage']
 			},
 			html: {
 				files: ['src/**/*.html'],
-				tasks: ['build-html', 'copy:stage']
+				tasks: ['build-html', 'stage']
 			},
 			specs: {
 				files: ['src/**/*.spec.ts'],
@@ -169,12 +169,13 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-ts');
 
     grunt.registerTask('doc', ['clean:docs', 'typedoc']);
+    grunt.registerTask('stage', ['copy:stage']);
     grunt.registerTask('build-html', ['copy:build']);
     grunt.registerTask('build-css', ['less']);
     grunt.registerTask('build-js', ['tslint:src', 'ts:src']);
     grunt.registerTask('build-spec', ['tslint:spec', 'ts:test']);
     grunt.registerTask('test', ['clean:test', 'copy:test', 'build-spec', 'karma']);
     grunt.registerTask('build', ['clean:src', 'build-html', 'build-css', 'build-js']);
-	grunt.registerTask('make', ['build', /*'test',*/ 'doc']);
+	grunt.registerTask('make', ['build', /*'test',*/ 'doc', 'stage']);
     grunt.registerTask('default', ['make', 'watch']);	
 };
