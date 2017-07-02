@@ -27,7 +27,9 @@ console.log(mdl);
     return m('.hs-item-constructor', !mdl.signatures? '' : mdl.signatures.map((s:any) => 
         m('', [
             m('.hs-item-desc', [
-                m('span.hs-item-name', `${s.name}()`),
+                m('span.hs-item-name', [s.name, '(']),
+                signature(s),
+                m('span.hs-item-name', ')'),
                 mdl.sources? sourceLink(mdl.lib, mdl.sources[0]) : ''
             ]),
             m('.hs-item-comment', comment(s))
@@ -52,8 +54,9 @@ console.log(mdl);
     return m('.hs-item-method', !mdl.signatures? '' : mdl.signatures.map((s:any) => 
         m('', [
             m('.hs-item-desc', [
-                m('span.hs-item-name', s.name),
+                m('span.hs-item-name', [s.name, '(']),
                 signature(s),
+                m('span.hs-item-name', ')'),
                 s.type? m('span', [': ', type(s.type)]) : '',
                 mdl.sources? sourceLink(mdl.lib, mdl.sources[0]) : ''
             ]),
@@ -105,9 +108,5 @@ function signature(s:any): typeof m.Vnode {
         ]);
     }
 
-    return m('span.hs-item-signature', [
-            ' (', 
-            s.parameters? m('span', s.parameters.map(parameter)) : '', 
-            ')',
-    ]);
+    return m('span.hs-item-signature', s.parameters? s.parameters.map(parameter) : '');
 }

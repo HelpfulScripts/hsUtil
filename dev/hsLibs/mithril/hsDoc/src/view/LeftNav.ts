@@ -44,7 +44,7 @@ class ExternalModule {
         node.attrs.mdl = undefined;
         node.attrs.field = undefined;
         const selected = (field===''+mdl.id)? '.hs-left-nav-selected' : '';
-       return m(`.hs-left-nav-module`, [
+        return m(`.hs-left-nav-module`, [
             m(`.hs-left-nav-module-name ${selected}`, {href:`/api/${mdl.lib}/${mdl.id}`, oncreate: m.route.link, onupdate: m.route.link}, m('', mdl.name)),
             mdl.groups? m('', mdl.groups.map((g:any) => m(ModuleEntries, {group:g, mdl:mdl, field:field}))) : undefined
         ]);
@@ -69,6 +69,7 @@ class ModuleEntries {
                                 {href:`/api/${mod.lib}/${mod.id}`, oncreate: m.route.link, onupdate: m.route.link}, 
                                 mod.name);
                         });
+            grp.unshift(m('.hs-left-nav-header', group.title));
             return m(`.hs-left-nav-entries`, grp);
         } else {
             return m('', '');

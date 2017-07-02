@@ -3115,7 +3115,7 @@
 							"sources": [
 								{
 									"fileName": "hsDoc/src/view/LeftNav.ts",
-									"line": 91,
+									"line": 92,
 									"character": 8
 								}
 							]
@@ -3133,7 +3133,7 @@
 					"sources": [
 						{
 							"fileName": "hsDoc/src/view/LeftNav.ts",
-							"line": 90,
+							"line": 91,
 							"character": 25
 						}
 					]
@@ -3285,7 +3285,7 @@
 					"sources": [
 						{
 							"fileName": "hsDoc/src/view/LeftNav.ts",
-							"line": 79,
+							"line": 80,
 							"character": 24
 						}
 					]
@@ -4357,7 +4357,7 @@
 					"sources": [
 						{
 							"fileName": "hsDoc/src/view/MainMembers.ts",
-							"line": 50,
+							"line": 52,
 							"character": 15
 						}
 					]
@@ -4397,7 +4397,7 @@
 					"sources": [
 						{
 							"fileName": "hsDoc/src/view/MainMembers.ts",
-							"line": 38,
+							"line": 40,
 							"character": 17
 						}
 					]
@@ -4437,7 +4437,7 @@
 					"sources": [
 						{
 							"fileName": "hsDoc/src/view/MainMembers.ts",
-							"line": 96,
+							"line": 99,
 							"character": 18
 						}
 					]
@@ -4488,7 +4488,7 @@
 					"sources": [
 						{
 							"fileName": "hsDoc/src/view/MainMembers.ts",
-							"line": 76,
+							"line": 79,
 							"character": 19
 						}
 					]
@@ -4528,7 +4528,7 @@
 					"sources": [
 						{
 							"fileName": "hsDoc/src/view/MainMembers.ts",
-							"line": 82,
+							"line": 85,
 							"character": 13
 						}
 					]
