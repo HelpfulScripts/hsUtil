@@ -9,63 +9,105 @@ export function members(mdl:any) {
     return !mdl.groups? '': mdl.groups.map((g:any) => member(g, mdl.lib));
 }
 
+
 function member(g:any, lib:string) {
     let content = [];
     switch(g.title) {
         case 'Constructors':content = g.children.map((c:number) => constructor(Modules.get(lib, c))); break;
-//        case 'Properties':  content = g.children.map((c:number) => property(Modules.get(lib, c))); break;
-//        case 'Methods':     content = g.children.map((c:number) => method(Modules.get(lib, c))); break;          
+        case 'Properties':  content = g.children.map((c:number) => property(Modules.get(lib, c))); break;
+        case 'Methods':     content = g.children.map((c:number) => method(Modules.get(lib, c))); break;          
 //        default:            content = g.children.map((c:number) => otherMember(Modules.get(lib, c)));
     }
-    content.unshift(m('.hs-item-member-title', g.title));
+    content.unshift(m('.hs-item-member-title', m('span', g.title)));
     return m('.hs-item-member', content);
 }
 
 function constructor(mdl:any) {
-console.log('constructor');
 console.log(mdl);
-    return m('.hs-item-constructor', !mdl.signatures? [] : mdl.signatures.map((s:any, i:number) => m('', [
-            m('.hs-item-member-name', sourceLink(`${s.name}()`, mdl.lib, mdl.sources[i])),
+    return m('.hs-item-constructor', !mdl.signatures? '' : mdl.signatures.map((s:any) => 
+        m('', [
+            m('.hs-item-desc', [
+                m('span.hs-item-name', `${s.name}()`),
+                mdl.sources? sourceLink(mdl.lib, mdl.sources[0]) : ''
+            ]),
             m('.hs-item-comment', comment(s))
         ])
     )); 
-}
+} 
 
-/*
 function property(mdl:any) {
-console.log('property');
 console.log(mdl);
-    const content = [m('.hs-item-member-name', [
-        sourceLink(mdl.name, mdl.lib, mdl.sources[0]),
-        mdl.type? m('.hs-item-member-type', ': '+mdl.type.name) : undefined
-    ])]; 
-    content.push(m('.hs-item-comment', comment(mdl)));
-    return m('.hs-item-property', content);
+    return m('.hs-item-property', [
+        m('.hs-item-desc', [ 
+            m('span.hs-item-name', mdl.name),
+            mdl.type? m('span', [': ', type(mdl.type)]) : '',
+            mdl.sources? sourceLink(mdl.lib, mdl.sources[0]) : ''
+        ]),
+        m('.hs-item-comment', comment(mdl))
+    ]); 
 }
 
 function method(mdl:any) {
-console.log('method');
 console.log(mdl);
-    let signs; 
-    if (mdl.signatures) { signs = mdl.signatures.map((s:any) => [
-        mdl.sources? sourceLink(s.name, mdl.lib, mdl.sources[0]) : '',
-        '(', 
-        s.parameters? m('', s.parameters((p:any, i:number) => `${i>0?',':''}${p.name}:${p.type.name}`)) : undefined, 
-        `):${s.type? s.type.name : ''}`, 
-        m('.hs-item-comment', comment(mdl))
-    ]); }
-    return m('.hs-item-method', signs);
+    return m('.hs-item-method', !mdl.signatures? '' : mdl.signatures.map((s:any) => 
+        m('', [
+            m('.hs-item-desc', [
+                m('span.hs-item-name', s.name),
+                signature(s),
+                s.type? m('span', [': ', type(s.type)]) : '',
+                mdl.sources? sourceLink(mdl.lib, mdl.sources[0]) : ''
+            ]),
+            m('.hs-item-comment', comment(s))
+        ])
+    ));
 }
 
+
+/*
 function otherMember(mdl:any) {
 console.log('otherMember');
 console.log(mdl);
     const content = [m('.hs-item-member-name .hs-item-other-member', sourceLink(mdl.name, mdl.lib, mdl.sources[0]))]; 
-    content.push(m('.hs-item-comment', comment(mdl)));
+    content.push(m('', comment(mdl)));
     return content;
 }
 */
 
-function sourceLink(text:string, lib:string, source:any) {
-    return m(`a[href=${SourceBase}${lib}/${source.fileName}#${source.line}]`, text);
+function sourceLink(lib:string, source:any) {
+    return m('span.hs-item-member-source', !source? '' : 
+        m(`a[href=${SourceBase}${lib}/${source.fileName}#${source.line}]`, '[source]')
+    );
+}
+
+function type(t:any) {
+    function _type(t:any) {
+        switch (t.type) { 
+            case 'instrinct':   return t.name; 
+            case 'union':       return t.types.map(_type).join(' | ');
+            case 'reference':   return 'Array<'+ t.typeArguments.map(_type).join(', ') + '>';
+            default: console.log('unknown type '+ t.type);
+                        console.log(t);
+                        return '';
+        }
+    }
+    return m('span.hs-item-sig-type', _type(t));
+}
+
+function signature(s:any): typeof m.Vnode {
+    function parameter(p:any, i:number) {
+        return m('span', [
+            `${i>0?', ':''}`,
+            m('span.hs-item-sig-param', [
+                m('span', p.name),
+                ': ', 
+                type(p.type)
+            ])
+        ]);
+    }
+
+    return m('span.hs-item-signature', [
+            ' (', 
+            s.parameters? m('span', s.parameters.map(parameter)) : '', 
+            ')',
+    ]);
 }

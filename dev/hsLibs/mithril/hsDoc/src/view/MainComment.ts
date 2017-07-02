@@ -11,9 +11,9 @@ function markDown(x:string) {
 
 
 export function comment(mdl:any) { 
-    let content:any = '';
+    let content:any[] = [];
     if (mdl.comment) {
-        content = m('.hs-item-comment-desc', [m.trust(markDown(mdl.comment.shortText))]);
+        content.push(m('.hs-item-comment-desc', [m.trust(markDown(mdl.comment.shortText))]));
         if (mdl.comment.tags) {
             content = [];
             mdl.comment.tags.map((tag:any) => {
@@ -24,12 +24,22 @@ export function comment(mdl:any) {
                         break;
                     default: 
                         content.push(m('.hs-item-comment-special', [
-                            m('.hs-item-comment-tag', tag.tag), 
-                            m('.hs-item-comment-text', tag.text)
+                            m('span.hs-item-comment-tag', tag.tag), 
+                            m('span.hs-item-comment-text', tag.text)
                         ]));
                 }
             });
         }
+        Object.keys(mdl.comment).map((e:any) => {
+            switch (e) {
+                case 'shortText': break;    // already handled
+                case 'tags':      break;    // already handled
+                default: content.push(m('', [
+                            m('span.hs-item-comment-tag', e), 
+                            m('span.hs-item-comment-text', mdl.comment[e])
+                        ]));
+            }
+        });
     }
     return content;
 }

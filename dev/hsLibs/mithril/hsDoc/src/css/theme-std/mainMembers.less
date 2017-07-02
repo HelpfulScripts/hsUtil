@@ -9,16 +9,45 @@
     background-color: #eee;
     font-size: 1.4em;
     font-weight:bold;
-    padding: 5px 0 5px 5px;
+    padding: 5px 0 5px 0;
     margin: 4px 0;
+    span { .hs-indent; }
 }
 
-.hs-item-member-name {
-    padding-left: 5px; 
+.hs-item-name {
+    font-weight: bold;
+    color: #008;
+    font-size: 1em;
+}
+
+.hs-item-member-source {
+    float:right;
+    margin-right: 10px;
+    font-size: 0.7em;
 }
 
 .hs-item-member-type {
     display: inline;
+}
+
+.hs-item-desc {
+    .hs-indent;
+}
+
+.hs-item-signature {
+    font-size: 1em;
+}
+
+.hs-item-sig-param {
+    margin: 0 2px;
+}
+
+.hs-item-sig-type {
+//    border: 1px solid #88f;
+    border-radius: 3px;
+    background-color: #dda;
+    padding: 2px;
+    font-size: 0.9em;
 }
 
 .hs-item-member-padding {

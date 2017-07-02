@@ -1,35 +1,41 @@
 .hs-item-comment { // applies to main comment on item
     font-size: 1em;
     padding: 10px 0px; 
+    .hs-indent;
 //    border-bottom: 1px solid #ccc;
+    h1 {
+        font-size: 1.4em;
+    }
 }
 
 .hs-item-comment-special {  // special comment tag, e.g. @ngdoc
-    margin: 4px;
+    margin: 4px 0;
     clear:left;
+    .hs-item-comment-tag {
+        background-color: #eee;
+        border: 1px solid #aae;
+        border-radius: 2px;
+        width: 70px;
+        padding:3px 5px;
+    }
+    .hs-item-comment-desc {     // text for special comment tag, e.g. @ngdoc
+        padding:3px 5px;
+    }
 }
 
 .hs-item-comment-tag {      // tag for special comment tag, e.g. @ngdoc
-    font-size: 0.8em;
-    background-color: #eee;
-    border: 1px solid #aae;
-    border-radius: 2px;
     font-weight: bold;
-    width: 70px;
-    padding-left:5px;
     margin-right:10px;
     float:left;
     &:after { content: ':'}
 }
 
 .hs-item-comment-text {     // text for special comment tag, e.g. @ngdoc
-    font-size: 0.8em;
 }
 
 .hs-item-comment-desc {     // text for special comment tag, e.g. @ngdoc
-    font-size: 0.8em;
-    line-height: 1.5em;
-    padding-left: 5px;
+    line-height: 1.3em;
+    margin-top: 5px;
     li, p {
         margin:0 0 5px 0;
     }

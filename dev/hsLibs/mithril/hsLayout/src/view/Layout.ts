@@ -116,6 +116,9 @@ export abstract class Layout extends Component {
 */
     /**
      * lays out the component.
+     * @param {cssClass} same as m(cssClass, ...) 
+     * @param {node} the node on which to do the layout
+     * @return a vnode 
      */
     public layout(cssClass:string, node: typeof m.Vnode, attrs:any, content:Array<typeof m.Vnode|string>|string): typeof m.Vnode {
         function makeContent(content:Array<typeof Layout|string>|string): any {

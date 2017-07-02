@@ -42,12 +42,12 @@ function classDoc(mdl:any) {
 
 function title(mdl:any) {
     return [
-        m('.hs-item-exported', (mdl.flags && mdl.flags.isExported)? 'export' : ''),
-        m('.hs-item-kind', mdl.kindString),
-        m('.hs-item-name', tooltip(mdl.name, 'class name and then some', 'bottom')),
-        !mdl.extendedTypes? undefined : m('.hs-item-extends', 'extends'),
-        !mdl.extendedTypes? undefined : m('.hs-item-extensions', mdl.extendedTypes.map((t:any, i:number) =>
-                m('.hs-item-extension', [
+        m('span.hs-item-exported', (mdl.flags && mdl.flags.isExported)? 'export' : ''),
+        m('span.hs-item-kind', mdl.kindString),
+        m('span.hs-item-name', tooltip(mdl.name, 'class name and then some', 'bottom')),
+        !mdl.extendedTypes? undefined : m('span.hs-item-extends', 'extends'),
+        !mdl.extendedTypes? undefined : m('span.hs-item-extensions', mdl.extendedTypes.map((t:any, i:number) =>
+                m('span.hs-item-extension', [
                     m(`a[href=/api/${mdl.lib}/${t.id}]`, {oncreate: m.route.link}, t.name), 
                     mdl.extendedTypes.map.length>(i+1)? ', ': ''
                 ])
