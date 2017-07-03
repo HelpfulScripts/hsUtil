@@ -1,12 +1,12 @@
 const m = require("mithril");
 
 
-import { Layout }    from '../../../hsLayout/src/';
-import { Modules }   from '../Modules'; 
-import { tooltip }   from './Tooltip';
-import { comment }   from './MainComment';
-import { members }   from './MainMembers';
-import { flags }     from './Parts';
+import { Layout }           from '../../../hsLayout/src/';
+import { Modules }          from '../Modules'; 
+import { tooltip }          from './Tooltip';
+import { comment }          from './MainComment';
+import { members }          from './MainMembers';
+import { flags, libLink }   from './Parts';
 
 export class MainDetail extends Layout { 
     view(node:typeof m.Vnode): typeof m.Vnode {
@@ -47,7 +47,7 @@ function title(mdl:any) {
         !mdl.extendedTypes? undefined : m('span.hs-item-extends', 'extends'),
         !mdl.extendedTypes? undefined : m('span.hs-item-extensions', mdl.extendedTypes.map((t:any, i:number) =>
                 m('span.hs-item-extension', [
-                    m(`a[href=/api/${mdl.lib}/${t.id}]`, {oncreate: m.route.link}, t.name), 
+                    libLink('a', mdl.lib, t.id, t.name),
                     mdl.extendedTypes.map.length>(i+1)? ', ': ''
                 ])
             ))

@@ -2,6 +2,7 @@ const m = require("mithril");
 
 import { Layout } from '../../../hsLayout/src/';
 import { Modules } from '../Modules'; 
+import { libLink } from './Parts'; 
 
 
 export class LeftNav extends Layout { 
@@ -28,7 +29,8 @@ class ModuleNavList {
         const selected = (field==='0')? '.hs-left-nav-selected' : '';
         if (mdl.kind === 0) { // External Modules
             return m('', [
-                m(`.hs-library-name ${selected}`, {href:`/api/${mdl.lib}/${mdl.id}`, oncreate: m.route.link, onupdate: m.route.link}, mdl.name),
+                libLink(`.hs-library-name ${selected}`, mdl.lib, mdl.id, mdl.name),
+//                m(`.hs-library-name ${selected}`, {href:`/api/${mdl.lib}/${mdl.id}`, oncreate: m.route.link, onupdate: m.route.link}, mdl.name),
                 m('', (mdl.children? mdl.children.map((c:any) => m(ExternalModule, {mdl:c, field:field})) : 'no children'))
             ]);
         } else {

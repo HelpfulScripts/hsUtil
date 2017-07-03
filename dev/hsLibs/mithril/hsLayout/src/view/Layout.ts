@@ -40,7 +40,13 @@ export const FILL = new FillArea();
  * 
  */
 export abstract class LayoutStyle {
-    static layoutStyles = {};
+    static layoutStyles:{string?: LayoutStyle} = {};
+
+    /**
+     * 
+     * @param keyword the keyword used in the attributes to `this.layout`
+     * @param style the `LayoutStyle` implementation to instantiate when encountering `keyword` 
+     */
     public static register(keyword:string, style:typeof LayoutStyle) {
         console.log(`registering ${keyword} layout`);
         LayoutStyle.layoutStyles[keyword] = style;

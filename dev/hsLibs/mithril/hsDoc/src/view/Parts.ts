@@ -6,7 +6,8 @@ const SourceBase = 'src/';
 export function flags(flags:any) {
     return m('span.hs-item-flags', !flags? '' : [
         (flags.isExported)? m('span.hs-item-exported', 'export') : '',
-        (flags.isPublic)?   m('span.hs-item-public', 'public') : ''
+        (flags.isPublic)?   m('span.hs-item-public', 'public') : '',
+        (flags.isStatic)?   m('span.hs-item-static', 'static') : ''
     ]);
 }
 
@@ -16,12 +17,25 @@ export function sourceLink(lib:string, source:any) {
     );
 }
 
-export function type(t:any) {
+/**
+ * creates a library link on the specified `name`. 
+ * The link points to `/api/<lib>/<id>`
+ * @param css the css selector to use
+ * @param lib the lib string to point to
+ * @param id the id number to point to
+ * @param name the name on which to formt he link
+ */
+export function libLink(css:string, lib:string, id:number, name:string) {
+    return m(`${css}[href=/api/${lib}/${id}]`, {oncreate: m.route.link}, name);
+}
+
+export function type(t:any, lib:string) {
     function _type(t:any) {
         switch (t.type) { 
             case 'instrinct':   return t.name; 
             case 'union':       return t.types.map(_type).join(' | ');
-            case 'reference':   return t.typeArguments? 'Array<'+ t.typeArguments.map(_type).join(', ') + '>' : t.name;
+            case 'reference':   return t.typeArguments? 'Array<'+ t.typeArguments.map(_type).join(', ') + '>' : 
+                                       t.id? t.name : t.name;
             default: console.log('unknown type '+ t.type);
                         console.log(t);
                         return '';
@@ -33,7 +47,7 @@ export function type(t:any) {
     } catch(e) { console.log(e); console.log(e.trace); }
 }
 
-export function signature(s:any): typeof m.Vnode {
+export function signature(s:any, lib:string): typeof m.Vnode {
     function comma(i:number)      { return (i>0)? ', ': ''; }
     function optional(flags: any) {
         return (flags && flags.isOptional)? '.hs-item-optional' : '';
@@ -44,10 +58,10 @@ export function signature(s:any): typeof m.Vnode {
             comma(i),
             m('span.hs-item-sig-param', [
                 m(`span${optional(p.flags)}`, p.name),
-                type(p.type)
+                type(p.type, lib)
             ])
         ]);
     }
 
-    return m('span.hs-item-signature', s.parameters? s.parameters.map(parameter) : '');
+    return !s? '' : m('span.hs-item-signature', s.parameters? s.parameters.map(parameter) : '');
 }

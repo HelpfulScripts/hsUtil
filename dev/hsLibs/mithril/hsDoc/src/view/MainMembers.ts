@@ -23,46 +23,37 @@ function member(g:any, lib:string) {
     return m('.hs-item-member', content);
 }
 
+function itemDescriptor(mdl:any, sub?:any) {
+    return m('.hs-item-desc', [ 
+            flags(mdl.flags),
+            m('span.hs-item-name', sub? [sub.name, '('] : mdl.name),
+            signature(sub, mdl.lib),
+            sub? m('span.hs-item-name', ')') : '',
+            type(sub? sub.type : mdl.type, mdl.lib),
+            mdl.sources? sourceLink(mdl.lib, mdl.sources[0]) : ''
+        ]);
+}
+
 function constructor(mdl:any) {
-//console.log(mdl);
     return m('.hs-item-constructor', !mdl.signatures? '' : mdl.signatures.map((s:any) => 
         m('', [
-            m('.hs-item-desc', [
-                m('span.hs-item-name', [s.name, '(']),
-                signature(s),
-                m('span.hs-item-name', ')'),
-                mdl.sources? sourceLink(mdl.lib, mdl.sources[0]) : ''
-            ]),
+            itemDescriptor(mdl, s),
             m('.hs-item-comment', comment(s))
         ])
     )); 
 } 
 
 function property(mdl:any) {
-//console.log(mdl);
     return m('.hs-item-property', [
-        m('.hs-item-desc', [ 
-            flags(mdl.flags),
-            m('span.hs-item-name', mdl.name),
-            type(mdl.type),
-            mdl.sources? sourceLink(mdl.lib, mdl.sources[0]) : ''
-        ]),
+        itemDescriptor(mdl),
         m('.hs-item-comment', comment(mdl))
     ]); 
 }
 
 function method(mdl:any) {
-//console.log(mdl);
     return m('.hs-item-method', !mdl.signatures? '' : mdl.signatures.map((s:any) => 
         m('', [
-            m('.hs-item-desc', [
-                flags(mdl.flags),
-                m('span.hs-item-name', [s.name, '(']),
-                signature(s),
-                m('span.hs-item-name', ')'),
-                type(s.type),
-                mdl.sources? sourceLink(mdl.lib, mdl.sources[0]) : ''
-            ]),
+            itemDescriptor(mdl, s),
             m('.hs-item-comment', comment(s))
         ])
     ));
