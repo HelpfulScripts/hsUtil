@@ -1,46 +1,16 @@
-import { Layout, LayoutStyle, LayoutArea } from './Layout';
+import { Layout, LayoutStyle, LayoutArea, DefinedArea, PixelArea } from './Layout';
 
-
-abstract class DefinedArea extends LayoutArea{
-    constructor(size: number) { super(size); } 
-}
-
-class PixelArea extends DefinedArea {
-    constructor(size:number) { super(size); }
-}
-
-class PercentArea extends DefinedArea {
-    constructor(size:number) { super(size); }
-}
-
-class FillArea extends LayoutArea {
-    constructor() { super(-1); }
-}
-
-export function px(px:number)   { return new PixelArea(px); }
-export function pc(pc:number)   { return new PercentArea(pc); }
-export const FILL = new FillArea();
-
-
-class LayoutDescriptor {
-    firstFixed: number;
-    lastFixed:  number;
-    unit: string;
-
-    constructor(public areaDesc:LayoutArea[]) { 
-    }
-
-    public getSizes(numAreas:number) {
-        
-    }
+interface PillarParams {
+    cssClass: string;
+    fields: string[];
 }
 
 const cParams = {
-    columns: {
+    columns: <PillarParams>{
         cssClass: '.hs-column-layout',
         fields: ['top', 'bottom', 'left', 'right', 'height', 'width']
     },
-    rows: {
+    rows: <PillarParams>{
         cssClass: '.hs-row-layout',
         fields: ['left', 'right', 'top', 'bottom', 'width', 'height']
     }
@@ -53,10 +23,10 @@ class Pillars extends LayoutStyle{
     fields: string[];
     cssClass:string;
 
-    constructor(paramName:string, public areaDesc:LayoutArea[]) { 
+    constructor(params:PillarParams, public areaDesc:LayoutArea[]) { 
         super(areaDesc); 
-        this.fields = cParams[paramName].fields;
-        this.cssClass = cParams[paramName].cssClass;
+        this.fields = params.fields;
+        this.cssClass = params.cssClass;
 
         let n = areaDesc.length-1;
         let first = 0;
@@ -168,12 +138,12 @@ class Pillars extends LayoutStyle{
 };
 
 export class Columns extends Pillars {
-    constructor(public areaDesc:LayoutArea[]) { super('columns', areaDesc);  };
+    constructor(public areaDesc:LayoutArea[]) { super(cParams['columns'], areaDesc);  };
 };
 
 
 export class Rows extends Pillars {
-    constructor(public areaDesc:LayoutArea[]) { super('rows', areaDesc);  };
+    constructor(public areaDesc:LayoutArea[]) { super(cParams['rows'], areaDesc);  };
 };
 
 LayoutStyle.register('columns', Columns);

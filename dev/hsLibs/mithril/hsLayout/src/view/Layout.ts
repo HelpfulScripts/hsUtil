@@ -15,6 +15,27 @@ export abstract class LayoutArea {
     constructor(public size: number) {}
 }
 
+export abstract class DefinedArea extends LayoutArea{
+    constructor(size: number) { super(size); } 
+}
+
+export class FillArea extends LayoutArea {
+    constructor() { super(-1); }
+}
+
+export class PixelArea extends DefinedArea {
+    constructor(size:number) { super(size); }
+}
+
+export class PercentArea extends DefinedArea {
+    constructor(size:number) { super(size); }
+}
+
+export function px(px:number)   { return new PixelArea(px); }
+export function pc(pc:number)   { return new PercentArea(pc); }
+export const FILL = new FillArea();
+
+
 /**
  * 
  */
