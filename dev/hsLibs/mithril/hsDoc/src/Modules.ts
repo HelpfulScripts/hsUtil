@@ -58,6 +58,7 @@ export const Modules = {
 
     add(id:number, name:string, content:any) {
         this.list.set.push(name);
+        this.list.set.sort();
         this.list.index[name] = {};
         recursiveIndex(content, this.list.index[name], name);
     },
