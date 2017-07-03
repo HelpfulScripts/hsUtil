@@ -12,10 +12,9 @@ export class LeftNav extends Layout {
         node.attrs.lib = undefined;
         node.attrs.field = undefined;
         const mdl = Modules.get(lib, 0) || {name:'unknown', id:0};
-        return this.layout('.hs-left', node, {}, [m('.hs-left-nav', [
-            m(ModuleNavList, {mdl:mdl, field:field}),  
-//            m(ModuleNavIndentList, {mdl:mdl, field:field})
-        ])]);
+        return this.layout('.hs-left', node, {}, [
+            m('.hs-left-nav', m(ModuleNavList, {mdl:mdl, field:field})),  
+        ]);
     } 
 }
 
@@ -30,7 +29,6 @@ class ModuleNavList {
         if (mdl.kind === 0) { // External Modules
             return m('', [
                 libLink(`.hs-library-name ${selected}`, mdl.lib, mdl.id, mdl.name),
-//                m(`.hs-library-name ${selected}`, {href:`/api/${mdl.lib}/${mdl.id}`, oncreate: m.route.link, onupdate: m.route.link}, mdl.name),
                 m('', (mdl.children? mdl.children.map((c:any) => m(ExternalModule, {mdl:c, field:field})) : 'no children'))
             ]);
         } else {
@@ -47,7 +45,7 @@ class ExternalModule {
         node.attrs.field = undefined;
         const selected = (field===''+mdl.id)? '.hs-left-nav-selected' : '';
         return m(`.hs-left-nav-module`, [
-            m(`.hs-left-nav-module-name ${selected}`, {href:`/api/${mdl.lib}/${mdl.id}`, oncreate: m.route.link, onupdate: m.route.link}, m('', mdl.name)),
+            libLink(`.hs-left-nav-module-name ${selected}`, mdl.lib, mdl.id, mdl.name),
             mdl.groups? m('', mdl.groups.map((g:any) => m(ModuleEntries, {group:g, mdl:mdl, field:field}))) : undefined
         ]);
     }
@@ -67,9 +65,11 @@ class ModuleEntries {
                         .map((mod:any) => {
                             const selected = (field===''+mod.id)? '.hs-left-nav-selected' : '';
                             const exported = (mod.flags && mod.flags.isExported);
-                            return m(`.hs-left-nav-entry ${selected} ${exported?'.hs-left-nav-exported' : ''}`, 
-                                {href:`/api/${mod.lib}/${mod.id}`, oncreate: m.route.link, onupdate: m.route.link}, 
-                                mod.name);
+                            const css = `.hs-left-nav-entry ${selected} ${exported?'.hs-left-nav-exported' : ''}`;
+                            return m('', [
+                                (mod.flags && mod.flags.isStatic)? 'static': '',
+                                libLink(css, mod.lib, mod.id, mod.name)
+                            ]);
                         });
             grp.unshift(m('.hs-left-nav-header', group.title));
             return m(`.hs-left-nav-entries`, grp);
@@ -86,21 +86,5 @@ function exportAscending(a:any, b:any) {
         else if (b.flags.isExported) { return 1; }
         else { return a.name > b.name; }
     } else { return a.name > b.name; }
-}
-
-
-//-----------------
-class ModuleNavIndentList {
-    view(node: typeof m.Vnode): typeof m.Vnode {
-        const mdl = node.attrs.mdl;
-        node.attrs.mdl = undefined;
-
-        const mNode = m(`.hs-member`, {href:`/api/${mdl.lib}/${mdl.id}`, oncreate: m.route.link, onupdate: m.route.link}, mdl.name);
-        return m(`.hs-module-list`, {}, [mNode, mdl.children?
-            m('.hs-indent', mdl.children.map((c:any) => 
-                m(ModuleNavIndentList, {mdl:c, lib:mdl.lib}))) 
-            : undefined
-        ]);
-    }
 }
 

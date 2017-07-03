@@ -1,11 +1,24 @@
 const m = require("mithril");
 
-export interface Module {
+/**
+ * Modules.ts. Loads the doc.json files to process and display as documentation.
+ * Processing occurs in these steps:
+ * 1. Load the index.json file that contains a list of doc.json files to load, one for each library to show
+ * 2. Load each doc.json file, which describes a library
+ * 3. Call Modules.add to add the library name to the registry and create an index of entries for the library
+ */
+
+/*
+interface Module {
     id:         number;
     name:       string;
     content:    any;
 }
+*/
 
+/**
+ * the directory to look for .json files, relative to the web page.
+ */
 const dir = './data/';
 
 function loadDocSet(modules:typeof Modules, file:string) {
