@@ -66,7 +66,7 @@ module.exports = function(grunt) {
            },
             src : {
                 outDir:     "dist/js",
-                src: ["src/**/*.ts", "!arc/**/*.spec.ts"],
+                src: ["src/**/*.ts", "!src/**/*.spec.ts"],
                 tsconfig:   true,
            },
             test : {
