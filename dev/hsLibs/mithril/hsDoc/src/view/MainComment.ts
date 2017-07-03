@@ -2,14 +2,6 @@ const m = require("mithril");
 const showdown  = require('showdown');
 
 
-function markDown(x:string) {
-    const html = false;
-    const converter = new showdown.Converter();
-    return (!x)? '' :
-        (html? x.replace(/\n/g, '<br>') : converter.makeHtml(x));
-}
-
-
 export function comment(mdl:any) { 
     let content:any[] = [];
     if (mdl.comment) {
@@ -43,4 +35,12 @@ export function comment(mdl:any) {
     }
     return content;
 }
+
+function markDown(x:string) {
+    const html = false;
+    const converter = new showdown.Converter();
+    return (!x)? '' :
+        (html? x.replace(/\n/g, '<br>') : converter.makeHtml(x));
+}
+
 

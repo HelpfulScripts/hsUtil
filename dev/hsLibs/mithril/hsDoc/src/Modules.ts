@@ -56,6 +56,9 @@ export const Modules = {
     get(lib?:string, id=0) { 
         if (lib) {
             if (this.list.index[lib]) { 
+//if (id===137) { 
+console.log(id); console.log(this.list.index[lib][id+'']); 
+//} 
                 return this.list.index[lib][id+'']; 
             } else {
                 console.log(`list ${lib} not loaded yet`);

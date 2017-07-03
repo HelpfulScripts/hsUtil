@@ -2,12 +2,13 @@ const m = require("mithril");
 
 import { Modules }   from '../Modules'; 
 import { comment }   from './MainComment'; 
+import { flags, sourceLink, signature, type } from './Parts'; 
 
-const SourceBase = 'src/';
 
 export function members(mdl:any) {
     return !mdl.groups? '': mdl.groups.map((g:any) => member(g, mdl.lib));
 }
+
 
 
 function member(g:any, lib:string) {
@@ -23,7 +24,7 @@ function member(g:any, lib:string) {
 }
 
 function constructor(mdl:any) {
-console.log(mdl);
+//console.log(mdl);
     return m('.hs-item-constructor', !mdl.signatures? '' : mdl.signatures.map((s:any) => 
         m('', [
             m('.hs-item-desc', [
@@ -38,11 +39,12 @@ console.log(mdl);
 } 
 
 function property(mdl:any) {
-console.log(mdl);
+//console.log(mdl);
     return m('.hs-item-property', [
         m('.hs-item-desc', [ 
+            flags(mdl.flags),
             m('span.hs-item-name', mdl.name),
-            mdl.type? m('span', [': ', type(mdl.type)]) : '',
+            type(mdl.type),
             mdl.sources? sourceLink(mdl.lib, mdl.sources[0]) : ''
         ]),
         m('.hs-item-comment', comment(mdl))
@@ -50,14 +52,15 @@ console.log(mdl);
 }
 
 function method(mdl:any) {
-console.log(mdl);
+//console.log(mdl);
     return m('.hs-item-method', !mdl.signatures? '' : mdl.signatures.map((s:any) => 
         m('', [
             m('.hs-item-desc', [
+                flags(mdl.flags),
                 m('span.hs-item-name', [s.name, '(']),
                 signature(s),
                 m('span.hs-item-name', ')'),
-                s.type? m('span', [': ', type(s.type)]) : '',
+                type(s.type),
                 mdl.sources? sourceLink(mdl.lib, mdl.sources[0]) : ''
             ]),
             m('.hs-item-comment', comment(s))
@@ -76,37 +79,3 @@ console.log(mdl);
 }
 */
 
-function sourceLink(lib:string, source:any) {
-    return m('span.hs-item-member-source', !source? '' : 
-        m(`a[href=${SourceBase}${lib}/${source.fileName}#${source.line}]`, '[source]')
-    );
-}
-
-function type(t:any) {
-    function _type(t:any) {
-        switch (t.type) { 
-            case 'instrinct':   return t.name; 
-            case 'union':       return t.types.map(_type).join(' | ');
-            case 'reference':   return 'Array<'+ t.typeArguments.map(_type).join(', ') + '>';
-            default: console.log('unknown type '+ t.type);
-                        console.log(t);
-                        return '';
-        }
-    }
-    return m('span.hs-item-sig-type', _type(t));
-}
-
-function signature(s:any): typeof m.Vnode {
-    function parameter(p:any, i:number) {
-        return m('span', [
-            `${i>0?', ':''}`,
-            m('span.hs-item-sig-param', [
-                m('span', p.name),
-                ': ', 
-                type(p.type)
-            ])
-        ]);
-    }
-
-    return m('span.hs-item-signature', s.parameters? s.parameters.map(parameter) : '');
-}

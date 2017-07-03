@@ -38,7 +38,7 @@ export class HsSite extends Layout {
 
 //----------- Main Site parts --------------------------------------------------------
 
-class MainArea extends Layout {
+class MainArea extends Layout {   
     view(node:typeof m.Vnode):typeof m.Vnode {
         const lib = node.attrs.lib;
         const field = node.attrs.field;

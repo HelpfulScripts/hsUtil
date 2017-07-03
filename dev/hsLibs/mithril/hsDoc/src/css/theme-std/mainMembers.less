@@ -5,9 +5,17 @@
 .hs-item-member {
 }
 
+.hs-item-optional {
+    &:after { 
+        content: '?'; 
+        font-style: italic;
+        font-weight:bold;
+    }
+}
+
 .hs-item-member-title {
     background-color: #eee;
-    font-size: 1.4em;
+    font-size: 1.3em;
     font-weight:bold;
     padding: 5px 0 5px 0;
     margin: 4px 0;
@@ -46,8 +54,13 @@
 //    border: 1px solid #88f;
     border-radius: 3px;
     background-color: #dda;
-    padding: 2px;
+    padding:  2px;
+    margin-left: 4px;
     font-size: 0.9em;
+    &:before { 
+        content: ': '; 
+        background-color: transparent;
+    }
 }
 
 .hs-item-member-padding {

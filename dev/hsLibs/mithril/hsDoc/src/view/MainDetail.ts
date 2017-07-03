@@ -6,6 +6,7 @@ import { Modules }   from '../Modules';
 import { tooltip }   from './Tooltip';
 import { comment }   from './MainComment';
 import { members }   from './MainMembers';
+import { flags }     from './Parts';
 
 export class MainDetail extends Layout { 
     view(node:typeof m.Vnode): typeof m.Vnode {
@@ -13,10 +14,7 @@ export class MainDetail extends Layout {
         const mdl = Modules.get(lib, node.attrs.field) || '';
         node.attrs.lib = undefined;
         node.attrs.field = undefined;
-        return this.layout('.hs-main-detail', node, {}, [
-            m(ItemDoc, {mdl: mdl}),
-            m(DebugItemDetail, {mdl: mdl})
-        ]); 
+        return this.layout('.hs-main-detail', node, {}, [m(ItemDoc, {mdl: mdl})]); 
     }
 }
 class ItemDoc {
@@ -26,7 +24,8 @@ class ItemDoc {
         let doc;
         switch(mdl.kindString) {
             case 'Class': doc = classDoc(mdl); break;
-            default: doc = m('.hs-item-unknown-kind', `${mdl.name} (${mdl.kind}, ${mdl.kindString})`); 
+            default: doc = classDoc(mdl);
+//            default: doc = m('.hs-item-unknown-kind', `${mdl.name} (${mdl.kind}, ${mdl.kindString})`); 
         }
         return m('.hs-item-doc', doc);
     }
@@ -42,7 +41,7 @@ function classDoc(mdl:any) {
 
 function title(mdl:any) {
     return [
-        m('span.hs-item-exported', (mdl.flags && mdl.flags.isExported)? 'export' : ''),
+        flags(mdl.flags),
         m('span.hs-item-kind', mdl.kindString),
         m('span.hs-item-name', tooltip(mdl.name, 'class name and then some', 'bottom')),
         !mdl.extendedTypes? undefined : m('span.hs-item-extends', 'extends'),
@@ -57,6 +56,7 @@ function title(mdl:any) {
 
 
 
+/*
 //------------ Debug -----------------------------
 class DebugItemDetail  { 
     view(node: typeof m.Vnode): typeof m.Vnode {
@@ -83,3 +83,4 @@ class DebugItemTable  {
         })]);
     }
 }
+*/
