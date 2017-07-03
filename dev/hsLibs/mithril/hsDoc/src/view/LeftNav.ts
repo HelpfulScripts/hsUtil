@@ -53,6 +53,7 @@ class ExternalModule {
 
 class ModuleEntries {
     view(node: typeof m.Vnode): typeof m.Vnode {
+        let grp = [];
         const group = node.attrs.group;
         const mdl = node.attrs.mdl;
         const field = node.attrs.field;
@@ -60,22 +61,23 @@ class ModuleEntries {
         node.attrs.group = undefined;
         node.attrs.field = undefined;
         if (group && group.children) {
-            let grp = group.children.map((c:any) => Modules.get(mdl.lib, c))
-                        .sort(exportAscending)
-                        .map((mod:any) => {
-                            const selected = (field===''+mod.id)? '.hs-left-nav-selected' : '';
-                            const exported = (mod.flags && mod.flags.isExported);
-                            const css = `.hs-left-nav-entry ${selected} ${exported?'.hs-left-nav-exported' : ''}`;
-                            return m('', [
-                                (mod.flags && mod.flags.isStatic)? 'static': '',
-                                libLink(css, mod.lib, mod.id, mod.name)
-                            ]);
-                        });
+            grp = group.children
+                .map((c:any) => Modules.get(mdl.lib, c))    // replace id reference by module
+                .sort(exportAscending)                      // sort: exported first, then alphabetically
+                .map((mod:any) => {                         // replace module by vnode structure
+                    const selected = (field===''+mod.id)? '.hs-left-nav-selected' : '';
+                    const exported = (mod.flags && mod.flags.isExported);
+                    const statik   = (mod.flags && mod.flags.isStatic);
+                    const css = `.hs-left-nav-entry ${selected} ${exported?'.hs-left-nav-exported' : ''}`;
+                    return (!exported && group.title==='Variables')? '' :   // ignore local module variables
+                        m('', [
+                            statik? 'static': '',
+                            libLink(css, mod.lib, mod.id, mod.name)
+                        ]);
+                });
             grp.unshift(m('.hs-left-nav-header', group.title));
-            return m(`.hs-left-nav-entries`, grp);
-        } else {
-            return m('', '');
         }
+        return m(`.hs-left-nav-entries`, (grp.length > 1)? grp : '');
     }
 }
 
