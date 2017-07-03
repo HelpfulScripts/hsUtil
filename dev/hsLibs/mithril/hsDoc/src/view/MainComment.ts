@@ -1,11 +1,15 @@
 const m = require("mithril");
 const showdown  = require('showdown');
 
-
+/**
+ * 
+ * @param mdl the module to scan for comments
+ * @return a vnode representing the comment entries
+ */
 export function comment(mdl:any) { 
     let content:any[] = [];
+    content.push(mainComment(mdl.comment));
     if (mdl.comment) {
-        content.push(m('.hs-item-comment-desc', [m.trust(markDown(mdl.comment.shortText))]));
         if (mdl.comment.tags) {
             content = [];
             mdl.comment.tags.map((tag:any) => {
@@ -22,18 +26,29 @@ export function comment(mdl:any) {
                 }
             });
         }
-        Object.keys(mdl.comment).map((e:any) => {
+    }
+    content.push(mainCommentRemainder(comment));
+    return m('.hs-item-comment', content);
+}
+
+function mainComment(comment:any) {
+    return m('.hs-item-comment-desc', comment? [m.trust(markDown(comment.shortText))] : '');
+}
+
+function mainCommentRemainder(comment:any) {
+    return !comment? '' : Object.keys(comment).map((e:any) => {
             switch (e) {
-                case 'shortText': break;    // already handled
-                case 'tags':      break;    // already handled
-                default: content.push(m('', [
-                            m('span.hs-item-comment-tag', e), 
-                            m('span.hs-item-comment-text', mdl.comment[e])
-                        ]));
+                case 'shortText': // already handled
+                case 'tags':      // already handled
+                    return '';
+                default: 
+                    return m('', [
+                        m('span.hs-item-comment-tag', e), 
+                        m('span.hs-item-comment-text', comment[e])
+                    ]);
             }
         });
-    }
-    return content;
+
 }
 
 function markDown(x:string) {
