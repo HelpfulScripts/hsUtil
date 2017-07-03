@@ -33,14 +33,14 @@ class ItemDoc {
 
 function classDoc(mdl:any) {
     return [
-        m('.hs-item-title', title(mdl)),
-        m('.hs-item-comment', comment(mdl)),
-        m('.hs-item-members', members(mdl))
+        title(mdl),
+        comment(mdl),
+        members(mdl)
     ];
 }
 
 function title(mdl:any) {
-    return [
+    return m('.hs-item-title', [
         flags(mdl.flags),
         m('span.hs-item-kind', mdl.kindString),
         m('span.hs-item-name', tooltip(mdl.name, 'class name and then some', 'bottom')),
@@ -51,7 +51,7 @@ function title(mdl:any) {
                     mdl.extendedTypes.map.length>(i+1)? ', ': ''
                 ])
             ))
-    ];
+    ]);
 }
 
 
