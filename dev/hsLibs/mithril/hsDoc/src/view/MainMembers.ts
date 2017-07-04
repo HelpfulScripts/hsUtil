@@ -17,12 +17,14 @@ function member(g:any, lib:string) {
     let content = [];
     switch(g.title) {
         case 'Constructors':    content = g.children.map((c:number) => constructor(Modules.get(lib, c))); break;
-        case 'Object Literals': content = g.children.map((c:number) => objectLiteral(Modules.get(lib, c))); break;
+        case 'Object literals': content = g.children.map((c:number) => objectLiteral(Modules.get(lib, c))); break;
         case 'Properties':      content = g.children.map((c:number) => property(Modules.get(lib, c))); break;
         case 'Variables':       content = g.children.map((c:number) => variables(Modules.get(lib, c))); break;
         case 'Functions':       content = g.children.map((c:number) => method(Modules.get(lib, c))); break;          
         case 'Methods':         content = g.children.map((c:number) => method(Modules.get(lib, c))); break;          
         case 'Classes':         content = g.children.map((c:number) => classes(Modules.get(lib, c))); break;          
+        case 'Interfaces':      content = g.children.map((c:number) => classes(Modules.get(lib, c))); break;          
+        case 'Type aliases':    content = g.children.map((c:number) => classes(Modules.get(lib, c))); break;          
         default:                content = g.children.map((c:number) => otherMember(Modules.get(lib, c)));
     }
     content.unshift(m('.hs-item-member-title', m('span', g.title)));
