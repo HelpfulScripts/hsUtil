@@ -31,7 +31,7 @@ console.log('requesting ' + dir+file);
         .catch(console.log);
 }
 
-function loadIndexSet(modules:typeof Modules) {
+function loadIndexSet(modules:typeof Modules) { 
     return m.request({ method: "GET", url: dir+"index.json" })
         .then((result:any) =>  {
             console.log('received index');
@@ -40,14 +40,29 @@ function loadIndexSet(modules:typeof Modules) {
         .catch(console.log);
 }
 
+function validExternalModuleName(content:any, lib:string):boolean {
+    let result = false;
+    if (content.kindString !== 'External module') { return true; }
+    else if (content.name.indexOf('/')>0 && content.name.indexOf(lib+'/src/')===0) {
+        let j = (lib+'/src/').length;
+        content.name = content.name.substring(j);
+        result = true;
+    }
+    return result;
+}
+
 function recursiveIndex(content:any, index:any, lib:string) {
+    let next = true;
     content.lib = lib;
     if (typeof content === 'object' && content.name) {
         content.name = content.name.replace(/["'](.+)["']|(.+)/g, "$1$2");  // remove quotes 
-        index[content.id+''] = content;
-    }
-    if (content.children) {
-        content.children.map((c:any) => recursiveIndex(c, index, lib));
+        validExternalModuleName(content, lib);
+        if (next) {
+            index[content.id+''] = content;
+            if (content.children) {
+                content.children.map((c:any) => recursiveIndex(c, index, lib));
+            }
+        }
     }
 }
 
@@ -55,11 +70,13 @@ export const Modules = {
     list: <any>{set:[], index:{}},
 
 
-    add(id:number, name:string, content:any) {
-        this.list.set.push(name);
+    add(id:number, lib:string, content:any) {
+        this.list.set.push(lib);
         this.list.set.sort();
-        this.list.index[name] = {};
-        recursiveIndex(content, this.list.index[name], name);
+        this.list.index[lib] = {};
+        recursiveIndex(content, this.list.index[lib], lib);
+        console.log('loaded '+ lib);
+//        console.log(this.list.index[lib]);
     },
 
     loadList() {
@@ -69,10 +86,10 @@ export const Modules = {
     get(lib?:string, id=0) { 
         if (lib) {
             if (this.list.index[lib]) { 
-if(id+''==='1') { console.log(this.list.index[lib][id+'']); }
+if(id+''!=='-4') { console.log(`${lib} ${id}`); console.log(this.list.index[lib][id+'']); }
                 return this.list.index[lib][id+'']; 
             } else {
-                console.log(`list ${lib} not loaded yet`);
+                console.log(`list ${lib} not loaded yet ${id}`);
                 return this.list.set; 
             }
         } else {
