@@ -1,4 +1,6 @@
 const path = require('path');
+const webpackConfig = require('./webpack.config');
+
 
 /*global module:false*/
 module.exports = function(grunt) {
@@ -92,7 +94,7 @@ module.exports = function(grunt) {
                     mode:   'modules',
 //                    listInvalidSymbolLinks: true,
 //                    theme:  'themes/hs',
-                    name:   'hsDocs',
+                    name:   'hsDoc',
                     readme: 'readme.txt'
                 },
                 src: ['src/**/*.ts', '!src/**/*.spec.ts']
@@ -139,8 +141,16 @@ module.exports = function(grunt) {
 		},
 
         webpack: {
-            production: { // webpack options 
+            prod: { // webpack options 
                 entry: './dist/hsDoc/src/index.js',
+                output: {
+                    filename: 'hsDocs.js',
+                    path: path.resolve(__dirname, './dist')
+                }
+            },
+            develop: { // webpack options 
+                entry: './dist/hsDoc/src/index.js',
+                devtool: "inline-source-map",
                 output: {
                     filename: 'hsDocs.js',
                     path: path.resolve(__dirname, './dist')
@@ -185,7 +195,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-webpack');
 
     grunt.registerTask('doc', ['clean:docs', 'typedoc', 'copy:docs']);
-    grunt.registerTask('stage', ['webpack:production', 'copy:stage']);
+    grunt.registerTask('stage', ['webpack:develop', 'copy:stage']);
     grunt.registerTask('build-html', ['copy:build']);
     grunt.registerTask('build-css', ['less']);
     grunt.registerTask('build-js', ['tslint:src', 'ts:src']);
