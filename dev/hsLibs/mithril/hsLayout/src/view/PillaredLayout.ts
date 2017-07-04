@@ -1,4 +1,5 @@
 import { Layout, LayoutStyle, LayoutToken, DefinedToken, PixelToken } from './Layout';
+import { Vnode} from '../../../mithril';
 
 /**
  * PillardLayout. Provides functionality to create row- and column-pillar layouts.
@@ -26,13 +27,20 @@ const cParams = {
     }
 };
 
+type descriptor = {size:number, code:string, fields:{}};
+
 class Pillars extends LayoutStyle{
     firstFixed: number; // number of DefinedToken entries at the beginning
     lastFixed:  number; // number of DefinedToken entries at the end
-    unit:(num:number)=>any[];
+    unit:(num:number)=>descriptor[];
     fields: string[];
     cssClass:string;
 
+    /**
+     * Constructs a Pillared layout (rows or columns)
+     * @param params Style params for either rows or columns layout
+     * @param areaDesc Description of the requested layout 
+     */
     constructor(params:PillarParams, public areaDesc:LayoutToken[]) { 
         super(areaDesc); 
         this.fields = params.fields;
@@ -52,12 +60,18 @@ class Pillars extends LayoutStyle{
     };
 
     // num: number of areas to layout
-    private getSizes(num:number) {
+    /**
+     * Creates an iterable list of size descriptors, one for each area to be layed out.
+     * Each descriptor 
+     * @param num the number pof areas to be layed out
+     * @return Iterable list of size descriptors, one for each area to be layed out
+     */
+    private getSizes(num:number):descriptor[] {
         const first = this.firstFixed;
         const last  = this.lastFixed;
         const desc  = this.areaDesc;
         const len = desc.length;
-        function getSize(i:number):{size:number, code:string, fields:{}} {
+        function getSize(i:number):descriptor {
             let size:number = null;
             let t = null;
             if (i > num-1-last)  { size = desc[len - (num-i)].size; t = 'end'; }   // end sequence
@@ -67,15 +81,15 @@ class Pillars extends LayoutStyle{
         return [...Array(num).keys()].map(getSize);
     }
 
-    private unitPercent(num:number):any[] {
+    private unitPercent(num:number):descriptor[] {
         let f = this.fields;
         let max = 100.0;
         let defDim = max / num;      // divvy up remaining space
-        let styles = this.getSizes(num);
+        let styles:descriptor[] = this.getSizes(num);
 
         styles.forEach(style => { if (style.size) { max = max - style.size; num--; } });
 
-        function pass(styles:any[], ix0:number, ix1:number, breakCond:(cond:string)=>boolean) {
+        function pass(styles:descriptor[], ix0:number, ix1:number, breakCond:(cond:string)=>boolean) {
             let sumDim = 0;
             styles.some(style => {
                 let size = style.size || defDim;
@@ -93,8 +107,8 @@ class Pillars extends LayoutStyle{
         return styles.reverse();    // reverse a second time for original sequence.
     };
 
-    private unitPixel(num:number):any[] { // pattern: [px, px, FILL , px, px]
-        let styles = this.getSizes(num);
+    private unitPixel(num:number):descriptor[] { // pattern: [px, px, FILL , px, px]
+        let styles:descriptor[] = this.getSizes(num);
         let f = this.fields;
        
         let defDim = 100.0/num;          // used for unspecified widths
@@ -136,9 +150,13 @@ class Pillars extends LayoutStyle{
         return styles;
     };
     
-    protected getStyles(content:any[])  { 
+    /**
+     * 
+     * @param content 
+     */
+    protected getStyles(content:Vnode[]):string  { 
         let f = this.fields;
-        let styles = this.unit(content.length);
+        let styles:descriptor[] = this.unit(content.length);
         content.map((area:Layout, i:number) => {
             area.style = `${f[0]}:0%; ${f[1]}:0%; `;
             Object.keys(styles[i].fields).forEach((st:string) => { area.style += `${st}: ${styles[i].fields[st]};`; });

@@ -5,7 +5,7 @@
 /**
  * 
  */
-import {m, Vnode} from '../../../mithril';
+import { m, Vnode} from '../../../mithril';
 
 /**
  * Abstract token for a layout area. It is defined by a single number available via the constructor. 
@@ -29,14 +29,14 @@ export class FillToken extends LayoutToken {
 }
 
 /**
- * a defined token that sets a size in pixel.
+ * A defined token that sets a size in pixel.
  */
 export class PixelToken extends DefinedToken {
     constructor(size:number) { super(size); }
 }
 
 /**
- * a defined token that sets a size in percent of available space.
+ * A defined token that sets a size in percent of available space.
  */
 export class PercentToken extends DefinedToken {
     constructor(size:number) { super(size); }
@@ -61,7 +61,7 @@ export const FILL = new FillToken();
 
 
 /**
- * 
+ * Abstract base class for layout style implementations.
  */
 export abstract class LayoutStyle {
     /**
@@ -102,11 +102,11 @@ export abstract class LayoutStyle {
 
     spacing = 0;    
     constructor(public areaDesc:LayoutToken[]) { };
-/*
-    styles(content:Array<typeof Layout>):string {
-        return this.getStyles(content);
-    }
-*/
+
+    /**
+     * 
+     * @param content 
+     */
     protected abstract getStyles(content:Vnode[]):string;
 }
 

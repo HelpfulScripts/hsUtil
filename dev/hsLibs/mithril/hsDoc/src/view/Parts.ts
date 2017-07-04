@@ -4,9 +4,9 @@ const SourceBase = 'src/';
 
 
 export function flags(flags:any) {
-    const fE = flags.isExported;
-    const fP = flags.isPublic;
-    const fS = flags.isStatic;
+    const fE = flags && flags.isExported;
+    const fP = flags && flags.isPublic;
+    const fS = flags && flags.isStatic;
     let f = fE || fP || fS;
     return !f? '' : m('span.hs-item-flag', [
         fE? m('span.hs-item-exported', 'export') : '',
