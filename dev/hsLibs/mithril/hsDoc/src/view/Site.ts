@@ -3,8 +3,7 @@
  */
 
 
-const m = require("mithril");
-
+import { m, Vnode}                  from '../../../mithril';
 import { Layout, px, FILL }         from '../../../hsLayout/src/';
 import { HeaderBar }                from './Header';
 import { LeftNavWidth }             from './Header';
@@ -20,7 +19,7 @@ const FooterHeight  = px(10);   //
  * hahaha 
  */
 export class HsSite extends Layout {
-    view(node:typeof m.Vnode):typeof m.Vnode {
+    view(node:Vnode):Vnode {
         try {
             const lib   = node.attrs.lib || 'projectOverview';
             const field = node.attrs.field || 0;
@@ -39,7 +38,7 @@ export class HsSite extends Layout {
 //----------- Main Site parts --------------------------------------------------------
 
 class MainArea extends Layout {   
-    view(node:typeof m.Vnode):typeof m.Vnode {
+    view(node:Vnode):Vnode {
         const lib = node.attrs.lib;
         const field = node.attrs.field;
         node.attrs.lib = undefined;

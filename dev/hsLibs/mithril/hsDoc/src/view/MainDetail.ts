@@ -1,15 +1,13 @@
-const m = require("mithril");
-
-
+import { m, Vnode}          from '../../../mithril';
 import { Layout }           from '../../../hsLayout/src/';
 import { Modules }          from '../Modules'; 
 import { tooltip }          from './Tooltip';
-import { comment }          from './MainComment';
-import { members }          from './MainMembers';
-import { flags, libLink }   from './Parts';
+import { Comment }          from './MainComment';
+import { Members }          from './MainMembers';
+import { flags, libLink, sourceLink }   from './Parts';
 
 export class MainDetail extends Layout { 
-    view(node:typeof m.Vnode): typeof m.Vnode {
+    view(node:Vnode): Vnode {
         const lib = node.attrs.lib || '';
         const mdl = Modules.get(lib, node.attrs.field) || '';
         node.attrs.lib = undefined;
@@ -18,40 +16,35 @@ export class MainDetail extends Layout {
     }
 }
 class ItemDoc {
-    view(node: typeof m.Vnode): typeof m.Vnode {
+    view(node: Vnode): Vnode {
         const mdl = node.attrs.mdl;
         node.attrs.mdl = undefined;
-        let doc;
-        switch(mdl.kindString) {
-            case 'Class': doc = classDoc(mdl); break;
-            default: doc = classDoc(mdl);
-//            default: doc = m('.hs-item-unknown-kind', `${mdl.name} (${mdl.kind}, ${mdl.kindString})`); 
-        }
-        return m('.hs-item-doc', doc);
+        return m('.hs-item-doc', [
+            m(Title,   {mdl:mdl}),
+            m(Comment, {mdl:mdl}),
+            m(Members, {mdl:mdl})
+        ]);
     }
 }
 
-function classDoc(mdl:any) {
-    return [
-        title(mdl),
-        comment(mdl),
-        members(mdl)
-    ];
-}
-
-function title(mdl:any) {
-    return m('.hs-item-title', [
-        flags(mdl.flags),
-        m('span.hs-item-kind', mdl.kindString),
-        m('span.hs-item-name', tooltip(mdl.name, 'class name and then some', 'bottom')),
-        !mdl.extendedTypes? undefined : m('span.hs-item-extends', 'extends'),
-        !mdl.extendedTypes? undefined : m('span.hs-item-extensions', mdl.extendedTypes.map((t:any, i:number) =>
-                m('span.hs-item-extension', [
-                    libLink('a', mdl.lib, t.id, t.name),
-                    mdl.extendedTypes.map.length>(i+1)? ', ': ''
-                ])
-            ))
-    ]);
+class Title {
+    view(node: Vnode): Vnode {
+        const mdl = node.attrs.mdl;
+        node.attrs.mdl = undefined;
+        return m('.hs-item-title', [
+            flags(mdl.flags),
+            m('span.hs-item-kind', mdl.kindString),
+            m('span.hs-item-name', tooltip(mdl.name, 'class name and then some', 'bottom')),
+            !mdl.extendedTypes? undefined : m('span.hs-item-extends', 'extends'),
+            !mdl.extendedTypes? undefined : m('span.hs-item-extensions', mdl.extendedTypes.map((t:any, i:number) =>
+                    m('span.hs-item-extension', [
+                        libLink('a', mdl.lib, t.id, t.name),
+                        mdl.extendedTypes.map.length>(i+1)? ', ': ''
+                    ])
+                )),
+            sourceLink(mdl.lib, mdl.sources[0])
+        ]);
+    }
 }
 
 
@@ -59,7 +52,7 @@ function title(mdl:any) {
 /*
 //------------ Debug -----------------------------
 class DebugItemDetail  { 
-    view(node: typeof m.Vnode): typeof m.Vnode {
+    view(node: Vnode): Vnode {
         const mdl = node.attrs.mdl;
         node.attrs.mdl = undefined;
         return m('.hs-item-detail', m(DebugItemTable, {mdl:mdl}));
@@ -67,7 +60,7 @@ class DebugItemDetail  {
 }
 
 class DebugItemTable  {
-    view(node: typeof m.Vnode): typeof m.Vnode {
+    view(node: Vnode): Vnode {
         const mdl = node.attrs.mdl;
         node.attrs.mdl = undefined;
         return m('table', {}, [Object.keys(mdl).map((k:string) => {

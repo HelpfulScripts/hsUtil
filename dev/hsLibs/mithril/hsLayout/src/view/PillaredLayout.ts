@@ -1,10 +1,20 @@
-import { Layout, LayoutStyle, LayoutArea, DefinedArea, PixelArea } from './Layout';
+import { Layout, LayoutStyle, LayoutToken, DefinedToken, PixelToken } from './Layout';
 
+/**
+ * PillardLayout. Provides functionality to create row- and column-pillar layouts.
+ */
+
+/**
+ * interface definition for entries in `cParams`
+ */
 interface PillarParams {
     cssClass: string;
     fields: string[];
 }
 
+/**
+ * contains style settings for the row and column layout
+ */
 const cParams = {
     columns: <PillarParams>{
         cssClass: '.hs-column-layout',
@@ -17,13 +27,13 @@ const cParams = {
 };
 
 class Pillars extends LayoutStyle{
-    firstFixed: number; // number of DefinedArea entries at the beginning
-    lastFixed:  number; // number of DefinedArea entries at the end
+    firstFixed: number; // number of DefinedToken entries at the beginning
+    lastFixed:  number; // number of DefinedToken entries at the end
     unit:(num:number)=>any[];
     fields: string[];
     cssClass:string;
 
-    constructor(params:PillarParams, public areaDesc:LayoutArea[]) { 
+    constructor(params:PillarParams, public areaDesc:LayoutToken[]) { 
         super(areaDesc); 
         this.fields = params.fields;
         this.cssClass = params.cssClass;
@@ -33,9 +43,9 @@ class Pillars extends LayoutStyle{
         let last  = 0;        
         // if any of the dimensions are in px, use the pixel method; else use the percent method
         // get index of first and last undefined area, if any            
-        this.unit = areaDesc.some((area:LayoutArea) => (area instanceof PixelArea))? this.unitPixel : this.unitPercent;        // true if any area is PixelArea
-        areaDesc.some((area:LayoutArea, i:number) => ((areaDesc[i]   instanceof DefinedArea)? ++first<0 : true)); // first = number of consecutive fixed fields at start
-        areaDesc.some((area:LayoutArea, i:number) => ((areaDesc[n-i] instanceof DefinedArea)? ++last<0  : true)); // last  = number of consecutive fixed fields at end
+        this.unit = areaDesc.some((area:LayoutToken) => (area instanceof PixelToken))? this.unitPixel : this.unitPercent;        // true if any area is PixelToken
+        areaDesc.some((area:LayoutToken, i:number) => ((areaDesc[i]   instanceof DefinedToken)? ++first<0 : true)); // first = number of consecutive fixed fields at start
+        areaDesc.some((area:LayoutToken, i:number) => ((areaDesc[n-i] instanceof DefinedToken)? ++last<0  : true)); // last  = number of consecutive fixed fields at end
 
         this.firstFixed = first;
         this.lastFixed  = Math.min(last, areaDesc.length-first);
@@ -138,12 +148,12 @@ class Pillars extends LayoutStyle{
 };
 
 export class Columns extends Pillars {
-    constructor(public areaDesc:LayoutArea[]) { super(cParams['columns'], areaDesc);  };
+    constructor(public areaDesc:LayoutToken[]) { super(cParams['columns'], areaDesc);  };
 };
 
 
 export class Rows extends Pillars {
-    constructor(public areaDesc:LayoutArea[]) { super(cParams['rows'], areaDesc);  };
+    constructor(public areaDesc:LayoutToken[]) { super(cParams['rows'], areaDesc);  };
 };
 
 LayoutStyle.register('columns', Columns);

@@ -1,6 +1,5 @@
-var m = require("mithril");
-
-import { HsSite } from './view/Site';
+import { m }       from '../../mithril';
+import { HsSite }  from './view/Site';
 import { Modules } from './Modules';
 
 

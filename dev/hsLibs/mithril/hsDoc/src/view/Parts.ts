@@ -1,13 +1,17 @@
-const m = require("mithril");
+import { m, Vnode} from '../../../mithril';
 
 const SourceBase = 'src/';
 
 
 export function flags(flags:any) {
-    return m('span.hs-item-flags', !flags? '' : [
-        (flags.isExported)? m('span.hs-item-exported', 'export') : '',
-        (flags.isPublic)?   m('span.hs-item-public', 'public') : '',
-        (flags.isStatic)?   m('span.hs-item-static', 'static') : ''
+    const fE = flags.isExported;
+    const fP = flags.isPublic;
+    const fS = flags.isStatic;
+    let f = fE || fP || fS;
+    return !f? '' : m('span.hs-item-flag', [
+        fE? m('span.hs-item-exported', 'export') : '',
+        fP? m('span.hs-item-public', 'public') : '',
+        fS? m('span.hs-item-static', 'static') : ''
     ]);
 }
 
@@ -43,11 +47,11 @@ export function type(t:any, lib:string) {
     }
 
     try {
-       return t? m('span.hs-item-sig-type', _type(t)) : m('','');
+       return t? m('span.hs-item-sig-type', _type(t)) : m('span','');
     } catch(e) { console.log(e); console.log(e.trace); }
 }
 
-export function signature(s:any, lib:string): typeof m.Vnode {
+export function signature(s:any, lib:string): Vnode {
     function comma(i:number)      { return (i>0)? ', ': ''; }
     function optional(flags: any) {
         return (flags && flags.isOptional)? '.hs-item-optional' : '';
@@ -63,5 +67,5 @@ export function signature(s:any, lib:string): typeof m.Vnode {
         ]);
     }
 
-    return !s? '' : m('span.hs-item-signature', s.parameters? s.parameters.map(parameter) : '');
+    return !s? m('span',[]) : m('span.hs-item-signature', s.parameters? s.parameters.map(parameter) : '');
 }

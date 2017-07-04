@@ -1,11 +1,11 @@
-const m = require("mithril");
+import { m, Vnode} from '../../../mithril';
 
 //import { px, FILL } from './PillaredLayout';
 //import { Layout } from './Layout';
  
 /*
 class RowsTest extends Layout {
-    view(node:typeof m.Vnode):typeof m.Vnode {
+    view(node:Vnode):Vnode {
         let l = node.attrs.layout;
         return this.layout('.hs-site', node, l, [
             'a', 'b', 'c'

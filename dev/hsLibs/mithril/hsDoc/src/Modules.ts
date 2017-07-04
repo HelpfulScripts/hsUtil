@@ -1,4 +1,4 @@
-const m = require("mithril");
+import { m } from '../../mithril';
 
 /**
  * Modules.ts. Loads the doc.json files to process and display as documentation.
@@ -25,8 +25,7 @@ function loadDocSet(modules:typeof Modules, file:string) {
 console.log('requesting ' + dir+file);
     return m.request({ method: "GET", url: dir+file })
         .then((r:any) => {
-console.log('received ' + dir+file);
-if (file==='hsLayout.json') { console.log(r); }
+            console.log('received ' + dir+file);
             modules.add(r.id, r.name, r);
         })
         .catch(console.log);
@@ -35,7 +34,7 @@ if (file==='hsLayout.json') { console.log(r); }
 function loadIndexSet(modules:typeof Modules) {
     return m.request({ method: "GET", url: dir+"index.json" })
         .then((result:any) =>  {
-console.log('received index');
+            console.log('received index');
             return Promise.all(result.docs.map((file:string) => loadDocSet(modules, file)));            
         })
         .catch(console.log);
@@ -63,16 +62,14 @@ export const Modules = {
         recursiveIndex(content, this.list.index[name], name);
     },
 
-    loadList() { 
+    loadList() {
         return loadIndexSet(this); 
     },
 
     get(lib?:string, id=0) { 
         if (lib) {
             if (this.list.index[lib]) { 
-//if (id===137) { 
-console.log(id); console.log(this.list.index[lib][id+'']); 
-//} 
+if(id+''==='1') { console.log(this.list.index[lib][id+'']); }
                 return this.list.index[lib][id+'']; 
             } else {
                 console.log(`list ${lib} not loaded yet`);

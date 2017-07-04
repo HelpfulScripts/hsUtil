@@ -30,7 +30,9 @@
 
 .hs-item-member-source {
     float:right;
+    padding: 10px 0em;  
     margin-right: 10px;
+    bottom: 3px;
     font-size: 0.7em;
 }
 
@@ -51,7 +53,6 @@
 }
 
 .hs-item-sig-type {
-//    border: 1px solid #88f;
     border-radius: 3px;
     background-color: #dda;
     padding:  2px;
@@ -64,8 +65,13 @@
 }
 
 .hs-item-child {
-    padding: 10px 0 10px 5px;  
+    padding: 4px 0 10px 5px;  
     font-size: 1em;
+    border-top: 1px solid #eee;
+}
+
+.hs-item-class {
+    .hs-item-child;
 }
 
 .hs-item-constructor {
@@ -73,6 +79,14 @@
 }
 
 .hs-item-property {
+    .hs-item-child;
+}
+
+.hs-item-object-literal {
+    .hs-item-child;
+}
+
+.hs-item-variable {
     .hs-item-child;
 }
 

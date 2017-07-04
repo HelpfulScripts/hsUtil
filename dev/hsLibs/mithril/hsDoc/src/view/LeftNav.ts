@@ -1,12 +1,11 @@
-const m = require("mithril");
-
+import { m, Vnode} from '../../../mithril';
 import { Layout } from '../../../hsLayout/src/';
 import { Modules } from '../Modules'; 
 import { libLink } from './Parts'; 
 
 
 export class LeftNav extends Layout { 
-    view(node: typeof m.Vnode): typeof m.Vnode {
+    view(node: Vnode): Vnode {
         const lib = node.attrs.lib;
         const field = node.attrs.field;
         node.attrs.lib = undefined;
@@ -19,7 +18,7 @@ export class LeftNav extends Layout {
 }
 
 class ModuleNavList {
-    view(node: typeof m.Vnode): typeof m.Vnode {
+    view(node: Vnode): Vnode {
         const mdl = node.attrs.mdl;
         const field = node.attrs.field;
         node.attrs.mdl = undefined;
@@ -38,7 +37,7 @@ class ModuleNavList {
 }
 
 class ExternalModule {
-    view(node: typeof m.Vnode): typeof m.Vnode {
+    view(node: Vnode): Vnode {
         const mdl = node.attrs.mdl;
         const field = node.attrs.field;
         node.attrs.mdl = undefined;
@@ -52,7 +51,7 @@ class ExternalModule {
 }
 
 class ModuleEntries {
-    view(node: typeof m.Vnode): typeof m.Vnode {
+    view(node: Vnode): Vnode {
         let grp = [];
         const group = node.attrs.group;
         const mdl = node.attrs.mdl;

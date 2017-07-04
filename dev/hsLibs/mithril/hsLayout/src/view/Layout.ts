@@ -1,45 +1,73 @@
 /**
- * @description Layout.ts
+ * Layout.ts provides basic mechanisms for laying out the view container. 
  */
-
-/**
- * @description:
- * layout('.myclass', {columns: [layout.px(10), layout.pc(10), layout.fill], []})
- */
-const m = require("mithril");
 
 /**
  * 
  */
-export abstract class LayoutArea {
+import {m, Vnode} from '../../../mithril';
+
+/**
+ * Abstract token for a layout area. It is defined by a single number available via the constructor. 
+ */
+export abstract class LayoutToken {
     constructor(public size: number) {}
 }
 
-export abstract class DefinedArea extends LayoutArea{
+/**
+ * A layout token that is defined in size.
+ */
+export abstract class DefinedToken extends LayoutToken{
     constructor(size: number) { super(size); } 
 }
 
-export class FillArea extends LayoutArea {
+/**
+ * A layout token that is undefined in size, and that fill will the available space.
+ */
+export class FillToken extends LayoutToken {
     constructor() { super(-1); }
 }
 
-export class PixelArea extends DefinedArea {
+/**
+ * a defined token that sets a size in pixel.
+ */
+export class PixelToken extends DefinedToken {
     constructor(size:number) { super(size); }
 }
 
-export class PercentArea extends DefinedArea {
+/**
+ * a defined token that sets a size in percent of available space.
+ */
+export class PercentToken extends DefinedToken {
     constructor(size:number) { super(size); }
 }
 
-export function px(px:number)   { return new PixelArea(px); }
-export function pc(pc:number)   { return new PercentArea(pc); }
-export const FILL = new FillArea();
+/**
+ * A convenience function that returns a defined pixel-sized token
+ * @param px the number of pixels in the token
+ */
+export function px(px:number)   { return new PixelToken(px); }
+
+/**
+ * A convenience function that returns a defined percent-sized token
+ * @param px the percentage in the token
+ */
+export function pc(pc:number)   { return new PercentToken(pc); }
+
+/**
+ * Convenience constant, standing for an undefined fill token.
+ */
+export const FILL = new FillToken();
 
 
 /**
  * 
  */
 export abstract class LayoutStyle {
+    /**
+     * statis list of available styles. The key for each entry is the keyword that triggers the style,
+     * and the value is a constructor for that style
+     */
     static layoutStyles:{string?: LayoutStyle} = {};
 
     /**
@@ -52,11 +80,17 @@ export abstract class LayoutStyle {
         LayoutStyle.layoutStyles[keyword] = style;
     }
 
-    public static createLayout(attrs:any, content:Array<typeof m.Vnode>):string {
+    /**
+     * 
+     * @param attrs an object literal, typically provided as middle attribuites objevctin the m(css, {}, '') call.
+     * @param content 
+     * @return returns the css class that the `getStyles` function returns.
+     */
+    public static createLayout(attrs:any, content:Array<Vnode>):string {
         let css = '';
-        Object.keys(LayoutStyle.layoutStyles).some(key => {
+        Object.keys(LayoutStyle.layoutStyles).some(key => { // executes the first match key in attrs.
             if (attrs[key]) { 
-                css = new LayoutStyle.layoutStyles[key](attrs[key]).styles(content); 
+                css = new LayoutStyle.layoutStyles[key](attrs[key]).getStyles(content); 
                 attrs[key] = undefined;
                 return true;
             }
@@ -67,21 +101,25 @@ export abstract class LayoutStyle {
 
 
     spacing = 0;    
-    constructor(public areaDesc:LayoutArea[]) { };
-
-    styles(content:Array<typeof Layout>) {
+    constructor(public areaDesc:LayoutToken[]) { };
+/*
+    styles(content:Array<typeof Layout>):string {
         return this.getStyles(content);
     }
-    protected abstract getStyles(content:typeof m.Vnode[]):string;
+*/
+    protected abstract getStyles(content:Vnode[]):string;
 }
 
 /**
- * 
+ * abstract base class of a viewable component. Subclasses can be passed into `mithril` 
+ * to create render trees.
+ * #Example
+ * `m('', [m(Component, {parameters})])`
  */
-export abstract class Component {
+abstract class Component {
 //    id:number;
     constructor() { /*this.id = id++;*/ }
-    public abstract view(vnode?: typeof m.Vnode): typeof m.Vnode;
+    public abstract view(vnode?: Vnode): Vnode;
 }
 
 /**
@@ -133,21 +171,16 @@ export abstract class Layout extends Component {
      * constructs a Layout component.
      */
     constructor() { super(); } 
-/*
-    private oninit(node: typeof m.Vnode) {
-        if (node.instance && node.instance.children && node.instance.children.length>0) { node.instance.children[0].hoho = 'haha'; }
-    }
 
-    private oncreate(node: typeof m.Vnode) {
-    }
-*/
     /**
      * lays out the component.
-     * @param {cssClass} same as m(cssClass, ...) 
-     * @param {node} the node on which to do the layout
+     * @param cssClass same as m(cssClass, ...) 
+     * @param node the node on which to do the layout
+     * @param attrs the attribute object literal that configures the layout
+     * @param content the (set of) vnodes to layout within the container
      * @return a vnode 
      */
-    public layout(cssClass:string, node: typeof m.Vnode, attrs:any, content:Array<typeof m.Vnode|string>|string): typeof m.Vnode {
+    public layout(cssClass:string, node: Vnode, attrs:any, content:Array<Vnode|string>|string): Vnode {
         function makeContent(content:Array<typeof Layout|string>|string): any {
             let result:any = [];
             if (typeof content === 'string') { 
@@ -159,7 +192,7 @@ export abstract class Layout extends Component {
             }
             return result;
         }
-        const _content = makeContent(content); // --> typeof m.Vnode[]
+        const _content = makeContent(content); // --> Vnode[]
         if (node.style) { attrs.style = node.style; }
         let css = LayoutStyle.createLayout(attrs, _content);
         return m(`${cssClass} ${css} .hs-layout`, attrs, _content);
@@ -168,7 +201,7 @@ export abstract class Layout extends Component {
 
 class TextLayout extends Layout {
     constructor() { super(); }
-    view(node: typeof m.Vnode): typeof m.Vnode {
+    view(node:Vnode): Vnode {
         if (node.style) { node.attrs.style = node.style; }
         return m('.hs-layout', node.attrs, node.attrs.content); 
     }
