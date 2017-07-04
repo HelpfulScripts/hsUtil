@@ -42,7 +42,7 @@ class Title {
                         mdl.extendedTypes.map.length>(i+1)? ', ': ''
                     ])
                 )),
-            sourceLink(mdl.lib, mdl.sources[0])
+            sourceLink(mdl.lib, mdl.sources? mdl.sources[0] : undefined)
         ]);
     }
 }
