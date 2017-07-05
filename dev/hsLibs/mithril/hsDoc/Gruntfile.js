@@ -1,5 +1,4 @@
 const path = require('path');
-const webpackConfig = require('./webpack.config');
 
 
 /*global module:false*/
