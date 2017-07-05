@@ -86,7 +86,7 @@ function entries(group:any, mdl:any, field:string) {
             grp.unshift(m('.hs-left-nav-header', group.title));
         }
     }
-    return m(`.hs-left-nav-entries`, (grp.length > 1)? grp : '');
+    return (grp.length > 1)? m(`.hs-left-nav-entries`, grp) : '';
 }
 
 /**
