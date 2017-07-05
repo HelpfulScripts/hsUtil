@@ -18,13 +18,13 @@ const DIR:string = './data/';
 
 /**
  * Modules object. Keeps a list of registered Doc sets and 
- * provides access to elements of each doc set.
+ * provides access to elements of each docset.
  */
 export class Modules { 
-    /** Contains references to the Doc Sets and all elements per Doc set, accessible per ID. */
+    /** Contains references to the Doc Sets and all elements per docset, accessible per ID. */
     private static list = <{set:string[], index:{}}>{set:[], index:{}};
 
-    /** Adds the Doc set in `content` to the `list` */
+    /** Adds the docset in `content` to the `list` */
     public static add(content:any) {
         const lib = content.name;
         Modules.list.set.push(lib);
@@ -61,7 +61,7 @@ console.log(Modules.list);
 
 /**
  * Loads ìndex.json` from the directory specified in `dir`.
- * Each entry in the index is interpreted as a doc set and loaded.
+ * Each entry in the index is interpreted as a docset and loaded.
  * @param dir the directory to read from
  * @param file the index file to read
  */
@@ -75,10 +75,10 @@ function loadIndexSet(dir:string, file:string):Promise<void> {
 }
 
 /**
- * Loads a Doc set specified by file from the directory `dir`. 
- * Once received, the Doc set is registered in `modules` via the `add` method.
+ * Loads a docset specified by file from the directory `dir`. 
+ * Once received, the docset is registered in `modules` via the `add` method.
  * @param dir the directory to read from
- * @param file the `json` file to load as Doc set
+ * @param file the `json` file to load as docset
  */
 function loadDocSet(dir:string, file:string):Promise<void> {
     return m.request({ method: "GET", url: dir+file })
@@ -90,11 +90,11 @@ function loadDocSet(dir:string, file:string):Promise<void> {
 }
 
 /**
- * recurses through the Doc set and registers all `children` entries of an entry by id,
+ * recurses through the docset and registers all `children` entries of an entry by id,
  * starting with the root entry.
- * @param content the Doc set object literal to traverse
+ * @param content the docset object literal to traverse
  * @param index the index in which to register the entries
- * @param lib the Doc set name, used for name validation
+ * @param lib the docset name, used for name validation
  */
 function recursiveIndex(content:any, index:any, lib:string, path='') {
     let next = true;
