@@ -73,32 +73,20 @@ function entries(group:any, mdl:any, field:string) {
             ]);
     }
 
+    function empty(mod:any) { return mod !== ''; }
+
     let grp = [];
     if (group && group.children) {
         grp = group.children
-            .map((moduleGet)        // replace id reference by module
+            .map(moduleGet)         // replace id reference by module
             .sort(exportAscending)  // sort: exported first, then alphabetically
-            .map(entry);            // replace module by vnode structure
+            .map(entry)             // replace module by vnode structure
+            .filter(empty);         // filter empty elements
         if (grp.length > 0) { // add an entries header if there are elements
             grp.unshift(m('.hs-left-nav-header', group.title));
         }
     }
     return m(`.hs-left-nav-entries`, (grp.length > 1)? grp : '');
-}
-
-/**
- * processes one entry within a group, e.g. one variable, function, or class.
- */
-function entry(mod:any, field:string, title:string) { 
-    const selected = (field===''+mod.id)? '.hs-left-nav-selected' : '';
-    const exported = (mod.flags && mod.flags.isExported);
-    const statik   = (mod.flags && mod.flags.isStatic);
-    const css = `.hs-left-nav-entry ${selected} ${exported?'.hs-left-nav-exported' : ''}`;
-    return (!exported && title==='Variables')? '' :   // ignore local module variables
-        m('', [
-            statik? 'static': '',
-            libLink(css, mod.lib, mod.id, mod.name)
-        ]);
 }
 
 /**
