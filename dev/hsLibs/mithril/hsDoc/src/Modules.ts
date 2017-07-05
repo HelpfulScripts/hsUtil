@@ -101,12 +101,14 @@ function recursiveIndex(content:any, index:any, lib:string, path='') {
     content.lib = lib;
     if (typeof content === 'object' && content.name) {
         content.name = content.name.replace(/["'](.+)["']|(.+)/g, "$1$2");  // remove quotes 
+        const newPath = (content.name === lib)? path : `${path}/${content.name}`;
+        content.fullPath = newPath;
         validExternalModuleName(content, lib);
         if (next) {
             index[content.id+''] = content;
-            index[path+content.name] = content;
+            if (newPath.length>0) { index[newPath] = content; }
             if (content.children) {
-                content.children.map((c:any) => recursiveIndex(c, index, lib, path+content.name));
+                content.children.map((c:any) => recursiveIndex(c, index, lib, newPath));
             }
         }
     }
