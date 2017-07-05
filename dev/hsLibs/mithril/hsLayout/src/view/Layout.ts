@@ -11,7 +11,8 @@ import { m, Vnode} from '../../../mithril';
  * Abstract token for a layout area. It is defined by a single number available via the constructor. 
  */
 export abstract class LayoutToken {
-    constructor(public size: number) {}
+    constructor(private size: number) {}
+    public getSize() { return this.size; }
 }
 
 /**
@@ -195,7 +196,9 @@ export abstract class Layout extends Component {
         const _content = makeContent(content); // --> Vnode[]
         if (node.style) { attrs.style = node.style; }
         let css = LayoutStyle.createLayout(attrs, _content);
-        return m(`${cssClass} ${css} .hs-layout`, attrs, _content);
+        try {
+            return m(`${cssClass} ${css} .hs-layout`, attrs, _content);
+        } catch(e) { console.log(e); }
     }
 }
 

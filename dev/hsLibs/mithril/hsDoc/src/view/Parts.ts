@@ -1,23 +1,57 @@
 import { m, Vnode} from '../../../mithril';
+import { tooltip } from './Tooltip';
 
 const SourceBase = 'src/';
 
 
-export function flags(flags:any) {
-    const fE = flags && flags.isExported;
-    const fP = flags && flags.isPublic;
-    const fS = flags && flags.isStatic;
-    let f = fE || fP || fS;
-    return !f? '' : m('span.hs-item-flag', [
-        fE? m('span.hs-item-exported', 'export') : '',
-        fP? m('span.hs-item-public', 'public') : '',
-        fS? m('span.hs-item-static', 'static') : ''
+export function flags(flags:any, ignore:string[]=[]) {
+    const knownFlags = {
+        isExported:             'export',
+        isPublic:               'public',
+        isPrivate:              'private',
+        isProtected:            'protected',
+        isConstructorProperty:  'constructorProperty',
+        isStatic:               'static',
+        isOptional:             'optional'
+    };
+    return m('span', !flags? [] : 
+        Object.keys(flags).map((f:string) => {
+            const flag = knownFlags[f];
+            const ign = (ignore.indexOf(flag) >= 0);
+            return m(`span.hs-item-${ign?'ignore':(flag||'unknown')}-flag`, ign? undefined : flag || f);
+        })
+    );
+}
+
+export function kindString(mdl:any) {
+    return m('span.hs-item-kind', mdl.kindString);
+}
+
+export function itemName(mdl:any, sub:any) {
+    return m('span.hs-item-name', libLink('a', mdl.lib, sub.id, sub.name));
+}
+
+
+export function itemTooltip(mdl:any) {
+    return m('span.hs-item-name', tooltip(mdl.name, 'class name and then some', 'bottom'));
+}
+
+export function extensionOf(mdl:any) {
+    return m('span.hs-item-extensions', !mdl.extendedTypes? undefined : [
+        m('span.hs-item-extends', 'extends'),
+        m('span', mdl.extendedTypes.map((t:any, i:number) =>
+            m('span.hs-item-extension', [
+                libLink('a', mdl.lib, t.id, t.name),
+                mdl.extendedTypes.map.length>(i+1)? ', ': ''
+            ])
+        )),
     ]);
 }
 
-export function sourceLink(lib:string, source:any) {
+export function sourceLink(mdl:any) {
+    const source = mdl.sources? mdl.sources[0] : undefined;
     return m('span.hs-item-member-source', !source? '' : 
-        m(`a[href=${SourceBase}${lib}/${source.fileName}#${source.line}]`, '[source]')
+        m(`a[href=${SourceBase}${mdl.lib}/${source.fileName}#${source.line}]`, '[source]')
     );
 }
 
@@ -36,36 +70,45 @@ export function libLink(css:string, lib:string, id:number, name:string) {
 export function type(t:any, lib:string) {
     function _type(t:any) {
         switch (t.type) { 
-            case 'instrinct':   return t.name; 
+            case 'instrinct':   return t.id? libLink('span', lib, t.id, t.name) : t.name; 
             case 'union':       return t.types.map(_type).join(' | ');
-            case 'reference':   return t.typeArguments? 'Array<'+ t.typeArguments.map(_type).join(', ') + '>' : 
-                                       t.id? t.name : t.name;
+            case 'reference':   return t.typeArguments? t.name+'<'+ t.typeArguments.map(_type).join(', ') + '>' : 
+                                       t.id? libLink('span', lib, t.id, t.name) : t.name;
+            case 'reflection':  return t.declaration? t.declaration.kindString : 'UNKNOWN';
             default: console.log('unknown type '+ t.type);
-                        console.log(t);
-                        return '';
+                     console.log(t);
+                     return '';
         }
     }
 
     try {
-       return t? m('span.hs-item-sig-type', _type(t)) : m('span','');
+       return m('span', t?[
+           m('span.hs-item-name',':'), 
+           m('span.hs-item-sig-type', _type(t))
+        ] : undefined);
     } catch(e) { console.log(e); console.log(e.trace); }
 }
 
+/**
+ * creates a function or method signature
+ */
 export function signature(s:any, lib:string): Vnode {
     function comma(i:number)      { return (i>0)? ', ': ''; }
     function optional(flags: any) {
         return (flags && flags.isOptional)? '.hs-item-optional' : '';
     }
 
-    function parameter(p:any, i:number) {
-        return m('span', [
+    let sig;
+    if (s && s.parameters) {
+        sig = s.parameters.map((p:any, i:number) => m('span', [
             comma(i),
             m('span.hs-item-sig-param', [
-                m(`span${optional(p.flags)}`, p.name),
+                m(`span.hs-item-name${optional(p.flags)}`, p.name),
                 type(p.type, lib)
             ])
-        ]);
+        ]));
+        sig.unshift(m('span.hs-item-name', '('));
+        sig.push(m('span.hs-item-name', ')'));
     }
-
-    return !s? m('span',[]) : m('span.hs-item-signature', s.parameters? s.parameters.map(parameter) : '');
+    return m('span.hs-item-signature', sig);
 }

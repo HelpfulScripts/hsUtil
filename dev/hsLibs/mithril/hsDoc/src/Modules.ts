@@ -1,5 +1,3 @@
-import { m } from '../../mithril';
-
 /**
  * Modules.ts. Loads the doc.json files to process and display as documentation.
  * Processing occurs in these steps:
@@ -8,38 +6,117 @@ import { m } from '../../mithril';
  * 3. Call Modules.add to add the library name to the registry and create an index of entries for the library
  */
 
-/*
-interface Module {
-    id:         number;
-    name:       string;
-    content:    any;
-}
-*/
+/** */
+import { m } from '../../mithril';
 
 /**
  * the directory to look for .json files, relative to the web page.
  */
-const dir = './data/';
+const DIR:string = './data/';
 
-function loadDocSet(modules:typeof Modules, file:string) {
-console.log('requesting ' + dir+file);
+
+
+/**
+ * Modules object. Keeps a list of registered Doc sets and 
+ * provides access to elements of each doc set.
+ */
+export class Modules { 
+    /** Contains references to the Doc Sets and all elements per Doc set, accessible per ID. */
+    private static list = <{set:string[], index:{}}>{set:[], index:{}};
+
+    /** Adds the Doc set in `content` to the `list` */
+    public static add(content:any) {
+        const lib = content.name;
+        Modules.list.set.push(lib);
+        Modules.list.set.sort();
+        Modules.list.index[lib] = {};
+        recursiveIndex(content, Modules.list.index[lib], lib);
+console.log(Modules.list);        
+    }
+
+    /**
+     * loads an index set and the Doc sets it contains from driectory `dir`.
+     * @param dir the optional directory to read from. If unspecified, 
+     * read from the directory specified by `DIR`.
+     */
+    public static loadList(dir?:string):Promise<void> {
+        dir = dir || DIR;   
+        return loadIndexSet(DIR, 'index.json'); 
+    }
+
+    public static get(lib?:string, id=0) { 
+        if (lib) {
+            if (Modules.list.index[lib]) { 
+                return Modules.list.index[lib][id+'']; 
+            } else {
+                console.log(`list ${lib} not loaded yet ${id}`);
+                return Modules.list.set; 
+            }
+        } else {
+//            console.log('redirected to /');
+            return Modules.list.set; 
+        }
+    }
+};
+
+/**
+ * Loads ìndex.json` from the directory specified in `dir`.
+ * Each entry in the index is interpreted as a doc set and loaded.
+ * @param dir the directory to read from
+ * @param file the index file to read
+ */
+function loadIndexSet(dir:string, file:string):Promise<void> { 
+    return m.request({ method: "GET", url: dir+file })
+        .then((result:any) =>  {
+            console.log('received index');
+            return Promise.all(result.docs.map((f:string) => loadDocSet(dir, f)));            
+        })
+        .catch(console.log);
+}
+
+/**
+ * Loads a Doc set specified by file from the directory `dir`. 
+ * Once received, the Doc set is registered in `modules` via the `add` method.
+ * @param dir the directory to read from
+ * @param file the `json` file to load as Doc set
+ */
+function loadDocSet(dir:string, file:string):Promise<void> {
     return m.request({ method: "GET", url: dir+file })
         .then((r:any) => {
             console.log('received ' + dir+file);
-            modules.add(r.id, r.name, r);
+            Modules.add(r);
         })
         .catch(console.log);
 }
 
-function loadIndexSet(modules:typeof Modules) { 
-    return m.request({ method: "GET", url: dir+"index.json" })
-        .then((result:any) =>  {
-            console.log('received index');
-            return Promise.all(result.docs.map((file:string) => loadDocSet(modules, file)));            
-        })
-        .catch(console.log);
+/**
+ * recurses through the Doc set and registers all `children` entries of an entry by id,
+ * starting with the root entry.
+ * @param content the Doc set object literal to traverse
+ * @param index the index in which to register the entries
+ * @param lib the Doc set name, used for name validation
+ */
+function recursiveIndex(content:any, index:any, lib:string, path='') {
+    let next = true;
+    content.lib = lib;
+    if (typeof content === 'object' && content.name) {
+        content.name = content.name.replace(/["'](.+)["']|(.+)/g, "$1$2");  // remove quotes 
+        validExternalModuleName(content, lib);
+        if (next) {
+            index[content.id+''] = content;
+            index[path+content.name] = content;
+            if (content.children) {
+                content.children.map((c:any) => recursiveIndex(c, index, lib, path+content.name));
+            }
+        }
+    }
 }
-
+/**
+ * Validates the `name` of `External module`s. If the `name` starts with the `lib` name
+ * then truncate the name by removing '`lib`/src/' from the left side of the name.
+ * @param content the docset to evaluate
+ * @param lib the library name
+ */
 function validExternalModuleName(content:any, lib:string):boolean {
     let result = false;
     if (content.kindString !== 'External module') { return true; }
@@ -51,50 +128,4 @@ function validExternalModuleName(content:any, lib:string):boolean {
     return result;
 }
 
-function recursiveIndex(content:any, index:any, lib:string) {
-    let next = true;
-    content.lib = lib;
-    if (typeof content === 'object' && content.name) {
-        content.name = content.name.replace(/["'](.+)["']|(.+)/g, "$1$2");  // remove quotes 
-        validExternalModuleName(content, lib);
-        if (next) {
-            index[content.id+''] = content;
-            if (content.children) {
-                content.children.map((c:any) => recursiveIndex(c, index, lib));
-            }
-        }
-    }
-}
 
-export const Modules = { 
-    list: <any>{set:[], index:{}},
-
-
-    add(id:number, lib:string, content:any) {
-        this.list.set.push(lib);
-        this.list.set.sort();
-        this.list.index[lib] = {};
-        recursiveIndex(content, this.list.index[lib], lib);
-        console.log('loaded '+ lib);
-//        console.log(this.list.index[lib]);
-    },
-
-    loadList() {
-        return loadIndexSet(this); 
-    },
-
-    get(lib?:string, id=0) { 
-        if (lib) {
-            if (this.list.index[lib]) { 
-if(id+''!=='-4') { console.log(`${lib} ${id}`); console.log(this.list.index[lib][id+'']); }
-                return this.list.index[lib][id+'']; 
-            } else {
-                console.log(`list ${lib} not loaded yet ${id}`);
-                return this.list.set; 
-            }
-        } else {
-            console.log('redirected to /');
-            return this.list.set; 
-        }
-    }
-};

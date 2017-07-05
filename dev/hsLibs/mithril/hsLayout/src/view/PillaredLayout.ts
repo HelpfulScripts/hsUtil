@@ -74,8 +74,8 @@ class Pillars extends LayoutStyle{
         function getSize(i:number):descriptor {
             let size:number = null;
             let t = null;
-            if (i > num-1-last)  { size = desc[len - (num-i)].size; t = 'end'; }   // end sequence
-            else if (i < first)  { size = desc[i].size; t = 'start'; }             // start sequence
+            if (i > num-1-last)  { size = desc[len - (num-i)].getSize(); t = 'end'; }   // end sequence
+            else if (i < first)  { size = desc[i].getSize(); t = 'start'; }             // start sequence
             return {size:size, code:t, fields:{}};
         } 
         return [...Array(num).keys()].map(getSize);
@@ -91,7 +91,7 @@ class Pillars extends LayoutStyle{
 
         function pass(styles:descriptor[], ix0:number, ix1:number, breakCond:(cond:string)=>boolean) {
             let sumDim = 0;
-            styles.some(style => {
+            styles.some(style => { // stop when breakCond is met
                 let size = style.size || defDim;
                 if (breakCond(style.code)) { return true; }
                 style.fields[f[ix0]] = sumDim+'%';

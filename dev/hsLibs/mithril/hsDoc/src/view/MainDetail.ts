@@ -1,10 +1,10 @@
-import { m, Vnode}          from '../../../mithril';
-import { Layout }           from '../../../hsLayout/src/';
-import { Modules }          from '../Modules'; 
-import { tooltip }          from './Tooltip';
-import { Comment }          from './MainComment';
-import { Members }          from './MainMembers';
-import { flags, libLink, sourceLink }   from './Parts';
+import { m, Vnode}  from '../../../mithril';
+import { Layout }   from '../../../hsLayout/src/';
+import { Modules }  from '../Modules'; 
+import { comment }  from './MainComment';
+import { flags, sourceLink, signature, type, extensionOf, kindString, itemName } 
+                    from './Parts'; 
+
 
 export class MainDetail extends Layout { 
     view(node:Vnode): Vnode {
@@ -19,61 +19,76 @@ class ItemDoc {
     view(node: Vnode): Vnode {
         const mdl = node.attrs.mdl;
         node.attrs.mdl = undefined;
+        const sig = mdl.signatures? mdl.signatures[0] : mdl;
         return m('.hs-item-doc', [
-            m(Title,   {mdl:mdl}),
-            m(Comment, {mdl:mdl}),
-            m(Members, {mdl:mdl})
+            title(mdl, sig),
+            comment(sig),
+            members(sig, sig)
         ]);
     }
 }
 
-class Title {
-    view(node: Vnode): Vnode {
-        const mdl = node.attrs.mdl;
-        node.attrs.mdl = undefined;
-        return m('.hs-item-title', [
-            flags(mdl.flags),
-            m('span.hs-item-kind', mdl.kindString),
-            m('span.hs-item-name', tooltip(mdl.name, 'class name and then some', 'bottom')),
-            !mdl.extendedTypes? undefined : m('span.hs-item-extends', 'extends'),
-            !mdl.extendedTypes? undefined : m('span.hs-item-extensions', mdl.extendedTypes.map((t:any, i:number) =>
-                    m('span.hs-item-extension', [
-                        libLink('a', mdl.lib, t.id, t.name),
-                        mdl.extendedTypes.map.length>(i+1)? ', ': ''
-                    ])
-                )),
-            sourceLink(mdl.lib, mdl.sources? mdl.sources[0] : undefined)
+function title(mdl:any, sig:any): Vnode { 
+    return m('.hs-item-title', itemDescriptor(mdl, sig)); 
+}
+
+function members(mdl:any, sig:any): Vnode {
+    if (mdl.groups) {
+        return m('.hs-item-members', mdl.groups.map((g:any) => member(g, mdl.lib)));
+    } else if (mdl.parameters) {
+        return m('.hs-item-members', parameter(mdl.parameters, mdl.lib));
+    } else {
+        return m('.hs-item-members');
+    }
+}
+
+function parameter(g:any[], lib:string): Vnode {
+    let content = g.map((c:any) => m('.hs-item-parameter', itemChild(c)));
+    content.unshift(m('.hs-item-member-title', m('span', 'Parameters')));
+    return m('.hs-item-member', content);
+}
+
+function member(group:any, lib:string): Vnode {
+    const groupMap = {
+        'External modules': '.hs-item-external-module',
+        'Constructors':     '.hs-item-constructor',
+        'Classes':          '.hs-item-class',          
+        'Interfaces':       '.hs-item-interface',          
+        'Functions':        '.hs-item-function',          
+        'Methods':          '.hs-item-method',          
+        'Variables':        '.hs-item-variable',
+        'Object literals':  '.hs-item-object-literal',
+        'Properties':       '.hs-item-property',
+        'Type aliases':     '.hs-item-alias',          
+    };
+    const fn = groupMap[group.title] || '.hs-item-unknown-member';
+    let content = group.children.map((c:number) => 
+            m(fn, itemChild(Modules.get(lib, c)))
+    );
+
+    content.unshift(m('.hs-item-member-title', m('span', group.title)));
+    return m('.hs-item-member', content);
+}
+
+export function itemDescriptor(mdl:any, sig:any):Vnode {
+    try { return m('.hs-item-desc', [ 
+            flags(mdl.flags, ['export']),
+            kindString(mdl),
+            itemName(mdl, mdl),
+            signature(sig, mdl.lib),
+            type(sig.type,  mdl.lib),
+            extensionOf(mdl),
+            sourceLink(mdl)
         ]);
     }
+    catch(e) { console.log(e); console.log(mdl); }
+}
+
+function itemChild(mdl:any, sig=mdl): Vnode[] {
+    return mdl.signatures? mdl.signatures.map((s:any) =>
+            m('',[itemDescriptor(mdl, s), comment(s)])
+        ) : 
+        [itemDescriptor(mdl, sig), comment(sig)];
 }
 
 
-
-/*
-//------------ Debug -----------------------------
-class DebugItemDetail  { 
-    view(node: Vnode): Vnode {
-        const mdl = node.attrs.mdl;
-        node.attrs.mdl = undefined;
-        return m('.hs-item-detail', m(DebugItemTable, {mdl:mdl}));
-    }
-}
-
-class DebugItemTable  {
-    view(node: Vnode): Vnode {
-        const mdl = node.attrs.mdl;
-        node.attrs.mdl = undefined;
-        return m('table', {}, [Object.keys(mdl).map((k:string) => {
-            let content;
-            if (typeof mdl[k] === 'object') {
-                content = (k==='children')? 
-                    `[${mdl.children.length}]` : 
-                    m(DebugItemTable, {mdl: mdl[k]}); 
-            } else {
-                content = `${mdl[k]}`;
-            }
-            return m('.hs-tr-border', [m('td', m('b', `${k}:`)), m('td', content)]);
-        })]);
-    }
-}
-*/

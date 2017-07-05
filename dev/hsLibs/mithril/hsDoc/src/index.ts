@@ -1,15 +1,6 @@
-import { m }       from '../../mithril';
-import { HsSite }  from './view/Site';
-import { Modules } from './Modules';
+import { Modules }  from './Modules';
+import { route }    from './Router';
 
 
-Modules.loadList()
-.then(() => {
-    console.log('fully loaded');
-    m.route(document.body, '/api/', {
-        '/api/':            HsSite,   // defines `http://localhost/#!/api/
-        '/api/:lib/':       HsSite,   // defines `http://localhost/#!/api/:hsLib
-        '/api/:lib/:field': HsSite    // defines `http://localhost/#!/api/:hsLib/:log
-    });
-});
+Modules.loadList().then(route);
 
