@@ -2,7 +2,7 @@
  * Site documentation
  */
 
-
+/** */
 import { m, Vnode}                  from '../../../mithril';
 import { Layout, px, FILL }         from '../../../hsLayout/src/';
 import { HeaderBar }                from './Header';
@@ -16,7 +16,7 @@ const TitleHeight   = px(30);   //
 const FooterHeight  = px(10);   // 
 
 /**
- * hahaha 
+ *  
  */
 export class HsSite extends Layout {
     view(node:Vnode):Vnode {

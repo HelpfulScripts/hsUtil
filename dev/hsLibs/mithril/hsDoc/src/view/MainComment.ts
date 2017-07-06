@@ -85,7 +85,11 @@ function markDown(x:string, short:boolean) {
         const i = result.indexOf('</p>');
         if (i>0) { result = result.substring(0, i); }
     }
+    result = substituteLinks(result);
     return result;
 }
 
-
+function substituteLinks(result:string) {
+    result = result.replace(/{@link ([\S]+)\s(.+)}/g, '<a href="$1">$2</a>');
+    return result;
+}

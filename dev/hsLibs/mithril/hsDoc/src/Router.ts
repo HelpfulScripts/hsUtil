@@ -9,7 +9,7 @@ import { m }        from '../../mithril';
 import { HsSite }   from './view/Site';
 
 /**
- * route function, attaches the single-page app to `document.body`and
+ * route function, attaches the single-page app to `document.body` and
  * routes requests to HsSite
  */
 export function route() {

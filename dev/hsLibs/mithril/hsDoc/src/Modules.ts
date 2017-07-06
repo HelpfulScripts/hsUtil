@@ -17,11 +17,11 @@ const DIR:string = './data/';
 
 
 /**
- * Modules object. Keeps a list of registered Doc sets and 
+ * Modules object. Keeps a list of registered docsets and 
  * provides access to elements of each docset.
  */
 export class Modules { 
-    /** Contains references to the Doc Sets and all elements per docset, accessible per ID. */
+    /** Contains references to the docsets and all elements per docset, accessible per ID. */
     private static list = <{set:string[], index:{}}>{set:[], index:{}};
 
     /** Adds the docset in `content` to the `list` */
@@ -35,7 +35,7 @@ console.log(Modules.list);
     }
 
     /**
-     * loads an index set and the Doc sets it contains from driectory `dir`.
+     * loads an index set and the docsets it contains from driectory `dir`.
      * @param dir the optional directory to read from. If unspecified, 
      * read from the directory specified by `DIR`.
      */
@@ -97,19 +97,18 @@ function loadDocSet(dir:string, file:string):Promise<void> {
  * @param lib the docset name, used for name validation
  */
 function recursiveIndex(content:any, index:any, lib:string, path='') {
-    let next = true;
     content.lib = lib;
     if (typeof content === 'object' && content.name) {
         content.name = content.name.replace(/["'](.+)["']|(.+)/g, "$1$2");  // remove quotes 
-        const newPath = (content.name === lib)? path : `${path}/${content.name}`;
+        const elName  = content.name.match(/([^\/]+)$/)[1];             // name = part after last /
+        const libName = content.name.match(/^([^\/]+)/)[1];             // name = part before first /
+        let newPath = (path==='')? elName : `${path}.${elName}`;
         content.fullPath = newPath;
-        validExternalModuleName(content, lib);
-        if (next) {
-            index[content.id+''] = content;
-            if (newPath.length>0) { index[newPath] = content; }
-            if (content.children) {
-                content.children.map((c:any) => recursiveIndex(c, index, lib, newPath));
-            }
+        content.name = elName;
+        index[content.id+''] = content;
+        if (newPath.length>0) { index[newPath] = content; }
+        if (content.children) {
+            content.children.map((c:any) => recursiveIndex(c, index, lib, newPath));
         }
     }
 }
@@ -119,6 +118,7 @@ function recursiveIndex(content:any, index:any, lib:string, path='') {
  * @param content the docset to evaluate
  * @param lib the library name
  */
+/*
 function validExternalModuleName(content:any, lib:string):boolean {
     let result = false;
     if (content.kindString !== 'External module') { return true; }
@@ -129,5 +129,5 @@ function validExternalModuleName(content:any, lib:string):boolean {
     }
     return result;
 }
-
+*/
 
