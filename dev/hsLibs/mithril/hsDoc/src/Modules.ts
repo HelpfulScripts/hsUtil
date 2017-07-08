@@ -22,16 +22,16 @@ const DIR:string = './data/';
  */
 export class Modules { 
     /** Contains references to the docsets and all elements per docset, accessible per ID. */
-    private static list = <{set:string[], index:{}}>{set:[], index:{}};
+    private static gList = <{set:string[], index:{}}>{set:[], index:{}};
+    private static gTitle: string;
 
-    /** Adds the docset in `content` to the `list` */
+    /** Adds the docset in `content` to the `gList` */
     public static add(content:any) {
         const lib = content.name;
-        Modules.list.set.push(lib);
-        Modules.list.set.sort();
-        Modules.list.index[lib] = {};
-        recursiveIndex(content, Modules.list.index[lib], lib);
-console.log(Modules.list);        
+        Modules.gList.set.push(lib);
+        Modules.gList.set.sort();
+        Modules.gList.index[lib] = {};
+        recursiveIndex(content, Modules.gList.index[lib], lib);
     }
 
     /**
@@ -41,38 +41,42 @@ console.log(Modules.list);
      */
     public static loadList(dir?:string):Promise<void> {
         dir = dir || DIR;   
-        return loadIndexSet(DIR, 'index.json'); 
+        return Modules.loadIndexSet(DIR, 'index.json'); 
     }
 
     public static get(lib?:string, id=0) { 
         if (lib) {
-            if (Modules.list.index[lib]) { 
-                return Modules.list.index[lib][id+'']; 
+            if (Modules.gList.index[lib]) { 
+                return Modules.gList.index[lib][id+'']; 
             } else {
                 console.log(`list ${lib} not loaded yet ${id}`);
-                return Modules.list.set; 
+                return Modules.gList.set; 
             }
         } else {
 //            console.log('redirected to /');
-            return Modules.list.set; 
+            return Modules.gList.set; 
         }
     }
-};
 
-/**
- * Loads ìndex.json` from the directory specified in `dir`.
- * Each entry in the index is interpreted as a docset and loaded.
- * @param dir the directory to read from
- * @param file the index file to read
- */
-function loadIndexSet(dir:string, file:string):Promise<void> { 
-    return m.request({ method: "GET", url: dir+file })
-        .then((result:any) =>  {
-            console.log('received index');
-            return Promise.all(result.docs.map((f:string) => loadDocSet(dir, f)));            
-        })
-        .catch(console.log);
-}
+    /**
+     * Loads ìndex.json` from the directory specified in `dir`.
+     * Each entry in the index is interpreted as a docset and loaded.
+     * @param dir the directory to read from
+     * @param file the index file to read
+     */
+    private static loadIndexSet(dir:string, file:string):Promise<void> { 
+        return m.request({ method: "GET", url: dir+file })
+            .then((result:any) =>  {
+                console.log('received index');
+                Modules.gTitle = result.title;
+                return Promise.all(result.docs.map((f:string) => loadDocSet(dir, f)));            
+            })
+            .catch(console.log);
+    }
+
+
+    public static title() { return Modules.gTitle; }
+};
 
 /**
  * Loads a docset specified by file from the directory `dir`. 
@@ -101,7 +105,8 @@ function recursiveIndex(content:any, index:any, lib:string, path='') {
     if (typeof content === 'object' && content.name) {
         content.name = content.name.replace(/["'](.+)["']|(.+)/g, "$1$2");  // remove quotes 
         const elName  = content.name.match(/([^\/]+)$/)[1];             // name = part after last /
-        const libName = content.name.match(/^([^\/]+)/)[1];             // name = part before first /
+//        const libName = content.name.match(/^([^\/]+)/)[1];             // name = part before first /
+//console.log(lib + ' >>> ' + libName + ' -- ' + content.name);        
         let newPath = (path==='')? elName : `${path}.${elName}`;
         content.fullPath = newPath;
         content.name = elName;

@@ -2,9 +2,13 @@
     padding: 10px 0.4em 10px 0em;  
 }
 
+@TitleBackground: #eef;
+@TitleBorder: darken(@TitleBackground, 5%);
+
 .hs-item-title {    // applies to the title row
-    background-color: #eef;
-    border: 1px solid #ccf;
+    background-color: @TitleBackground;
+    border-top: 1px solid @TitleBorder;
+    border-bottom: 1px solid @TitleBorder;
     margin-top: 5px;
     .hs-item-padding;
     padding-left: 5px;
@@ -14,6 +18,10 @@
     font-weight: bold;
     color: #008;
     font-size: 1.1em;
+}
+
+.hs-item-unknown-type {
+    color: #f44;
 }
 
 

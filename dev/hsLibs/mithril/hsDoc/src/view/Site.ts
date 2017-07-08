@@ -25,7 +25,7 @@ export class HsSite extends Layout {
             const field = node.attrs.field || 0;
 //console.log(`HsSite ${lib}: ${field}`);        
             return this.layout('.hs-site', node, { rows:[TitleHeight, FILL, FooterHeight] }, [
-                m(HeaderBar), 
+                m(HeaderBar, {lib:lib}), 
                 m(MainArea, {lib:lib, field:field}),
                 m(FooterBar)
             ]);

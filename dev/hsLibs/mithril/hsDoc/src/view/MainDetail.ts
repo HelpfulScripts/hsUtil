@@ -1,7 +1,7 @@
 import { m, Vnode}  from '../../../mithril';
 import { Layout }   from '../../../hsLayout/src/';
 import { Modules }  from '../Modules'; 
-import { comment }  from './MainComment';
+import { comment, commentLong }  from './MainComment';
 import { flags, sourceLink, signature, type, extensionOf, kindString, itemName } 
                     from './Parts'; 
 
@@ -22,13 +22,14 @@ class ItemDoc {
         const sig = mdl.signatures? mdl.signatures[0] : mdl;
         return m('.hs-item-doc', [
             title(mdl, sig),
-            comment(sig),
+            commentLong(sig),
             members(sig, sig)
         ]);
     }
 }
 
 function title(mdl:any, sig:any): Vnode { 
+console.log(mdl);    
     return m('.hs-item-title', itemDescriptor(mdl, sig)); 
 }
 

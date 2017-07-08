@@ -3,5 +3,6 @@
         "hsDocs.json",
         "hsLayout.json",
         "hsNode.json"
-    ]
+    ],
+    "title": "HS Libraries"
 }

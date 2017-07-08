@@ -124,12 +124,6 @@ abstract class Component {
 }
 
 /**
- * @ngdoc directive
- * @name hsLayout.directive:hsLayout
- * @restrict E
- * @element ANY
- * @description hs-layout directive. Establishes a space in which 
- * {@link hsLayout.directive:hsWidget widgets} live.
 # Attributes
 All attributes are optional except where marked as required. For emphasis, optional attributes
 are wrapped in square brackets: `[...]`. When optional, the default value is <u>underlined</u>.

@@ -1,5 +1,5 @@
 .hs-site-header {   // the top bar of the site
-    border-bottom: solid blue 1px;
+    border-bottom: 1px solid @BorderColor;
 }
 
 
@@ -10,9 +10,15 @@
 .hs-module-title {  // the bar containing the module menu
 }
 
+@hdrTabColor: lighten(@BorderColor, 30%);
 
-.hs-module-name {   // name menu item in hs-modules-title
+.hs-header-tab {   // name menu item in hs-modules-title
     padding: 5px 0px 5px 10px;
-    background-color: #eee;
-    border: solid white 2px;
+    background-color: @hdrTabColor;
+    border-right: solid white 2px;
+}
+
+.hs-header-tab-selected {
+    background-color: darken(@hdrTabColor, 5%);
+    font-weight:bold;
 }

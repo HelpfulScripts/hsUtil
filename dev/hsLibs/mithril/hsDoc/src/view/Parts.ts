@@ -1,12 +1,13 @@
 import { m, Vnode} from '../../../mithril';
 import { tooltip } from './Tooltip';
 
-const SourceBase = 'src/';
+const SourceBase = 'src/'; 
 
 
 export function flags(flags:any, ignore:string[]=[]) {
     const knownFlags = {
         isExported:             'export',
+        isExternal:             '',
         isPublic:               'public',
         isPrivate:              'private',
         isProtected:            'protected',
@@ -16,9 +17,11 @@ export function flags(flags:any, ignore:string[]=[]) {
     };
     return m('span', !flags? [] : 
         Object.keys(flags).map((f:string) => {
-            const flag = knownFlags[f];
-            const ign = (ignore.indexOf(flag) >= 0);
-            return m(`span.hs-item-${ign?'ignore':(flag||'unknown')}-flag`, ign? undefined : flag || f);
+            let ign = false;
+            let flag = knownFlags[f];
+            if (flag !== undefined) { ign = (ignore.indexOf(flag) >= 0); }
+            else { flag = f; }
+            return m(`span.hs-item-${ign?'ignore':(flag===f?'unknown':flag)}-flag`, ign? undefined : flag);
         })
     );
 }
@@ -70,14 +73,15 @@ export function libLink(css:string, lib:string, id:number, name:string) {
 export function type(t:any, lib:string) {
     function _type(t:any) {
         switch (t.type) { 
-            case 'instrinct':   return t.id? libLink('span', lib, t.id, t.name) : t.name; 
-            case 'union':       return t.types.map(_type).join(' | ');
-            case 'reference':   return t.typeArguments? t.name+'<'+ t.typeArguments.map(_type).join(', ') + '>' : 
-                                       t.id? libLink('span', lib, t.id, t.name) : t.name;
-            case 'reflection':  return t.declaration? t.declaration.kindString : 'UNKNOWN';
+            case 'instrinct':       return t.id? libLink('span', lib, t.id, t.name) : t.name; 
+            case 'stringLiteral':   return t.type; 
+            case 'union':           return t.types.map(_type).join(' | ');
+            case 'reference':       return t.typeArguments? t.name+'<'+ t.typeArguments.map(_type).join(', ') + '>' : 
+                                           t.id? libLink('span', lib, t.id, t.name) : t.name;
+            case 'reflection':      return t.declaration? t.declaration.kindString : 'UNKNOWN';
             default: console.log('unknown type '+ t.type);
                      console.log(t);
-                     return '';
+                     return t.type;
         }
     }
 
