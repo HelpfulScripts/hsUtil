@@ -44,7 +44,7 @@ export class Modules {
         return Modules.loadIndexSet(DIR, 'index.json'); 
     }
 
-    public static get(lib?:string, id=0) { 
+    public static get(lib?:string, id:number|string=0) { 
         if (lib) {
             if (Modules.gList.index[lib]) { 
                 return Modules.gList.index[lib][id+'']; 
@@ -105,8 +105,6 @@ function recursiveIndex(content:any, index:any, lib:string, path='') {
     if (typeof content === 'object' && content.name) {
         content.name = content.name.replace(/["'](.+)["']|(.+)/g, "$1$2");  // remove quotes 
         const elName  = content.name.match(/([^\/]+)$/)[1];             // name = part after last /
-//        const libName = content.name.match(/^([^\/]+)/)[1];             // name = part before first /
-//console.log(lib + ' >>> ' + libName + ' -- ' + content.name);        
         let newPath = (path==='')? elName : `${path}.${elName}`;
         content.fullPath = newPath;
         content.name = elName;

@@ -1,11 +1,13 @@
-import { Vnode}     from '../../../mithril';
-import { Layout }   from '../../../hsLayout/src/';
+import { m, Vnode}     from '../../../mithril';
+import { Container }   from '../../../hsLayout/src/';
+import { markDown } from '../showdown';
 
-const COPYRIGHT     = "(c) Helpful Scripts";
 
-export class FooterBar extends Layout {
+const COPYRIGHT     = "&copy; Helpful Scripts";
+
+export class FooterBar extends Container {
     view(node:Vnode):Vnode {
-        return this.layout('.hs-site-footer', node, { }, COPYRIGHT);
+        return this.layout('.hs-site-footer', node, { }, m.trust(markDown(COPYRIGHT)));
     }
 }; 
 

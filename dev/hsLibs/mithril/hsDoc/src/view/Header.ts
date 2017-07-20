@@ -1,11 +1,11 @@
 import { m, Vnode} from '../../../mithril';
-import { Layout, px, FILL } from '../../../hsLayout/src/';
+import { Container, px, FILL } from '../../../hsLayout/src/';
 import { Modules } from '../Modules'; 
 
 export const LeftNavWidth  = px(200);
 let SiteName      = 'HSDocs';
 
-export class HeaderBar extends Layout {
+export class HeaderBar extends Container {
     view(node:Vnode):Vnode {
         const lib = node.attrs.lib;
         node.attrs.lib = undefined;
@@ -17,13 +17,13 @@ export class HeaderBar extends Layout {
     }
 };
 
-class SiteTitle extends Layout {
+class SiteTitle extends Container {
     view(node:Vnode):Vnode {
         return this.layout('.hs-site-title', node, { href:`/api/`, oncreate: m.route.link, onupdate: m.route.link }, SiteName);
     }
 };
 
-class ModulesMenuBar extends Layout {
+class ModulesMenuBar extends Container {
     view(node: Vnode): Vnode {
         const lib = node.attrs.lib;
         node.attrs.lib = undefined;
@@ -32,7 +32,7 @@ class ModulesMenuBar extends Layout {
     }
 };
 
-class ModulesMenu extends Layout {
+class ModulesMenu extends Container {
     view(node: Vnode): Vnode {
         const lib = node.attrs.lib;
         const setLib = node.attrs.setLib;

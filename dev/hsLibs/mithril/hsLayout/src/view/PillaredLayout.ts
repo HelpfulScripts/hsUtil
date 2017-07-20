@@ -1,5 +1,7 @@
-import { Layout, LayoutStyle, LayoutToken, DefinedToken, PixelToken } from './Layout';
-import { Vnode} from '../../../mithril';
+import { Container }    from './Container';
+import { Layout }       from './Layout';
+import { LayoutToken, DefinedToken, PixelToken }    from './Tokens';
+import { Vnode}         from '../../../mithril';
 
 /**
  * PillardLayout. Provides functionality to create row- and column-pillar layouts.
@@ -12,6 +14,13 @@ interface PillarParams {
     cssClass: string;
     fields: string[];
 }
+
+/**
+ * array of trigger keywords for column and row layout styles
+ */
+export const PillarLayouts = [
+    'columns', 'rows'
+];
 
 /**
  * contains style settings for the row and column layout
@@ -32,16 +41,11 @@ type descriptor = {size:number, code:string, fields:{}};
 /**
 Lays its components out in pillars, i.e. either {@link hsLayout:PillaredLayout.Columns columns}
 or {@link hsLayout:PillaredLayout.Rows rows}
-# Attributes
-All attributes are optional except where marked as required. For emphasis, optional attributes
-are wrapped in square brackets: `[...]`. When optional, the default value is <u>underlined</u>.
-- [**hs-type** = '<u>tiles</u> | columns | rows | relative']
-    sets the type of layout. For options see below
-- [**hs-tiles**] alternative to `hs-type=tiles`; creates a {@link hsLayout.object.HsTileLayout tile layout}
+## Attributes
 - [**hs-columns='[<i>Array</i>, ]'**] 
-    Please see {@link hsLayout.object.HsColumnsLayout columns layout} on avaliable options for `Array`
+    Please see {@link hsLayout:Columns columns layout} on avaliable options for `Array`
 - [**hs-rows='[<i>Array</i>, ]'**] 
-    Please see {@link hsLayout.object.HsRowsLayout rows layout} on avaliable options for `Array`
+    Please see {@link hsLayout:Rows rows layout} on avaliable options for `Array`
 - [**hs-relative**] create a {@link hsLayout.object.HsRelativeLayout relative layout}
 - [**hs-fill-last-col**] applies to tile layout only; if specified, the last colum of tiles are stretched horizontally 
     to fill the remaining space.
@@ -64,7 +68,7 @@ The following options are supported for `Array`:
     if the unit is px, the remaining n-2 widgets will have their left/right borders at location `i*100/n%`.
 - [1w, 2w, , w2, w1]: multiple widths can be specified in uninterrupted sequence both from the left and the right. 
  */
-class Pillars extends LayoutStyle{
+class Pillars extends Layout{
     firstFixed: number; // number of DefinedToken entries at the beginning
     lastFixed:  number; // number of DefinedToken entries at the end
     unit:(num:number)=>descriptor[];
@@ -186,28 +190,35 @@ class Pillars extends LayoutStyle{
     };
     
     /**
-     * 
-     * @param content 
+     * Calculates the style attributes required for each component in `Components`.
+     * These attributes are saved in a `styles` field on the component itself. 
+     * During rendering these `styles` attributes are copied to the `node.attrs.styles` field.
+     * @param components 
      */
-    protected getStyles(content:Vnode[]):string  { 
+    protected getStyles(components:Array<Vnode|Container>):string  { 
         let f = this.fields;
-        let styles:descriptor[] = this.unit(content.length);
-        content.map((area:Layout, i:number) => {
-            area.style = `${f[0]}:0%; ${f[1]}:0%; `;
-            Object.keys(styles[i].fields).forEach((st:string) => { area.style += `${st}: ${styles[i].fields[st]};`; });
+        let styles:descriptor[] = this.unit(components.length);
+        components.map((c:Container|Vnode, i:number) => {
+            c.style = `${f[0]}:0%; ${f[1]}:0%; `;
+            Object.keys(styles[i].fields).forEach((st:string) => { c.style += `${st}: ${styles[i].fields[st]};`; });
         });   
         return this.cssClass;
     };
 };
 
-export class Columns extends Pillars {
-    constructor(public areaDesc:LayoutToken[]) { super(cParams['columns'], areaDesc);  };
+/**
+ * constructs a columns pillar layout style.
+ */
+class Columns extends Pillars {
+    constructor(public areaDesc:LayoutToken[]) { super(cParams[PillarLayouts[0]], areaDesc);  };
 };
 
-
-export class Rows extends Pillars {
-    constructor(public areaDesc:LayoutToken[]) { super(cParams['rows'], areaDesc);  };
+/**
+ * constructs a rows pillar layout style.
+ */
+class Rows extends Pillars {
+    constructor(public areaDesc:LayoutToken[]) { super(cParams[PillarLayouts[1]], areaDesc);  };
 };
 
-LayoutStyle.register('columns', Columns);
-LayoutStyle.register('rows',    Rows);
+Layout.register(PillarLayouts[0], Columns);
+Layout.register(PillarLayouts[1],    Rows);

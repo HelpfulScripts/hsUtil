@@ -1,35 +1,70 @@
 import { m, Vnode}  from '../../../mithril';
-import { Layout }   from '../../../hsLayout/src/';
+import { Container }   from '../../../hsLayout/src/';
 import { Modules }  from '../Modules'; 
 import { comment, commentLong }  from './MainComment';
 import { flags, sourceLink, signature, type, extensionOf, kindString, itemName } 
                     from './Parts'; 
 
 
-export class MainDetail extends Layout { 
+/**
+ * Creates Documentation on the main panel 
+ */
+export class MainDetail extends Container { 
     view(node:Vnode): Vnode {
         const lib = node.attrs.lib || '';
-        const mdl = Modules.get(lib, node.attrs.field) || '';
+        let mdl = node.attrs.field;
         node.attrs.lib = undefined;
         node.attrs.field = undefined;
-        return this.layout('.hs-main-detail', node, {}, [m(ItemDoc, {mdl: mdl})]); 
-    }
-}
-class ItemDoc {
-    view(node: Vnode): Vnode {
-        const mdl = node.attrs.mdl;
-        node.attrs.mdl = undefined;
-        const sig = mdl.signatures? mdl.signatures[0] : mdl;
-        return m('.hs-item-doc', [
-            title(mdl, sig),
-            commentLong(sig),
-            members(sig, sig)
-        ]);
+        if (isOverview(mdl)) {
+            mdl = Modules.get(lib, `${lib}.overview`);
+            if (mdl) { // if project has an overview:
+                return this.layout('.hs-main-detail', node, {}, [overviewDoc(mdl)]); 
+            }
+        }
+        mdl = Modules.get(lib, mdl) || '';
+        return this.layout('.hs-main-detail', node, {}, [itemDoc(mdl)]); 
     }
 }
 
+/**
+ * Checks if the project overview is being requested
+ * @param mdl the module name to check
+ * @return true if the overview file should be rendered
+ */
+function isOverview(mdl:string):boolean {
+    return (mdl === '0' || mdl === '');
+}
+
+/**
+ * Creates documentation for standard items in the main panel
+ * @param mdl the module to document on the main panel
+ */
+function itemDoc(mdl:any) {
+    const sig = mdl.signatures? mdl.signatures[0] : mdl;
+    return m('.hs-item-doc', [
+        title(mdl, sig),
+        commentLong(sig),
+        members(sig, sig)
+    ]);
+}
+
+/**
+ * Creates documentation for the project overview in the main panel
+ * @param mdl the module to document on the main panel
+ */
+function overviewDoc(mdl:any) {
+    const sig = mdl.signatures? mdl.signatures[0] : mdl;
+    return m('.hs-item-doc', [
+        commentLong(sig),
+    ]);
+}
+
+/**
+ * renders the title of the main panel
+ * @param mdl the module to document 
+ * @param sig a signature of the module, or the the module itself
+ */
 function title(mdl:any, sig:any): Vnode { 
-console.log(mdl);    
     return m('.hs-item-title', itemDescriptor(mdl, sig)); 
 }
 

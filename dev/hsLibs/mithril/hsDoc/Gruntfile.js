@@ -85,16 +85,14 @@ module.exports = function(grunt) {
         typedoc: {
             code: {
                 options: {
-                    target: 'es6',
-                    tsconfig: 'typedoc.json',
-                    module: 'commonjs',
-                    json:   './docs/hsDocs.json',
-                    out:    './docs',
                     mode:   'modules',
-//                    listInvalidSymbolLinks: true,
-//                    theme:  'themes/hs',
+                    out:    './docs',
+                    target: 'es6',
+                    module: 'commonjs',
+                    tsconfig: 'typedoc.json',
+                    json:   './docs/hsDocs.json',
                     name:   'hsDoc',
-                    readme: 'readme.txt'
+                    readme:   './readme.txt',
                 },
                 src: ['src/**/*.ts', '!src/**/*.spec.ts']
             }

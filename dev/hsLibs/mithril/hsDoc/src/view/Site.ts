@@ -4,7 +4,7 @@
 
 /** */
 import { m, Vnode}                  from '../../../mithril';
-import { Layout, px, FILL }         from '../../../hsLayout/src/';
+import { Container, px, FILL }      from '../../../hsLayout/src/';
 import { HeaderBar }                from './Header';
 import { LeftNavWidth }             from './Header';
 import { LeftNav }                  from './LeftNav';
@@ -16,9 +16,9 @@ const TitleHeight   = px(30);   //
 const FooterHeight  = px(10);   // 
 
 /**
- *  
+ *  Creates the main sitye layout
  */
-export class HsSite extends Layout {
+export class HsSite extends Container {
     view(node:Vnode):Vnode {
         try {
             const lib   = node.attrs.lib || 'projectOverview';
@@ -32,12 +32,12 @@ export class HsSite extends Layout {
         }
         catch(e) { console.log(e); }
     }
-} 
+}
 
 
 //----------- Main Site parts --------------------------------------------------------
 
-class MainArea extends Layout {   
+class MainArea extends Container {   
     view(node:Vnode):Vnode {
         const lib = node.attrs.lib;
         const field = node.attrs.field;

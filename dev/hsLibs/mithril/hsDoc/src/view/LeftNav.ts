@@ -4,7 +4,7 @@
 
 /** */
 import { m, Vnode} from '../../../mithril';
-import { Layout } from '../../../hsLayout/src/';
+import { Container } from '../../../hsLayout/src/';
 import { Modules } from '../Modules'; 
 import { libLink } from './Parts'; 
 
@@ -12,7 +12,7 @@ import { libLink } from './Parts';
 /**
  * Constructs the left-hand navigation pane
  */
-export class LeftNav extends Layout { 
+export class LeftNav extends Container { 
     view(node: Vnode): Vnode {
         const lib = node.attrs.lib;
         const field = node.attrs.field;
@@ -38,11 +38,21 @@ function navList(mdl:any, field:string) {
 }
 
 /**
+ * modules to ignore in the list
+ */
+const ignoreModules = {
+    overview:   true,   // the project overview.ts file
+    index:      true    // the index.ts file
+};
+
+/**
  * processes a module, i.e. a `.ts` file.
  */
 function externalModule(mdl:any, field:string) {
     const selected = (field===''+mdl.id)? '.hs-left-nav-selected' : '';
-    return m(`.hs-left-nav-module`, [
+    // don't show modules from other projects (isExported flag) or modules on the ignore list
+    const skip = (mdl.flags && mdl.flags.isExternal) || ignoreModules[mdl.name];
+    return skip? m('') : m(`.hs-left-nav-module`, [
         libLink(`.hs-left-nav-module-name ${selected}`, mdl.lib, mdl.id, mdl.name),
         mdl.groups? m('', mdl.groups.map((g:any) => entries(g, mdl, field))) : undefined
     ]);

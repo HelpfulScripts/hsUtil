@@ -5,5 +5,6 @@
 /**
  * 
  */
-export { Layout, FILL, px, pc } from './view/Layout'; 
-export { Columns, Rows }        from './view/PillaredLayout'; 
+export { Container }        from './view/Container'; 
+export { FILL, px, pc }     from './view/Tokens'; 
+export { PillarLayouts }    from './view/PillaredLayout';  
