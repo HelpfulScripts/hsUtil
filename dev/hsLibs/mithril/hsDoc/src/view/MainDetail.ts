@@ -1,9 +1,9 @@
-import { m, Vnode}  from '../../../mithril';
-import { Container }   from '../../../hsLayout/src/';
-import { Modules }  from '../Modules'; 
+import { m, Vnode}      from '../../../mithril';
+import { Container }    from '../../../hsLayout/src/';
+import { Modules }      from '../Modules'; 
 import { comment, commentLong }  from './MainComment';
-import { flags, sourceLink, signature, type, extensionOf, kindString, itemName } 
-                    from './Parts'; 
+import { flags, sourceLink, signature, type, extensionOf, kindString, itemName, makeID } 
+                        from './Parts'; 
 
 
 /**
@@ -15,24 +15,26 @@ export class MainDetail extends Container {
         let mdl = node.attrs.field;
         node.attrs.lib = undefined;
         node.attrs.field = undefined;
-        if (isOverview(mdl)) {
-            mdl = Modules.get(lib, `${lib}.overview`);
-            if (mdl) { // if project has an overview:
-                return this.layout('.hs-main-detail', node, {}, [overviewDoc(mdl)]); 
-            }
-        }
-        mdl = Modules.get(lib, mdl) || '';
-        return this.layout('.hs-main-detail', node, {}, [itemDoc(mdl)]); 
+
+        let result = getOverview(lib, mdl) || itemDoc(Modules.get(lib, mdl) || ''); 
+        return this.layout('.hs-main-detail', node, {}, [result]); 
     }
 }
 
 /**
- * Checks if the project overview is being requested
+ * Checks if the project overview is being requested and returns the overview, 
+ * or `undefined` if not available
  * @param mdl the module name to check
- * @return true if the overview file should be rendered
+ * @return Vnode containing the overview file, or `undefined`
  */
-function isOverview(mdl:string):boolean {
-    return (mdl === '0' || mdl === '');
+function getOverview(lib:string, mdl:string):Vnode {
+    if (mdl === '0' || mdl === '') {  //show module overview
+        mdl = Modules.get(lib, `${lib}.overview`);
+        if (mdl) { // if project has an overview:
+            return overviewDoc(mdl); 
+        }
+    }
+    return undefined;
 }
 
 /**
@@ -65,7 +67,7 @@ function overviewDoc(mdl:any) {
  * @param sig a signature of the module, or the the module itself
  */
 function title(mdl:any, sig:any): Vnode { 
-    return m('.hs-item-title', itemDescriptor(mdl, sig)); 
+    return m('.hs-item-title', {id: makeID('title', mdl)}, itemDescriptor(mdl, sig)); 
 }
 
 function members(mdl:any, sig:any): Vnode {
@@ -79,8 +81,8 @@ function members(mdl:any, sig:any): Vnode {
 }
 
 function parameter(g:any[], lib:string): Vnode {
-    let content = g.map((c:any) => m('.hs-item-parameter', itemChild(c)));
-    content.unshift(m('.hs-item-member-title', m('span', 'Parameters')));
+    let content = g.map((c:any) => m('.hs-item-parameter', {id:makeID('parameter', c)}, itemChild(c)));
+    content.unshift(m('.hs-item-member-title', {id:'parameters'}, m('span', 'Parameters')));
     return m('.hs-item-member', content);
 }
 
@@ -98,15 +100,17 @@ function member(group:any, lib:string): Vnode {
         'Type aliases':     '.hs-item-alias',          
     };
     const fn = groupMap[group.title] || '.hs-item-unknown-member';
-    let content = group.children.map((c:number) => 
-            m(fn, itemChild(Modules.get(lib, c)))
+    let content = group.children.map((c:number) => {
+            let mdl = Modules.get(lib, c);
+            return m(fn, {id:makeID(group.title, mdl)}, itemChild(mdl));
+        }
     );
 
-    content.unshift(m('.hs-item-member-title', m('span', group.title)));
+    content.unshift(m('.hs-item-member-title', {id:group.title.toLowerCase()}, m('span', group.title)));
     return m('.hs-item-member', content);
 }
 
-export function itemDescriptor(mdl:any, sig:any):Vnode {
+function itemDescriptor(mdl:any, sig:any):Vnode {
     try { return m('.hs-item-desc', [ 
             flags(mdl.flags, ['export']),
             kindString(mdl),
