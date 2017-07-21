@@ -65,6 +65,7 @@ function textOrShortTextOrDescription(comment:any, short:boolean):Vnode {
     if (comment.tags) {
         comment.tags.map((tag:any) => {if (tag.tag==='description') { text = tag.text;}} );
     }
+    text = prettifyCode(text);
     return m('.hs-item-comment-desc', [m.trust(markDown(text, short))]);
 }
 
@@ -116,3 +117,18 @@ function mainCommentParams(params:any):Vnode {
     ));
 }
 
+function prettifyCode(content:string):string { 
+    function indenting(text:string): string {
+        let indent = 0;
+        return text.split('\n')
+            .map((l:string) => {
+                let oldIndent = indent;
+                let k = l.trim();
+                if (k.includes('{')) { indent++; }
+                if (k.includes('}')) { indent--; }
+                return ' '.repeat(((indent < oldIndent)?indent:oldIndent)*4) + k;
+            })
+            .join('\n');
+    }
+    return content.replace(/<code>([\S\s]*?)<\/code>/gi, indenting);
+}
