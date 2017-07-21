@@ -10,7 +10,7 @@ import { Layout } from './Layout';
 /**
  * abstract base class of a viewable component. Subclasses can be passed into `mithril` 
  * to create render trees.
- * #Example
+ * ### Example
  * `m('', [m(Component, {parameters})])`
  */
 abstract class Component {
@@ -20,7 +20,7 @@ abstract class Component {
 }
 
 /**
-Abstract base class for applying layouts. Subclasses should follow the following pattern:<pre><code>
+Abstract base class for applying layouts. Subclasses should follow the following pattern:<code>
 import { Container, px, FILL }  from 'hsLayout';
 const TitleHeight   = px(30); 
 const FooterHeight  = px(10); 
@@ -36,38 +36,13 @@ class MyLayout extends Container {
         catch(e) { console.log(e); }
     }
 } 
-</code></pre>
-# Attributes
-All attributes are optional except where marked as required. For emphasis, optional attributes
-are wrapped in square brackets: `[...]`. When optional, the default value is <u>underlined</u>.
-- [**hs-type** = '<u>tiles</u> | columns | rows | relative']
-    sets the type of layout. For options see below
-- [**hs-tiles**] alternative to `hs-type=tiles`; creates a {@link hsLayout.object.HsTileLayout tile layout}
-- [**hs-columns='[<i>Array</i>, ]'**] 
-    Please see {@link hsLayout.object.HsColumnsLayout columns layout} on avaliable options for `Array`
-- [**hs-rows='[<i>Array</i>, ]'**] 
-    Please see {@link hsLayout.object.HsRowsLayout rows layout} on avaliable options for `Array`
-- [**hs-relative**] create a {@link hsLayout.object.HsRelativeLayout relative layout}
-- [**hs-fill-last-col**] applies to tile layout only; if specified, the last colum of tiles are stretched horizontally 
-    to fill the remaining space.
+</code>
+The call to `this.layout` takes as parameters
+- the css class to associate with the container,
+- the container Vnode,
+- the layout configration, and
+- the components to be layed out.
 
-Elements in `Array` will be used as width indicators for the widgets that are children of this layout. 
-All widths have to be specified either in px or in %.
-The following options are supported for `Array`:
-- []: An empty array; all widgets will be evenly spaced across the available width. 
-- [fw]: All widgets have the specified width (in px or %) and will fill the available space with from the left,
-    leaving any remaining unused space on the right. 
-- [fw,]: Sets the first (left) widget to a width of `fw`.<br>
-    if `fw` is specified in %, the remaining n-1 widgets will have equal relative widths of `(100-fw)/(n-1)%`<br>
-    if `fw` is specified in px, the remaining n-1 widgets will have their right borders at location `i*100/n%`, with i=1...n.
-- [,lw]: Sets the last (right) widget to a width of `lw`.<br>
-    if `lw` is specified in %, the remaining n-1 widgets will have equal relative widths of `(100-lw)/(n-1)%`<br>
-    if `lw` is specified in px, the remaining n-1 widgets will have their left borders at location `i*100/n%`, with i=0...n-1.
-- [fw,,lw]: Sets the first and last widget to a width of `fw`/`lw`.<br>
-    Both have to be specified either in px or in %.<br>
-    if the unit is %, the remaining n-2 widgets will have equal relative widths of `(100-lw-fw)/(n-2)%`<br>
-    if the unit is px, the remaining n-2 widgets will have their left/right borders at location `i*100/n%`.
-- [1w, 2w, , w2, w1]: multiple widths can be specified in uninterrupted sequence both from the left and the right. 
  */
 export abstract class Container extends Component {
     /**
@@ -81,13 +56,18 @@ export abstract class Container extends Component {
     constructor() { super(); } 
 
     /**
-     * lays out the component in `components` according to the configuration in `attrs`.
-     * The method returns a vnode container that has an associated `cssClass` style.
-     * `layout` is called during the `render` phase of the mithril` lifecycle, which ensures an outside-in
-     * calling sequence on containers; i.e. the outermost containers are called first 
-     * `node` will already have the `styles` field set with required style attributes. These are 
-     * added to the provided `attrs` parameter.
-     * 
+    lays out the component in `components` according to the configuration in `attrs`.
+    The method returns a vnode container that has an associated `cssClass` style.
+    `layout` is called during the `render` phase of the mithril` lifecycle, 
+    which ensures an outside-in calling sequence on containers; 
+    i.e. the outermost containers are called first, and `node` will already have the 
+    `style` field set with required style attributes. 
+    These are added to any `attrs` parameter provided.
+
+    The format for the layout configuration in `attrs` is <code>
+    {<keyword>: <parameter>}
+    </code>
+     where `keyword` is the keyword with which the `Layout` was registered.
      * @param cssClass a css style designator; same as used in m(cssClass, ...) 
      * @param node the node on which to do the layout
      * @param attrs the attribute object literal that configures the layout

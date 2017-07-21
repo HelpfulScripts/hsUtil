@@ -116,3 +116,9 @@ export function signature(s:any, lib:string): Vnode {
     }
     return m('span.hs-item-signature', sig);
 }
+
+export function makeID(section:string, mdl:any) {
+    let result = section? section+'_' : '';
+    result = (result + (mdl.name || '')).toLowerCase();
+    return (result!=='')? result : undefined;
+}
