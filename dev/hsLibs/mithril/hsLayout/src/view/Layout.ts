@@ -16,8 +16,27 @@ import { LayoutToken } from './Tokens';
 import { Container }   from './Container';
 
 /**
- * Abstract base class for creating layout style implementations.
- * Subclasses  should 
+Abstract base class for creating layout style implementations.
+Subclasses should implement `getStyles`. In addition, subclasses need to be registered with the 
+static `Layout.register` method.
+### Example
+<code>
+class MyLayout extends Layout {
+    cssClass = '.my-css-class';
+    constructor(public areaDesc:LayoutToken[]) { 
+        super(areaDesc); 
+    }
+    
+    protected getStyles(components:Array<Vnode|Container>):string {
+        components.map((c:Container|Vnode, i:number) => {
+            c.style = `width:auto; height:auto;
+        });   
+        return this.cssClass;
+   }
+}
+
+Layout.register('MyLayout', MyLayout);
+</code>
  */
 export abstract class Layout {
     /**
@@ -66,12 +85,20 @@ export abstract class Layout {
      * and will be passed through form the `Container` requesting the layout.
      * @param areaDesc 
      */
-    constructor(public areaDesc:LayoutToken[]) { };
+    constructor(public areaDesc:LayoutToken[]) {};
 
     /**
      * Calculates the style attributes required for each component in `Components`.
-     * These attributes are saved in a `styles` field on the component itself. 
-     * During rendering these `styles` attributes are copied to the `node.attrs.styles` field.
+     * These attributes are saved in a `style` field on the component itself. 
+     * During rendering these `style` attributes are copied to the `node.attrs.styles` field.
+     * ### Example
+    <code>protected getStyles(components:Array<Vnode|Container>):string {
+        components.map((c:Container|Vnode, i:number) => {
+            c.style = `width:auto; height:auto;
+        });   
+        return this.cssClass;
+    }
+    </code>
      * @param components 
      */
     protected abstract getStyles(components:Array<Vnode|Container>):string;
