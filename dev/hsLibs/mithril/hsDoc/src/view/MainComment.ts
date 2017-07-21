@@ -117,18 +117,32 @@ function mainCommentParams(params:any):Vnode {
     ));
 }
 
-function prettifyCode(content:string):string { 
+/**
+ * finds segments of `<code>...</code>` in `comment` and replaces them with a prettified version.
+ * Currently the function performs two operations:
+ * - add indentation for brackets {...}
+ * - wrap the <code>...</code> part within <pre>...</pre> brackets
+ * @param comment the comment comment 
+ */
+function prettifyCode(comment:string):string { 
+    const indentSpaces = 4;
     function indenting(text:string): string {
         let indent = 0;
-        return text.split('\n')
+        const result = text
+            .substring(6, text.length-7)    // remove <code> and </code>
+            .trim()
+            .split('\n')
             .map((l:string) => {
                 let oldIndent = indent;
                 let k = l.trim();
                 if (k.includes('{')) { indent++; }
                 if (k.includes('}')) { indent--; }
-                return ' '.repeat(((indent < oldIndent)?indent:oldIndent)*4) + k;
+                return ' '.repeat(((indent < oldIndent)?indent:oldIndent) * indentSpaces) + k;
             })
-            .join('\n');
+            .join('\n')
+            .trim();
+console.log('-----\n'+result+'-------');            
+        return '<pre><code>' + result + '</code></pre>';
     }
-    return content.replace(/<code>([\S\s]*?)<\/code>/gi, indenting);
+    return comment.replace(/<code>([\S\s]*?)<\/code>/gi, indenting);
 }
