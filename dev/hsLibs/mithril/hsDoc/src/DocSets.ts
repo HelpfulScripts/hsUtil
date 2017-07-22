@@ -1,9 +1,9 @@
 /**
- * Modules.ts. Loads the doc.json files to process and display as documentation.
+ * DocSets.ts. Loads the doc.json files to process and display as documentation.
  * Processing occurs in these steps:
  * 1. Load the index.json file that contains a list of doc.json files to load, one for each library to show
  * 2. Load each doc.json file, which describes a library
- * 3. Call Modules.add to add the library name to the registry and create an index of entries for the library
+ * 3. Call DocSets.add to add the library name to the registry and create an index of entries for the library
  */
 
 /** */
@@ -17,10 +17,10 @@ const DIR:string = './data/';
 
 
 /**
- * Modules object. Keeps a list of registered docsets and 
+ * DocSets object. Keeps a list of registered docsets and 
  * provides access to elements of each docset.
  */
-export class Modules { 
+export class DocSets { 
     /** Contains references to the docsets and all elements per docset, accessible per ID. */
     private static gList = <{set:string[], index:{}}>{set:[], index:{}};
     private static gTitle: string;
@@ -28,10 +28,10 @@ export class Modules {
     /** Adds the docset in `content` to the `gList` */
     public static add(content:any) {
         const lib = content.name;
-        Modules.gList.set.push(lib);
-        Modules.gList.set.sort();
-        Modules.gList.index[lib] = {};
-        recursiveIndex(content, Modules.gList.index[lib], lib);
+        DocSets.gList.set.push(lib);
+        DocSets.gList.set.sort();
+        DocSets.gList.index[lib] = {};
+        recursiveIndex(content, DocSets.gList.index[lib], lib);
     }
 
     /**
@@ -41,20 +41,20 @@ export class Modules {
      */
     public static loadList(dir?:string):Promise<void> {
         dir = dir || DIR;   
-        return Modules.loadIndexSet(DIR, 'index.json'); 
+        return DocSets.loadIndexSet(DIR, 'index.json'); 
     }
 
     public static get(lib?:string, id:number|string=0) { 
         if (lib) {
-            if (Modules.gList.index[lib]) { 
-                return Modules.gList.index[lib][id+'']; 
+            if (DocSets.gList.index[lib]) { 
+                return DocSets.gList.index[lib][id+'']; 
             } else {
                 console.log(`list ${lib} not loaded yet ${id}`);
-                return Modules.gList.set; 
+                return DocSets.gList.set; 
             }
         } else {
 //            console.log('redirected to /');
-            return Modules.gList.set; 
+            return DocSets.gList.set; 
         }
     }
 
@@ -68,14 +68,14 @@ export class Modules {
         return m.request({ method: "GET", url: dir+file })
             .then((result:any) =>  {
                 console.log('received index');
-                Modules.gTitle = result.title;
+                DocSets.gTitle = result.title;
                 return Promise.all(result.docs.map((f:string) => loadDocSet(dir, f)));            
             })
             .catch(console.log);
     }
 
 
-    public static title() { return Modules.gTitle; }
+    public static title() { return DocSets.gTitle; }
 };
 
 /**
@@ -88,7 +88,7 @@ function loadDocSet(dir:string, file:string):Promise<void> {
     return m.request({ method: "GET", url: dir+file })
         .then((r:any) => {
             console.log('received ' + dir+file);
-            Modules.add(r);
+            DocSets.add(r);
         })
         .catch(console.log);
 }

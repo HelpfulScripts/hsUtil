@@ -3,9 +3,9 @@
  */
 
 /** */
-import { Modules }  from './Modules';
+import { DocSets }  from './DocSets';
 import { route }    from './Router';
 
 
-Modules.loadList().then(route);
+DocSets.loadList().then(route);
 

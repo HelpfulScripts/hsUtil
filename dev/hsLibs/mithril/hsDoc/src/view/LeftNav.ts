@@ -5,7 +5,7 @@
 /** */
 import { m, Vnode} from '../../../mithril';
 import { Container } from '../../../hsLayout/src/';
-import { Modules } from '../Modules'; 
+import { DocSets } from '../DocSets'; 
 import { libLink } from './Parts'; 
 
 
@@ -18,7 +18,7 @@ export class LeftNav extends Container {
         const field = node.attrs.field;
         node.attrs.lib = undefined;
         node.attrs.field = undefined;
-        const mdl = Modules.get(lib, 0) || {name:'unknown', id:0};
+        const mdl = DocSets.get(lib, 0) || {name:'unknown', id:0};
         return this.layout('.hs-left', node, {}, [
             m('.hs-left-nav', navList(mdl, field))
         ]);
@@ -27,7 +27,7 @@ export class LeftNav extends Container {
 
 function navList(mdl:any, field:string) {
     const selected = (field==='0')? '.hs-left-nav-selected' : '';
-    if (mdl.kind === 0) { // External Modules
+    if (mdl.kind === 0) { // External DocSets
         return m('', [
             libLink(`.hs-library-name ${selected}`, mdl.lib, mdl.id, mdl.name),
             m('', (mdl.children? mdl.children.map((c:any) => externalModule(c, field)) : 'no children'))
@@ -66,7 +66,7 @@ function externalModule(mdl:any, field:string) {
  */
 function entries(group:any, mdl:any, field:string) {
     function moduleGet(c:any) {
-        return Modules.get(mdl.lib, c);
+        return DocSets.get(mdl.lib, c);
     }
     /**
      * processes one entry within a group, e.g. one variable, function, or class.

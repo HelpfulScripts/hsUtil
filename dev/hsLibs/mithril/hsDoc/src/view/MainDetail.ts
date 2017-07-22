@@ -1,6 +1,6 @@
 import { m, Vnode}      from '../../../mithril';
 import { Container }    from '../../../hsLayout/src/';
-import { Modules }      from '../Modules'; 
+import { DocSets }      from '../DocSets'; 
 import { comment, commentLong }  from './MainComment';
 import { flags, sourceLink, signature, type, extensionOf, kindString, itemName, makeID } 
                         from './Parts'; 
@@ -16,7 +16,7 @@ export class MainDetail extends Container {
         node.attrs.lib = undefined;
         node.attrs.field = undefined;
 
-        let result = getOverview(lib, mdl) || itemDoc(Modules.get(lib, mdl) || ''); 
+        let result = getOverview(lib, mdl) || itemDoc(DocSets.get(lib, mdl) || ''); 
         return this.layout('.hs-main-detail', node, {}, [result]); 
     }
 }
@@ -29,7 +29,7 @@ export class MainDetail extends Container {
  */
 function getOverview(lib:string, mdl:string):Vnode {
     if (mdl === '0' || mdl === '') {  //show module overview
-        mdl = Modules.get(lib, `${lib}.overview`);
+        mdl = DocSets.get(lib, `${lib}.overview`);
         if (mdl) { // if project has an overview:
             return overviewDoc(mdl); 
         }
@@ -101,7 +101,7 @@ function member(group:any, lib:string): Vnode {
     };
     const fn = groupMap[group.title] || '.hs-item-unknown-member';
     let content = group.children.map((c:number) => {
-            let mdl = Modules.get(lib, c);
+            let mdl = DocSets.get(lib, c);
             return m(fn, {id:makeID(group.title, mdl)}, itemChild(mdl));
         }
     );
