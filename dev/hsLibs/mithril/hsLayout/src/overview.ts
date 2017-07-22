@@ -13,6 +13,22 @@ to `this.layout()`.
 To create new layout styles, define a class that extends the abstract {@link hsLayout:Layout.Layout `Layout`} class.
 This class should implement the `getStyles` method which calculates the styles attributes required for each `Component`
 to be layed out in a `Container`.
- */
+
+### Example
+<code>
+class Columns extends Container {   
+    view(node) {
+        return this.layout('.hs-site-main', node, { columns: [px(200), FILL]}, [
+            m('.my-left', 'Left Column'), 
+            m('.my-right', 'Right Column')
+        ]);
+    }
+}
+
+m('.my-example', columns);
+</code>
+
+
+*/
 
 /** */

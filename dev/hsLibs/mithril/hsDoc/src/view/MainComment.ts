@@ -65,8 +65,19 @@ function textOrShortTextOrDescription(comment:any, short:boolean):Vnode {
     if (comment.tags) {
         comment.tags.map((tag:any) => {if (tag.tag==='description') { text = tag.text;}} );
     }
-    text = prettifyCode(text);
-    return m('.hs-item-comment-desc', [m.trust(markDown(text, short))]);
+/*    
+    const parts = text.match(/([\s\S]*?)(<example>[\s\S]*?<\/example>)([\s\S]*)/i);
+    if (parts && parts.length>0) {
+console.log(parts[2]);        
+        return m('.hs-item-comment-desc', [
+            prettifyCode(parts[1], short),
+            compileExample(parts[2]), 
+            prettifyCode(parts[3], short)
+        ]);
+    }
+console.log('no example'); 
+*/       
+    return m('.hs-item-comment-desc', prettifyCode(text, short));
 }
 
 function returns(comment:any, short:boolean):Vnode {
@@ -124,9 +135,11 @@ function mainCommentParams(params:any):Vnode {
  * - wrap the <code>...</code> part within <pre>...</pre> brackets
  * @param comment the comment comment 
  */
-function prettifyCode(comment:string):string { 
+function prettifyCode(comment:string, short:boolean):Vnode { 
     const indentSpaces = 4;
-    function indenting(text:string): string {
+    let result = comment;
+
+    function braceIndenting(text:string): string {
         let indent = 0;
         const result = text
             .substring(6, text.length-7)    // remove <code> and </code>
@@ -135,14 +148,30 @@ function prettifyCode(comment:string):string {
             .map((l:string) => {
                 let oldIndent = indent;
                 let k = l.trim();
-                if (k.includes('{')) { indent++; }
-                if (k.includes('}')) { indent--; }
+                if (k.includes('{') || k.includes('[')) { indent++; }
+                if (k.includes('}') || k.includes(']')) { indent--; }
                 return ' '.repeat(((indent < oldIndent)?indent:oldIndent) * indentSpaces) + k;
             })
             .join('\n')
-            .trim();
-console.log('-----\n'+result+'-------');            
+            .trim()
+            .replace(/(<)/g, '&lt;').replace(/(>)/g, '&gt;');
         return '<pre><code>' + result + '</code></pre>';
     }
-    return comment.replace(/<code>([\S\s]*?)<\/code>/gi, indenting);
+
+    result = result.replace(/<code>([\S\s]*?)<\/code>/gi, braceIndenting);
+    return m.trust(markDown(result, short));
 }
+
+/*
+function compileExample(text:string):Vnode {  
+    const geval = eval;
+    function makeExample(text:string):Vnode {
+        const parts = text.match(/<example>([\s\S]*)<\/example>/i);
+        const code = `(function(m) { return ${parts[1].trim()}; })`;
+        try { return m('', geval(code)(m)); }
+        catch(e) { console.log(e); }
+        return m('', '');
+    }
+    return m('example', [makeExample(text)]);
+}
+*/

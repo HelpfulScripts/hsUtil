@@ -1,10 +1,10 @@
 /**
 # hsDoc
 ___
-hsDoc.js is a code documentation viewer for typescript projects written in [Typescript](https://www.typescriptlang.org).
+hsDoc.js is a code documentation viewer for [Typescript](https://www.typescriptlang.org) projects.
 It renders JSON documentation files as created by [typedoc](http://typedoc.org).
 
-## Creating the documentation docset hu
+## Creating the documentation docset
 Follow the instruction for typedoc in commenting the code. 
 
 In addition to the documented source files,
@@ -30,7 +30,7 @@ As an example, we use grunt-typedoc with the following configuration:
 A `tsconfig.json` file seems to be required by typedoc. The file can be empty
 
 ### Gruntfile:
-<pre><code>module.exports = function(grunt) {
+<code>module.exports = function(grunt) {
     ...
     typedoc: {
         code: {
@@ -50,21 +50,14 @@ A `tsconfig.json` file seems to be required by typedoc. The file can be empty
    ...
    grunt.registerTask('doc', ['typedoc']);
 }
-</code></pre>
+</code>
 
 ## Setting up the web app
 1. Create an **`index.html`** in the directory to serve from (web-app directory): 
 <code>
 <html>
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>My Application</title>
-    <link href="styles.css" rel="stylesheet" />
-</head>
-<body class='hs-layout-fill'>
-    <script src="./hsDocs.js"></script>
-</body>
+<head><link href="styles.css" rel="stylesheet" /></head>
+<body class='hs-layout-fill'><script src="./hsDocs.js"></script></body>
 </html>
 </code>
 
@@ -91,6 +84,8 @@ A `tsconfig.json` file seems to be required by typedoc. The file can be empty
 ### For rendering the docsets:
 - [Mithril](https://mithril.js.org)
 - [showdown](https://github.com/showdownjs/showdown)
+- [hsLayout]
+- [webpack]
 
 ## Structural Code Overview
 The main entry point for the web-app is index.ts, which initiates loading the docsets 
