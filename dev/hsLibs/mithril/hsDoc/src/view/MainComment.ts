@@ -118,8 +118,8 @@ function otherCommentTags(comment:any):string|Vnode {
 }
 
 function mainCommentParams(params:any):Vnode {
-    return m('',  params.map((par:any) =>
-        m('.hs-item-comment-desc', [
+    return m('.hs-item-comment-params',  params.map((par:any) =>
+        m('.hs-item-comment-param', [
             m('span.hs-item-comment-tag', par.name+':'), 
             m('span.hs-item-comment-text', !par.comment? '' :
                 ((par.defaultValue!==undefined)? `[default: ${par.defaultValue}] ` : '') + par.comment.text
