@@ -3,8 +3,6 @@ const path = require('path');
 
 /*global module:false*/
 module.exports = function(grunt) {
-    const staging = '../../../../staging/apps/';
-
 	// Project configuration.
 	grunt.initConfig({
 		// Metadata.
@@ -26,17 +24,9 @@ module.exports = function(grunt) {
             build: { files: [
                 { cwd:'src/', expand:true, src:['*.html'], dest:'dist/' }
             ]},
-            docs: { files: [
-                { cwd:'docs/', expand:true, src:['*.json'], dest:'example/' }
-            ]},
 		    test: { files: [
                 { cwd:'dist/test/', expand:true, src:['*.js', '*.css', '*.html'], dest:'test/'},
                 { cwd:'example/',   expand:true, src:['*.json'], dest:'test/'}
-            ]}, 
-			stage: { files: [
-                { expand: true, cwd: 'dist/', src: ['*.js', '*.css', '*.css.map', '*.html'], dest: staging },
-//                { src: ['packageDeploy.json'],    dest: staging+'../package.json' },
-	            { expand: true, flatten:true, src: ['example/*.json'],    dest: staging+'data/' }
             ]}
 		},
 		
@@ -46,7 +36,7 @@ module.exports = function(grunt) {
             },
             css: {
                 files: {
-                    'dist/styles.css': 'src/css/styles.less'
+                    'dist/hsDocs.css': 'src/css/styles.less'
                 }
             }
         }, 
@@ -166,11 +156,11 @@ module.exports = function(grunt) {
 			},
 			less: {
 				files: ['src/**/*.less'],
-				tasks: ['build-css', 'copy:stage']
+				tasks: ['build-css']
 			},
 			html: {
 				files: ['src/**/*.html'],
-				tasks: ['build-html', 'copy:stage']
+				tasks: ['build-html']
 			},
 			specs: {
 				files: ['src/**/*.spec.ts'],
@@ -191,8 +181,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-ts');
     grunt.loadNpmTasks('grunt-webpack');
 
-    grunt.registerTask('doc', ['clean:docs', 'typedoc', 'copy:docs']);
-    grunt.registerTask('stage', ['webpack:develop', 'copy:stage']);
+    grunt.registerTask('doc', ['clean:docs', 'typedoc']);
+    grunt.registerTask('stage', ['webpack:develop']);
     grunt.registerTask('build-html', ['copy:build']);
     grunt.registerTask('build-css', ['less']);
     grunt.registerTask('build-js', ['tslint:src', 'ts:src']);

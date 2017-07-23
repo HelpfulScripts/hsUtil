@@ -2,8 +2,6 @@ const path = require('path');
 
 /*global module:false*/
 module.exports = function(grunt) {
-    const staging = '../../../../staging/apps/';
-
 	// Project configuration.
 	grunt.initConfig({
 		// Metadata.
@@ -26,11 +24,6 @@ module.exports = function(grunt) {
 		    test: { files: [
                 { cwd:'dist/',    expand:true, src:['*.js', '*.css', '*.html'], dest:'test/'},
                 { cwd:'example/', expand:true, src:['*.json'], dest:'test/'}
-            ]}, 
-			stage: { files: [
-                { expand: true, cwd: 'dist/', src: ['*.css', '*.css.map', '*.html'], dest: staging },
-                { src: ['packageDeploy.json'],    dest: staging+'../package.json' },
-	            { expand: true, cwd: 'docs', src: ['*.json'],   dest: staging+'data/' }
             ]}
 		},
 		
@@ -40,7 +33,7 @@ module.exports = function(grunt) {
             },
             css: {
                 files: {
-                    'dist/styles.css': 'src/css/styles.less'
+                    'dist/hsLayout.css': 'src/css/*.less'
                 }
             }
         }, 
@@ -169,7 +162,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-ts');
 
     grunt.registerTask('doc', ['clean:docs', 'typedoc']);
-    grunt.registerTask('stage', ['copy:stage']);
+    grunt.registerTask('stage', []);
     grunt.registerTask('build-html', ['copy:build']);
     grunt.registerTask('build-css', ['less']);
     grunt.registerTask('build-js', ['tslint:src', 'ts:src']);
