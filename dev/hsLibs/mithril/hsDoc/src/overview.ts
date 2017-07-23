@@ -66,14 +66,14 @@ A `tsconfig.json` file seems to be required by typedoc. The file can be empty
 3. Create a subdirectory **`data`** and copy the docsets into it, including **`hsDocs.json`**
 
 4. Create a list of docsets to render in a new file **`index.json`** inside **`data`**:
-<pre>
+<code>
 {
     "docs": [
         "hsDocs.json",
         ...
     ],
     "title": "HS Libraries"   // will be displayed at the top left corner
-}</pre>
+}</code>
 
 5. Point a browser to the web-app directory
 

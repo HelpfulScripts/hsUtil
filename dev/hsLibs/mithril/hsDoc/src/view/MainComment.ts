@@ -136,7 +136,7 @@ function mainCommentParams(params:any):Vnode {
  * @param comment the comment comment 
  */
 function prettifyCode(comment:string, short:boolean):Vnode { 
-    const indentSpaces = 4;
+//    const indentSpaces = 2;
     let result = comment;
 
     function braceIndenting(text:string): string {
@@ -144,18 +144,19 @@ function prettifyCode(comment:string, short:boolean):Vnode {
         const result = text
             .substring(6, text.length-7)    // remove <code> and </code>
             .trim()
+            .replace(/(<)/g, '&lt;').replace(/(>)/g, '&gt;')
             .split('\n')
             .map((l:string) => {
                 let oldIndent = indent;
                 let k = l.trim();
-                if (k.includes('{')) { indent++; }
-                if (k.includes('}')) { indent--; }
+//                if (k.includes('{')) { indent++; }
+//                if (k.includes('}')) { indent--; }
+                indent += Math.max(-1, Math.min(1, k.split('{').length - k.split('}').length)); 
                 indent += Math.max(-1, Math.min(1, k.split('[').length - k.split(']').length)); 
-                return ' '.repeat(((indent < oldIndent)?indent:oldIndent) * indentSpaces) + k;
+                return '<span class="hs-code-indent"></span>'.repeat(((indent < oldIndent)?indent:oldIndent)) + k;
             })
             .join('\n')
-            .trim()
-            .replace(/(<)/g, '&lt;').replace(/(>)/g, '&gt;');
+            .trim();
         return '<pre><code>' + result + '</code></pre>';
     }
 
