@@ -16,6 +16,12 @@ import { Layout } from './Layout';
 abstract class Component {
 //    id:number;
     constructor() { /*this.id = id++;*/ }
+
+    /** 
+     * the standard `Mithril` component view function 
+     * @param vnode the vnode passed by `Mithril`
+     * @return A vnode that represents the view of this `Component` 
+     */
     public abstract view(vnode?: Vnode): Vnode;
 }
 
