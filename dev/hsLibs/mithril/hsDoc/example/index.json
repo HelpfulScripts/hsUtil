@@ -2,6 +2,7 @@
     "docs": [
         "hsDocs.json",
         "hsLayout.json",
+        "hsWidgets.json",
         "hsNode.json"
     ],
     "title": "HS Libraries"
