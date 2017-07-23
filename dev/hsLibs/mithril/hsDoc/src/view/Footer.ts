@@ -9,5 +9,4 @@ export class FooterBar extends Container {
     view(node:Vnode):Vnode {
         return this.layout('.hs-site-footer', node, { }, m.trust(markDown(COPYRIGHT)));
     }
-}; 
-
+};

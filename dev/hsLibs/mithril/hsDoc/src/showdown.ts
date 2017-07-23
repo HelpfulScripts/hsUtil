@@ -30,6 +30,6 @@ export function markDown(text:string, short:boolean=false):string {
  * @return the comment with substituted links 
  */
 function substituteLinks(comment:string):string {
-    comment = comment.replace(/[^"`']{@link ([\S]*):([\S]+)\s(.+)}/g, ' <a href="#!/api/$1/$1.$2">$3</a>');
+    comment = comment.replace(/[^"`']{@link ([\S]*):([\S]+)\s*(.+)}/g, ' <a href="#!/api/$1/$1.$2">$3</a>');
     return comment;
 }

@@ -2,7 +2,7 @@ import { m, Vnode}      from '../../../mithril';
 import { Container }    from '../../../hsLayout/src/';
 import { DocSets }      from '../DocSets'; 
 import { comment, commentLong }  from './MainComment';
-import { flags, sourceLink, signature, type, extensionOf, kindString, itemName, makeID } 
+import { flags, sourceLink, signature, type, extensionOf, kindString, itemLongName, makeID } 
                         from './Parts'; 
 
 
@@ -114,7 +114,7 @@ function itemDescriptor(mdl:any, sig:any):Vnode {
     try { return m('.hs-item-desc', [ 
             flags(mdl.flags, ['export']),
             kindString(mdl),
-            itemName(mdl, mdl),
+            itemLongName(mdl, mdl),
             signature(sig, mdl.lib),
             type(sig.type,  mdl.lib),
             extensionOf(mdl),

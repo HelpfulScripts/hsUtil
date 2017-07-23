@@ -6,7 +6,7 @@
 import { m, Vnode} from '../../../mithril';
 import { Container } from '../../../hsLayout/src/';
 import { DocSets } from '../DocSets'; 
-import { libLink } from './Parts'; 
+import { libLongLink } from './Parts'; 
 
 
 /**
@@ -29,7 +29,7 @@ function navList(mdl:any, field:string) {
     const selected = (field==='0')? '.hs-left-nav-selected' : '';
     if (mdl.kind === 0) { // External DocSets
         return m('', [
-            libLink(`.hs-library-name ${selected}`, mdl.lib, mdl.id, mdl.name),
+            libLongLink(`a.hs-library-name ${selected}`, mdl.lib, mdl.fullPath, mdl.name),
             m('', (mdl.children? mdl.children.map((c:any) => externalModule(c, field)) : 'no children'))
         ]);
     } else {
@@ -53,7 +53,7 @@ function externalModule(mdl:any, field:string) {
     // don't show modules from other projects (isExported flag) or modules on the ignore list
     const skip = (mdl.flags && mdl.flags.isExternal) || ignoreModules[mdl.name];
     return skip? m('') : m(`.hs-left-nav-module`, [
-        libLink(`.hs-left-nav-module-name ${selected}`, mdl.lib, mdl.id, mdl.name),
+        libLongLink(`a.hs-left-nav-module-name ${selected}`, mdl.lib, mdl.fullPath, mdl.name),
         mdl.groups? m('', mdl.groups.map((g:any) => entries(g, mdl, field))) : undefined
     ]);
 }
@@ -75,11 +75,11 @@ function entries(group:any, mdl:any, field:string) {
         const selected = (field===''+mod.id)? '.hs-left-nav-selected' : '';
         const exported = (mod.flags && mod.flags.isExported);
         const statik   = (mod.flags && mod.flags.isStatic);
-        const css = `.hs-left-nav-entry ${selected} ${exported?'.hs-left-nav-exported' : ''}`;
+        const css = `a.hs-left-nav-entry ${selected} ${exported?'.hs-left-nav-exported' : ''}`;
         return (!exported && group.title==='Variables')? '' :   // ignore local module variables
             m('', [
                 statik? 'static': '',
-                libLink(css, mod.lib, mod.id, mod.name)
+                libLongLink(css, mod.lib, mod.fullPath, mod.name)
             ]);
     }
 

@@ -58,7 +58,7 @@ export abstract class Container extends Component {
     /**
     lays out the component in `components` according to the configuration in `attrs`.
     The method returns a vnode container that has an associated `cssClass` style.
-    `layout` is called during the `render` phase of the mithril` lifecycle, 
+    `layout` is called during the `render` phase of the `mithril` lifecycle, 
     which ensures an outside-in calling sequence on containers; 
     i.e. the outermost containers are called first, and `node` will already have the 
     `style` field set with required style attributes. 

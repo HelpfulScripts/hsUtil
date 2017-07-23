@@ -31,7 +31,11 @@ export function kindString(mdl:any) {
 }
 
 export function itemName(mdl:any, sub:any) {
-    return m('span.hs-item-name', libLink('a', mdl.lib, sub.id, sub.name));
+    return m('span.hs-item-name', libLongLink('a', mdl.lib, sub.fullPath, sub.name));
+}
+
+export function itemLongName(mdl:any, sub:any) {
+    return m('span.hs-item-name', libLongLink('a', mdl.lib, mdl.fullPath, sub.name));
 }
 
 
@@ -44,7 +48,7 @@ export function extensionOf(mdl:any) {
         m('span.hs-item-extends', 'extends'),
         m('span', mdl.extendedTypes.map((t:any, i:number) =>
             m('span.hs-item-extension', [
-                libLink('a', mdl.lib, t.id, t.name),
+                libLongLink('a', mdl.lib, t.fullPath, t.name),
                 mdl.extendedTypes.map.length>(i+1)? ', ': ''
             ])
         )),
@@ -70,14 +74,18 @@ export function libLink(css:string, lib:string, id:number, name:string) {
     return m(`${css}[href=/api/${lib}/${id}]`, {oncreate: m.route.link}, name);
 }
 
+export function libLongLink(css:string, lib:string, id:string, name:string) {
+    return m(`${css}[href=/api/${lib}/${id}]`, {oncreate: m.route.link}, name);
+}
+
 export function type(t:any, lib:string) {
     function _type(t:any) {
         switch (t.type) { 
-            case 'instrinct':       return t.id? libLink('span', lib, t.id, t.name) : t.name; 
+            case 'instrinct':       return t.id? libLongLink('span', lib, t.fullPath, t.name) : t.name; 
             case 'stringLiteral':   return t.type; 
             case 'union':           return t.types.map(_type).join(' | ');
             case 'reference':       return t.typeArguments? t.name+'<'+ t.typeArguments.map(_type).join(', ') + '>' : 
-                                           t.id? libLink('span', lib, t.id, t.name) : t.name;
+                                           t.id? libLongLink('span', lib, t.fullPath, t.name) : t.name;
             case 'reflection':      return t.declaration? t.declaration.kindString : 'UNKNOWN';
             default: console.log('unknown type '+ t.type);
                      console.log(t);
