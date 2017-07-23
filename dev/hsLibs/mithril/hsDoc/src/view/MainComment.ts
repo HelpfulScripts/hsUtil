@@ -148,8 +148,9 @@ function prettifyCode(comment:string, short:boolean):Vnode {
             .map((l:string) => {
                 let oldIndent = indent;
                 let k = l.trim();
-                if (k.includes('{') || k.includes('[')) { indent++; }
-                if (k.includes('}') || k.includes(']')) { indent--; }
+                if (k.includes('{')) { indent++; }
+                if (k.includes('}')) { indent--; }
+                indent += Math.max(-1, Math.min(1, k.split('[').length - k.split(']').length)); 
                 return ' '.repeat(((indent < oldIndent)?indent:oldIndent) * indentSpaces) + k;
             })
             .join('\n')
