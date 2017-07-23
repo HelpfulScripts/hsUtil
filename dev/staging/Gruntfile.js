@@ -2,7 +2,8 @@ const path = require('path');
 
 const paths = [
     '../hsLibs/mithril/hsDoc/',
-    '../hsLibs/mithril/hsLayout/'
+    '../hsLibs/mithril/hsLayout/',
+    '../hsLibs/mithril/hsWidgets/'
 ];
 
 /*global module:false*/
@@ -10,7 +11,7 @@ module.exports = function(grunt) {
     const staging = '../../staging/apps/';
 
 	// Project configuration.
-	grunt.initConfig({
+	grunt.initConfig({ 
 		copy: {
             stage: { files: 
                 paths.map(p => { return {
@@ -28,7 +29,11 @@ module.exports = function(grunt) {
             }
 		},
 
-		watch: {
+		watch: { 
+			gruntfile: {
+                files: ['Gruntfile.js'],
+				tasks: ['stage']
+			},
 			stage: { 
                 files:      paths.map(p => p+'dist/*.js')
                     .concat(paths.map(p => p+'dist/*.css'))
