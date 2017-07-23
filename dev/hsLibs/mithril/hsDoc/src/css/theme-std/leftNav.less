@@ -1,13 +1,32 @@
-.hs-left-nav a {
-    text-decoration: none;
-    color: black;
-    display:block;
-    :link, :visited { 
+@BorderRadius:  5px;
+@HoverColor:    #fee;
+@SelectColor:   #cfc;
+
+.hs-left {
+    a {
         text-decoration: none;
-        cursor: black;
-    }
-    :link:active, :visited:active { 
         color: black;
+        display:block;
+        :link, :visited { 
+            text-decoration: none;
+            cursor: black;
+        }
+        :link:active, :visited:active { 
+            color: black;
+        }
+    }
+}
+
+.hs-left-nav {    // the left detail window providing a nav overview
+    padding: 0px 5px 0 5px;  
+    font-size:0.8em;
+    list-style-type: none; 
+}
+
+a.hs-left-nav-selected {
+    background-color: @SelectColor;
+    &:hover {
+        background-color: darken(@HoverColor, 10%);
     }
 }
 
@@ -24,11 +43,17 @@
     }
 }
 
+.hs-left-nav-content{
+
+}
+
 .hs-left-nav-module {
-    margin-left:5px;
-    margin-top: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+//    margin-left:5px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #aaa;
+    border-radius: @BorderRadius;
+    overflow: hidden
 }
 
 
@@ -51,29 +76,20 @@
 }
 
 .hs-left-nav-entries {
-    border-top: 1px solid #aaa;
+    border-top: 1px solid #ccc;
 }
 
 .hs-left-nav-entry {
     padding-left:5px;
     background-color: transparent;
     &:hover {
-        background-color: #eef;
+        background-color: @HoverColor;
     }
 }
 
-
-.hs-left-nav {    // the left detail window providing a nav overview
-    padding: 0px 5px 0 0;  
-    font-size:0.8em;
-    list-style-type: none; 
-}
 
 a.hs-left-nav-exported {
     color: #44f;
     font-weight:bold;
 }
 
-.hs-left-nav .hs-left-nav-selected {
-    background-color: #cfc;
-}

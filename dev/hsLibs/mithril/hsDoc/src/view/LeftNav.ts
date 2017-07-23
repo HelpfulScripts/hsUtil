@@ -19,19 +19,22 @@ export class LeftNav extends Container {
         node.attrs.lib = undefined;
         node.attrs.field = undefined;
         const mdl = DocSets.get(lib, 0) || {name:'unknown', id:0};
+        const selected = (field==='0' || field===lib)? '.hs-left-nav-selected' : '';
         return this.layout('.hs-left', node, {}, [
+            libLongLink(`a.hs-library-name ${selected}`, mdl.lib, mdl.fullPath, mdl.name),
             m('.hs-left-nav', navList(mdl, field))
         ]);
     } 
 }
 
-function navList(mdl:any, field:string) {
-    const selected = (field==='0')? '.hs-left-nav-selected' : '';
+/** creates the list if modules (`*.ts` files) */
+function navList(mdl:any, field:string):Vnode[] {
     if (mdl.kind === 0) { // External DocSets
-        return m('', [
-            libLongLink(`a.hs-library-name ${selected}`, mdl.lib, mdl.fullPath, mdl.name),
-            m('', (mdl.children? mdl.children.map((c:any) => externalModule(c, field)) : 'no children'))
-        ]);
+        const modules = mdl.children? mdl.children.map((c:any) => externalModule(c, field)) : ['no children'];
+        modules.unshift(m('.hs-left-nav-header', 'Modules'));
+        return [
+            m('.hs-left-nav-content', modules)
+        ];
     } else {
         console.log('error: not a head node');
     }
@@ -49,7 +52,7 @@ const ignoreModules = {
  * processes a module, i.e. a `.ts` file.
  */
 function externalModule(mdl:any, field:string) {
-    const selected = (field===''+mdl.id)? '.hs-left-nav-selected' : '';
+    const selected = (field===''+mdl.id || field===mdl.fullPath)? '.hs-left-nav-selected' : '';
     // don't show modules from other projects (isExported flag) or modules on the ignore list
     const skip = (mdl.flags && mdl.flags.isExternal) || ignoreModules[mdl.name];
     return skip? m('') : m(`.hs-left-nav-module`, [
@@ -72,7 +75,7 @@ function entries(group:any, mdl:any, field:string) {
      * processes one entry within a group, e.g. one variable, function, or class.
      */
     function entry(mod:any) { 
-        const selected = (field===''+mod.id)? '.hs-left-nav-selected' : '';
+        const selected = (field===''+mod.id || field===mod.fullPath)? '.hs-left-nav-selected' : '';
         const exported = (mod.flags && mod.flags.isExported);
         const statik   = (mod.flags && mod.flags.isStatic);
         const css = `a.hs-left-nav-entry ${selected} ${exported?'.hs-left-nav-exported' : ''}`;
