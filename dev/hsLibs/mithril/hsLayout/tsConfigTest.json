@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "module": "es6",
+    "module": "commonjs",
     "moduleResolution": "node",
     "inlineSourceMap": true,
     "removeComments": false,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "allowJs": true,
     "suppressImplicitAnyIndexErrors": true
   },
