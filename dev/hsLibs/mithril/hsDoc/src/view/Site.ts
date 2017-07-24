@@ -21,7 +21,7 @@ const FooterHeight  = px(10);   //
 export class HsSite extends Container {
     view(node:Vnode):Vnode {
         try {
-            const lib   = node.attrs.lib || 'projectOverview';
+            const lib   = node.attrs.lib || undefined;
             const field = node.attrs.field || 0;
 //console.log(`HsSite ${lib}: ${field}`);        
             return this.layout('.hs-site', node, { rows:[TitleHeight, FILL, FooterHeight] }, [
