@@ -26,6 +26,12 @@ module.exports = function(grunt) {
                     src: ['*.json'], 
                     dest: staging+'data/' 
                 }}))
+                .concat(paths.map(p => { return {
+                    expand: true, 
+                    cwd: p+'dist/example/', 
+                    src: ['*.*'], 
+                    dest: staging+'example/' 
+                }}))
             }
 		},
 
