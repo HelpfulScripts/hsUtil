@@ -150,12 +150,22 @@ module.exports = function(grunt) {
                 files: ['Gruntfile.js'],
 				tasks: ['make']
 			},
+			libs: {
+                files: [
+                    '../hsLayout/docs/hsLayout.json', 
+                    '../hsWidgets/docs/hsWidgets.json'
+                ],
+				tasks: ['make']
+			},
 			js: {
 				files: ['src/**/*.ts', '!src/**/*.spec.ts', '!src/**/*.less'],
 				tasks: ['make']
 			},
 			less: {
-				files: ['src/**/*.less'],
+                files: ['src/**/*.less',
+                    '../hsLayout/dist/hsLayoput.css', 
+                    '../hsWidgets/dist/hsWidgets.css'
+                ],
 				tasks: ['build-css']
 			},
 			html: {
