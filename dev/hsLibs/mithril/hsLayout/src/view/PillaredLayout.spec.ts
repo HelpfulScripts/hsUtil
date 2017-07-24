@@ -1,7 +1,7 @@
-import { m, Vnode} from '../../../mithril';
+import { m, Vnode } from '../../../mithril'; 
 
-//import { px, FILL } from './PillaredLayout';
-//import { Layout } from './Layout';
+import { px, FILL } from '../';
+import { Container } from '../';
  
 /*
 class RowsTest extends Layout {
@@ -14,15 +14,42 @@ class RowsTest extends Layout {
 }
 */
 
-describe('RowsLayout', () => {
-    let node:any;
-    beforeEach(() => {
-//        m.mount(document.body, m(RowsTest, {layout: { rows:[px(40), FILL, px(20)]}})); 
-        m.mount(document.body, "hhh"); 
+class Test extends Container {
+    view(node: Vnode): Vnode {
+        return this.layout('#test', node, { columns: <any[]>[px(200), FILL] }, [m('', 'left'), m('', 'middle'), m('', 'right')]);
+    }
+}
+
+class Test2 extends Container {
+    view(node: Vnode): Vnode {
+        return m('#test', [m('', 'left'), m('', 'middle'), m('', 'right')]);
+    }
+}
+
+
+describe('RowsLayout', () => { 
+    let node;
+    beforeAll((done) => {
+        m.mount(document.body, Test); 
+        setTimeout(() => {
+            node = document.getElementById('test');
+            done();
+        }, 1000);
     });
 
-    it ('should have 3 rows', () => {
-        console.log(node);
-        expect(node.children.length).toBe(3);
+    it ('should have defined document.body', (done) => {
+        expect(document.body).toBeDefined();
+        done();
+    });
+
+    it ('should have defined node', (done) => {
+        expect(node).toBeDefined();
+        expect(node).toBe(null);
+        done();
+    });
+
+    it ('should have defined node2', (done) => {
+        expect(node.children).toBeDefined();
+        done();
     });
 });
