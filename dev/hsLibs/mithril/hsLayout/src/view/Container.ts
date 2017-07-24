@@ -26,27 +26,26 @@ abstract class Component {
 }
 
 /**
-Abstract base class for applying layouts. Subclasses should follow the following pattern:<code>
+Abstract base class for applying layouts. Subclasses should implement a `view` method that returns
+the result of a call to `this.layout()`, as in the following example:
+<code>
 import { Container, px, FILL }  from 'hsLayout';
 const TitleHeight   = px(30); 
 const FooterHeight  = px(10); 
 class MyLayout extends Container {
     view(node:Vnode):Vnode {
-        try {
-            return this.layout('.my-layout', node, { rows:[TitleHeight, FILL, FooterHeight] }, [
-                m(), 
-                m(),
-                m()
-            ]);
-        }
-        catch(e) { console.log(e); }
+        return this.layout('.my-layout', node, { rows:[TitleHeight, FILL, FooterHeight] }, [
+            m(), 
+            m(),
+            m()
+        ]);
     }
 } 
 </code>
 The call to `this.layout` takes as parameters
 - the css class to associate with the container,
 - the container Vnode,
-- the layout configration, and
+- the layout configration (see {@link #methods_layout layout} method), and
 - the components to be layed out.
 
  */
