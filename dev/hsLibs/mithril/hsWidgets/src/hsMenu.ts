@@ -10,6 +10,7 @@
         items: ['One', 'Two', 'Three'],
         selectedItem: 'One',
         select: (item:string) => <do something>  
+        size?:LayoutToken[] = []
     };
     m(Menu, {desc: desc}); 
  * </code>
@@ -17,7 +18,7 @@
 
  /** */
 import { m, Vnode} from '../../mithril';
-import { Container } from '../../hsLayout/src/';
+import { Container, LayoutToken } from '../../hsLayout/src/';
 
 /** passed into Menu from the calling application */
 export interface MenuDesc {
@@ -27,6 +28,8 @@ export interface MenuDesc {
     selectedItem: string;
     /** the function to call when the selection changes */
     select: (item:string) => void;
+    /** optional array of `LayoutToken`s, defaults to `[ ]` */
+    size?:LayoutToken[];
 }
 
 /** interface of the parameter passed to a `MenuItem` */
@@ -56,11 +59,12 @@ export class Menu extends Container {
         const desc:MenuDesc = node.attrs.desc;
         node.attrs.desc = undefined;
 
+        const size = desc.size || [];
         this.menu.select(desc.selectedItem);
-        return this.layout('.hs-menu', node, { columns: <any[]>[] }, desc.items.map((l:string) => {
+        return this.layout('.hs-menu', node, { columns: size }, desc.items.map((l:string) => {
             if (!this.menu.items[l]) { this.menu.items[l] = {title: l, selected: false, select:(item:string) => {
                 this.menu.select(item); // local housekeeping: make sure the item's style shows correct selection
-                desc.select(item);      // trigger any actions formt he selection
+                desc.select(item);      // trigger any actions form the selection
             }}; }
             return m(MenuItem, { desc:this.menu.items[l] });
         }));
