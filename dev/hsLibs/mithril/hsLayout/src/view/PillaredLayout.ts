@@ -41,32 +41,37 @@ type descriptor = {size:number, code:string, fields:{}};
 /**
 Lays its components out in pillars, i.e. either {@link hsLayout:PillaredLayout.Columns columns}
 or {@link hsLayout:PillaredLayout.Rows rows}
-## Attributes
-- [**hs-columns='[<i>Array</i>, ]'**] 
-    Please see {@link hsLayout:Columns columns layout} on avaliable options for `Array`
-- [**hs-rows='[<i>Array</i>, ]'**] 
-    Please see {@link hsLayout:Rows rows layout} on avaliable options for `Array`
-- [**hs-relative**] create a {@link hsLayout.object.HsRelativeLayout relative layout}
-- [**hs-fill-last-col**] applies to tile layout only; if specified, the last colum of tiles are stretched horizontally 
-    to fill the remaining space.
+Use `{rows: [attributes]}` or `{columns: [attributes]}` to invoke this layout.
+[Examples]("/example/layout.html")
+### Example
+<code>
+    {rows: [px(200), FILL]} // --> top row has height 200px, all other rows evenly share remaining space 
+</code>
 
-Elements in `Array` will be used as width indicators for the widgets that are children of this layout. 
-All widths have to be specified either in px or in %.
-The following options are supported for `Array`:
-- []: An empty array; all widgets will be evenly spaced across the available width. 
-- [fw]: All widgets have the specified width (in px or %) and will fill the available space with from the left,
+## Attributes
+The following values **v** are valid entries in The Attributes array:
+- **px(n)** -- a fixed number of pixels 
+- **pc(n)** -- a fixed percentage of available space
+- **FILL**  -- a special constant to indicate - may appear only once per array.
+
+The following options are supported for the Attributes array:
+- **[ ]**: An empty array; all components will be evenly spaced across the available width. 
+- **[v]**: All components have the specified width (in px or %) and will fill the available space from the left,
     leaving any remaining unused space on the right. 
-- [fw,]: Sets the first (left) widget to a width of `fw`.<br>
-    if `fw` is specified in %, the remaining n-1 widgets will have equal relative widths of `(100-fw)/(n-1)%`<br>
-    if `fw` is specified in px, the remaining n-1 widgets will have their right borders at location `i*100/n%`, with i=1...n.
-- [,lw]: Sets the last (right) widget to a width of `lw`.<br>
-    if `lw` is specified in %, the remaining n-1 widgets will have equal relative widths of `(100-lw)/(n-1)%`<br>
-    if `lw` is specified in px, the remaining n-1 widgets will have their left borders at location `i*100/n%`, with i=0...n-1.
-- [fw,,lw]: Sets the first and last widget to a width of `fw`/`lw`.<br>
+- **[v1, v2]**: All components have the specified widths (in px or %) and will fill the available space from the left,
+    leaving any remaining unused space on the right. If there are more components than widths, the right-most width
+    will be used for the reminaing widgets.
+- **[v, FILL]**: Sets the first (left) widget to a width of `v`.<br>
+    if `v` is specified in %, the remaining n-1 components will have equal relative widths of `(100-v)/(n-1)%`<br>
+    if `v` is specified in px, the remaining n-1 components will have their right borders at location `i*100/n%`, with i=1...n.
+- **[FILL, v]**: Sets the last (right) widget to a width of `v`.<br>
+    if `v` is specified in %, the remaining n-1 components will have equal relative widths of `(100-v)/(n-1)%`<br>
+    if `v` is specified in px, the remaining n-1 components will have their left borders at location `i*100/n%`, with i=0...n-1.
+- **[va, FILL, vb]**: Sets the first and last widget to a width of `va`/`vb`.<br>
     Both have to be specified either in px or in %.<br>
-    if the unit is %, the remaining n-2 widgets will have equal relative widths of `(100-lw-fw)/(n-2)%`<br>
-    if the unit is px, the remaining n-2 widgets will have their left/right borders at location `i*100/n%`.
-- [1w, 2w, , w2, w1]: multiple widths can be specified in uninterrupted sequence both from the left and the right. 
+    if the unit is %, the remaining n-2 components will have equal relative widths of `(100-vb-va)/(n-2)%`<br>
+    if the unit is px, the remaining n-2 components will have their left/right borders at location `i*100/n%`.
+- **[v1, v2, FILL, v3, v4]**: multiple widths can be specified in uninterrupted sequence both from the left and the right. 
  */
 class Pillars extends Layout{
     firstFixed: number; // number of DefinedToken entries at the beginning
@@ -90,9 +95,13 @@ class Pillars extends Layout{
         let last  = 0;        
         // if any of the dimensions are in px, use the pixel method; else use the percent method
         // get index of first and last undefined area, if any            
-        this.unit = areaDesc.some((area:LayoutToken) => (area instanceof PixelToken))? this.unitPixel : this.unitPercent;        // true if any area is PixelToken
-        areaDesc.some((area:LayoutToken, i:number) => ((areaDesc[i]   instanceof DefinedToken)? ++first<0 : true)); // first = number of consecutive fixed fields at start
-        areaDesc.some((area:LayoutToken, i:number) => ((areaDesc[n-i] instanceof DefinedToken)? ++last<0  : true)); // last  = number of consecutive fixed fields at end
+        this.unit = areaDesc.some((area:LayoutToken) => (area instanceof PixelToken))? this.unitPixel : this.unitPercent;   // true if any area is PixelToken
+        
+        // determine first = number of consecutive fixed fields at start
+        areaDesc.some((area:LayoutToken, i:number) => ((areaDesc[i]   instanceof DefinedToken)? ++first<0 : true));         
+
+        // determine last  = number of consecutive fixed fields at end
+        areaDesc.some((area:LayoutToken, i:number) => ((areaDesc[n-i] instanceof DefinedToken)? ++last<0  : true));         
 
         this.firstFixed = first;
         this.lastFixed  = Math.min(last, areaDesc.length-first);
@@ -113,10 +122,19 @@ class Pillars extends Layout{
         function getSize(i:number):descriptor {
             let size:number = null;
             let t = null;
-            if (i > num-1-last)  { size = desc[len - (num-i)].getSize(); t = 'end'; }   // end sequence
-            else if (i < first)  { size = desc[i].getSize(); t = 'start'; }             // start sequence
+            if (i > num-1-last)  { size = desc[len - (num-i)].getSize(); t = 'end'; }       // end sequence
+            else if (i < first)  { size = desc[i].getSize(); t = 'start'; }                 // start sequence
+            else if (len>0 && len===first){ size = desc[len-1].getSize(); t = 'start'; }    // all items 
+if (desc.length === 1) {  
+console.log(`${i} of ${num}: size=${size}, t=${t}`);      
+}
             return {size:size, code:t, fields:{}};
         } 
+if (desc.length === 1) {        
+console.log('---------');
+console.log(desc);
+console.log(`first=${first}, last=${last}`);
+}
         return [...Array(num).keys()].map(getSize);
     }
 
@@ -185,7 +203,6 @@ class Pillars extends Layout{
             } 
             return false;
         });  
-       
         return styles;
     };
     
