@@ -3,6 +3,6 @@
  */
 
 /** */
-export { Container }        from './view/Container'; 
-export { FILL, px, pc }     from './view/Tokens'; 
-export { PillarLayouts }    from './view/PillaredLayout';
+export { Container }                    from './view/Container'; 
+export { FILL, px, pc, LayoutToken }    from './view/Tokens'; 
+export { PillarLayouts }                from './view/PillaredLayout';
