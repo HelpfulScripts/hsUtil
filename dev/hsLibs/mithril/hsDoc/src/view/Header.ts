@@ -16,6 +16,7 @@ export class HeaderBar extends Container {
             selectedItem: lib,
             select: (item:string) => m.route.set('/api/:lib/0', {lib:item})  
         };
+        if (!desc.selectedItem)  { desc.selectedItem = desc.items[0]; }
         return this.layout('.hs-site-header', node, { columns: [LeftNavWidth, FILL]}, [
             m(SiteTitle),
             m(Menu, {desc: desc})           
