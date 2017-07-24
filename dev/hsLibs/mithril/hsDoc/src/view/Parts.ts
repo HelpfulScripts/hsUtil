@@ -74,8 +74,8 @@ export function libLink(css:string, lib:string, id:number, name:string) {
     return m(`${css}[href=/api/${lib}/${id}]`, {oncreate: m.route.link}, name);
 }
 
-export function libLongLink(css:string, lib:string, id:string, name:string) {
-    return m(`${css}[href=/api/${lib}/${id}]`, {oncreate: m.route.link}, name);
+export function libLongLink(css:string, lib:string, id:string, name:string, onclick?:()=>void) {
+    return m(`${css}[href=/api/${lib}/${id}]`, {oncreate: m.route.link, onclick:onclick}, name);
 }
 
 export function type(t:any, lib:string) {

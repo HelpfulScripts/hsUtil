@@ -19,9 +19,9 @@ export class LeftNav extends Container {
         node.attrs.lib = undefined;
         node.attrs.field = undefined;
         const mdl = DocSets.get(lib, 0) || {name:'unknown', id:0};
-        const selected = (field==='0' || field===lib)? '.hs-left-nav-selected' : '';
+//        const selected = (field==='0' || field===lib)? '.hs-left-nav-selected' : '';
         return this.layout('.hs-left', node, {}, [
-            libLongLink(`a.hs-library-name ${selected}`, mdl.lib, mdl.fullPath, mdl.name),
+//            libLongLink(`a.hs-library-name ${selected}`, mdl.lib, mdl.fullPath, mdl.name),
             m('.hs-left-nav', navList(mdl, field))
         ]);
     } 
@@ -48,6 +48,8 @@ const ignoreModules = {
     index:      true    // the index.ts file
 };
 
+const expanded: {string?:boolean} = {};
+
 /**
  * processes a module, i.e. a `.ts` file.
  */
@@ -56,10 +58,12 @@ function externalModule(mdl:any, field:string) {
     // don't show modules from other projects (isExported flag) or modules on the ignore list
     const skip = (mdl.flags && mdl.flags.isExternal) || ignoreModules[mdl.name];
     return skip? m('') : m(`.hs-left-nav-module`, [
-        libLongLink(`a.hs-left-nav-module-name ${selected}`, mdl.lib, mdl.fullPath, mdl.name),
-        mdl.groups? m('', mdl.groups.map((g:any) => entries(g, mdl, field))) : undefined
+        libLongLink(`a.hs-left-nav-module-name ${selected}`, mdl.lib, mdl.fullPath, mdl.name, () => {
+            expanded[mdl.fullPath] = !expanded[mdl.fullPath];
+        }),
+        mdl.groups? m('.hs-left-nav-module-content', { class: expanded[mdl.fullPath]?'':'hs-collapsed'}, mdl.groups.map((g:any) => entries(g, mdl, field))) : undefined
     ]);
-}
+} 
 
 /**
  * processes a group of entries, e.g. Variables, Functions, or Classes.
