@@ -60,6 +60,7 @@ function externalModule(mdl:any, field:string) {
     return skip? m('') : m(`.hs-left-nav-module`, [
         libLongLink(`a.hs-left-nav-module-name ${selected}`, mdl.lib, mdl.fullPath, mdl.name, () => {
             expanded[mdl.fullPath] = !expanded[mdl.fullPath];
+            m.redraw();            
         }),
         mdl.groups? m('.hs-left-nav-module-content', { class: expanded[mdl.fullPath]?'':'hs-collapsed'}, mdl.groups.map((g:any) => entries(g, mdl, field))) : undefined
     ]);
