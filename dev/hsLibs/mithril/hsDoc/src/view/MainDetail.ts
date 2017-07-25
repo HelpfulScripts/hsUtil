@@ -112,7 +112,8 @@ function member(group:any, lib:string): Vnode {
 
 function itemDescriptor(mdl:any, sig:any):Vnode {
     try { return m('.hs-item-desc', [ 
-            flags(mdl.flags, ['export']),
+//            flags(mdl.flags, ['export']),
+            flags(mdl.flags, []),
             kindString(mdl),
             itemLongName(mdl, mdl),
             signature(sig, mdl.lib),
