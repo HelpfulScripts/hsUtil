@@ -24,7 +24,7 @@ export class HsSite extends Container {
             const lib   = node.attrs.lib || undefined;
             const field = node.attrs.field || 0;
 //console.log(`HsSite ${lib}: ${field}`);        
-            return this.layout('.hs-site', node, { rows:[TitleHeight, FILL, FooterHeight] }, [
+            return this.layout('.hs-site', { rows:[TitleHeight, FILL, FooterHeight] }, [
                 m(HeaderBar, {lib:lib}), 
                 m(MainArea, {lib:lib, field:field}),
                 m(FooterBar)
@@ -43,7 +43,7 @@ class MainArea extends Container {
         const field = node.attrs.field;
         node.attrs.lib = undefined;
         node.attrs.field = undefined;
-        return this.layout('.hs-site-main', node, { columns: [LeftNavWidth, FILL]}, [
+        return this.layout('.hs-site-main', { columns: [LeftNavWidth, FILL]}, [
             m(LeftNav, {lib:lib, field:field}), 
             m(MainDetail, {lib:lib, field:field})
         ]);

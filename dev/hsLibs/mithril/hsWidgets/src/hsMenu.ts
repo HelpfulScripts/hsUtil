@@ -61,7 +61,7 @@ export class Menu extends Container {
 
         const size = desc.size || [];
         this.menu.select(desc.selectedItem);
-        return this.layout('.hs-menu', node, { columns: size }, desc.items.map((l:string) => {
+        return this.layout('.hs-menu', { columns: size }, desc.items.map((l:string) => {
             if (!this.menu.items[l]) { this.menu.items[l] = {title: l, selected: false, select:(item:string) => {
                 this.menu.select(item); // local housekeeping: make sure the item's style shows correct selection
                 desc.select(item);      // trigger any actions form the selection
@@ -78,7 +78,7 @@ class MenuItem extends Container {
     view(node: Vnode): Vnode {
         const desc:MenuItemDesc = node.attrs.desc;
         node.attrs.desc = undefined;
-        return this.layout(`.hs-menu-item`, node, {
+        return this.layout(`.hs-menu-item`, {
                 class: desc.selected?'hs-menu-item-selected': '',
                 onclick:() => { desc.select(desc.title); }, 
             }, [m('', desc.title)]

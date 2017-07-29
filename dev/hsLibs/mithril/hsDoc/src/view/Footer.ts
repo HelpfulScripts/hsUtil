@@ -7,6 +7,6 @@ const COPYRIGHT     = "&copy; Helpful Scripts";
 
 export class FooterBar extends Container {
     view(node:Vnode):Vnode {
-        return this.layout('.hs-site-footer', node, { }, m.trust(markDown(COPYRIGHT)));
+        return this.layout('.hs-site-footer', { }, m.trust(markDown(COPYRIGHT)));
     }
 };

@@ -61,6 +61,12 @@ export abstract class Container extends Component {
     constructor() { super(); } 
 
     /**
+     * copies the node style defined by the parent to this instance's style field.
+     * @param node 
+     */
+    oninit(node:Vnode) { this.style = node.style || undefined; }
+    
+    /**
     lays out the component in `components` according to the configuration in `attrs`.
     The method returns a vnode container that has an associated `cssClass` style.
     `layout` is called during the `render` phase of the `mithril` lifecycle, 
@@ -74,13 +80,12 @@ export abstract class Container extends Component {
     </code>
      where `keyword` is the keyword with which the `Layout` was registered.
      * @param cssClass a css style designator; same as used in m(cssClass, ...) 
-     * @param node the node on which to do the layout
      * @param attrs the attribute object literal that configures the layout
      * @param components the components to layout within the container. 
      * This is either a primitive `string`, or an array of `Container`s or `string`s.
      * @return a vnode that has an associated `cssClass` style.
      */
-    public layout(cssClass:string, node: Vnode, attrs:any, components:Array<typeof Container|string>|string): Vnode {
+    public layout(cssClass:string, attrs:any, components:Array<typeof Container|string>|string): Vnode {
         function makeContent(components:Array<typeof Container|string>|string): Vnode {
             if (typeof components === 'string') { return m('',components); }
             else if (components.length>0) { // an array:
@@ -89,7 +94,7 @@ export abstract class Container extends Component {
             return m('',[]);
         }
         const _content = makeContent(components); // --> Vnode[]
-        if (node.style) { attrs.style = node.style; }
+        if (this.style) { attrs.style = this.style; }
         let css = Layout.createLayout(attrs, _content);
         return m(`${cssClass} ${css} .hs-layout`, attrs, _content);
     }

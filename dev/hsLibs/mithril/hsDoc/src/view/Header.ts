@@ -17,7 +17,7 @@ export class HeaderBar extends Container {
             select: (item:string) => m.route.set('/api/:lib/0', {lib:item})  
         };
         if (!desc.selectedItem)  { desc.selectedItem = desc.items[0]; }
-        return this.layout('.hs-site-header', node, { columns: [LeftNavWidth, FILL]}, [
+        return this.layout('.hs-site-header', { columns: [LeftNavWidth, FILL]}, [
             m(SiteTitle),
             m(Menu, {desc: desc})           
         ]);
@@ -26,7 +26,7 @@ export class HeaderBar extends Container {
 
 class SiteTitle extends Container {
     view(node:Vnode):Vnode {
-        return this.layout('.hs-site-title', node, { href:`/api/`, oncreate: m.route.link, onupdate: m.route.link }, SiteName);
+        return this.layout('.hs-site-title', { href:`/api/`, oncreate: m.route.link, onupdate: m.route.link }, SiteName);
     }
 };
 
