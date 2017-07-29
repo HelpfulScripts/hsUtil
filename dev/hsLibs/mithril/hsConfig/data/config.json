@@ -1,0 +1,22 @@
+{
+    "HsContainer": {
+        "rows":  ["30px", "fill", "10px"],
+        "content": [
+            {"HsContainer":{
+                "columns": ["200px", "fill"],
+                "content": [
+                    {"LeftHead":    {"lib":"route.lib", "field":"route.field"}},
+                    {"MainHead":    {"lib":"route.lib", "field":"route.field"}}
+                ]
+            }},
+            {"HsContainer":{
+                "columns": ["200px", "fill"],
+                "content": [
+                    {"LeftNav":     {"lib":"route.lib", "field":"route.field"}},
+                    {"MainDetail":  {"lib":"route.lib", "field":"route.field"}}
+                ]
+            }},
+            "&copy; Helpful Scripts"
+        ]
+    }
+}

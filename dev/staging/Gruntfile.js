@@ -4,7 +4,8 @@ const basePath = '../hsLibs/mithril/';
 const paths = [
     'hsDoc/',
     'hsLayout/',
-    'hsWidgets/'
+    'hsWidgets/',
+    'hsConfig/'
 ];
 
 /*global module:false*/
@@ -20,21 +21,28 @@ module.exports = function(grunt) {
                     expand: true, 
                     cwd: basePath+p+'dist/', 
                     src: ['*.js', '*.css', '*.css.map', 'index.html', '!mithril.js'], 
-                    dest: staging 
+                    dest: staging+p
                 }})
                 // doc files
                 .concat(paths.map(p => { return {
                     expand: true, 
                     cwd: basePath+p+'docs/', 
                     src: ['*.json'], 
-                    dest: staging+'data/' 
+                    dest: staging+p+'data/' 
                 }}))
                 // example files
                 .concat(paths.map(p => { return {
                     expand: true, 
                     cwd: basePath+p+'dist/example/', 
                     src: ['*.*'], 
-                    dest: staging+'example/' 
+                    dest: staging+p+'example/' 
+                }}))
+                // data files
+                .concat(paths.map(p => { return {
+                    expand: true, 
+                    cwd: basePath+p+'dist/data/', 
+                    src: ['*.*'], 
+                    dest: staging+p+'data/' 
                 }}))
             }
         },
@@ -45,7 +53,7 @@ module.exports = function(grunt) {
                     expand: true, 
                     cwd: basePath+p+'src/', 
                     src: ['**/*.ts'], 
-                    dest: staging+'src/'+p +'src/' 
+                    dest: staging+p+'src/'+p +'src/' 
                 }})
             }
         },

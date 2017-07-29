@@ -25,8 +25,10 @@ module.exports = function(grunt) {
                 { cwd:'src/', expand:true, src:['*.html'], dest:'dist/' }
             ]},
 		    test: { files: [
-                { cwd:'dist/test/', expand:true, src:['*.js', '*.css', '*.html'], dest:'test/'},
-                { cwd:'example/',   expand:true, src:['*.json'], dest:'test/'}
+                { cwd:'dist/test/', expand:true, src:['*.js', '*.css', '*.html'], dest:'test/'}
+            ]},
+		    example: { files: [
+                { cwd:'example/',   expand:true, src:['*.json'], dest:'dist/data/'}
             ]}
 		},
 		
@@ -192,7 +194,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-webpack');
 
     grunt.registerTask('doc', ['clean:docs', 'typedoc']);
-    grunt.registerTask('stage', ['webpack:develop']);
+    grunt.registerTask('stage', ['copy:example', 'webpack:develop']);
     grunt.registerTask('build-html', ['copy:build']);
     grunt.registerTask('build-css', ['less']);
     grunt.registerTask('build-js', ['tslint:src', 'ts:src']);

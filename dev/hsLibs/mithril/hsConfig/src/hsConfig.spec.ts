@@ -1,15 +1,15 @@
-declare const global: any;
-global.window = require("mithril/test-utils/browserMock.js")();
-global.document = window.document;
+//declare const global: any;
+//global.window = require("mithril/test-utils/browserMock.js")();
+//global.document = window.document;
 
+import { m, Vnode } from '../../mithril'; 
 import { HsConfig } from "./"; 
 
 describe('hsConfig', () => { 
-    let vnode: any;
+    let vnode: Vnode;
  
     beforeEach(() => {
-        const cfg = new HsConfig('testCfg.json');
-        vnode = cfg.view();
+        vnode = m(HsConfig, { file: 'testCfg.json'});
     });
 
     it('should have a class .hs-config', () => {

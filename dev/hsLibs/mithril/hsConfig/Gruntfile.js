@@ -1,3 +1,4 @@
+const path = require('path');
 
 /*global module:false*/
 module.exports = function(grunt) {
@@ -13,18 +14,37 @@ module.exports = function(grunt) {
 				' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
 
 		clean: {
-			src:   ['dist/src'],
+			src:   ['dist/src'], 
 			spec:  ['dist/spec'],
+            data:  ['dist/data'],
             docs:  ['docs'],
-            test:  ['docs/tests']
+            test:  ['docs/tests'],
 		},
 		
 		// Task configuration.
 		copy: {
-		    pre: {}, 
-			post: {}
+            build: { files: [
+                { cwd:'src/', expand:true, src:['*.html'], dest:'dist/' }
+            ]},
+		    test: { files: [
+                { cwd:'dist/test/', expand:true, src:['*.js', '*.css', '*.html'], dest:'dist/test/'},
+                { cwd:'example/',   expand:true, src:['*.css', '*.html'], dest:'dist/'},
+                { cwd:'example/',   expand:true, src:['*.json'], dest:'dist/data/'},
+                { cwd:'data/',   expand:true, src:['*.json'], dest:'dist/data/'}
+            ]}
 		},
-		
+
+        less: {
+            options: {
+                sourceMap: true
+            },
+            css: {
+                files: {
+                    'dist/hsDocs.css': 'src/css/styles.less'
+                }
+            }
+        }, 
+        
         tslint: {
             options: {
                 configuration: 'tslint.json',
@@ -32,27 +52,18 @@ module.exports = function(grunt) {
                 fix:    false
             },
             src: {
-                src: ["src/**/*.ts", "!src/**/*.spec.ts"]
-            },
-            spec: {
-                src: ["src/**/*.spec.ts"]
+                src: ["src/**/*.ts"]
             }
         },
 
         ts: {
             options: {
-                module:             "commonjs",
                 moduleResolution:   "node",
                 allowJs:            true
            },
             src : {
-                outDir:     "dist",
-                src: ["src/**/*.ts", "!src/**/*.spec.ts"],
-                tsconfig:   true,
-            },
-            spec : {
-                outDir:     "dist/spec",
-                src: ["src/**/*.spec.ts"],
+                outDir:     "dist/",
+                src: ["src/**/*.ts"],
                 tsconfig:   true,
             }
         },
@@ -75,35 +86,71 @@ module.exports = function(grunt) {
             }
         },
 
-		jasmine_node: {
-			options: { forceExit: true },
-			all: {
-				options: {
-                    projectRoot: 'dist',
-					coverage: {
-						reportDir: 'docs/tests',
-                        relativize: true,
-						includeAllSources: true,
-						report: ['html']
-					},
-					jasmine: {
-						spec_dir: '',
-						spec_files: [
-						    'dist/spec/**/*.spec.js'
-						]
-					}
+        karma: {
+			options: {
+			    basePath: './',
+				frameworks: ['jasmine'],
+				exclude: [ ], 
+				coverageReporter: { 
+				   type : 'html',
+				   dir : 'dist/test/',
+				   subdir: '', 
+				   includeAllSources: true
 				},
-				src: ['dist/spec/**/*.js'] 
-			}
+				reporters: ['progress', 'coverage'],
+				port: 9876,
+				logLevel: 'WARN',  // OFF, ERROR, WARN, INFO, DEBUG
+				autoWatch: false,
+				singleRun: true,
+                webpack: {
+                    module: {
+                        loaders: [
+                            { test: /\.js/, exclude: /node_modules/ }
+                        ]
+                    },
+                    watch: true
+                },
+                webpackServer: {
+                    noInfo: true
+                },
+			},
+		    Safari: { 
+				browsers: ['Safari'],
+				coverageReporter: { subdir: './Safari' },
+			    preprocessors: {
+			    	'dist/test/**/*.js': 		['webpack', 'coverage'],
+			    },
+				files: [
+				    {hs:['dist/test/**/*.spec.js']}
+				]
+			},
+		    Firefox: {
+				browsers: ['Firefox'],
+				coverageReporter: { subdir: './Firefox' },
+			    preprocessors: {
+			    	'dist/test/**/*.js': 		['webpack', 'coverage'],
+			    },
+				files: [
+				    {hs:['dist/test/**/*.spec.js']}
+				]
+			}, 
 		},
 
         webpack: {
-            example: { // webpack options 
-                entry: './dist/index.js',
+            prod: { // webpack options 
+                entry: './dist/hsDoc/src/index.js',
                 output: {
-                    filename: 'index.js',
-                    path: require('path').resolve(__dirname, 'example')
-                },
+                    filename: 'hsConfig.js',
+                    path: path.resolve(__dirname, './dist')
+                }
+            },
+            develop: { // webpack options 
+                entry: './dist/hsConfig/src/index.js',
+                devtool: "inline-source-map",
+                output: {
+                    filename: 'hsConfig.js',
+                    path: path.resolve(__dirname, './dist')
+                }
             }
 		},
 
@@ -114,7 +161,7 @@ module.exports = function(grunt) {
 			},
 			js: {
 				files: ['src/**/*.ts', '!src/**/*.spec.ts'],
-				tasks: ['build']
+				tasks: ['make']
 			},
 			specs: {
 				files: ['src/**/*.spec.ts'],
@@ -127,16 +174,22 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-jasmine-node-coverage');
+    grunt.loadNpmTasks('grunt-contrib-less');
+    grunt.loadNpmTasks('grunt-karma');
+//    grunt.loadNpmTasks('grunt-jasmine-node-coverage');
     grunt.loadNpmTasks('grunt-typedoc');
     grunt.loadNpmTasks('grunt-tslint');
     grunt.loadNpmTasks('grunt-ts');
     grunt.loadNpmTasks('grunt-webpack');
 
     grunt.registerTask('doc', ['clean:docs', 'typedoc']);
-    grunt.registerTask('test', ['clean:spec', 'tslint:spec', 'ts:spec', 'jasmine_node']);
-    grunt.registerTask('build', ['clean:src', 'tslint:src', 'ts:src', 'webpack']);
-    grunt.registerTask('deploy', ['copy:post']);
-	grunt.registerTask('make', ['build', 'test', 'doc']);
-    grunt.registerTask('default', ['build', 'test', 'watch']);	
+    grunt.registerTask('stage', ['webpack:develop']);
+    grunt.registerTask('build-html', ['copy:build']);
+    grunt.registerTask('build-css', ['less']);
+    grunt.registerTask('build-js', ['tslint:src', 'ts:src']);
+    grunt.registerTask('build-spec', ['tslint:spec', 'ts:test']);
+    grunt.registerTask('test', ['clean:test', 'copy:test'/*, 'build-spec', 'karma'*/]);
+    grunt.registerTask('build', ['clean:src', 'build-html', 'build-css', 'build-js']);
+	grunt.registerTask('make', ['build', 'test', 'doc', 'stage']);
+    grunt.registerTask('default', ['make', 'watch']);	
 };
