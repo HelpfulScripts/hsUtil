@@ -28,7 +28,7 @@ module.exports = function(grunt) {
             ]},
 		    test: { files: [
                 { cwd:'dist/test/', expand:true, src:['*.js', '*.css', '*.html'], dest:'dist/test/'},
-                { cwd:'example/',   expand:true, src:['*.css', '*.html'], dest:'dist/'},
+                { cwd:'example/',   expand:true, src:['*.html'], dest:'dist/'},
                 { cwd:'example/',   expand:true, src:['*.json'], dest:'dist/data/'},
                 { cwd:'data/',   expand:true, src:['*.json'], dest:'dist/data/'}
             ]}
@@ -40,7 +40,7 @@ module.exports = function(grunt) {
             },
             css: {
                 files: {
-                    'dist/hsDocs.css': 'src/css/styles.less'
+                    'dist/hsConfig.css': 'example/hsConfig.less'
                 }
             }
         }, 
