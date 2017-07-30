@@ -64,7 +64,7 @@ export abstract class Layout {
      * @return returns the css class that the `getStyles` function returns.
      */
     public static createLayout(attrs:any, components:Array<Vnode>):string {
-        let css = '';
+        let css;
         Object.keys(Layout.layoutStyles).some(key => { // executes the first match key in attrs.
             if (attrs[key]) { 
                 css = new Layout.layoutStyles[key](attrs[key]).getStyles(components); 
@@ -73,6 +73,11 @@ export abstract class Layout {
             }
             return false;
         });
+        if (css === undefined) {
+            console.log(`Layout not found`);
+            console.log(attrs);
+            console.log(Layout.layoutStyles);
+        }
         return css;
     }
 
