@@ -18,7 +18,7 @@ to be layed out in a `Container`.
 <code>
 class Columns extends Container {   
     view(node) {
-        return this.layout('.hs-site-main', node, { columns: [px(200), FILL]}, [
+        return this.layout('.hs-site-main', { columns: [px(200), FILL]}, [
             m('.my-left', 'Left Column'), 
             m('.my-right', 'Right Column')
         ]);

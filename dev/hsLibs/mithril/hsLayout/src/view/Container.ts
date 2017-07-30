@@ -34,7 +34,7 @@ const TitleHeight   = px(30);
 const FooterHeight  = px(10); 
 class MyLayout extends Container {
     view(node:Vnode):Vnode {
-        return this.layout('.my-layout', node, { rows:[TitleHeight, FILL, FooterHeight] }, [
+        return this.layout('.my-layout', { rows:[TitleHeight, FILL, FooterHeight] }, [
             m(), 
             m(),
             m()
@@ -60,12 +60,36 @@ export abstract class Container extends Component {
      */
     constructor() { super(); } 
 
-    /**
-     * copies the node style defined by the parent to this instance's style field.
-     * @param node 
-     */
-    oninit(node:Vnode) { this.style = node.style || undefined; }
-    
+    oninit(node:Vnode) { 
+        this.style = node.style || undefined; 
+    }
+/*
+
+    oncreate(node:Vnode) {
+        node.instance.children.map((c:any) => {
+//            if (c.style) { c.attrs.style = c.style; }
+        });
+//        if (node.children.length>0) {
+            console.log('oncreate');
+            console.log(node);
+//        }
+    }
+    onupdate(node:Vnode) {
+//        if (node.children.length>0) {
+            console.log('onupdate');
+            console.log(node);
+//        }
+    }
+    onbeforeremove(node:Vnode) {}
+    onremove(node:Vnode) {}
+    onbeforeupdate(node:Vnode) {
+//        if (node.children.length>0) {
+            console.log('onbeforeupdate');
+            console.log(node);
+//        }
+    }
+*/
+
     /**
     lays out the component in `components` according to the configuration in `attrs`.
     The method returns a vnode container that has an associated `cssClass` style.
@@ -80,22 +104,37 @@ export abstract class Container extends Component {
     </code>
      where `keyword` is the keyword with which the `Layout` was registered.
      * @param cssClass a css style designator; same as used in m(cssClass, ...) 
-     * @param attrs the attribute object literal that configures the layout
+     * @param layout the attribute object literal that configures the layout
      * @param components the components to layout within the container. 
      * This is either a primitive `string`, or an array of `Container`s or `string`s.
      * @return a vnode that has an associated `cssClass` style.
      */
-    public layout(cssClass:string, attrs:any, components:Array<typeof Container|string>|string): Vnode {
+    protected layout(cssClass:string, layout:any, components:Array<typeof Container|string>|string): Vnode {
         function makeContent(components:Array<typeof Container|string>|string): Vnode {
-            if (typeof components === 'string') { return m('',components); }
-            else if (components.length>0) { // an array:
+            if (typeof components === 'string') { 
+                return m('.hs-layout', components); 
+            }
+            if (components.length>0) { // an array:
                 return components.map((comp:string|typeof Container) => (typeof comp === 'string')? m('.hs-layout', comp) : comp);
             }
             return components;
         }
         const _content = makeContent(components); // --> Vnode[]
-        if (this.style) { attrs.style = this.style; }
-        let css = Layout.createLayout(attrs, _content);
-        return m(`${cssClass} ${css} .hs-layout`, attrs, _content);
+        let css = Layout.createLayout(layout, _content);
+        return m(`${cssClass} ${css} .hs-layout`, {style: this.style}, components);
+    }
+
+    protected leaf(components:Array<typeof Container|string>|string): Vnode {
+        return m(`.hs-layout .hs-leaf`, {style: this.style}, components);
+    }
+}
+
+/**
+ * Leaf implements a terminal Container, i.e. one that doesn't have any children.
+ * We need to use a Leaf rather than a simple m() terminal since styles need to be applied from the parent.
+ */
+export class Leaf extends Container {
+    view(node:Vnode) { 
+        return m(`.hs-layout`, {style: node.style}, node.attrs.content);
     }
 }

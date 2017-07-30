@@ -17,7 +17,7 @@ export class MainDetail extends Container {
         node.attrs.field = undefined;
 
         let result = getOverview(lib, mdl) || itemDoc(DocSets.get(lib, mdl) || ''); 
-        return this.layout('.hs-main-detail', {}, [result]); 
+        return this.leaf(m('.hs-main-detail', [result])); 
     }
 }
 

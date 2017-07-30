@@ -19,11 +19,7 @@ export class LeftNav extends Container {
         node.attrs.lib = undefined;
         node.attrs.field = undefined;
         const mdl = DocSets.get(lib, 0) || {name:'unknown', id:0};
-//        const selected = (field==='0' || field===lib)? '.hs-left-nav-selected' : '';
-        return this.layout('.hs-left', {}, [
-//            libLongLink(`a.hs-library-name ${selected}`, mdl.lib, mdl.fullPath, mdl.name),
-            m('.hs-left-nav', navList(mdl, field))
-        ]);
+        return this.leaf(m('.hs-left', [m('.hs-left-nav', navList(mdl, field))]));
     } 
 }
 

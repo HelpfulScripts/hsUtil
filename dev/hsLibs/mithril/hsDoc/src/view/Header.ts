@@ -26,7 +26,7 @@ export class HeaderBar extends Container {
 
 class SiteTitle extends Container {
     view(node:Vnode):Vnode {
-        return this.layout('.hs-site-title', { href:`/api/`, oncreate: m.route.link, onupdate: m.route.link }, SiteName);
+        return this.leaf(m('.hs-site-title', { href:`/api/`, oncreate: m.route.link, onupdate: m.route.link }, SiteName));
     }
 };
 

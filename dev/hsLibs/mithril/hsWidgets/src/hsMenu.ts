@@ -78,11 +78,11 @@ class MenuItem extends Container {
     view(node: Vnode): Vnode {
         const desc:MenuItemDesc = node.attrs.desc;
         node.attrs.desc = undefined;
-        return this.layout(`.hs-menu-item`, {
+        return this.leaf(m(`.hs-menu-item`, {
                 class: desc.selected?'hs-menu-item-selected': '',
                 onclick:() => { desc.select(desc.title); }, 
             }, [m('', desc.title)]
-        );
+        ));
     }
 };
 
