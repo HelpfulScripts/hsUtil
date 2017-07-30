@@ -91,7 +91,7 @@ export abstract class Container extends Component {
             else if (components.length>0) { // an array:
                 return components.map((comp:string|typeof Container) => (typeof comp === 'string')? m('.hs-layout', comp) : comp);
             }
-            return m('',[]);
+            return components;
         }
         const _content = makeContent(components); // --> Vnode[]
         if (this.style) { attrs.style = this.style; }
