@@ -1,4 +1,7 @@
-
+/**
+ * ## Layout Tokens
+ * Used to specify layout sizes
+ */
 
 /**
  * Abstract token for a layout area. It is defined by a single number available via the constructor. 
@@ -44,7 +47,7 @@ export function px(px:number)   { return new PixelToken(px); }
 
 /**
  * A convenience function that returns a defined percent-sized token
- * @param px the percentage in the token
+ * @param pc the percentage in the token
  */
 export function pc(pc:number)   { return new PercentToken(pc); }
 
