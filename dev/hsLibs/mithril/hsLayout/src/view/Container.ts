@@ -135,6 +135,6 @@ export abstract class Container extends Component {
  */
 export class Leaf extends Container {
     view(node:Vnode) { 
-        return m(`.hs-layout`, {style: node.style}, node.attrs.content);
+        return m(`.hs-layout .hs-leaf`, {style: node.style}, node.attrs.content);
     }
 }
