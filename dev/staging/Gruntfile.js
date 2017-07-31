@@ -28,7 +28,7 @@ module.exports = function(grunt) {
                     expand: true, 
                     cwd: basePath+p+'docs/', 
                     src: ['*.json'], 
-                    dest: staging+p+'data/' 
+                    dest: staging+'hsDoc/data/' 
                 }}))
                 // example files
                 .concat(paths.map(p => { return {
@@ -53,7 +53,7 @@ module.exports = function(grunt) {
                     expand: true, 
                     cwd: basePath+p+'src/', 
                     src: ['**/*.ts'], 
-                    dest: staging+p+'src/'+p +'src/' 
+                    dest: staging+'hsDoc/src/'+p +'src/' 
                 }})
             }
         },
