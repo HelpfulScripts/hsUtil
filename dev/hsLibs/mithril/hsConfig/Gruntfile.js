@@ -138,14 +138,14 @@ module.exports = function(grunt) {
 
         webpack: {
             prod: { // webpack options 
-                entry: './dist/hsDoc/src/index.js',
+                entry: './dist/hsDoc/src/example.js',
                 output: {
                     filename: 'hsConfig.js',
                     path: path.resolve(__dirname, './dist')
                 }
             },
             develop: { // webpack options 
-                entry: './dist/hsConfig/src/index.js',
+                entry: './dist/hsConfig/src/example.js',
                 devtool: "inline-source-map",
                 output: {
                     filename: 'hsConfig.js',
