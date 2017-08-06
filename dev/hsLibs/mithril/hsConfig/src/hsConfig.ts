@@ -4,67 +4,62 @@
 
 /** */
 import { m, Vnode } from '../../mithril'; 
-import { ConfigContainer as cfg } from '../../hsLayout/src/';
 
-const ConfigContainer = cfg;
-if (ConfigContainer) {}
-
-
-function recurse(config:any) {
-    if (typeof config === 'string') { return m('.h8', config); }
+/**
+ * recurses a configuration, trying to instantiate each element (key) in `config`. 
+ * If successful, it calls the instance's `config` method with the result of 
+ * recursing on the element's value.
+ * If unsuccessful, the element's value is returned unaltered so that it can be consumed 
+ * by an instance further up in the recursion tree.
+ * Hence, instantiable objects used in a config tree must implement a static method
+ * with the signature `public static config(params:any):Vnode`
+ * @param config an object literal containing a configuration subtree
+ * @param context an array of objects against which to instantiate elements of `config`.
+ */
+function recurse(config:any, context:any[]) {
+    if (typeof config === 'string') { return config; }
     const keys = Object.keys(config);
-    const nodes =  keys.map((k:string) => {
-        let cl;
-        try { cl = eval(k); }
-        catch(e) {}
-        if (cl) {
-            const content = config[k].content.map((e:any) => recurse(e));
-            const params = cl.configFilter(config[k]);
-            return m(cl, {layout: params, content: content}); 
-        } else { 
-            return m('.h7', k); 
-        }
-    });
-    return nodes.length===1? nodes[0] : nodes;
+    keys.map((k:string):Vnode => {
+        let cl:any;
+        context.some((c:any) => {
+            try { cl = eval('c.'+k);  return cl; }
+            catch(e) { return false; }
+        });
+        const content = recurse(config[k], context); 
+        if (cl) { config = m(cl, content); }
+        else { config[k] = content; }
+    }); 
+    return config; 
 }
 
 
 export class HsConfig {
-    content: any = [];
+    content: Vnode[] = []; 
+    file:string;
+    context:any[];
+    mountPoint:any;
 
-    constructor(config:any, mountPoint=document.body) {
-        const file = (typeof config === 'string')? config : undefined;
-        m.mount(mountPoint, {view: () => m(HsConfigLoader, { file:file, config:config })});
+    constructor(context:any[], mountPoint=document.body) {
+        this.context = context;
+        this.mountPoint = mountPoint;
     }
-}
 
-class HsConfigLoader {
-    content: any = [];
-
-    view(node:Vnode) { 
+    run(config:any) {
         if (this.content.length ===0)  { 
-            const file = node.attrs.file;
-            const config = node.attrs.config;
-            if (file) { this.load(file); }
-            else { this.content.push(recurse(config)); }
+            if (typeof config === 'string') { this.load(config)           
+                .then((r:any) => this.content.push(recurse(r, this.context)));
+            }
+            else { this.content.push(recurse(config, this.context)); }
         }
-        return m('.hs-config', this.content.map((x:any) => x)); 
-    } 
+        m.mount(this.mountPoint, {view: () => m('.hs-config', this.content.map((x:Vnode) => x))});
+    }
 
     load(file:string) {
         console.log('requesting ' + file);
         return m.request({ method: "GET", url: file })
-            .then((r:any) => {
-                console.log('received ' + file);
-                this.content.push(recurse(r));
-            })
             .catch((e:any) => {
                 console.log('error:');
                 console.log(e);
             });
     }
-}
-
-
-export function runConfig(config:any) {
 }

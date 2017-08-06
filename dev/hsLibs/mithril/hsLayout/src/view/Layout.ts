@@ -14,6 +14,7 @@ import { Vnode} from '../../../mithril';
 
 import { LayoutToken } from './Tokens';
 import { Container }   from './Container';
+import { px, pc, FILL } from './Tokens';
 
 /**
 Abstract base class for creating layout style implementations.
@@ -45,6 +46,27 @@ export abstract class Layout {
      */
     static layoutStyles:{string?: Layout} = {};
 
+        /**
+     * Translates `string` params to {@link hsLayout:Tokens.LayoutToken LayoutTokens}.
+     * The `params` are expected to either
+     * - end in 'px'
+     * - end in '%'
+     * - be equal to 'fill' (case insensitive)
+     * @param params an Array of strings that will be converted to an array of LayourTokens.
+     * 
+     */
+    private static translate(params:Array<string|any>):Array<LayoutToken> {
+        return params.map((param:string|any) => {
+            if (typeof param === 'string') {
+                if (param.endsWith('px')) { return px(parseInt(param)); }
+                if (param.endsWith('%')) { return pc(parseInt(param)); }
+                if (param.toLowerCase()==='fill') { return FILL;}
+            } else {
+                return param;
+            }
+        });
+    }
+
     /**
      * 
      * @param keyword the keyword used in the attributes to `this.layout`
@@ -67,7 +89,8 @@ export abstract class Layout {
         let css = '';
         Object.keys(Layout.layoutStyles).some(key => { // executes the first match key in attrs.
             if (attrs[key]) { 
-                css = new Layout.layoutStyles[key](attrs[key]).getStyles(components); 
+
+                css = new Layout.layoutStyles[key](Layout.translate(attrs[key])).getStyles(components); 
                 attrs[key] = undefined;
                 return true;
             }

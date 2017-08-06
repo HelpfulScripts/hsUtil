@@ -3,7 +3,7 @@
  */
 
 /** */
-export { Container, Leaf }              from './view/Container'; 
-export { ConfigContainer }              from './ConfigContainer'; 
+export { Container, Leaf, Component }   from './view/Container'; 
 export { FILL, px, pc, LayoutToken }    from './view/Tokens'; 
 export { PillarLayouts }                from './view/PillaredLayout';
+export { Layout }                       from './view/Layout';

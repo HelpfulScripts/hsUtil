@@ -3,9 +3,9 @@
  */
 
 /** */
-import { m, Vnode} from '../../../mithril';
+import { m, Vnode}      from '../../../mithril';
 
-import { Layout } from './Layout'; 
+import { Layout }       from './Layout'; 
 
 /**
  * abstract base class of a viewable component. Subclasses can be passed into `mithril` 
@@ -13,7 +13,7 @@ import { Layout } from './Layout';
  * ### Example
  * `m('', [m(Component, {parameters})])`
  */
-abstract class Component {
+export abstract class Component {
 //    id:number;
     constructor() { /*this.id = id++;*/ }
 
@@ -63,32 +63,6 @@ export abstract class Container extends Component {
     oninit(node:Vnode) { 
         this.style = node.style || undefined; 
     }
-/*
-
-    oncreate(node:Vnode) {
-        node.instance.children.map((c:any) => {
-//            if (c.style) { c.attrs.style = c.style; }
-        });
-//        if (node.children.length>0) {
-            console.log('oncreate');
-            console.log(node);
-//        }
-    }
-    onupdate(node:Vnode) {
-//        if (node.children.length>0) {
-            console.log('onupdate');
-            console.log(node);
-//        }
-    }
-    onbeforeremove(node:Vnode) {}
-    onremove(node:Vnode) {}
-    onbeforeupdate(node:Vnode) {
-//        if (node.children.length>0) {
-            console.log('onbeforeupdate');
-            console.log(node);
-//        }
-    }
-*/
 
     /**
     lays out the component in `components` according to the configuration in `attrs`.
@@ -112,21 +86,29 @@ export abstract class Container extends Component {
     protected layout(cssClass:string, layout:any, components:Array<typeof Container|string>|string): Vnode {
         function makeContent(components:Array<typeof Container|string>|string): Vnode {
             if (typeof components === 'string') { 
-                return m('.hs-layout', components); 
+                return m(Leaf, {content: components}); 
             }
             if (components.length>0) { // an array:
-                return components.map((comp:string|typeof Container) => (typeof comp === 'string')? m('.hs-layout', comp) : comp);
+                return components.map((comp:string|typeof Container) => 
+                    (typeof comp === 'string')? m(Leaf, {content:comp}) : comp);
             }
             return components;
         }
-        const _content = makeContent(components); // --> Vnode[]
-        let css = Layout.createLayout(layout, _content);
-        return m(`${cssClass} ${css} .hs-layout`, {style: this.style}, components);
+        const content = makeContent(components); // --> Vnode[]
+        let css = Layout.createLayout(layout, content);
+        return m(`${cssClass||''} ${css} .hs-layout`, {style: this.style}, content);
     }
 
     protected leaf(components:Array<typeof Container|string>|string): Vnode {
         return m(`.hs-layout .hs-leaf`, {style: this.style}, components);
     }
+
+    /** default implementation of standard Mithril view method. */
+    view(node:Vnode) {
+        const cssStyle = node.attrs.css || '.hs';
+        const content  = node.attrs.content; 
+        return this.layout(cssStyle, node.attrs, content);
+    } 
 }
 
 /**

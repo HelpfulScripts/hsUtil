@@ -125,16 +125,8 @@ class Pillars extends Layout{
             if (i > num-1-last)  { size = desc[len - (num-i)].getSize(); t = 'end'; }       // end sequence
             else if (i < first)  { size = desc[i].getSize(); t = 'start'; }                 // start sequence
             else if (len>0 && len===first){ size = desc[len-1].getSize(); t = 'start'; }    // all items 
-if (desc.length === 1) {  
-console.log(`${i} of ${num}: size=${size}, t=${t}`);      
-}
             return {size:size, code:t, fields:{}};
         } 
-if (desc.length === 1) {        
-console.log('---------');
-console.log(desc);
-console.log(`first=${first}, last=${last}`);
-}
         return [...Array(num).keys()].map(getSize);
     }
 

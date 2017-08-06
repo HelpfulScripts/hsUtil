@@ -1,2 +1,2 @@
-export { HsConfig } from './hsConfig';
+export { HsConfig }         from './hsConfig';
 
