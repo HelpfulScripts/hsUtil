@@ -12,7 +12,7 @@ import { m } from '../../mithril';
 /**
  * the directory to look for .json files, relative to the web page.
  */
-const DIR:string = './data/';
+const FILE:string = './data/index.json';
 
 
 
@@ -39,9 +39,10 @@ export class DocSets {
      * @param dir the optional directory to read from. If unspecified, 
      * read from the directory specified by `DIR`.
      */
-    public static loadList(dir?:string):Promise<void> {
-        dir = dir || DIR;   
-        return DocSets.loadIndexSet(DIR, 'index.json'); 
+    public static loadList(file?:string):Promise<void> {
+        file = file || FILE;   
+        console.log('requesting docSet ' + file);
+        return DocSets.loadIndexSet(file); 
     }
 
     public static get(lib?:string, id:number|string=0) { 
@@ -49,26 +50,27 @@ export class DocSets {
             if (DocSets.gList.index[lib]) { 
                 return DocSets.gList.index[lib][id+'']; 
             } else {
-                console.log(`list ${lib} not loaded yet ${id}`);
+//                console.log(`list ${lib} not loaded yet ${id}`);
                 return DocSets.gList.set; 
             }
         } else {
-//            console.log('redirected to /');
             return DocSets.gList.set; 
         }
     }
 
     /**
-     * Loads ìndex.json` from the directory specified in `dir`.
+     * Loads `index.json` from the directory specified in `dir`.
      * Each entry in the index is interpreted as a docset and loaded.
      * @param dir the directory to read from
      * @param file the index file to read
      */
-    private static loadIndexSet(dir:string, file:string):Promise<void> { 
-        return m.request({ method: "GET", url: dir+file })
+    private static loadIndexSet(file:string):Promise<void> { 
+        return m.request({ method: "GET", url: file })
             .then((result:any) =>  {
                 console.log('received index');
                 DocSets.gTitle = result.title;
+                let i = file.lastIndexOf('/');
+                const dir = file.substring(0,i+1);
                 return Promise.all(result.docs.map((f:string) => loadDocSet(dir, f)));            
             })
             .catch(console.log);

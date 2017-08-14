@@ -55,19 +55,21 @@ export class Menu extends Container {
             });
         }
     };
-    view(node: Vnode): Vnode {
+    getComponents(node: Vnode): Vnode {
         const desc:MenuDesc = node.attrs.desc;
         node.attrs.desc = undefined;
 
-        const size = desc.size || [];
+//        const size = desc.size || [];
         this.menu.select(desc.selectedItem);
-        return this.layout('.hs-menu', { columns: size }, desc.items.map((l:string) => {
+        node.attrs.columns = [];
+        node.attrs.css = '.hs-menu';
+        return desc.items.map((l:string) => {
             if (!this.menu.items[l]) { this.menu.items[l] = {title: l, selected: false, select:(item:string) => {
                 this.menu.select(item); // local housekeeping: make sure the item's style shows correct selection
                 desc.select(item);      // trigger any actions form the selection
             }}; }
             return m(MenuItem, { desc:this.menu.items[l] });
-        }));
+        });
     }
 };
 
@@ -75,14 +77,12 @@ export class Menu extends Container {
  * Creates a menu item as part of the menu, as configured by the desc:MenuItemDesc object passed as a parameter.
  */
 class MenuItem extends Container {
-    view(node: Vnode): Vnode {
+    getComponents(node: Vnode): Vnode {
         const desc:MenuItemDesc = node.attrs.desc;
         node.attrs.desc = undefined;
-        return this.leaf(m(`.hs-menu-item`, {
-                class: desc.selected?'hs-menu-item-selected': '',
-                onclick:() => { desc.select(desc.title); }, 
-            }, [m('', desc.title)]
-        ));
+        node.attrs.css = `.hs-menu-item ${desc.selected?'hs-menu-item-selected': ''}`;
+        node.attrs.onclick = () => { desc.select(desc.title); };
+        return desc.title;
     }
 };
 

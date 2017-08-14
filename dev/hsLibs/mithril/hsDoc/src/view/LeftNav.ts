@@ -12,14 +12,16 @@ import { libLongLink } from './Parts';
 /**
  * Constructs the left-hand navigation pane
  */
-export class LeftNav extends Container { 
-    view(node: Vnode): Vnode {
-        const lib = node.attrs.lib;
-        const field = node.attrs.field;
-        node.attrs.lib = undefined;
-        node.attrs.field = undefined;
+export class LeftNav extends Container {
+    getComponents(node: Vnode): Vnode {
+        let lib:string;
+        let field:string;
+        if (node.attrs && node.attrs.route) {
+            lib = node.attrs.route.lib;
+            field = node.attrs.route.field;
+        }
         const mdl = DocSets.get(lib, 0) || {name:'unknown', id:0};
-        return this.leaf(m('.hs-left', [m('.hs-left-nav', navList(mdl, field))]));
+        return m('.hs-left', [m('.hs-left-nav', navList(mdl, field))]);
     } 
 }
 
@@ -28,11 +30,9 @@ function navList(mdl:any, field:string):Vnode[] {
     if (mdl.kind === 0) { // External DocSets
         const modules = mdl.children? mdl.children.map((c:any) => externalModule(c, field)) : ['no children'];
         modules.unshift(m('.hs-left-nav-header', 'Modules'));
-        return [
-            m('.hs-left-nav-content', modules)
-        ];
-    } else {
-        console.log('error: not a head node');
+        return [m('.hs-left-nav-content', modules)];
+//    } else {
+//        console.log('error: not a head node');
     }
 }
 

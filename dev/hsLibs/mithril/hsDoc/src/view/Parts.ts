@@ -57,7 +57,7 @@ export function extensionOf(mdl:any) {
 
 export function sourceLink(mdl:any) {
     const source = mdl.sources? mdl.sources[0] : undefined;
-    const file = source.fileName.replace('.ts', '.html');
+    const file = source.fileName? source.fileName.replace('.ts', '.html') : '';
     return m('span.hs-item-member-source', !source? '' : 
         m('a', { href:`${SourceBase}${file}#${Math.max(0,source.line-5)}`, target:"_blank"}, '[source]')
     );

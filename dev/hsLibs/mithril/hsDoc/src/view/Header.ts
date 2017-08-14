@@ -1,32 +1,31 @@
-import { m, Vnode}              from '../../../mithril';
-import { Container, px, FILL }  from '../../../hsLayout/src/';
-import { DocSets }              from '../DocSets'; 
-import { Menu, MenuDesc }       from '../../../hsWidgets/src/';
+import { m, Vnode}    from '../../../mithril';
+import { Container }  from '../../../hsLayout/src/';
+import { DocSets }    from '../DocSets'; 
+import { Menu }       from '../../../hsWidgets/src/';
 
-export const LeftNavWidth  = px(200);
-let SiteName      = 'HSDocs';
+export class MenuTitle extends Container {
+    docSet = '';
 
-export class HeaderBar extends Container {
-    view(node:Vnode):Vnode {
-        const lib = node.attrs.lib;
-        node.attrs.lib = undefined;
-        SiteName = DocSets.title() || SiteName;
-        const desc:MenuDesc = {
-            items: DocSets.get(),
-            selectedItem: lib,
-            select: (item:string) => m.route.set('/api/:lib/0', {lib:item})  
+    private getDesc(attrs:any) { 
+        if (this.docSet !== attrs.docSet) {
+            this.docSet = attrs.docSet;
+            DocSets.loadList(attrs.docSet);
+        }
+        const items = DocSets.get(); 
+        return {
+            items: items.map((c:any) => c),
+            selectedItem: (attrs.route && attrs.route.lib)? attrs.route.lib : items[0],
+            select: (item:string) => m.route.set('/api/:lib/0', {lib:item})
         };
-        if (!desc.selectedItem)  { desc.selectedItem = desc.items[0]; }
-        return this.layout('.hs-site-header', { columns: [LeftNavWidth, FILL]}, [
-            m(SiteTitle),
-            m(Menu, {desc: desc})           
-        ]);
     }
-};
 
-class SiteTitle extends Container {
-    view(node:Vnode):Vnode {
-        return this.leaf(m('.hs-site-title', { href:`/api/`, oncreate: m.route.link, onupdate: m.route.link }, SiteName));
+    oninit(node:Vnode) { 
+        this.report('MenuTitle:init', node); 
     }
-};
 
+    getComponents(node:Vnode):Vnode {
+        this.report('Container:view', node); 
+        const desc = this.getDesc(node.attrs);
+        return m(Menu, {desc: desc});
+    }
+}

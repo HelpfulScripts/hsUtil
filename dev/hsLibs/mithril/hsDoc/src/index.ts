@@ -3,9 +3,7 @@
  */
 
 /** */
-import { DocSets }  from './DocSets';
-import { route }    from './Router';
+import { init } from './view/Site';
 
-
-DocSets.loadList().then(route);
+init();
 

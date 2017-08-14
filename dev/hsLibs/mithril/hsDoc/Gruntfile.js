@@ -70,7 +70,7 @@ module.exports = function(grunt) {
             test : {
                 outDir:     "dist/test/",
                 src: ["src/**/*.ts"],
-                tsconfig:   './tsConfigTest.json'
+                tsconfig:   './tsConfigTest.json' 
             }
         },
 

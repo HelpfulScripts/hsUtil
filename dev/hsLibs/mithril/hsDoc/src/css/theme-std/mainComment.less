@@ -29,6 +29,7 @@
     line-height: 1.6em;
     font-size: 1em;
     .hs-item-comment-tag {      // tag for special comment tag, e.g. @ngdoc
+        font-size: 0.9em;
         background-color: #eee;
         border: 1px solid #aae;
         border-radius: 2px;
@@ -52,15 +53,23 @@
 }
 
 .hs-item-comment-params {
+//    margin-top: 5px;
     display: inline-block;
-    background-color: #f8f8f8;
-    border-radius: 5px;
 }
 
 
 .hs-item-comment-param {
-    margin-top: 4px;
-    margin-bottom: 4px;
+    line-height: 1.6em;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    background-color: #f8f8f8;
+    border-radius: 5px;
+}
+
+.hs-item-comment-return {     // text for normal comment
+    .hs-item-comment-param;
+    margin-top: 0px;
+    background-color: #d0ffd0;
 }
 
 .hs-item-comment-tag {      // tag for special comment tag, e.g. @ngdoc

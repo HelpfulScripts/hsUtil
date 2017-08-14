@@ -14,9 +14,6 @@ import { Layout }       from './Layout';
  * `m('', [m(Component, {parameters})])`
  */
 export abstract class Component {
-//    id:number;
-    constructor() { /*this.id = id++;*/ }
-
     /** 
      * the standard `Mithril` component view function 
      * @param vnode the vnode passed by `Mithril`
@@ -49,19 +46,59 @@ The call to `this.layout` takes as parameters
 - the components to be layed out.
 
  */
-export abstract class Container extends Component {
+export class Container extends Component {
     /**
      * holds structural elements in style form: left, right, top, bottom, width, height
      */
     public style:string;
-    
-    /**
-     * constructs a Container component.
-     */
-    constructor() { super(); } 
 
-    oninit(node:Vnode) { 
-        this.style = node.style || undefined; 
+//    oninit(node:Vnode)   { this.report('Container:init', node); }
+//    oncreate(node:Vnode) { this.report('Container:create', node); } 
+//    onupdate(node:Vnode) { this.report('Container:update', node); }
+
+    /**
+     * Called during the lifecycle `view` call to retrieve the subcomponents to render in this container.
+     * The default implementation returns components stored in `node.attrs.content`. This allows for 
+     * creating containers directly via mithril: `m(Container, {content:[...]})`.
+     * Override this method to create containers that return more sophisticated content.
+     */
+    protected getComponents(node:Vnode):Vnode {
+        return Array.isArray(node.attrs.content)?
+            node.attrs.content.map((c:any) => {
+                if (c.container) { 
+                    c.children.route = node.attrs.route;
+                    return m(c.container, c.children);
+                } else {
+                    return c;
+                }
+            }) :
+            node.attrs.content;
+    }
+
+    /**
+     * Called during the lifecycle `view` call to retrieve the css style class to apply to this container.
+     * The default implementation returns components stored in `node.attrs.css`. This allows for 
+     * creating containers directly via mithril: `m(Container, {content:[...], css:'.my-class'})`.
+     * Override this method to create containers that return more sophisticated content.
+     */
+    protected getCSS(node:Vnode):string {
+        return node.attrs.css || '';
+    }
+
+
+    private normalizeContent(components:Array<typeof Container|string>|string): Vnode {
+        if (typeof components === 'string') { 
+            return [m('.hs-leaf', components)]; 
+        }
+        if (components.length>0) { // an array:
+            if (components.some((c:any) => (typeof c !== 'object'))) {
+                return components.map((comp:string|typeof Container):Vnode => 
+                    (typeof comp === 'string')? m(Container, {content:comp}) : comp);
+            } else {
+                return components;
+            }
+        }
+        return [components];
     }
 
     /**
@@ -83,40 +120,28 @@ export abstract class Container extends Component {
      * This is either a primitive `string`, or an array of `Container`s or `string`s.
      * @return a vnode that has an associated `cssClass` style.
      */
-    protected layout(cssClass:string, layout:any, components:Array<typeof Container|string>|string): Vnode {
-        function makeContent(components:Array<typeof Container|string>|string): Vnode {
-            if (typeof components === 'string') { 
-                return m(Leaf, {content: components}); 
-            }
-            if (components.length>0) { // an array:
-                return components.map((comp:string|typeof Container) => 
-                    (typeof comp === 'string')? m(Leaf, {content:comp}) : comp);
-            }
-            return components;
+    private layItOut(node:Vnode): Vnode {
+        const content = this.normalizeContent(this.getComponents(node)); // --> Vnode[]
+        let css = Layout.createLayout(node.attrs, content);
+        const attrs:any = {
+            style: node.style,
+            route: node.attrs.route,     
+            onclick: node.attrs.onclick
+        };
+        node.attrs.route = undefined
+        if (node.attrs.href) { 
+            attrs.href = node.attrs.href;
+            attrs.oncreate = m.route.link;
+            attrs.onupdate = m.route.link;
         }
-        const content = makeContent(components); // --> Vnode[]
-        let css = Layout.createLayout(layout, content);
-        return m(`${cssClass||''} ${css} .hs-layout`, {style: this.style}, content);
-    }
-
-    protected leaf(components:Array<typeof Container|string>|string): Vnode {
-        return m(`.hs-layout .hs-leaf`, {style: this.style}, components);
+        return m(`.hs-layout ${css} ${this.getCSS(node)}`, attrs, content.map((c:any) => c));
     }
 
     /** default implementation of standard Mithril view method. */
-    view(node:Vnode) {
-        const cssStyle = node.attrs.css || '.hs';
-        const content  = node.attrs.content; 
-        return this.layout(cssStyle, node.attrs, content);
-    } 
-}
+    view(node:Vnode) { this.report('Container:view', node); return this.layItOut(node); } 
 
-/**
- * Leaf implements a terminal Container, i.e. one that doesn't have any children.
- * We need to use a Leaf rather than a simple m() terminal since styles need to be applied from the parent.
- */
-export class Leaf extends Container {
-    view(node:Vnode) { 
-        return m(`.hs-layout .hs-leaf`, {style: node.style}, node.attrs.content);
+    report(cname:string, node:Vnode) { 
+//        console.log(`${cname} ${node.attrs.css}`); 
+//        console.log(node.attrs); 
     }
 }

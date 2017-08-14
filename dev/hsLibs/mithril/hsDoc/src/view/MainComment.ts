@@ -82,7 +82,7 @@ console.log('no example');
 
 function returns(comment:any, short:boolean):Vnode {
     let text = comment.returns;
-    return m('.hs-item-comment-desc', !text? '': [            
+    return m('.hs-item-comment-return', !text? '': [            
         m('span.hs-item-comment-tag', 'returns:'), 
         m('span.hs-item-comment-text', text)
     ]);

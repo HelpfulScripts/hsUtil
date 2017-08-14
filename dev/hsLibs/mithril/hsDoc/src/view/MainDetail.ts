@@ -10,14 +10,16 @@ import { flags, sourceLink, signature, type, extensionOf, kindString, itemLongNa
  * Creates Documentation on the main panel 
  */
 export class MainDetail extends Container { 
-    view(node:Vnode): Vnode {
-        const lib = node.attrs.lib || '';
-        let mdl = node.attrs.field;
-        node.attrs.lib = undefined;
-        node.attrs.field = undefined;
+    getComponents(node:Vnode): Vnode {
+        let lib, field;
+        if (node.attrs.route) {
+            lib = node.attrs.route.lib;
+            field = node.attrs.route.field;
+        }
+        node.attrs.route = undefined;
 
-        let result = getOverview(lib, mdl) || itemDoc(DocSets.get(lib, mdl) || ''); 
-        return this.leaf(m('.hs-main-detail', [result])); 
+        let result = getOverview(lib, field) || itemDoc(DocSets.get(lib, field) || ''); 
+        return m('.hs-main-detail', [result]); 
     }
 }
 
@@ -126,9 +128,8 @@ function itemDescriptor(mdl:any, sig:any):Vnode {
 }
 
 function itemChild(mdl:any, sig=mdl): Vnode[] {
-    return mdl.signatures? mdl.signatures.map((s:any) =>
-            m('',[itemDescriptor(mdl, s), comment(s)])
-        ) : 
+    return mdl.signatures? 
+        mdl.signatures.map((s:any) => m('',[itemDescriptor(mdl, s), comment(s)])) : 
         [itemDescriptor(mdl, sig), comment(sig)];
 }
 

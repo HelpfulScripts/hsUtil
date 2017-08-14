@@ -20,7 +20,7 @@ module.exports = function(grunt) {
                 paths.map(p => { return {
                     expand: true, 
                     cwd: basePath+p+'dist/', 
-                    src: ['*.js', '*.css', '*.css.map', 'index.html', '!mithril.js'], 
+                    src: ['*.js', '*.css', '*.css.map', '*.html', '!mithril.js'], 
                     dest: staging+p
                 }})
                 // doc files

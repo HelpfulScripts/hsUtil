@@ -1,12 +1,12 @@
 import * as config from './';
-import { Vnode}  from '../../mithril';
+import { m, Vnode}  from '../../mithril';
 import * as layout from '../../hsLayout/src/';
-import * as widgets from '../../hsWidgets/src/';
+//import * as widgets from '../../hsWidgets/src/';
 
 const myConfig = {
     Container: {
         rows:  ["30px", "fill", "10px"],
-        styleClass: '.my-example',
+        css: '.my-example',
         content: [{
             Container:{
                 columns: ["200px", "fill"],
@@ -16,32 +16,60 @@ const myConfig = {
                 ]
             }},{
             Container:{
-                columns: ["200px", "fill"],
+                columns: ["200px", "fill"], 
                 content: [
                     { LeftNav:    { lib:"route.lib", field:"route.field"}},
                     { MainNav:    { lib:"route.lib", field:"route.field"}}
                 ]
             }},
-            "&copy; Helpful Scripts"
+            { Container: {
+                css: '.hs-site-footer',
+                content: ['(c) Helpful ; Scripts']
+            }}
+        ] 
+    },
+    route: {
+        default: '/api',
+        paths: [
+            '/api',             // defines `http://localhost/#!/api/
+            '/api/:lib',        // defines `http://localhost/#!/api/:hsLib
+            '/api/:lib/:field'  // defines `http://localhost/#!/api/:hsLib/:id        
         ]
-    } 
-};
+    }
+}; 
 
+/*
+const path = { lib:'', field:'' }; 
+function hsSite(content:any) {
+    return { view: () => {
+        path.lib    = node.attrs.lib;
+        path.field  = node.attrs.field;
+        return m('.hs-config', content);
+    }};
+}
+*/ 
 const example = {
     LeftHead: class extends layout.Container{ 
-        view(node:Vnode) { return this.leaf('The Left Head'); } 
+        getComponents(node:Vnode) { 
+            return 'The Left Head'; 
+        } 
     },
     MainHead: class extends layout.Container{ 
-        view(node:Vnode) { return this.leaf('The Main Head'); } 
+        getComponents(node:Vnode) { return m('', 'The Main Head'); } 
     },
     LeftNav: class extends layout.Container{ 
-        view(node:Vnode) { return this.leaf('The Left Nav'); } 
+        getComponents(node:Vnode) { return m('', 'The Left Nav'); } 
     },
     MainNav: class extends layout.Container{ 
-        view(node:Vnode) { return this.leaf('The Main Nav'); } 
+        getComponents(node:Vnode) { return m('', 'The Main Nav'); } 
+    },
+    Footer: class extends layout.Container{ 
+        getComponents(node:Vnode) { return m('.hs-site-footer', '(c) Helpful ; Scripts'); } 
     }
 };
 
 
-//new HsConfig('data/config.json');
-new config.HsConfig([layout, widgets, config, example]).run(myConfig);
+
+new config.HsConfig([layout, config, example])
+    .attachNodeTree(myConfig, document.getElementById('exampleBase'));
+
