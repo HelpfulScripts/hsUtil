@@ -48,7 +48,7 @@ export function timeout(ms:number) { return new Promise((resolve, reject) => { s
  * @name delay
  * @methodOf hsNode.hsLibs
  * @description delay promise for use in delay(ms).then(doSomething).
- * @param {number} ms the milliseconds to wait before resolving
- * @return {Promise} a Promise that resolves after `ms` 
+ * @param number ms the milliseconds to wait before resolving
+ * @return a Promise that resolves after `ms` 
  */
 export function delay(ms:number)   { return new Promise(resolve => { setTimeout(resolve, ms); }); }

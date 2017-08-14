@@ -128,7 +128,7 @@ export class Container extends Component {
             route: node.attrs.route,     
             onclick: node.attrs.onclick
         };
-        node.attrs.route = undefined
+        node.attrs.route = undefined;
         if (node.attrs.href) { 
             attrs.href = node.attrs.href;
             attrs.oncreate = m.route.link;

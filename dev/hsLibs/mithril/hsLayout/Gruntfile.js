@@ -81,9 +81,9 @@ module.exports = function(grunt) {
 //                    listInvalidSymbolLinks: true,
 //                    theme:  'themes/hs',
                     name:   'hsLayout',
-                    readme: 'readme.txt'
+                    readme: 'readme.txt' 
                 },
-                src: ['src/**/*.ts', '!src/**/*.spec.ts']
+                src: ['src/**/*.ts']
             }
         },
 

@@ -132,7 +132,7 @@ function mainCommentParams(params:any):Vnode {
  * finds segments of `<code>...</code>` in `comment` and replaces them with a prettified version.
  * Currently the function performs two operations:
  * - add indentation for brackets {...}
- * - wrap the <code>...</code> part within <pre>...</pre> brackets
+ * - wrap the &lt;code&gt;...&lt;/code&gt; part within &lt;pre&gt;...&lt;/pre&gt; brackets
  * @param comment the comment comment 
  */
 function prettifyCode(comment:string, short:boolean):Vnode { 

@@ -53,7 +53,7 @@ module.exports = function(grunt) {
                     expand: true, 
                     cwd: basePath+p+'src/', 
                     src: ['**/*.ts'], 
-                    dest: staging+'hsDoc/src/'+p +'src/' 
+                    dest: staging+'hsDoc/src/'+p +'src/'
                 }})
             }
         },
@@ -82,7 +82,7 @@ module.exports = function(grunt) {
         function lineNum(num) { return ('    '+(num)).substr(-4).replace(/( )/g, '&nbsp;'); }
         function destFile(file, destDir) { return destDir+file.replace('.ts', '.html'); }
         function wrapLine(line, i) {  
-            return `<span id=${i+1} class=".line">${lineNum(i+1)}</span>${line}<br>`;
+            return `<span id=${i+1} class="line">${lineNum(i+1)}</span>${line}<br>`;
         }
         function comment(content) { return `<comment>${content}</comment>`; }
         function module(content) { return `<module>${content}</module>`; }
@@ -95,18 +95,31 @@ module.exports = function(grunt) {
                 .replace(/(\/\/.*?)<\/code>/g, comment) // color code some syntax
                 .replace(/\/\*[\s\S]*?\*\//g, comment) // color code some syntax
                 ;
-            grunt.file.write(destFile(file, destDir), intro + content + extro);
+            grunt.file.write(destFile(file, destDir), `
+                ${intro}
+                <h1>${file}</h1>
+                <div class='listing'><code>${content}</code></div>
+                ${extro}
+            `);
         }
 
         const style = `
-            p { margin:0; padding-top:5px; 
-                font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, Courier, monospace;
-                font-size: 12px;}
-            span { margin-right: 10px; color:#aaa; }
+            body { overflow:hidden;}
+            h1 { font-family: Arial, sans-serif; font-size: 24px; color: #44a; }
+            p { margin:0; padding-top:5px; }
+            br  { margin:0; padding:0; }
+            .line { margin: 0 5px 0 0; padding-right: 5px; color:#999; background-color:#eef;  }
             comment { color: #080;} module { color: #804;}
+            .listing { margin: 10px; border: 1px solid #ccc; 
+                      font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+                      font-size: 14px; line-height: 1.2em; 
+                      overflow:scroll;
+                      height:90%;
+            }
+            code { padding: 5px 0;}
         `;
-        const intro = `<html><style>${style}</style></html><body><code>`;
-        const extro = `</code></body>`;
+        const intro = `<html><style>${style.trim()}</style></html><body>`;
+        const extro = `</body>`;
         this.data.files.map(entry => {
             let files = grunt.file.expand({cwd:entry.cwd}, entry.src);
             files.map(file => processFile(entry.cwd, file, entry.dest));

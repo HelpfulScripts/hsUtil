@@ -1,2 +1,0 @@
-export { HsConfig }         from './hsConfig';
-

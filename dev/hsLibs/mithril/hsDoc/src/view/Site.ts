@@ -8,7 +8,6 @@ import * as layout  from '../../../hsLayout/src/';
 import * as header  from './Header';
 import * as left    from './LeftNav';
 import * as main    from './MainDetail';
-import * as config  from '../../../hsConfig/src';
 
 
 const TitleHeight   = '30px'; 
@@ -16,7 +15,7 @@ const FooterHeight  = '10px';
 const LeftNavWidth  = '200px';
 const SiteName      = 'HSDocs'; 
  
-export const myConfig = { 
+const myConfig = {
     Container: {
         rows:  [TitleHeight, "fill", FooterHeight],
         css: '.hs-site',
@@ -42,7 +41,7 @@ export const myConfig = {
             }},
             { Container: {
                 css: '.hs-site-footer',
-                content: '(c) Helpful ; Scripts'
+                content: '(c) Helpful Scripts'
             }}
         ] 
     },
@@ -58,5 +57,5 @@ export const myConfig = {
 
 
 export function init() {
-    new config.HsConfig([mithril, layout, header, left, main]).attachNodeTree(myConfig, document.body);
+    new layout.HsConfig([mithril, layout, header, left, main]).attachNodeTree(myConfig, document.body);
 }

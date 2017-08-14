@@ -7,13 +7,12 @@
  */
 
 /** */
-import { m } from '../../mithril';
+import { m }    from '../../mithril';
 
 /**
  * the directory to look for .json files, relative to the web page.
  */
 const FILE:string = './data/index.json';
-
 
 
 /**

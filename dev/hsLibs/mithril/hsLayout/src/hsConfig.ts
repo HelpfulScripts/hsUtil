@@ -1,10 +1,17 @@
 /**
- * ##HsConfing 
+ * ##HsConfig 
  */
 
 /** */
 import { m, Vnode } from '../../mithril'; 
 
+/**
+ * resolves the symbol `sym` against the provided `context`.
+ * If successful, returns the class definition for `sym`. 
+ * @param sym the symbol to resolve
+ * @param context the context to resolve against
+ * @return the resolved Class, or `undefined`.
+ */
 function resolve(sym:string, context:any[]) {
     let cl:any;
     context.some((c:any) => {
@@ -15,15 +22,14 @@ function resolve(sym:string, context:any[]) {
 }
 
 /**
- * recurses a configuration, trying to instantiate each element (key) in `config`. 
- * If successful, it calls the instance's `config` method with the result of 
- * recursing on the element's value.
+ * recurses a configuration, trying to fetch the class definition for each element (key) in `config`. 
+ * If successful, it creates an object literal containing the class and its children.
  * If unsuccessful, the element's value is returned unaltered so that it can be consumed 
  * by an instance further up in the recursion tree.
- * Hence, instantiable objects used in a config tree must implement a static method
- * with the signature `public static config(params:any):Vnode`
  * @param config an object literal containing a configuration subtree
  * @param context an array of objects against which to instantiate elements of `config`.
+ * @return an object literal representing the configuration, with Class names resolved 
+ * against the provided `context`.
  */
 function recurse(config:any, context:any[]) {
     if (['string', 'number', 'boolean', 'function'].indexOf(typeof config)>=0) { return config; }
@@ -33,16 +39,40 @@ function recurse(config:any, context:any[]) {
         const content = recurse(config[k], context); 
         const cl:any = resolve(k, context);
         if (cl) { 
-            Object.keys(config).length === 1? 
-                result = {container:cl, children:content} :     // m(cl, content) : 
-                result[k] = {container:cl, children:content};   // m(cl, content); 
+            const r = {container:cl, children:content};
+            Object.keys(config).length === 1? result = r : result[k] = r;   
         }
         else { result[k] = content; }
     }); 
     return result; 
 }
 
+/**
+ * Interprets a configuration and either mounts it or routs it in `mithril`. 
+ * Example: 
+<code>
+import * as mithril from '../../../mithril';
+import * as layout  from '../../../hsLayout/src/';
 
+const myConfig = { 
+    Container: {
+        rows:  ['50px', 'fill'],
+        css: '.hs-site',
+        content: ['top row', 'bottom row']
+    },
+    route: {
+        default: '/api',
+        paths: [
+            '/api',             // defines `http://localhost/#!/api/
+            '/api/:lib',        // defines `http://localhost/#!/api/foo
+            '/api/:lib/:field'  // defines `http://localhost/#!/api/foo/bar        
+        ]
+    }
+}
+
+new HsConfig([mithril, layout]).attachNodeTree(myConfig, document.body)
+</code>
+ */
 export class HsConfig {
     constructor(protected context:any[]) {}
 

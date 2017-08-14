@@ -82,7 +82,7 @@ module.exports = function(grunt) {
                     target: 'es6',
                     module: 'commonjs',
                     tsconfig: 'typedoc.json',
-                    json:   './docs/hsDocs.json',
+                    json:   'docs/hsDocs.json',
                     name:   'hsDoc',
                     readme:   './readme.txt',
                 },

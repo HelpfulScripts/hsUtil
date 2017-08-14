@@ -4,6 +4,7 @@ import { tooltip } from './Tooltip';
 const SourceBase = 'src/'; 
 
 
+// TODO: sort flags in array to garantee sequence of printing
 export function flags(flags:any, ignore:string[]=[]) {
     const knownFlags = {
         isExported:             'export',
@@ -57,7 +58,7 @@ export function extensionOf(mdl:any) {
 
 export function sourceLink(mdl:any) {
     const source = mdl.sources? mdl.sources[0] : undefined;
-    const file = source.fileName? source.fileName.replace('.ts', '.html') : '';
+    const file = (source && source.fileName)? source.fileName.replace('.ts', '.html') : '';
     return m('span.hs-item-member-source', !source? '' : 
         m('a', { href:`${SourceBase}${file}#${Math.max(0,source.line-5)}`, target:"_blank"}, '[source]')
     );
@@ -72,11 +73,11 @@ export function sourceLink(mdl:any) {
  * @param name the name on which to formt he link
  */
 export function libLink(css:string, lib:string, id:number, name:string) {
-    return m(`${css}[href=/api/${lib}/${id}]`, {oncreate: m.route.link}, name);
+    return m(`${css}[href=/api/${lib}/${id}]`, {oncreate: m.route.link, onupdate: m.route.link, }, name);
 }
 
 export function libLongLink(css:string, lib:string, id:string, name:string, onclick?:()=>void) {
-    return m(`${css}[href=/api/${lib}/${id}]`, {oncreate: m.route.link, onclick:onclick}, name);
+    return m(`${css}`, { href:`/api/${lib}/${id}`, oncreate: m.route.link, oncupdate: m.route.link, onclick:onclick}, name);
 }
 
 export function type(t:any, lib:string) {

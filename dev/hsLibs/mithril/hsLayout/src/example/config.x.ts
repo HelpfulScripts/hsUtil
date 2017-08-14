@@ -1,6 +1,5 @@
-import * as config from './';
-import { m, Vnode}  from '../../mithril';
-import * as layout from '../../hsLayout/src/';
+import { m, Vnode}  from '../../../mithril';
+import * as layout from '../';
 //import * as widgets from '../../hsWidgets/src/';
 
 const myConfig = {
@@ -38,16 +37,6 @@ const myConfig = {
     }
 }; 
 
-/*
-const path = { lib:'', field:'' }; 
-function hsSite(content:any) {
-    return { view: () => {
-        path.lib    = node.attrs.lib;
-        path.field  = node.attrs.field;
-        return m('.hs-config', content);
-    }};
-}
-*/ 
 const example = {
     LeftHead: class extends layout.Container{ 
         getComponents(node:Vnode) { 
@@ -70,6 +59,6 @@ const example = {
 
 
 
-new config.HsConfig([layout, config, example])
+new layout.HsConfig([layout, example])
     .attachNodeTree(myConfig, document.getElementById('exampleBase'));
 
