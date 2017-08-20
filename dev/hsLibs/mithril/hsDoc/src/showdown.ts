@@ -7,7 +7,10 @@ const showdown  = require('showdown');
  * @return the marked down comment
  */
 export function markDown(text:string, short:boolean=false):string {
-    const converter = new showdown.Converter();
+    const converter = new showdown.Converter({
+        tables:                 true,
+        smartIndentationFix:    true
+    });
     let result = (!text)? '' : converter.makeHtml(text);
     if (short) {
         const i = result.indexOf('</p>');
