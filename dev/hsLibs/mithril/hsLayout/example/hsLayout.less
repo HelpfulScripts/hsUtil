@@ -1,0 +1,33 @@
+@import "../src/css/Layout.less";
+
+@space: 2px;
+@border: 1px;
+
+.leaf {
+    font-family: Arial;
+    font-size: 10px;
+    overflow:visible;
+    &.hs-column-layout {
+        margin-top: @space;
+        margin-bottom: @space+2*@border;
+        &:first-child { margin-top: 2*@space; }
+        &:last-child { margin-bottom: 2*@space+2*@border; }
+    }
+    &.hs-row-layout {
+        margin-left: @space;
+        margin-right: @space+2*@border;
+        &:first-child { margin-left: 2*@space; }
+        &:last-child { margin-right: 2*@space+2*@border; }
+    }
+}
+
+.leaf .hs-layout {
+    text-align: center;
+    border: @border solid #aaa;
+    .hs-column-layout& {
+        background-color: #ffe;
+    }
+    .hs-row-layout& {
+        background-color: #eef;
+    }
+}
