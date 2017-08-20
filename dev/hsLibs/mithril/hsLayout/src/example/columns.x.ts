@@ -29,16 +29,6 @@ const myConfig = {
                 ]
             }}
         ]
-/*        
-    },
-    route: {
-        default: '/api',
-        paths: [
-            '/api',             // defines `http://localhost/#!/api/
-            '/api/:lib',        // defines `http://localhost/#!/api/:hsLib
-            '/api/:lib/:field'  // defines `http://localhost/#!/api/:hsLib/:id        
-        ]
-*/        
     }
 };
 
