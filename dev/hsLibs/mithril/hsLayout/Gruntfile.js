@@ -14,7 +14,7 @@ module.exports = function(grunt) {
 
 		clean: {
 			src:   ['dist/js'],
-            docs:  ['docs'],
+            docs:  ['docs', 'dist/docs'],
             test:  ['dist/test','docs/test']
 		},
 		
@@ -34,6 +34,11 @@ module.exports = function(grunt) {
             css: {
                 files: {
                     'dist/hsLayout.css': 'src/css/*.less'
+                }
+            },
+            example: {
+                files: {
+                    'example/hsLayout.css': 'example/hsLayout.less'
                 }
             }
         }, 
@@ -142,7 +147,7 @@ module.exports = function(grunt) {
                 entry: './dist/js/hsLayout/src/example/columns.x.js',
                 output: {
                     filename: 'hsLayout.js',
-                    path: path.resolve(__dirname, './dist/example')
+                    path: path.resolve(__dirname, './example')
                 }
             },
             develop: { // webpack options 
@@ -150,7 +155,7 @@ module.exports = function(grunt) {
                 devtool: "inline-source-map",
                 output: {
                     filename: 'hsLayout.js',
-                    path: path.resolve(__dirname, './dist/example')
+                    path: path.resolve(__dirname, './example')
                 }
             }
 		},
@@ -165,7 +170,7 @@ module.exports = function(grunt) {
 				tasks: ['make']
 			},
 			less: {
-				files: ['src/**/*.less'],
+				files: ['src/**/*.less', 'example/*.less'],
 				tasks: ['build-css', 'stage']
 			},
 			html: {

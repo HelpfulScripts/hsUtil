@@ -2,9 +2,10 @@
  * @description hsLayout: Library for generating formatted screen layouts.
  */
 
+import * as pillars                  from './view/PillaredLayout';      if(pillars) {}
+import * as tiles                    from './view/TileLayout';          if(tiles) {}
 /** */
-export { Container, Component }      from './view/Container'; 
+export { Canvas, Component }         from './view/Canvas'; 
 export { FILL, px, pc, LayoutToken } from './view/Tokens'; 
-export { PillarLayouts }             from './view/PillaredLayout';
 export { Layout }                    from './view/Layout';
-export { HsConfig }                  from './hsConfig';
+export { HsConfig, Container }       from './hsConfig';

@@ -33,9 +33,16 @@ module.exports = function(grunt) {
                 // example files
                 .concat(paths.map(p => { return {
                     expand: true, 
-                    cwd: basePath+p+'dist/example/', 
-                    src: ['*.*'], 
+                    cwd: basePath+p+'example/', 
+                    src: ['*.js', '*.css', '*.html', '*.json'], 
                     dest: staging+p+'example/' 
+                }}))
+                // example files in docs
+                .concat(paths.map(p => { return {
+                    expand: true, 
+                    cwd: basePath+p+'example/', 
+                    src: ['*.js', '*.css', '*.html', '*.json'], 
+                    dest: staging+'hsDoc/example/' 
                 }}))
                 // data files
                 .concat(paths.map(p => { return {
@@ -66,7 +73,8 @@ module.exports = function(grunt) {
 			stage: { 
                 files:      paths.map(p => basePath+p+'dist/*.js')
                     .concat(paths.map(p => basePath+p+'dist/*.css'))
-                    .concat(paths.map(p => basePath+p+'docs/*.json')),
+                    .concat(paths.map(p => basePath+p+'dist/docs/*.json'))
+                    .concat(paths.map(p => basePath+p+'example/*.*')),
 				tasks: ['stage']
 			},
 		}

@@ -1,20 +1,93 @@
 /**
  * ##HsConfig 
- */
+ * Tool to configure a layout via a configuration object that is either defined
+ * as an object literal or as a JSON file.
+ * 
+ * The structure of the configuration object follows the convention
+ <code>
+ {
+     <Class>: <Configuration>
+     [,route: {
+        default: '/api',
+        paths: [
+            '/api',             
+            '/api/:lib',       
+            '/api/:lib/:field' 
+        ]
+    }]
+ }
+ </code>
+`<Class>` is either {@link hsLayout:Container.Container Container} or a subclass thereof.
+`<Configuration>` is an object literal `{ <Attr>:<Value>[, ...] }`
+
+Arrays and Object Literals in `<Configuration>` define a layout tree that will be traversed,
+After which the tree will be instantiated by calling `m(<Class>, <Configuration>)`.
+Mithril will then recursively create the Classes in the tree and call their `view` methods,
+where `Configuration`settings will be available via the `node.attrs` parameter.
+
+The default `Container` implementation recognizes the following special `<Attr>` keys:
+
+* - `content`: the subcomponents to render in `Container`, allowing for following `<Value>` types:
+*     - `[{<Class>: <Configuration>}, ...]`
+*     - `['string literal', ...]`
+*     - `'string literal'`
+* - `css`: the CSS class to set on `Container`
+* - `href`: a href attribute to set on `Container`. This makes `Container` clickable and sends the 
+     respective attribute value to the Mithril router.
+* - `onclick`: a function to call when `Container` is clicked.
+*/
 
 /** */
 import { m, Vnode } from '../../mithril'; 
+import * as mithril from '../../mithril';
+import * as layout from './';
+
+/**
+ * creates a deep copy of the struct passed in.
+ * @param struct the object to copy
+ */
+function copy(struct:any): any {
+    let result:any;
+    if (Array.isArray(struct)) { result = []; }
+    else if (typeof struct === 'object') { result = {}; }
+    else { return struct; }
+    Object.keys(struct).map((k:string) => result[k] = copy(struct[k]));
+    return result;
+}
+
+
+export class Container extends layout.Canvas {
+    /**
+     * Called during the lifecycle `view` call to retrieve the subcomponents to render in this container.
+     * The default implementation returns components stored in `node.attrs.content`. This allows for 
+     * creating containers directly via mithril: `m(Container, {content:[...]})`.
+     * Override this method to create containers that return more sophisticated content.
+     */
+    protected getComponents(node:Vnode):Vnode {
+        return !Array.isArray(node.attrs.content)? node.attrs.content :
+            node.attrs.content.map((c:any) => {
+                if (c.compClass) { 
+                    c.attrs.route = node.attrs.route;
+                    return m(c.compClass, c.attrs);
+                } else {
+                    return c;
+                }
+            });
+            
+    }
+}
 
 /**
  * resolves the symbol `sym` against the provided `context`.
  * If successful, returns the class definition for `sym`. 
  * @param sym the symbol to resolve
- * @param context the context to resolve against
+ * @param context the context to resolve against; `mithril` and `hsLayout` 
+ * are implicitely part of the context and need not be specified.
  * @return the resolved Class, or `undefined`.
  */
 function resolve(sym:string, context:any[]) {
     let cl:any;
-    context.some((c:any) => {
+    context.concat(mithril, layout).some((c:any) => {
         try { cl = eval('c.'+sym);  return cl; }
         catch(e) { return false; }
     });
@@ -23,7 +96,7 @@ function resolve(sym:string, context:any[]) {
 
 /**
  * recurses a configuration, trying to fetch the class definition for each element (key) in `config`. 
- * If successful, it creates an object literal containing the class and its children.
+ * If successful, it creates an object literal containing the component class and its attributes.
  * If unsuccessful, the element's value is returned unaltered so that it can be consumed 
  * by an instance further up in the recursion tree.
  * @param config an object literal containing a configuration subtree
@@ -39,26 +112,31 @@ function recurse(config:any, context:any[]) {
         const content = recurse(config[k], context); 
         const cl:any = resolve(k, context);
         if (cl) { 
-            const r = {container:cl, children:content};
-            Object.keys(config).length === 1? result = r : result[k] = r;   
+            const r = {
+                compClass:cl,   // Component class
+                attrs:content   // attributes passed to the Component class
+            };
+            (!Array.isArray(config) && keys.length === 1)? 
+                result = r : 
+                result[k] = r;   
         }
         else { result[k] = content; }
     }); 
     return result; 
 }
 
+
 /**
  * Interprets a configuration and either mounts it or routs it in `mithril`. 
  * Example: 
 <code>
-import * as mithril from '../../../mithril';
-import * as layout  from '../../../hsLayout/src/';
+import * as mylib from './mylib';
 
 const myConfig = { 
     Container: {
         rows:  ['50px', 'fill'],
         css: '.hs-site',
-        content: ['top row', 'bottom row']
+        content: [{MyClass: {}}, 'bottom row']
     },
     route: {
         default: '/api',
@@ -70,25 +148,62 @@ const myConfig = {
     }
 }
 
-new HsConfig([mithril, layout]).attachNodeTree(myConfig, document.body)
+const myExample = {
+    MyClass: class extends Container {
+        view(node:Vnode) { return m('', 'myExample'); }
+    }
+}
+
+new HsConfig([mylib, myExample]).attachNodeTree(myConfig, document.body)
 </code>
  */
 export class HsConfig {
+    /**
+     * Constructs an HsConfig object on a `context`. Any class names encountered
+     * in the configuration tree when calling `attachNodeTree` will be resolved
+     * against this context. The `mithril`and `hsLayout` namespaces are automatically 
+     * added to the context.
+     * @param context Array of namespaces againt which classes will be resolved.  
+     */
     constructor(protected context:any[]) {}
 
+    /**
+     * Interprets a configuration object and attaches it to a DOM element
+     * @param config an object literal, or name of a JSON file, containing a configration tree
+     * @param root a DOM element to which to attach the tree
+     */
     attachNodeTree(config:any, root:any) {
         const context = this.context;
 
-        function decodeRoute(config:any) {
-            const rp:string[] = config.params = [];
-            config.paths.map((p0:string) => {
+        /**
+         * decodes the parts of a `route` declaration in the `config` tree
+         * that will be passed to the `mithril` `m.route()` command.
+         * 
+         * `route` defines a `default` path, as well as an array `paths` of 
+         * path templates containing variables of the form `:varName`.
+         * 
+         * All `paths`resolve to the same root element defined in the config tree.
+         * @param route an object literal structured as 
+         * <pre><code>
+         * {
+         *     default: '...'   // the default path
+         *     paths: [
+         *         '<path>/:var1[/:var2...]'  // path template, 
+         *         ...
+         *     ]
+         * }
+         * </code></pre>
+         */
+        function decodeRoute(route:any) {
+            const rp:string[] = route.params = [];
+            route.paths.map((p0:string) => {
                 const params = p0.match(/:(.+?)\b/g);
                 if (params) { 
                     params.map((p1:string) => p1.substr(1))
                             .map((p2:any) => rp.indexOf(p2)<0? rp.push(p2):''); 
                 }
             });
-            return config;
+            return route;
         }
         /**
          * Handles top-level interpretations of a config tree and returns 
@@ -99,15 +214,19 @@ export class HsConfig {
          */
         function decode(config:any) {
             let result:any = { };
-            Object.keys(config).map((k:any) => {
-                if (k==='route') { 
-                    result.route = decodeRoute(config[k]);
-                } else if (config[k].container) {  //(config[k].tag) { 
-                    result.root = result.root? result.root : config[k];   // only capture the first one
-                } else {
-                    result[k] = config[k];
-                }
-            });
+            if (config.compClass && !result.root) {   // only capture the first one
+                result.root = config; 
+            } else {
+                Object.keys(config).map((k:any) => {
+                    if (config[k].compClass && !result.root) {   // only capture the first one
+                        result.root = config[k]; 
+                    } else if (k==='route') { 
+                        result.route = decodeRoute(config.route);
+                    } else {
+                        result[k] = config[k];
+                    }
+                });
+            }
             return result;
         }
 
@@ -115,18 +234,19 @@ export class HsConfig {
             .then((r:any) => recurse(r, context))
             .then((c:any) => {
                 const content = decode(c);
-                if (!content.root) { 
+                const cr = content.root;
+                if (!cr) { 
                     console.log('*** no top level component defined in config:'); 
                     console.log(config); 
                 }
                 if (content.route) {
                     class Router {
                         view(node:Vnode) { 
-                            content.root.children.route = {};
+                            cr.attrs.route = {};
                             content.route.params.map((k:any) =>
-                                content.root.children.route[k] = node.attrs[k]
+                                cr.attrs.route[k] = node.attrs[k]
                             );
-                            return m(content.root.container, content.root.children); // content.root; 
+                            return m(cr.compClass, copy(cr.attrs));  
                         }
                     }
                     content.route.routes = {};
@@ -134,7 +254,7 @@ export class HsConfig {
                     m.route(root, content.route.default, content.route.routes);
                     console.log('starting router');
                 } else {
-                    m.mount(root, m(content.root.container, content.root.children));
+                    m.mount(root, {view: (node:Vnode)=> m(cr.compClass, copy(cr.attrs))});
                     console.log('mounting component');
                 }
             });
