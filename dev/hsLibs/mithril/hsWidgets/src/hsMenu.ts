@@ -7,10 +7,10 @@
  * ## Example
  * <code>
     const desc:MenuDesc = {
-        items: ['One', 'Two', 'Three'],
-        selectedItem: 'One',
-        select: (item:string) => <do something>  
-        size?:LayoutToken[] = []
+        items: ['One', 'Two', 'Three'],         // the menu items to display 
+        selectedItem: 'One',                    // the selected menu item
+        select: (item:string) => <do something> // the function to call when selection changed
+        size?:LayoutToken[] = []                //
     };
     m(Menu, {desc: desc}); 
  * </code>
@@ -28,7 +28,7 @@ export interface MenuDesc {
     selectedItem: string;
     /** the function to call when the selection changes */
     select: (item:string) => void;
-    /** optional array of `LayoutToken`s, defaults to `[ ]` */
+    /** optional array of `LayoutToken`s used to layout the menu items; defaults to `[ ]` */
     size?:LayoutToken[];
 }
 
@@ -59,12 +59,12 @@ export class Menu extends Container {
         const desc:MenuDesc = node.attrs.desc;
         node.attrs.desc = undefined;
 
-//        const size = desc.size || [];
         this.menu.select(desc.selectedItem);
-        node.attrs.columns = [];
+        node.attrs.columns = desc.size || [];
         node.attrs.css = '.hs-menu';
         return desc.items.map((l:string) => {
             if (!this.menu.items[l]) { this.menu.items[l] = {title: l, selected: false, select:(item:string) => {
+                desc.selectedItem = item;
                 this.menu.select(item); // local housekeeping: make sure the item's style shows correct selection
                 desc.select(item);      // trigger any actions form the selection
             }}; }
