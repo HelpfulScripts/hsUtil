@@ -9,19 +9,27 @@ Follow the instruction for typedoc in commenting the code.
 
 In addition to the documented source files,
 `hsDoc` recognizes a special **`overview.ts`** file that will be displayed as a project overview. 
-For this to work, `typedoc` requirtes the file to have two sepoarate comment entries.
+For this to work, `typedoc` requires the file to have two separate comment entries.
 If the second comment is missing, `typedoc` will not generate a comment in the docset.
 
+### Linking across the docsets
 Links to items across the docsets can be placed via a link directive: 
 - "{@link *docset*:*module*.*item* linked text}", 
 where
  - *docset* is the name of the docset
- - *module* is name of the module to link to
+ - *module* is name of the module to link to; 
+   if *module* is `overview`, or unspecified, the link will point to the docset overview page.
  - *item* is the name of the item within the module. 
  - linked text is displayed with a link to path within module
-For example, the link to <br> 
- {@link hsDoc:MainComment.returns the `returns` function} is
-'{@link hsDoc:MainComment.returns the `returns` function}'
+
+Examples:
+- '{@link hsDoc: Overview of hsDoc docSet}' -> {@link hsDoc: Overview of hsDoc docSet}
+- '{@link hsDoc:DocSets.DocSets.add the `adds` function}' --> {@link hsDoc:DocSets.DocSets.add the `adds` function}
+
+
+### Mithril Code Examples
+`hsDoc` supports creating inline code examples in comment sections as explained 
+in the {@link hsDoc:MainExample MainExample overview}.
 
 ## Configuring typedoc
 As an example, we use grunt-typedoc with the following configuration:
