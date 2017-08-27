@@ -50,14 +50,16 @@ const expanded: {string?:boolean} = {};
  * processes a module, i.e. a `.ts` file.
  */
 function externalModule(mdl:any, field:string) {
-    const selected = (field===''+mdl.id || field===mdl.fullPath)? '.hs-left-nav-selected' : '';
+    const selected = (field===''+mdl.id || field.indexOf(mdl.fullPath) === 0)?
+        '.hs-left-nav-selected' : '';
+
+    if (selected && field.length > mdl.fullPath.length) { expanded[mdl.fullPath] = true; }
+
     // don't show modules from other projects (isExported flag) or modules on the ignore list
     const skip = (mdl.flags && mdl.flags.isExternal) || ignoreModules[mdl.name];
     return skip? m('') : m(`.hs-left-nav-module`, [
-        libLongLink(`a.hs-left-nav-module-name ${selected}`, mdl.lib, mdl.fullPath, mdl.name, () => {
-            expanded[mdl.fullPath] = !expanded[mdl.fullPath];
-//            m.redraw();            
-        }),
+        libLongLink(`a.hs-left-nav-module-name ${selected}`, mdl.lib, mdl.fullPath, mdl.name, 
+            () => { expanded[mdl.fullPath] = !expanded[mdl.fullPath]; }),
         mdl.groups? m('.hs-left-nav-module-content', { class: expanded[mdl.fullPath]?'':'hs-collapsed'}, mdl.groups.map((g:any) => entries(g, mdl, field))) : undefined
     ]);
 } 
