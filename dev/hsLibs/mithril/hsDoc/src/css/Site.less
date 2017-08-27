@@ -1,3 +1,7 @@
+@bg-example: #eea;
+@bg-source:  #ddf;
+@border: 2px solid white; 
+
 body {
     color: black;
 }
@@ -6,7 +10,21 @@ example {
     display:block;
     height: 300px;
     width: 100%;
-    background-color: #eea;
+    padding: 5px;
+    box-sizing: border-box;
+     
+    .hs-source              { 
+        background-color: @bg-source;  
+        border-left: @border; 
+    }
+    .hs-execution           { 
+        background-color: @bg-example; 
+        div { margin: 5px; }
+    }
+    .hs-menu                { border-left: @border; }
+    .hs-menu-item           { background-color: #fff; border: 1px solid #ddd;  }
+    .hs-menu-item-selected  { background-color: @bg-source; } 
+    pre { padding-left: 10px; }
 }
 
 .hs-layout {
