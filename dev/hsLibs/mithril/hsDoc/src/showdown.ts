@@ -22,17 +22,31 @@ export function markDown(text:string, short:boolean=false):string {
 
 /**
  * replaces link statements in the comment with hyperlink references.
- * The format of a link statement is "{@link *module*:*path* linked text}", where
- * - *module* is the name of the docset
- * - *path* is the structural path of a component with steps on the path separated by a period. 
- * - linked text is displayed with a link to path within module
- * For example, the link to <br> 
- * '{@link hsDoc:MainComment.substituteLinks the substituteLinks function}' is 
- * {@link hsDoc:MainComment.substituteLinks the substituteLinks function}
+ * The format of a link statement is "{@link *docset*:*path* linked text}", where
+ * - *docset* is the name of the docset
+ * - *path* is the structural path of a component with steps on the path separated by a period,
+ *    following the pattern *module*.*entity*.*member* with
+ *     - *module* = the name of the module file
+ *     - *entity* = [*class* | *function* | *variable*]
+ *     - *member* = [*method* | *variable*]
+ * - if *path* is omittied, or is `overview`, the library overview will be shown.
+ *   
+ * Examples: 
+ * - '{@link hsDoc: Doc Overview}' -> {@link hsDoc: Doc Overview}
+ * - '{@link hsDoc:DocSets.DocSets.add the `adds` function}' --> {@link hsDoc:DocSets.DocSets.add the `adds` function}
+ * 
  * @param comment the comment in which to replace the links
  * @return the comment with substituted links 
  */
 function substituteLinks(comment:string):string {
-    comment = comment.replace(/[^"`']{@link ([\S]*):([\S]+)\s*(.+)}/g, ' <a href="#!/api/$1/$1.$2">$3</a>');
+    comment = comment.replace(/[^"`']{@link ([\S]*):([\S]*)\s*(.+)}/gi, (match, ...args) => {
+        const lib = args[0];
+        const module = args[1];
+        const text = args[2];
+        console.log(args);
+        return (module === '' || module === 'overview')?
+                ` <a href="#!/api/${lib}/0">${text}</a>` :
+                ` <a href="#!/api/${lib}/${lib}.${module}">${text}</a>`;
+    });
     return comment;
 }
