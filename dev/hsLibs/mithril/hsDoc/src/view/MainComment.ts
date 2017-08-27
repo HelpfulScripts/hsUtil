@@ -5,6 +5,7 @@
 /** */
 import { m, Vnode } from '../../../mithril';
 import { markDown } from '../showdown';
+import { example }  from './MainExample';
 
 /**
  * Main comment processing. The result appears directly below the title in the main panel.
@@ -65,6 +66,8 @@ function textOrShortTextOrDescription(comment:any, short:boolean):Vnode {
     if (comment.tags) {
         comment.tags.map((tag:any) => {if (tag.tag==='description') { text = tag.text;}} );
     }
+    text = text.replace(/<example>([\S\s]*?)<\/example>/gi, example);
+
 /*    
     const parts = text.match(/([\s\S]*?)(<example>[\s\S]*?<\/example>)([\s\S]*)/i);
     if (parts && parts.length>0) {

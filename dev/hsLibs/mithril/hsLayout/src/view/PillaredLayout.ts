@@ -1,11 +1,43 @@
+/**
+ * PillardLayout. Provides functionality to create row- and column-pillar layouts.
+ * <example>
+ * <file name='script.js'>
+ * m.mount(root, { 
+ *     view:() => m('.ex1', 'once')
+ * });
+ * </file>
+ * <file name='style.css'>
+ * .ex1 { 
+ *     color: red; 
+ *     font-weight:bold; 
+ * }
+ * </file>
+ * </example>
+ * <example>
+ * <file name='script.js'>
+ * m.mount(root, { 
+ *     view:() => m(layout.Container, {columns:[], content:[
+ *         'first line',
+ *         'second line'
+ *     ]})
+ * });
+ * </file>
+ * <file name='style.css'>
+ * .ex2 { 
+ *     color: blue; 
+ *     font-weight:bold; 
+ * }
+ * </file>
+ * </example>
+ */
+
+/** */
 import { Canvas }       from './Canvas';
 import { Layout }       from './Layout';
 import { LayoutToken, DefinedToken, PixelToken }    from './Tokens';
 import { Vnode}         from '../../../mithril';
 
-/**
- * PillardLayout. Provides functionality to create row- and column-pillar layouts.
- */
+
 
 /**
  * interface definition for entries in `cParams`

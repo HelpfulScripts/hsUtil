@@ -87,10 +87,7 @@ export class Container extends layout.Canvas {
  */
 function resolve(sym:string, context:any[]) {
     let cl:any;
-    context.concat(mithril, layout).some((c:any) => {
-        try { cl = eval('c.'+sym);  return cl; }
-        catch(e) { return false; }
-    });
+    context.concat(mithril, layout).some((c:any) =>  cl = c[sym]);
     return cl;
 }
 
