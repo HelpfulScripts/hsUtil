@@ -1,15 +1,18 @@
 const showdown  = require('showdown');
 
 /**
- * process a comment string and returns the equivalent markdown syntax.
+ * process a markdown comment string and returns the equivalent html syntax. 
  * @param text the comment to markdown
  * @param short if true, only the first paragraph is returned
  * @return the marked down comment
  */
 export function markDown(text:string, short:boolean=false):string {
     const converter = new showdown.Converter({
-        tables:                 true,
-        smartIndentationFix:    true
+        tables:                 true,   // enables |...| style tables; requires 2nd |---| line
+        ghCompatibleHeaderId:   true,   // github-style dash-separated header IDs
+        smartIndentationFix:    true,   // fixes ES6 template indentations
+        takslists:              true,   // enable - [ ] task; doesn't seem to work.
+        strikethrough:          true    // enables ~~text~~
     });
     let result = (!text)? '' : converter.makeHtml(text);
     if (short) {
@@ -43,7 +46,6 @@ function substituteLinks(comment:string):string {
         const lib = args[0];
         const module = args[1];
         const text = args[2];
-        console.log(args);
         return (module === '' || module === 'overview')?
                 ` <a href="#!/api/${lib}/0">${text}</a>` :
                 ` <a href="#!/api/${lib}/${lib}.${module}">${text}</a>`;
