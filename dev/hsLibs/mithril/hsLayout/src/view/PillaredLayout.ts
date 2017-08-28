@@ -1,34 +1,41 @@
 /**
- * PillardLayout. Provides functionality to create row- and column-pillar layouts.
- * <example>
- * <file name='script.js'>
- * m.mount(root, { 
- *     view:() => m('.ex1', 'once')
- * });
- * </file>
- * <file name='style.css'>
- * .ex1 { 
- *     color: red; 
- *     font-weight:bold; 
- * }
- * </file>
- * </example>
- * <example>
- * <file name='script.js'>
- * m.mount(root, { 
- *     view:() => m(layout.Container, {columns:[], content:[
- *         'first line',
- *         'second line'
- *     ]})
- * });
- * </file>
- * <file name='style.css'>
- * .ex2 { 
- *     color: blue; 
- *     font-weight:bold; 
- * }
- * </file>
- * </example>
+Lays out components in pillars, i.e. either {@link hsLayout:PillaredLayout.Columns columns}
+or {@link hsLayout:PillaredLayout.Rows rows}
+Use either of
+- `{rows: [attributes]}`
+- `{columns: [attributes]}` 
+
+to invoke this layout.
+
+### Example
+<code>
+    {rows: [px(200), FILL]} // --> top row has height 200px, all other rows evenly share remaining space 
+</code>
+
+## Attributes
+The following values **v** are valid entries in The Attributes array:
+- **px(n)** -- a fixed number of pixels 
+- **pc(n)** -- a fixed percentage of available space
+- **FILL**  -- a special constant to indicate - may appear only once per array.
+
+The following options are supported for the Attributes array:
+- **[ ]**: An empty array; all components will be evenly spaced across the available width. 
+- **[v]**: All components have the specified width (in px or %) and will fill the available space from the left,
+    leaving any remaining unused space on the right. 
+- **[v1, v2]**: All components have the specified widths (in px or %) and will fill the available space from the left,
+    leaving any remaining unused space on the right. If there are more components than widths, the right-most width
+    will be used for the reminaing widgets.
+- **[v, FILL]**: Sets the first (left) widget to a width of `v`.<br>
+    if `v` is specified in %, the remaining n-1 components will have equal relative widths of `(100-v)/(n-1)%`<br>
+    if `v` is specified in px, the remaining n-1 components will have their right borders at location `i*100/n%`, with i=1...n.
+- **[FILL, v]**: Sets the last (right) widget to a width of `v`.<br>
+    if `v` is specified in %, the remaining n-1 components will have equal relative widths of `(100-v)/(n-1)%`<br>
+    if `v` is specified in px, the remaining n-1 components will have their left borders at location `i*100/n%`, with i=0...n-1.
+- **[va, FILL, vb]**: Sets the first and last widget to a width of `va`/`vb`.<br>
+    Both have to be specified either in px or in %.<br>
+    if the unit is %, the remaining n-2 components will have equal relative widths of `(100-vb-va)/(n-2)%`<br>
+    if the unit is px, the remaining n-2 components will have their left/right borders at location `i*100/n%`.
+- **[v1, v2, FILL, v3, v4]**: multiple widths can be specified in uninterrupted sequence both from the left and the right. 
  */
 
 /** */
@@ -71,41 +78,6 @@ const cParams = {
 type descriptor = {size:number, code:string, fields:{}};
 
 /**
-Lays its components out in pillars, i.e. either {@link hsLayout:PillaredLayout.Columns columns}
-or {@link hsLayout:PillaredLayout.Rows rows}
-Use `{rows: [attributes]}` or `{columns: [attributes]}` to invoke this layout.
-See [Examples][example]
-
-[example]: ./example/layout.html
-### Example
-<code>
-    {rows: [px(200), FILL]} // --> top row has height 200px, all other rows evenly share remaining space 
-</code>
-
-## Attributes
-The following values **v** are valid entries in The Attributes array:
-- **px(n)** -- a fixed number of pixels 
-- **pc(n)** -- a fixed percentage of available space
-- **FILL**  -- a special constant to indicate - may appear only once per array.
-
-The following options are supported for the Attributes array:
-- **[ ]**: An empty array; all components will be evenly spaced across the available width. 
-- **[v]**: All components have the specified width (in px or %) and will fill the available space from the left,
-    leaving any remaining unused space on the right. 
-- **[v1, v2]**: All components have the specified widths (in px or %) and will fill the available space from the left,
-    leaving any remaining unused space on the right. If there are more components than widths, the right-most width
-    will be used for the reminaing widgets.
-- **[v, FILL]**: Sets the first (left) widget to a width of `v`.<br>
-    if `v` is specified in %, the remaining n-1 components will have equal relative widths of `(100-v)/(n-1)%`<br>
-    if `v` is specified in px, the remaining n-1 components will have their right borders at location `i*100/n%`, with i=1...n.
-- **[FILL, v]**: Sets the last (right) widget to a width of `v`.<br>
-    if `v` is specified in %, the remaining n-1 components will have equal relative widths of `(100-v)/(n-1)%`<br>
-    if `v` is specified in px, the remaining n-1 components will have their left borders at location `i*100/n%`, with i=0...n-1.
-- **[va, FILL, vb]**: Sets the first and last widget to a width of `va`/`vb`.<br>
-    Both have to be specified either in px or in %.<br>
-    if the unit is %, the remaining n-2 components will have equal relative widths of `(100-vb-va)/(n-2)%`<br>
-    if the unit is px, the remaining n-2 components will have their left/right borders at location `i*100/n%`.
-- **[v1, v2, FILL, v3, v4]**: multiple widths can be specified in uninterrupted sequence both from the left and the right. 
  */
 class Pillars extends Layout{
     firstFixed: number; // number of DefinedToken entries at the beginning
@@ -250,7 +222,58 @@ class Pillars extends Layout{
 };
 
 /**
- * constructs a columns pillar layout style.
+ * Constructs a columns pillar layout style.
+ * Supported 
+ * <example>
+ * <file name='script.js'>
+ * const styles = [ 
+ *     [],                // equal spacing
+ *     ["100px"],         // fixed spacing
+ *     ["60px", "100px"], // fixed spacing
+ *     ["20%"],           // relative spacing
+ *     ["fill", "20%"]    // relative spacing
+ * ];
+ * let c = [];
+ * function next() {
+ *     const title = `Column<${'br'}>${c.length+1}`;
+ *     if (c.length >= 5) { c = []; }
+ *     else { c.push(title); }
+ *     setTimeout(next, 2000);
+ *     m.redraw();
+ * }
+ * 
+ * m.mount(root, { 
+ *     view:() => m(layout.Container, {
+ *         rows:[],  // each row a style
+ *         content: styles.map(i => m(layout.Container, {
+ *             css: '.myExample', 
+ *             content: c.map(c=>c),
+ *             columns: i
+ *         }))
+ *     })
+ * });
+ * next();
+ * </file>
+ * <file name='style.css'>
+ * .hs-layout { 
+ *     margin:0; 
+ * }
+ * .hs-row-layout>.myExample { 
+ *     border-top:    1px solid white;
+ *     border-bottom: 1px solid white;
+ * }
+ * .myExample>.hs-layout {
+ *     border-left:  1px solid white;
+ *     border-right: 1px solid white;
+ *     background-color: #eee;
+ * }
+ * .myExample { 
+ *     color:       red; 
+ *     font-weight: bold; 
+ *     text-align:  center;
+ * }
+ * </file>
+ * </example>
  */
 class Columns extends Pillars {
     constructor(public areaDesc:LayoutToken[]) { super(cParams[PillarLayouts[0]], areaDesc);  };
@@ -258,6 +281,56 @@ class Columns extends Pillars {
 
 /**
  * constructs a rows pillar layout style.
+ * <example>
+ * <file name='script.js'>
+ * const styles = [ 
+ *     [],                // equal spacing
+ *     ["50px"],         // fixed spacing
+ *     ["30px", "50px"], // fixed spacing
+ *     ["20%"],           // relative spacing
+ *     ["fill", "20%"]    // relative spacing
+ * ];
+ * let c = [];
+ * function next() {
+ *     const title = `Row<${'br'}>${c.length+1}`;
+ *     if (c.length >= 5) { c = []; }
+ *     else { c.push(title); }
+ *     setTimeout(next, 2000);
+ *     m.redraw();
+ * }
+ * 
+ * m.mount(root, { 
+ *     view:() => m(layout.Container, {
+ *         columns:[],  // each column a style
+ *         content: styles.map(i => m(layout.Container, {
+ *             css: '.myExample', 
+ *             content: c.map(c=>c),
+ *             rows: i
+ *         }))
+ *     })
+ * });
+ * next();
+ * </file>
+ * <file name='style.css'>
+ * .hs-layout { 
+ *     margin:0; 
+ * }
+ * .hs-column-layout>.myExample {
+ *     border-left:    1px solid white;
+ *     border-right: 1px solid white;
+ * }
+ * .myExample>.hs-layout {
+ *     border-top:  1px solid white;
+ *     border-bottom: 1px solid white;
+ *     background-color: #eee;
+ * }
+ * .myExample { 
+ *     color:       red; 
+ *     font-weight: bold; 
+ *     text-align:  center;
+ * }
+ * </file>
+ * </example>
  */
 class Rows extends Pillars {
     constructor(public areaDesc:LayoutToken[]) { super(cParams[PillarLayouts[1]], areaDesc);  };
