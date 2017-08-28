@@ -4,21 +4,21 @@
  * `hsDoc` will interpret and execute Javascript instructions within a &lt;`file name='script.js'`&gt; tag.
  * and stylesheet instructions with a &lt;`file name='style.css'`&gt; tag, as in following example:
  * <code>
- * &lt;example&gt;
- * <file name='script.js'>
+ *     &lt;example&gt; 
+ *     <file name='script.js'>
  *     m.mount(root, { 
  *         view:() => m(layout.Container, { columns:[], 
  *             content:['first line','second line')]
  *         })
  *     });
- * </file>
+ *     </file>
  * 
- * <file name='style.css'>
+ *     <file name='style.css'>
  *     .hsLeaf { 
  *         color: blue; 
  *     }
- * </file>
- * &lt;/example&gt;
+ *     </file>
+ *     &lt;/example&gt;
  * </code>
  * 
  * ### Scripts 
@@ -26,29 +26,44 @@
  * Do not use `m.route` as only a single call is allowed per web app and that is used to manage the 
  * main hsDoc site menu and navigation.
  * 
- * hsDoc internally uses the [global `Function`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function)
- * object to parse and execute the script. Thus the script has access only to global objects and to objects provided
+ * hsDoc internally uses the [global `Function` object][Function] to parse and execute the script. 
+ * Thus the script has access only to global objects and to objects provided
  * as parameters in the `Function` constructor. hsDoc currently provides the following namespaces as parameters
  * for use in the scripts:
- * | m      | the `Mithril` m function |     
- * | layout | the {@link hsLayout: `hsLayout`} namespace, providing functions to layout the browser window. |
- * | widget | the {@link hsWidget: `hsWidget`} namespace, providing various UI widget functions. |
+ * - **m**: the `Mithril` m function    
+ * - **layout**: the {@link hsLayout: `hsLayout`} namespace, providing functions to layout the browser window.
+ * - **widget**: the {@link hsWidget: `hsWidget`} namespace, providing various UI widget functions.
+ * - additionally, the parameter **root** is provided as the DOM element to mount to.
+ * 
+ * [Function]:https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function
+ * 
+ * ### Styles
+ * Styles will be automatically sandboxed so they are valid only within the enclosing example tags. 
+ * This allows multiple examples to co-exist on the same page.
  * 
  * <example>
  * <file name='script.js'>
  * m.mount(root, { 
- *     view:() => m(layout.Container, {css:'.ex2', columns:[], content:[
- *         'third line',
- *         'fourth line'
- *     ]})
+ *     view:() => m(layout.Container, {
+ *         css:'.myExample', 
+ *         columns:[], 
+ *         content:[
+ *             'third line',
+ *             'fourth line'
+ *         ]
+ *     })
  * });
  * </file>
  * <file name='style.css'>
- * .ex2 { 
+ * .hs-layout { 
+ *     margin:0; 
+ * }
+ * .myExample>.hs-layout {
+ *     border: 2px solid white;
+ * }
+ * .myExample { 
  *     color: red; 
  *     font-weight:bold; 
- * }
- *    .ex3 { color: red;
  * }
  * </file>
  * </example>
@@ -77,9 +92,9 @@ export function example(example:string) {
     let IDs = gInitialized[instance];
     if (!IDs) {
         IDs = gInitialized[instance] = initDesc(() => addExample(IDs));
-        getCommentDescriptor(IDs, example);
-        addExample(IDs);    
+        getCommentDescriptor(IDs, example);    
     }
+    if (!document.getElementById(IDs.mid)) { addExample(IDs); }
     const style = IDs.pages['css'].replace(/(^|})\s*?(\S*?)\s*?{/gi, (x:string, ...args:any[]) =>
         x.replace(args[1], `#${IDs.eid} ${args[1]}`)
     );
@@ -105,7 +120,6 @@ function getNewID():string {
 }
 
 function addExample(IDs:CommentDescriptor) {
-    console.log('addExample ' + IDs.desc.selectedItem);
     Promise.resolve(IDs)
         .then(addExampleStructure)
         .then(executeScript);
