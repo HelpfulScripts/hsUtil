@@ -78,8 +78,9 @@ const cParams = {
 type descriptor = {size:number, code:string, fields:{}};
 
 /**
+ * Abstract base Layout for creating Pillars (rows, colums)
  */
-class Pillars extends Layout{
+abstract class Pillars extends Layout{
     firstFixed: number; // number of DefinedToken entries at the beginning
     lastFixed:  number; // number of DefinedToken entries at the end
     unit:(num:number)=>descriptor[];
@@ -87,7 +88,8 @@ class Pillars extends Layout{
     cssClass:string;
 
     /**
-     * Constructs a Pillared layout (rows or columns)
+     * Constructs a Pillared layout (rows or columns).
+     * Determines the `unit` (% or px) from the passed area descriptors
      * @param params Style params for either rows or columns layout
      * @param areaDesc Description of the requested layout 
      */
@@ -100,8 +102,7 @@ class Pillars extends Layout{
         let first = 0;
         let last  = 0;        
         // if any of the dimensions are in px, use the pixel method; else use the percent method
-        // get index of first and last undefined area, if any            
-        this.unit = areaDesc.some((area:LayoutToken) => (area instanceof PixelToken))? this.unitPixel : this.unitPercent;   // true if any area is PixelToken
+        this.unit = areaDesc.some((area:LayoutToken) => (area instanceof PixelToken))? this.unitPixel : this.unitPercent;   
         
         // determine first = number of consecutive fixed fields at start
         areaDesc.some((area:LayoutToken, i:number) => ((areaDesc[i]   instanceof DefinedToken)? ++first<0 : true));         
@@ -117,48 +118,48 @@ class Pillars extends Layout{
     /**
      * Creates an iterable list of size descriptors, one for each area to be layed out.
      * Each descriptor 
-     * @param num the number pof areas to be layed out
-     * @return Iterable list of size descriptors, one for each area to be layed out
+     * @param num the number of areas to be layed out
+     * @return Iterable list of `num` size descriptors, one for each area to be layed out
      */
     private getSizes(num:number):descriptor[] {
         const first = this.firstFixed;
         const last  = this.lastFixed;
         const desc  = this.areaDesc;
         const len = desc.length;
-        function getSize(i:number):descriptor {
+
+        return [...Array(num).keys()].map((i:number) => {
             let size:number = null;
             let t = null;
             if (i > num-1-last)  { size = desc[len - (num-i)].getSize(); t = 'end'; }       // end sequence
             else if (i < first)  { size = desc[i].getSize(); t = 'start'; }                 // start sequence
             else if (len>0 && len===first){ size = desc[len-1].getSize(); t = 'start'; }    // all items 
             return {size:size, code:t, fields:{}};
-        } 
-        return [...Array(num).keys()].map(getSize);
+        });
     }
 
     private unitPercent(num:number):descriptor[] {
         let f = this.fields;
         let max = 100.0;
-        let defDim = max / num;      // divvy up remaining space
         let styles:descriptor[] = this.getSizes(num);
 
         styles.forEach(style => { if (style.size) { max = max - style.size; num--; } });
+        let defDim = max / num;      // divvy up remaining space
 
-        function pass(styles:descriptor[], ix0:number, ix1:number, breakCond:(cond:string)=>boolean) {
+        function pass(styles:descriptor[], ix0:string, ix1:string, breakCond:(cond:string)=>boolean) {
             let sumDim = 0;
             styles.some(style => { // stop when breakCond is met
                 let size = style.size || defDim;
                 if (breakCond(style.code)) { return true; }
-                style.fields[f[ix0]] = sumDim+'%';
+                style.fields[ix0] = sumDim+'%';
                 sumDim += size;
-                style.fields[f[ix1]] = (100-sumDim)+'%'; 
+                style.fields[ix1] = (100-sumDim)+'%'; 
                 style.fields[f[5]] = 'auto';
                 return false;
             });
         }
 
-        pass(styles, 2, 3, (e:string) => e==='end');              // forward pass
-        pass(styles.reverse(), 3, 2, (e:string) => e!=='end');    // backward pass
+        pass(styles, f[2], f[3], (e:string) => e==='end');              // forward pass
+        pass(styles.reverse(), f[3], f[2], (e:string) => e!=='end');    // backward pass
         return styles.reverse();    // reverse a second time for original sequence.
     };
 
@@ -222,22 +223,24 @@ class Pillars extends Layout{
 };
 
 /**
- * Constructs a columns pillar layout style.
- * Supported 
+ * Constructs a columns pillar layout style.<br>
+ * Use `{columns: [attributes]}` to invoke this layout. See top of page for a description.
  * <example>
  * <file name='script.js'>
  * const styles = [ 
  *     [],                // equal spacing
  *     ["100px"],         // fixed spacing
- *     ["60px", "100px"], // fixed spacing
- *     ["20%"],           // relative spacing
- *     ["fill", "20%"]    // relative spacing
+ *     ["60px", "100px"], // fixed spacing, first one smaller
+ *     ["100px", "fill"], // first one fixed, rest equal
+ *     ["fill", "100px"], // last one fixed, rest equal
+ *     ["20%"],           // relative spacing, all equal
+ *     ["20%", "fill"],   // first relative, rest equal
+ *     ["fill", "20%"]    // last relative, rest equal
  * ];
  * let c = [];
  * function next() {
- *     const title = `Column<${'br'}>${c.length+1}`;
  *     if (c.length >= 5) { c = []; }
- *     else { c.push(title); }
+ *     else { c.push(''); }
  *     setTimeout(next, 2000);
  *     m.redraw();
  * }
@@ -247,8 +250,8 @@ class Pillars extends Layout{
  *         rows:[],  // each row a style
  *         content: styles.map(i => m(layout.Container, {
  *             css: '.myExample', 
- *             content: c.map(c=>c),
- *             columns: i
+ *             content: c.map(c=>(''+i)),
+ *             columns: i    // a style from styles
  *         }))
  *     })
  * });
@@ -280,21 +283,24 @@ class Columns extends Pillars {
 };
 
 /**
- * constructs a rows pillar layout style.
+ * Constructs a row pillar layout style.<br>
+ * Use `{row: [attributes]}` to invoke this layout. See top of page for a description.
  * <example>
  * <file name='script.js'>
  * const styles = [ 
  *     [],                // equal spacing
- *     ["50px"],         // fixed spacing
- *     ["30px", "50px"], // fixed spacing
- *     ["20%"],           // relative spacing
- *     ["fill", "20%"]    // relative spacing
+ *     ["100px"],         // fixed spacing
+ *     ["60px", "100px"], // fixed spacing, first one smaller
+ *     ["100px", "fill"], // first one fixed, rest equal
+ *     ["fill", "100px"], // last one fixed, rest equal
+ *     ["20%"],           // relative spacing, all equal
+ *     ["20%", "fill"],   // first relative, rest equal
+ *     ["fill", "20%"]    // last relative, rest equal
  * ];
  * let c = [];
  * function next() {
- *     const title = `Row<${'br'}>${c.length+1}`;
  *     if (c.length >= 5) { c = []; }
- *     else { c.push(title); }
+ *     else { c.push(''); }
  *     setTimeout(next, 2000);
  *     m.redraw();
  * }
@@ -304,8 +310,8 @@ class Columns extends Pillars {
  *         columns:[],  // each column a style
  *         content: styles.map(i => m(layout.Container, {
  *             css: '.myExample', 
- *             content: c.map(c=>c),
- *             rows: i
+ *             content: c.map(c=>(''+i)),
+ *             rows: i   // a style from styles
  *         }))
  *     })
  * });
