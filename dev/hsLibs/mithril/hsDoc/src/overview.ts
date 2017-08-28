@@ -19,7 +19,7 @@ where
  - *docset* is the name of the docset
  - *module* is name of the module to link to; 
    if *module* is `overview`, or unspecified, the link will point to the docset overview page.
- - *item* is the name of the item within the module. 
+ - *item* is the name, or period-separated path, of the item within the module. 
  - linked text is displayed with a link to path within module
 
 Examples:
@@ -28,8 +28,34 @@ Examples:
 
 
 ### Mithril Code Examples
-`hsDoc` supports creating inline code examples in comment sections as explained 
-in the {@link hsDoc:MainExample MainExample overview}.
+ * `hsDoc` supports creating inline code examples in comment sections as explained 
+ * in the {@link hsDoc:MainExample MainExample overview}.
+ * <example>
+ * <file name="script.js">
+ * let tl = [10, 10];
+ * function click() {
+ *     tl = tl.map(i => Math.floor(80*Math.random()));
+ * }
+ * m.mount(root, {
+ *     view: () => m('.myBlock', {
+ *         onclick:click, 
+ *         style:`top:${tl[0]}%; left:${tl[1]}%;`
+ *     }, m('', 'click me'))})
+ * </file>
+ * <file name="style.css">
+ * .myBlock {
+ *     text-align:center;
+ *     color: white;
+ *     background-color: red;
+ *     position:relative;
+ *     width:  20%;
+ *     height: 30%;
+ * }
+ * .myBlock div {
+ *     padding-top: 40%;
+ * }
+ * </file>
+ * </example>
 
 ## Configuring typedoc
 As an example, we use grunt-typedoc with the following configuration:
