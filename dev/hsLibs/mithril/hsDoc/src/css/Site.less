@@ -1,6 +1,7 @@
-@bg-example: #eea;
-@bg-source:  #ddf;
-@border: 2px solid white; 
+@bg-example: #eed;
+@bg-source:  #dde;
+@border: 1px solid #ddd; 
+@selectBorder: 1px solid #eee;
 
 body {
     color: black;
@@ -15,15 +16,15 @@ example {
      
     .hs-source              { 
         background-color: @bg-source;  
-        border-left: @border; 
+        font-size: 12px;
     }
     .hs-execution           { 
         background-color: @bg-example; 
-        div { margin: 5px; }
+        div { margin: 0px; }
+        .hs-leaf { padding: 5px; } 
     }
-    .hs-menu                { border-left: @border; }
-    .hs-menu-item           { background-color: #fff; border: 1px solid #ddd;  }
-    .hs-menu-item-selected  { background-color: @bg-source; } 
+    .hs-menu-item           { background-color: #fff; border: @border;  }
+    .hs-menu-item-selected  { background-color: @bg-source; border: @selectBorder; } 
     pre { padding-left: 10px; }
 }
 
