@@ -19,10 +19,10 @@
  *     }
  *     </file>
  *     &lt;/example&gt;
- * </code>
+ * </code> 
  * 
  * ### Scripts 
- * Scripts a expected to mount a `mithril Vnode` on a root DOM element using `m.mount` or `m.render`. 
+ * Scripts are expected to mount a `mithril Vnode` on a root DOM element using `m.mount` or `m.render`. 
  * Do not use `m.route` as only a single call is allowed per web app and that is used to manage the 
  * main hsDoc site menu and navigation.
  * 
@@ -70,41 +70,75 @@
  */
 
 /** */
-import { m }                from '../../../mithril';
-import { Menu, MenuDesc }   from '../../../hsWidgets/src/';
-import { Container }        from '../../../hsLayout/src/';
-import { shortCheckSum }    from '../../../../standalone/src/hsChecksum';
-import * as layout          from '../../../hsLayout/src/';
-import * as widget          from '../../../hsWidgets/src/';
+import { m }                    from '../../../mithril';
+import { Menu, MenuDesc }       from '../../../hsWidgets/src/';
+import { Container }            from '../../../hsLayout/src/';
+import { shortCheckSum, delay } from '../../../../standalone/src/';
+import * as layout              from '../../../hsLayout/src/';
+import * as widget              from '../../../hsWidgets/src/';
+
 
 interface CommentDescriptor {
     eid:    string;             // example tag ID
     mid:    string;             // menu tag ID
     desc:   MenuDesc;           // menu items
-    pages:  {string:string};    // page content for each menu item
-    mountScript: Function;
+    pages:  {string?:string};   // page content for each menu item
+    executeScript?: (root:any) => void;
 }
 
+/**
+ * Map containing various exampkle configurations 
+ */
 const gInitialized:{string?:CommentDescriptor} = {};
 
-export function example(example:string) {
-    const instance = shortCheckSum(example);
-    let IDs = gInitialized[instance];
-    if (!IDs) {
-        IDs = gInitialized[instance] = initDesc(() => addExample(IDs));
-        getCommentDescriptor(IDs, example);    
-    }
-    if (!document.getElementById(IDs.mid)) { addExample(IDs); }
-    const style = IDs.pages['css'].replace(/(^|})\s*?(\S*?)\s*?{/gi, (x:string, ...args:any[]) =>
-        x.replace(args[1], `#${IDs.eid} ${args[1]}`)
-    );
-    return `<style>${style}</style><example id=${IDs.eid} class="hs-layout-frame"></example>`;
+/**
+ * creates the example configuration, generates the DOM hook, and sets up the example execution.
+ * `example` takes a context map of the form `{ name:module, ...}` and return a function 
+ * that can be used in calls to `string.replace`as in the following example:
+ * <code><pre>
+ * import * as layout from "layout";
+ * text = text.replace(/<example>([\S\s]*?)<\/example>/gi, example({layout:layout}));
+ * </pre></code>
+ * The modules `m`, `hsLayout`, and `hsWidget` will be added by default as 
+ * ` { m: m, layout: layout, widget: widget } `
+ * @param example the example string extracted from the comment, including the `<example>` tags.
+ * @param context the context in which the example script should be run, expressed as `name`:`namespace` pairs.
+ */
+export function example(context:any) { 
+    context.m      = m;
+    context.layout = layout;
+    context.widget = widget;
+    const names = Object.keys(context);
+    const modules = names.map(n => context[n]);
+    return (example:string) => { 
+        const instance = shortCheckSum(example);
+        let IDs = gInitialized[instance];
+        if (!IDs) {
+            IDs = gInitialized[instance] = initDesc(() => addExample(IDs));
+            try {
+                const script = new Function('root', ...names, getCommentDescriptor(IDs, example));    
+                IDs.executeScript = (root:any) => script(root, ...modules);
+            }
+            catch(e) { console.log('creating script:' + e); }
+        }
+        if (!document.getElementById(IDs.mid)) { addExample(IDs); }
+        const styles = IDs.pages['css']; 
+
+        // prefix css selectors with ID of main execution area to sandbox the scope
+        const style = (styles===undefined)? '': styles.replace(/(^|})\s*?(\S*?)\s*?{/gi, (x:string, ...args:any[]) =>
+            x.replace(args[1], `#${IDs.mid} ${args[1]}`)
+        );
+        return `<style>${style}</style><example id=${IDs.eid} class="hs-layout-frame"></example>`;
+    };
 }
 
-function initDesc(fn:any) {
+/**
+ * creates the example configuration 
+ */
+function initDesc(fn:any):CommentDescriptor {
     return {
-        eid: getNewID(),    // example tag ID
-        mid: getNewID(),    // menu tag ID
+        eid:     getNewID(),    // example tag ID
+        mid:     getNewID(),    // main execution area tag ID
         desc:{ 
             items:<string[]>[],
             selectedItem: 'js',
@@ -115,12 +149,14 @@ function initDesc(fn:any) {
     };
 }
 
+/** creates a new random example ID for each call. */
 function getNewID():string { 
     return 'hs'+Math.floor(1000000*Math.random());
 }
 
+/** asynchronously adds the example structure on the page and then executed the script. */
 function addExample(IDs:CommentDescriptor) {
-    Promise.resolve(IDs)
+    return Promise.resolve(IDs)
         .then(addExampleStructure)
         .then(executeScript);
 }
@@ -130,12 +166,12 @@ function addExample(IDs:CommentDescriptor) {
  * mount the menu and execute the script function provided in `IDs`. 
  * @param IDs the `CommentDescriptor` to execute on. 
  */
-function addExampleStructure(IDs:CommentDescriptor) {
+function addExampleStructure(IDs:CommentDescriptor) { 
     const item = IDs.desc.selectedItem;
     const source = m.trust(`<code><pre>${IDs.pages[item]}</pre></code>`);
     const root = document.getElementById(IDs.eid);
 
-    m.mount(root, {view: () => m(Container, {
+    m.mount(root, {view: () => m(Container, { 
         columns: ["50%"],
         content: [
             m(Container, {content: m('.hs-layout .hs-execution', {id:IDs.mid})}),
@@ -151,60 +187,34 @@ function addExampleStructure(IDs:CommentDescriptor) {
     return IDs;
 }
 
-const scriptFunction = {
-    create: (IDs:CommentDescriptor, text:string) => IDs.mountScript = new Function('root', 'm', 'layout', 'widget', text),
-    apply: (IDs:CommentDescriptor, root:any) => IDs.mountScript(root, m, layout, widget)
-};
-
 /**
  * execute the provided script 
  * @param IDs provides the context in which the script is exceuted/
  */
 function executeScript(IDs:CommentDescriptor) {
-    const root = document.getElementById(IDs.mid);
-    try { scriptFunction.apply(IDs, root); }
-    catch(e) { console.log("executing script: " + e); }
-    return IDs;
+    delay(20).then(() => {
+        const root = document.getElementById(IDs.mid);
+        try { IDs.executeScript(root); }
+        catch(e) { console.log("executing script: " + e); }
+        return IDs;
+    });
 }
  
 /**
  * Fills in all fields of the CommentDescriptor provided as `IDs`.
  * @param IDs the CommentDescriptor to complete
  * @param example the example string, including <example> tag
+ * @return the script to execute, as a string
  */
-function getCommentDescriptor(IDs:CommentDescriptor, example:string) {
-    function pageSrc(text:string) {
-        return text;
-    }
-
-    /**
-     * prefixes all definitions in the style `text` with with the example ID, e.g. `#545673`,
-     * and returns the result.
-     * @param text the style definition to process.
-     */
-    function styleSrc(text:string) { 
-        return text;
-    }
-
-    /** 
-     * Creates the function that executed the script. 
-     * That function is expected to call `m.mount` on `root` as the DOM mount point.
-     * */
-    function scriptSrc(IDs:CommentDescriptor, text:string):string {
-        scriptFunction.create(IDs, text); 
-        return text;
-    }
-
+function getCommentDescriptor(IDs:CommentDescriptor, example:string):string {
     let result = '';
     example.replace(/<file[\s]*name=[\S]*?\.([\s\S]*?)['|"]>([\S\s]*?)<\/file>/gi, function(text:string) {
         const args = [...arguments];
         const content = args[2].trim();
-        switch (args[1]) {
-            case 'html': IDs.desc.items.push('html'); IDs.pages['html'] = pageSrc(content); break;
-            case 'js': IDs.desc.items.push('js'); IDs.pages['js'] = scriptSrc(IDs, content); break;
-            case 'css': IDs.desc.items.push('css'); IDs.pages['css'] = styleSrc(content); break;
-        }
+        IDs.desc.items.push(args[1]);
+        IDs.pages[args[1]] = content;
         return result;
     });
+    return IDs.pages['js'];
 }
 

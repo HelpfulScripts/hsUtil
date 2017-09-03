@@ -2,8 +2,8 @@
 Layout.ts provides basic mechanisms for laying out a view container. 
 Two abstract classes provide the basic mechanism:
  
-##{@link hsLayout:Layout.Canvas Canvas}
-Extensions of `Canvas` layout  `Compnonent`s they hold in one of a number of ways. 
+##{@link hsLayout:Layout.Container Container}
+Extensions of `Container` layout  `Compnonent`s they hold in one of a number of ways. 
 Being a `Component` themselves, 
 For example, 
    ``
@@ -13,7 +13,7 @@ For example,
 import { Vnode} from '../../../mithril';
 
 import { LayoutToken }  from './Tokens';
-import { Canvas }       from './Canvas';
+import { Container }    from './Container';
 import { px, pc, FILL } from './Tokens';
 
 /**
@@ -28,8 +28,8 @@ class MyLayout extends Layout {
         super(areaDesc); 
     }
     
-    protected getStyles(components:Array<Vnode|Canvas>):string {
-        components.map((c:Canvas|Vnode, i:number) => {
+    protected getStyles(components:Array<Vnode|Container>):string {
+        components.map((c:Container|Vnode, i:number) => {
             c.style = `width:auto; height:auto;
         });   
         return this.cssClass;
@@ -104,9 +104,9 @@ export abstract class Layout {
     spacing = 0;   
     
     /**
-     * Layout Constructor, will be called by the static `createLayout` method when creating the layout on a {@link hsLayout:Canvas.Canvas `Canvas`}.
+     * Layout Constructor, will be called by the static `createLayout` method when creating the layout on a {@link hsLayout:Container.Container `Container`}.
      * The `areaDesc` parameter is expected to be of the form {<keyword>: {@link hsLayout:Tokens.LayoutToken `LayoutToken`}[]}} 
-     * and will be passed through form the `Canvas` requesting the layout.
+     * and will be passed through form the `Container` requesting the layout.
      * @param areaDesc 
      */
     constructor(public areaDesc:LayoutToken[]) {};
@@ -116,8 +116,8 @@ export abstract class Layout {
      * These attributes are saved in a `style` field on the component itself. 
      * During rendering these `style` attributes are copied to the `node.attrs.styles` field.
      * ### Example
-    <code>protected getStyles(components:Array<Vnode|Canvas>):string {
-        components.map((c:Canvas|Vnode, i:number) => {
+    <code>protected getStyles(components:Array<Vnode|Container>):string {
+        components.map((c:Container|Vnode, i:number) => {
             c.style = `width:auto; height:auto;
         });   
         return this.cssClass;
@@ -125,6 +125,6 @@ export abstract class Layout {
     </code>
      * @param components 
      */
-    protected abstract getStyles(components:Array<Vnode|Canvas>):string;
+    protected abstract getStyles(components:Array<Vnode|Container>):string;
 }
 

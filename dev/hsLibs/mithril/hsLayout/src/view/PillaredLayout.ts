@@ -39,7 +39,7 @@ The following options are supported for the Attributes array:
  */
 
 /** */
-import { Canvas }       from './Canvas';
+import { Container }    from './Container';
 import { Layout }       from './Layout';
 import { LayoutToken, DefinedToken, PixelToken }    from './Tokens';
 import { Vnode}         from '../../../mithril';
@@ -211,10 +211,10 @@ abstract class Pillars extends Layout{
      * During rendering these `styles` attributes are copied to the `node.attrs.styles` field.
      * @param components 
      */
-    protected getStyles(components:Array<Vnode|Canvas>):string  { 
+    protected getStyles(components:Array<Vnode|Container>):string  { 
         let f = this.fields;
         let styles:descriptor[] = this.unit(components.length);
-        components.map((c:Canvas|Vnode, i:number) => {
+        components.map((c:Container|Vnode, i:number) => {
             c.style = `${f[0]}:0%; ${f[1]}:0%; `;
             Object.keys(styles[i].fields).forEach((st:string) => { c.style += `${st}: ${styles[i].fields[st]};`; });
         });   
@@ -258,9 +258,6 @@ abstract class Pillars extends Layout{
  * next();
  * </file>
  * <file name='style.css'>
- * .hs-layout { 
- *     margin:0; 
- * }
  * .hs-row-layout>.myExample { 
  *     border-top:    1px solid white;
  *     border-bottom: 1px solid white;
@@ -268,10 +265,10 @@ abstract class Pillars extends Layout{
  * .myExample>.hs-layout {
  *     border-left:  1px solid white;
  *     border-right: 1px solid white;
- *     background-color: #eee;
+ *     background-color: #ccc;
  * }
  * .myExample { 
- *     color:       red; 
+ *     color:       #a44; 
  *     font-weight: bold; 
  *     text-align:  center;
  * }
@@ -318,9 +315,6 @@ class Columns extends Pillars {
  * next();
  * </file>
  * <file name='style.css'>
- * .hs-layout { 
- *     margin:0; 
- * }
  * .hs-column-layout>.myExample {
  *     border-left:    1px solid white;
  *     border-right: 1px solid white;
@@ -328,10 +322,10 @@ class Columns extends Pillars {
  * .myExample>.hs-layout {
  *     border-top:  1px solid white;
  *     border-bottom: 1px solid white;
- *     background-color: #eee;
+ *     background-color: #ccc;
  * }
  * .myExample { 
- *     color:       red; 
+ *     color:       #a44; 
  *     font-weight: bold; 
  *     text-align:  center;
  * }

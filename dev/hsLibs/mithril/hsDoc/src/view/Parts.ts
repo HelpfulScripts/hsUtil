@@ -1,5 +1,6 @@
 import { m, Vnode} from '../../../mithril';
 import { tooltip } from './Tooltip';
+import { DocSets } from '../DocSets'; 
 
 const SourceBase = 'src/'; 
 
@@ -49,7 +50,7 @@ export function extensionOf(mdl:any) {
         m('span.hs-item-extends', 'extends'),
         m('span', mdl.extendedTypes.map((t:any, i:number) =>
             m('span.hs-item-extension', [
-                libLongLink('a', mdl.lib, t.fullPath, t.name),
+                libLongLink('a', mdl.lib, DocSets.get(mdl.lib, t.id).fullPath, t.name),
                 mdl.extendedTypes.map.length>(i+1)? ', ': ''
             ])
         )),

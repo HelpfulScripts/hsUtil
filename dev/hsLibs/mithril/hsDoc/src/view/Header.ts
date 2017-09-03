@@ -19,12 +19,7 @@ export class MenuTitle extends Container {
         };
     }
 
-    oninit(node:Vnode) { 
-        this.report('MenuTitle:init', node); 
-    }
-
     getComponents(node:Vnode):Vnode {
-        this.report('Container:view', node); 
         const desc = this.getDesc(node.attrs);
         return m(Menu, {desc: desc});
     }

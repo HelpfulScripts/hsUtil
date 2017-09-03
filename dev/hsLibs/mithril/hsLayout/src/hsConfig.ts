@@ -56,27 +56,6 @@ function copy(struct:any): any {
 }
 
 
-export class Container extends layout.Canvas {
-    /**
-     * Called during the lifecycle `view` call to retrieve the subcomponents to render in this container.
-     * The default implementation returns components stored in `node.attrs.content`. This allows for 
-     * creating containers directly via mithril: `m(Container, {content:[...]})`.
-     * Override this method to create containers that return more sophisticated content.
-     */
-    protected getComponents(node:Vnode):Vnode {
-        return !Array.isArray(node.attrs.content)? node.attrs.content :
-            node.attrs.content.map((c:any) => {
-                if (c.compClass) { 
-                    c.attrs.route = node.attrs.route;
-                    return m(c.compClass, c.attrs);
-                } else {
-                    return c;
-                }
-            });
-            
-    }
-}
-
 /**
  * resolves the symbol `sym` against the provided `context`.
  * If successful, returns the class definition for `sym`. 
