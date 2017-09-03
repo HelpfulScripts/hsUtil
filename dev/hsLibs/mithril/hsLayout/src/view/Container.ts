@@ -1,5 +1,5 @@
 /**
- Definitions of the abstratc base classes `Component` and `Canvas`.
+ Definitions of the abstratc base classes `Component` and `Container`.
  */
 
 /** */
@@ -26,10 +26,10 @@ export abstract class Component {
 Abstract base class for applying layouts. Subclasses should implement a `view` method that returns
 the result of a call to `this.layout()`, as in the following example:
 <code>
-import { Canvas, px, FILL }  from 'hsLayout';
+import { Container, px, FILL }  from 'hsLayout';
 const TitleHeight   = px(30); 
 const FooterHeight  = px(10); 
-class MyLayout extends Canvas {
+class MyLayout extends Container {
     view(node:Vnode):Vnode {
         return this.layout('.my-layout', { rows:[TitleHeight, FILL, FooterHeight] }, [
             m(), 
@@ -40,28 +40,41 @@ class MyLayout extends Canvas {
 } 
 </code>
 The call to `this.layout` takes as parameters
-- the css class to associate with the canvas,
-- the Canvas Vnode,
+- the css class to associate with the Container,
+- the Container Vnode,
 - the layout configration (see {@link #methods_layout layout} method), and
 - the components to be layed out.
 
  */
-export abstract class Canvas extends Component {
+export abstract class Container extends Component {
     /**
      * holds structural elements in style form: left, right, top, bottom, width, height
      */
     public style:string;
 
-//    oninit(node:Vnode)   { this.report('Canvas:init', node); }
-//    oncreate(node:Vnode) { this.report('Canvas:create', node); } 
-//    onupdate(node:Vnode) { this.report('Canvas:update', node); }
+//    oninit(node:Vnode)   { this.report('Container:init', node); }
+//    oncreate(node:Vnode) { this.report('Container:create', node); } 
+//    onupdate(node:Vnode) { this.report('Container:update', node); }
 
     /**
      * Called during the lifecycle `view` call to retrieve the subcomponents to render in this container.
+     * The default implementation returns components stored in `node.attrs.content`. This allows for 
+     * creating containers directly via mithril: `m(Container, {content:[...]})`. 
+     * In case `node.attrs.content` is an array of literals with a `compClass` field describing a Component class, 
+     * the method will create a Mithril node on that class and pass the `node.attrs.route` argument down to it.
+     * Override this method to create containers that return more sophisticated content.
      * @return a Vnode or an array or Vnodes
      */
     protected getComponents(node:Vnode):Vnode {
-        return node.attrs.content;
+        return !Array.isArray(node.attrs.content)? node.attrs.content :
+            node.attrs.content.map((c:any) => {
+                if (c.compClass) { 
+                    c.attrs.route = node.attrs.route;
+                    return m(c.compClass, c.attrs);
+                } else {
+                    return c;
+                }
+            });
     }
 
     /**
@@ -75,14 +88,15 @@ export abstract class Canvas extends Component {
     }
 
 
-    private normalizeContent(components:Array<typeof Canvas|string>|string): Vnode {
+    private normalizeContent(components:Array<typeof Container|string>|string): Vnode {
         if (typeof components === 'string') { 
             return [m('.hs-leaf', m.trust(components))]; 
         }
         if (components.length>0) { // an array:
             if (components.some((c:any) => (typeof c !== 'object'))) {
-                return components.map((comp:string|typeof Canvas):Vnode => 
-                    (typeof comp === 'string')? m(Canvas, {content:comp}) : comp);
+                return components.map((comp:string|typeof Container):Vnode => 
+                    (comp instanceof Container)? comp : m(Container, {content:comp})
+                );
             } else {
                 return components;
             }
@@ -106,10 +120,10 @@ export abstract class Canvas extends Component {
      * @param cssClass a css style designator; same as used in m(cssClass, ...) 
      * @param layout the attribute object literal that configures the layout
      * @param components the components to layout within the container. 
-     * This is either a primitive `string`, or an array of `Canvas`s or `string`s.
+     * This is either a primitive `string`, or an array of `Container`s or `string`s.
      * @return a vnode that has an associated `cssClass` style.
      */
-    private layItOut(node:Vnode): Vnode {
+    view(node:Vnode): Vnode {
         const content = this.normalizeContent(this.getComponents(node)); // --> Vnode[]
         let css = Layout.createLayout(node.attrs, content);
         const attrs:any = {
@@ -124,13 +138,5 @@ export abstract class Canvas extends Component {
             attrs.onupdate = m.route.link;
         }
         return m(`.hs-layout ${css} ${this.getCSS(node)}`, attrs, content.map((c:any) => c));
-    }
-
-    /** default implementation of standard Mithril view method. */
-    view(node:Vnode) { this.report('Canvas:view', node); return this.layItOut(node); } 
-
-    report(cname:string, node:Vnode) { 
-//        console.log(`${cname} ${node.attrs.css}`); 
-//        console.log(node.attrs); 
     }
 }
