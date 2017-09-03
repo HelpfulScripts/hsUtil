@@ -73,7 +73,7 @@ module.exports = function(grunt) {
                     target: 'es6',
                     tsconfig: 'typedoc.json',
                     module: 'commonjs',
-                    json:   './dist/docs/hsWidgets.json',
+                    json:   'docs/hsWidgets.json',
                     out:    './docs',
                     mode:   'modules',
 //                    listInvalidSymbolLinks: true,

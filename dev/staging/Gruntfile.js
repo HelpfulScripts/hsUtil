@@ -13,7 +13,7 @@ module.exports = function(grunt) {
     const staging = '../../staging/apps/';
 
 	// Project configuration.
-	grunt.initConfig({ 
+	grunt.initConfig({
 		copy: {
             stage: { files: 
                 // program files
@@ -73,7 +73,7 @@ module.exports = function(grunt) {
 			stage: { 
                 files:      paths.map(p => basePath+p+'dist/*.js')
                     .concat(paths.map(p => basePath+p+'dist/*.css'))
-                    .concat(paths.map(p => basePath+p+'dist/docs/*.json'))
+                    .concat(paths.map(p => basePath+p+'docs/*.json'))
                     .concat(paths.map(p => basePath+p+'example/*.*')),
 				tasks: ['stage']
 			},
