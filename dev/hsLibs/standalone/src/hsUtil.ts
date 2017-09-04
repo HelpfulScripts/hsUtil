@@ -21,10 +21,15 @@ export function timeout(ms:number) {
  * @ngdoc function
  * @name delay
  * @methodOf hsNode.hsLibs
- * @description delay promise for use in delay(ms).then(doSomething).
+ * @description delay promise for use in Promise.all(param).then(delay(ms)).then(doSomething).
+ * `delay` passes the paremeter received from the calling promise down to the following promise.
  * @param number ms the milliseconds to wait before resolving
  * @return a Promise that resolves after `ms` 
  */
 export function delay(ms:number)   { 
-    return new Promise(resolve => { setTimeout(resolve, ms); }); 
+    return (args:any) => {
+        return new Promise((resolve:any) => { 
+            setTimeout(() => { resolve(args); }, ms); 
+        }); 
+    }
 }
