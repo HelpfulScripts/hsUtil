@@ -54,7 +54,8 @@ function externalModule(mdl:any, field:string) {
     const selected = (field===''+mdl.id || field.indexOf(mdl.fullPath) === 0)?
         '.hs-left-nav-selected' : '';
 
-    if (selected && field.length > mdl.fullPath.length) { expanded[mdl.fullPath] = true; }
+    // if field.length condition is commented out, the panel will always stay open
+    if (selected /*&& field.length > mdl.fullPath.length*/) { expanded[mdl.fullPath] = true; }
 
     // don't show modules from other projects (isExported flag) or modules on the ignore list
     const skip = (mdl.flags && mdl.flags.isExternal) || ignoreModules[mdl.name];
@@ -82,7 +83,7 @@ function entries(group:any, mdl:any, field:string) {
         const selected = (field===''+mod.id || field===mod.fullPath)? '.hs-left-nav-selected' : '';
         const exported = (mod.flags && mod.flags.isExported);
         const statik   = (mod.flags && mod.flags.isStatic);
-        const css = `.hs-left-nav-entry ${selected} ${exported?'.hs-left-nav-exported' : ''}`;
+        const css = `a.hs-left-nav-entry ${selected} ${exported?'.hs-left-nav-exported' : ''}`;
         return (!exported && group.title==='Variables')? '' :   // ignore local module variables
             m('', [
                 statik? 'static': '',
