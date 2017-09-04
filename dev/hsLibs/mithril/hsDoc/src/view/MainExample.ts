@@ -112,7 +112,7 @@ export function example(context:any) {
     const modules = names.map(n => context[n]);
     return (example:string) => { 
         const instance = shortCheckSum(example);
-        let IDs = gInitialized[instance];
+        let IDs = gInitialized[instance]; 
         if (!IDs) {
             IDs = gInitialized[instance] = initDesc(() => addExample(IDs).then(executeScript));
             try {
@@ -122,7 +122,7 @@ export function example(context:any) {
             catch(e) { console.log('creating script:' + e); }
         }
         if (!document.getElementById(IDs.mid)) { 
-            addExample(IDs).then(executeScript); 
+            addExample(IDs).then(delay(1)).then(executeScript);
         }
         const styles = IDs.pages['css']; 
 
@@ -192,12 +192,12 @@ function addExampleStructure(IDs:CommentDescriptor) {
  * @param IDs provides the context in which the script is exceuted/
  */
 function executeScript(IDs:CommentDescriptor) {
-    delay(1).then(() => {
-        const root = document.getElementById(IDs.mid);
-        try { IDs.executeScript(root); }
-        catch(e) { console.log("executing script: " + e); }
-        return IDs;
-    });
+    const root = document.getElementById(IDs.mid);
+console.log(root);    
+    try { IDs.executeScript(root); }
+    catch(e) { console.log("executing script: " + e); }
+    m.redraw();
+    return IDs;
 }
  
 /**
