@@ -33,11 +33,11 @@ export function kindString(mdl:any) {
 }
 
 export function itemName(mdl:any, sub:any) {
-    return m('span.hs-item-name', libLink('a', '', mdl.lib, sub.fullPath, sub.name));
+    return m('span.hs-item-name', libLink('a', mdl.lib, sub.fullPath, sub.name));
 }
 
 export function itemLongName(mdl:any, sub:any) {
-    return m('span.hs-item-name', libLink('a', '', mdl.lib, mdl.fullPath, sub.name));
+    return m('span.hs-item-name', libLink('a', mdl.lib, mdl.fullPath, sub.name));
 }
 
 
@@ -50,7 +50,7 @@ export function extensionOf(mdl:any) {
         m('span.hs-item-extends', 'extends'),
         m('span', mdl.extendedTypes.map((t:any, i:number) =>
             m('span.hs-item-extension', [
-                libLink('a', '', mdl.lib, DocSets.get(mdl.lib, t.id).fullPath, t.name),
+                libLink('a', mdl.lib, DocSets.get(mdl.lib, t.id).fullPath, t.name),
                 mdl.extendedTypes.map.length>(i+1)? ', ': ''
             ])
         )),
@@ -74,18 +74,18 @@ export function sourceLink(mdl:any) {
  * @param id the id number to point to
  * @param name the name on which to formt he link
  */
-export function libLink(css:string, cls:string, lib:string, id:string, name:string, onclick?:()=>void) {
-    return m(css, { href:`/api/${lib}/${id}`, class:cls, oncreate: m.route.link, onupdate: m.route.link, onclick:onclick}, name);
-}
+export function libLink(css:string, lib:string, id:string, name:string) {
+    return m(css, { href:`/api/${lib}/${id}`, oncreate: m.route.link, onupdate: m.route.link }, name);
+};
 
 export function type(t:any, lib:string) {
     function _type(t:any) {
         switch (t.type) { 
-            case 'instrinct':       return t.id? libLink('span', '', lib, t.fullPath, t.name) : t.name; 
+            case 'instrinct':       return t.id? libLink('span', lib, t.fullPath, t.name) : t.name; 
             case 'stringLiteral':   return t.type; 
             case 'union':           return t.types.map(_type).join(' | ');
             case 'reference':       return t.typeArguments? t.name+'<'+ t.typeArguments.map(_type).join(', ') + '>' : 
-                                           t.id? libLink('span', '', lib, t.fullPath, t.name) : t.name;
+                                           t.id? libLink('span', lib, t.fullPath, t.name) : t.name;
             case 'reflection':      return t.declaration? t.declaration.kindString : 'UNKNOWN';
             default: console.log('unknown type '+ t.type);
                      console.log(t);
