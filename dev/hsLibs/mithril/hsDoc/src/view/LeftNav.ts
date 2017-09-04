@@ -6,7 +6,7 @@
 import { m, Vnode} from '../../../mithril';
 import { Container } from '../../../hsLayout/src/';
 import { DocSets } from '../DocSets'; 
-import { libLongLink } from './Parts'; 
+import { libLink } from './Parts'; 
 
 
 /**
@@ -50,17 +50,18 @@ const expanded: {string?:boolean} = {};
  * processes a module, i.e. a `.ts` file.
  */
 function externalModule(mdl:any, field:string) {
+    const toggleExpansion = () => expanded[mdl.fullPath] = !expanded[mdl.fullPath];
     const selected = (field===''+mdl.id || field.indexOf(mdl.fullPath) === 0)?
-        '.hs-left-nav-selected' : '';
+        'hs-left-nav-selected' : '';
 
     if (selected && field.length > mdl.fullPath.length) { expanded[mdl.fullPath] = true; }
 
     // don't show modules from other projects (isExported flag) or modules on the ignore list
     const skip = (mdl.flags && mdl.flags.isExternal) || ignoreModules[mdl.name];
     return skip? m('') : m(`.hs-left-nav-module`, [
-        libLongLink(`a.hs-left-nav-module-name ${selected}`, mdl.lib, mdl.fullPath, mdl.name, 
-            () => { expanded[mdl.fullPath] = !expanded[mdl.fullPath]; }),
-        mdl.groups? m('.hs-left-nav-module-content', { class: expanded[mdl.fullPath]?'':'hs-collapsed'}, mdl.groups.map((g:any) => entries(g, mdl, field))) : undefined
+        libLink('a', `hs-left-nav-module-name ${selected}`, mdl.lib, mdl.fullPath, mdl.name, toggleExpansion),
+        !mdl.groups? undefined : m('.hs-left-nav-module-content', { class: expanded[mdl.fullPath]?'':'hs-collapsed'}, 
+            mdl.groups.map((g:any) => entries(g, mdl, field)))
     ]);
 } 
 
@@ -78,14 +79,15 @@ function entries(group:any, mdl:any, field:string) {
      * processes one entry within a group, e.g. one variable, function, or class.
      */
     function entry(mod:any) { 
-        const selected = (field===''+mod.id || field===mod.fullPath)? '.hs-left-nav-selected' : '';
+        const noop = () => {};
+        const selected = (field===''+mod.id || field===mod.fullPath)? 'hs-left-nav-selected' : '';
         const exported = (mod.flags && mod.flags.isExported);
         const statik   = (mod.flags && mod.flags.isStatic);
-        const css = `a.hs-left-nav-entry ${selected} ${exported?'.hs-left-nav-exported' : ''}`;
+        const css = `hs-left-nav-entry ${selected} ${exported?'hs-left-nav-exported' : ''}`;
         return (!exported && group.title==='Variables')? '' :   // ignore local module variables
             m('', [
                 statik? 'static': '',
-                libLongLink(css, mod.lib, mod.fullPath, mod.name)
+                libLink('a', css, mod.lib, mod.fullPath, mod.name, noop)
             ]);
     }
 

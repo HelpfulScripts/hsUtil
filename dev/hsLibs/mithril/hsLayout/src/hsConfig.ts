@@ -149,8 +149,6 @@ export class HsConfig {
      * @param root a DOM element to which to attach the tree
      */
     attachNodeTree(config:any, root:any) {
-        const context = this.context;
-
         /**
          * decodes the parts of a `route` declaration in the `config` tree
          * that will be passed to the `mithril` `m.route()` command.
@@ -206,34 +204,42 @@ export class HsConfig {
             return result;
         }
 
+        function prepareRoutes(content:any) {
+            const cr = content.root;
+            class Router {
+                view(node:Vnode) { 
+                    cr.attrs.route = {};
+                    content.route.params.map((k:any) =>
+                        cr.attrs.route[k] = node.attrs[k]
+                    );
+                    return m(cr.compClass, copy(cr.attrs));  
+                }
+            }
+            content.route.routes = {};
+            content.route.paths.map((path:string) => content.route.routes[path] = Router);
+        }
+
+        function mountOrRoute(c:any) {
+            const content = decode(c);
+            const cr = content.root;
+            if (!cr) { 
+                console.log('*** no top level component defined in config:'); 
+                console.log(config); 
+            }
+            if (content.route) {
+                prepareRoutes(content);
+                m.route(root, content.route.default, content.route.routes);
+                console.log('starting router');
+            } else {
+                m.mount(root, {view: (node:Vnode)=> m(cr.compClass, copy(cr.attrs))});
+                console.log('mounting component');
+            }
+        }
+
+        const context = this.context;
         this.getContent(config)           
             .then((r:any) => recurse(r, context))
-            .then((c:any) => {
-                const content = decode(c);
-                const cr = content.root;
-                if (!cr) { 
-                    console.log('*** no top level component defined in config:'); 
-                    console.log(config); 
-                }
-                if (content.route) {
-                    class Router {
-                        view(node:Vnode) { 
-                            cr.attrs.route = {};
-                            content.route.params.map((k:any) =>
-                                cr.attrs.route[k] = node.attrs[k]
-                            );
-                            return m(cr.compClass, copy(cr.attrs));  
-                        }
-                    }
-                    content.route.routes = {};
-                    content.route.paths.map((path:string) => content.route.routes[path] = Router);
-                    m.route(root, content.route.default, content.route.routes);
-                    console.log('starting router');
-                } else {
-                    m.mount(root, {view: (node:Vnode)=> m(cr.compClass, copy(cr.attrs))});
-                    console.log('mounting component');
-                }
-            });
+            .then(mountOrRoute);
     }
 
     private getContent(config:any) {

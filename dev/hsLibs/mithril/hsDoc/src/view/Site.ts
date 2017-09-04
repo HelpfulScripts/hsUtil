@@ -16,11 +16,11 @@ const LeftNavWidth  = '200px';
 const SiteName      = 'HSDocs'; 
  
 const myConfig = {
-    Container: {
+    Container: { // whole page
         rows:  [TitleHeight, "fill", FooterHeight],
         css: '.hs-site',
         content: [{
-            Container:{
+            Container:{ // top row
                 columns: [LeftNavWidth, "fill"],
                 css: '.hs-site-header',
                 content: [
@@ -32,14 +32,14 @@ const myConfig = {
                     { MenuTitle:    { css:'.hs-menu-title', docSet:"./data/index.json"}}
                 ]                
             }},{
-            Container:{
+            Container:{ // main part
                 columns: [LeftNavWidth, "fill"], 
                 content: [
                     { LeftNav:    {}},
                     { MainDetail: {}}
                 ]                
             }},
-            { Container: {
+            { Container: { // footer
                 css: '.hs-site-footer',
                 content: '(c) Helpful Scripts'
             }}

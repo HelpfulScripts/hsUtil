@@ -114,14 +114,16 @@ export function example(context:any) {
         const instance = shortCheckSum(example);
         let IDs = gInitialized[instance];
         if (!IDs) {
-            IDs = gInitialized[instance] = initDesc(() => addExample(IDs));
+            IDs = gInitialized[instance] = initDesc(() => addExample(IDs).then(executeScript));
             try {
                 const script = new Function('root', ...names, getCommentDescriptor(IDs, example));    
                 IDs.executeScript = (root:any) => script(root, ...modules);
             }
             catch(e) { console.log('creating script:' + e); }
         }
-        if (!document.getElementById(IDs.mid)) { addExample(IDs); }
+        if (!document.getElementById(IDs.mid)) { 
+            addExample(IDs).then(executeScript); 
+        }
         const styles = IDs.pages['css']; 
 
         // prefix css selectors with ID of main execution area to sandbox the scope
@@ -139,7 +141,7 @@ function initDesc(fn:any):CommentDescriptor {
     return {
         eid:     getNewID(),    // example tag ID
         mid:     getNewID(),    // main execution area tag ID
-        desc:{ 
+        desc:<MenuDesc>{ 
             items:<string[]>[],
             selectedItem: 'js',
             select: fn,
@@ -156,9 +158,7 @@ function getNewID():string {
 
 /** asynchronously adds the example structure on the page and then executed the script. */
 function addExample(IDs:CommentDescriptor) {
-    return Promise.resolve(IDs)
-        .then(addExampleStructure)
-        .then(executeScript);
+    return Promise.resolve(IDs).then(addExampleStructure);
 }
 
 /**
@@ -192,7 +192,7 @@ function addExampleStructure(IDs:CommentDescriptor) {
  * @param IDs provides the context in which the script is exceuted/
  */
 function executeScript(IDs:CommentDescriptor) {
-    delay(20).then(() => {
+    delay(1).then(() => {
         const root = document.getElementById(IDs.mid);
         try { IDs.executeScript(root); }
         catch(e) { console.log("executing script: " + e); }
