@@ -33,9 +33,11 @@ Examples:
  * <example>
  * <file name="script.js">
  * let tl = [10, 10];
- * function click() {
- *     tl = tl.map(i => Math.floor(80*Math.random()));
- * }
+ * 
+ * const rnd = () => Math.floor(80*Math.random());
+ * 
+ * function click() { tl = tl.map(i => rnd()); }
+ * 
  * m.mount(root, {
  *     view: () => m('.myBlock', {
  *         onclick:click, 

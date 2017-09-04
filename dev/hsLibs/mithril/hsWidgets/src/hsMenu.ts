@@ -1,8 +1,15 @@
 /**
  * # hsMenu
  * Creates a simple menu with several items.
- * The `Menu` object is passed into `Mithril`'s m function with a `MenuDesc` object that specifes the items,
- * the currently selected item, and a `select` function that is called when the menu selection changes. 
+ * The `Menu` object is passed into `Mithril`'s m function with a `MenuDesc` object:
+ * ```
+ * interface MenuDesc {
+ *    items: string[];                // the items on the menu
+ *    select: (item:string) => void;  // called when item clicked
+ *    selectedItem?: string;          // the currently selected item
+ *    size?:string[];                 // size to layout menu items
+ * }
+ * ```
  * 
  * ## Example
  * <example>
@@ -26,8 +33,14 @@
  *
  * </file>
  * <file name='style.css'>
- * .myMain { border:1px solid #ddd; } 
- * .hs-menu-item-selected { background-color: #eed; }
+ * .myMain { 
+ *    border:1px solid #ddd;
+ *    border-top: 0px solid #ddd;
+ * } 
+ * .hs-menu-item-selected { 
+ *     background-color: #eed; 
+ *     border-width:0px;
+ * }
  * </file>
  * </example>
  */
@@ -41,7 +54,7 @@ export interface MenuDesc {
     /** the items on the menu */
     items: string[];
     /** the currently selected item */
-    selectedItem: string;
+    selectedItem?: string;
     /** the function to call when the selection changes */
     select: (item:string) => void;
     /** optional array of size strings used to layout the menu items; defaults to `[ ]` */

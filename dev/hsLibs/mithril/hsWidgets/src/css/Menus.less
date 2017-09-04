@@ -1,4 +1,6 @@
-@MenuColor: #eee;
+@MenuBgColor: #eee;
+@SelectBgColor: #fff;
+@ItemBorder: 1px solid white;
 
 .hs-menu { 
     overflow:hidden;
@@ -6,13 +8,12 @@
 
 .hs-menu-item {   // name menu item in hs-modules-title
     padding: 5px 0px 5px 10px;
-    background-color: @MenuColor;
-    border-right: solid white 2px;
+    background-color: @MenuBgColor;
+    border-left: @ItemBorder;
+    border-right: @ItemBorder;
 }
 
 .hs-menu-item-selected {
-    background-color: #fff; //darken(@hdrTabColor, 5%);
-    border-right: solid @MenuColor 1px;
-    border-left: solid @MenuColor 1px;
+    background-color: @SelectBgColor; 
     font-weight:bold;
 }

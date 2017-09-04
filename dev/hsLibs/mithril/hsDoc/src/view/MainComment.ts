@@ -67,19 +67,6 @@ function textOrShortTextOrDescription(comment:any, short:boolean):Vnode {
         comment.tags.map((tag:any) => {if (tag.tag==='description') { text = tag.text;}} );
     }
     text = text.replace(/<example>([\S\s]*?)<\/example>/gi, example({}));
-
-/*    
-    const parts = text.match(/([\s\S]*?)(<example>[\s\S]*?<\/example>)([\s\S]*)/i);
-    if (parts && parts.length>0) {
-console.log(parts[2]);        
-        return m('.hs-item-comment-desc', [
-            prettifyCode(parts[1], short),
-            compileExample(parts[2]), 
-            prettifyCode(parts[3], short)
-        ]);
-    }
-console.log('no example'); 
-*/       
     return m('.hs-item-comment-desc', prettifyCode(text, short));
 }
 
@@ -164,17 +151,3 @@ function prettifyCode(comment:string, short:boolean):Vnode {
     result = result.replace(/<code>([\S\s]*?)<\/code>/gi, braceIndenting);
     return m.trust(markDown(result, short));
 }
-
-/*
-function compileExample(text:string):Vnode {  
-    const geval = eval;
-    function makeExample(text:string):Vnode {
-        const parts = text.match(/<example>([\s\S]*)<\/example>/i);
-        const code = `(function(m) { return ${parts[1].trim()}; })`;
-        try { return m('', geval(code)(m)); }
-        catch(e) { console.log(e); }
-        return m('', '');
-    }
-    return m('example', [makeExample(text)]);
-}
-*/
