@@ -9,14 +9,15 @@ to invoke this layout.
 
 ### Example
 <code>
-    {rows: [px(200), FILL]} // --> top row has height 200px, all other rows evenly share remaining space 
+    {rows: [px(200), FILL]}   // --> top row has height 200px, all other rows evenly share remaining space 
+    {rows: ["200px", "fill"]} // --> equivalent description
 </code>
 
 ## Attributes
 The following values **v** are valid entries in The Attributes array:
-- **px(n)** -- a fixed number of pixels 
-- **pc(n)** -- a fixed percentage of available space
-- **FILL**  -- a special constant to indicate - may appear only once per array.
+- **px(n)** or **"<n>px"** -- a fixed number of pixels 
+- **pc(n)** or **"<n>%"**  -- a fixed percentage of available space
+- **FILL** or **"fill"**   -- a special constant to indicate - may appear only once per array.
 
 The following options are supported for the Attributes array:
 - **[ ]**: An empty array; all components will be evenly spaced across the available width. 
