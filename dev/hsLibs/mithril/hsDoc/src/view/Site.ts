@@ -53,7 +53,7 @@ const myConfig = {
             '/api/:lib/:field'  // defines `http://localhost/#!/api/:hsLib/:id        
         ]
     }
-};
+}; 
 
 
 export function init() {
