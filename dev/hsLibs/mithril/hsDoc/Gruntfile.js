@@ -15,8 +15,8 @@ module.exports = function(grunt) {
 
 		clean: {
 			src:   ['dist/'],
-            docs:  ['docs'],
-            test:  ['dist/test','docs/test']
+            docs:  ['docs', 'dist/docs'],
+            test:  ['dist/**/tests']
 		},
 		
 		// Task configuration.
@@ -27,9 +27,7 @@ module.exports = function(grunt) {
 		    test: { files: [
                 { cwd:'dist/test/', expand:true, src:['*.js', '*.css', '*.html'], dest:'test/'}
             ]},
-		    example: { files: [
-                { cwd:'example/',   expand:true, src:['*.json'], dest:'dist/data/'}
-            ]}
+		    example: { }
 		},
 		
         less: {
@@ -61,16 +59,16 @@ module.exports = function(grunt) {
             options: {
                 moduleResolution:   "node",
                 allowJs:            true
-           },
+            },
             src : {
                 outDir:     "dist/",
-                src: ["src/**/*.ts"],
+                src: ["src/**/*.ts", "!src/**/*.spec.ts"],
                 tsconfig:   true,
-           },
+            },
             test : {
-                outDir:     "dist/test/",
-                src: ["src/**/*.ts"],
-                tsconfig:   './tsConfigTest.json' 
+                outDir:     "dist/mithril/hsDoc/tests",
+                src: ["src/**/*.spec.ts"],
+                tsconfig:   true,
             }
         },
 
@@ -193,14 +191,17 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-ts');
     grunt.loadNpmTasks('grunt-webpack');
 
+    grunt.registerTask('ospec', () => {
+        require('child_process').spawnSync('npm', ['test'], {stdio: 'inherit'}); 
+    });
     grunt.registerTask('doc', ['clean:docs', 'typedoc']);
     grunt.registerTask('stage', ['copy:example', 'webpack:develop']);
     grunt.registerTask('build-html', ['copy:build']);
     grunt.registerTask('build-css', ['less']);
     grunt.registerTask('build-js', ['tslint:src', 'ts:src']);
     grunt.registerTask('build-spec', ['tslint:spec', 'ts:test']);
-    grunt.registerTask('test', ['clean:test', 'copy:test', 'build-spec', 'karma']);
+    grunt.registerTask('test', ['clean:test', 'copy:test', 'build-spec', 'ospec'/*'karma'*/ ]);
     grunt.registerTask('build', ['clean:src', 'build-html', 'build-css', 'build-js']);
-	grunt.registerTask('make', ['build', /*'test',*/ 'doc', 'stage']);
+	grunt.registerTask('make', ['build', 'test', 'doc', 'stage']);
     grunt.registerTask('default', ['make', 'watch']);	
 };

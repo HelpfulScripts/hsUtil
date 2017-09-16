@@ -13,15 +13,15 @@ module.exports = function(grunt) {
 		clean: {
 			src:   ['dist/js'],
             docs:  ['docs'],
-            test:  ['dist/test','docs/tests']
+            test:  ['dist/**/tests']
 		},
 		
 		// Task configuration.
 		copy: {
             build: { cwd:'src/', expand:true, src:['*.html'], dest:'dist/' },
 		    test: { files: [
-                { cwd:'dist/',    expand:true, src:['*.js', '*.css', '*.html'], dest:'test/'},
-                { cwd:'example/', expand:true, src:['*.json'], dest:'test/'}
+//                { cwd:'dist/',    expand:true, src:['*.js', '*.css', '*.html'], dest:'test/'},
+//                { cwd:'example/', expand:true, src:['*.json'], dest:'test/'}
             ]}
 		},
 		
@@ -54,21 +54,21 @@ module.exports = function(grunt) {
             options: {
                 moduleResolution:   "node",
                 allowJs:            true
-           },
+            },
             src : {
                 outDir:     "dist/js",
                 src: ["src/**/*.ts", "!src/**/*.spec.ts"],
                 tsconfig:   true,
-           },
+            },
             test : {
-                outDir:     "dist/test",
-                src: ["src/**/*.ts"],
-                tsconfig:   './tsConfigTest.json'
+                outDir:     "dist/js/hsWidgets/tests",
+                src: ["src/**/*.spec.ts"],
+                tsconfig:   true,
             }
         },
 
         typedoc: {
-            code: {
+            code: { 
                 options: {
                     target: 'es6',
                     tsconfig: 'typedoc.json',
@@ -153,20 +153,22 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-less');
-    grunt.loadNpmTasks('grunt-karma');
-//    grunt.loadNpmTasks('grunt-jasmine-node-coverage');
+//    grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-typedoc');
     grunt.loadNpmTasks('grunt-tslint');
     grunt.loadNpmTasks('grunt-ts');
 
+    grunt.registerTask('ospec', () => {
+        require('child_process').spawnSync('npm', ['test'], {stdio: 'inherit'}); 
+    });
     grunt.registerTask('doc', ['clean:docs', 'typedoc']);
     grunt.registerTask('stage', []);
     grunt.registerTask('build-html', ['copy:build']);
     grunt.registerTask('build-css', ['less']);
     grunt.registerTask('build-js', ['tslint:src', 'ts:src']);
     grunt.registerTask('build-spec', ['tslint:spec', 'ts:test']);
-    grunt.registerTask('test', ['clean:test', 'copy:test', 'build-spec', 'karma']);
+    grunt.registerTask('test', ['clean:test', 'copy:test', 'build-spec', 'ospec'/*'karma'*/ ]);
     grunt.registerTask('build', ['clean:src', 'build-html', 'build-css', 'build-js']);
-	grunt.registerTask('make', ['build', /*'test',*/ 'doc', 'stage']);
+	grunt.registerTask('make', ['build', 'test', 'doc', 'stage']);
     grunt.registerTask('default', ['make', 'watch']);	
 };

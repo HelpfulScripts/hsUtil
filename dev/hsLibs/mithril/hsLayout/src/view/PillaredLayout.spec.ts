@@ -1,55 +1,91 @@
-import { m, Vnode } from '../../../mithril'; 
+// Polyfill DOM env for mithril
+global['window'] = require("mithril/test-utils/browserMock.js")();
+global['document'] = window.document;
 
-import { px, FILL } from '../';
-import { Container } from '../';
- 
-/*
-class RowsTest extends Layout {
-    view(node:Vnode):Vnode {
-        let l = node.attrs.layout;
-        return this.layout('.hs-site', node, l, [
-            'a', 'b', 'c'
-        ]);
-    }
-}
-*/
-
-class Test extends Container {
-    view(node: Vnode): Vnode {
-        return this.layout('#test', node, { columns: <any[]>[px(200), FILL] }, [m('', 'left'), m('', 'middle'), m('', 'right')]);
-    }
-}
-
-class Test2 extends Container {
-    view(node: Vnode): Vnode {
-        return m('#test', [m('', 'left'), m('', 'middle'), m('', 'right')]);
-    }
-}
+const m = require("mithril");
+const o = require("mithril/ospec/ospec");
+const root = window.document.createElement("div");  
 
 
-describe('RowsLayout', () => { 
-    let node;
-    beforeAll((done) => {
-        m.mount(document.body, Test); 
-        setTimeout(() => {
-            node = document.getElementById('test');
-            done();
-        }, 1000);
+const layout = require('../src/');
+
+type Vnode = typeof m.Vnode;
+const Container = layout.Container;
+
+const columns = ["150px", "fill"];
+const titles  = ['Left Column: 150px', 'Right Column: remainder'];
+
+
+o.spec('rows', () => {
+    let rows:any;
+    o.before(() => {
+        m.mount(root, {view: () => m(Container, {
+            css: 'myRow',
+            rows: columns,
+            content: titles
+            })
+        }); 
+        rows = root.childNodes[0];
+    }); 
+    o('first level', () => {
+        o(rows===undefined).equals(false)('should be defined');
+        o(rows.className.includes('myRow')).equals(true)(`class myRow in '${rows.className}'`);
+        o(rows.className.includes('hs-row-layout')).equals(true)(`class hs-row-layout in '${rows.className}'`);
+        o(rows.childNodes.length).equals(2)(`has ${rows.childNodes.length} children`);
     });
 
-    it ('should have defined document.body', (done) => {
-        expect(document.body).toBeDefined();
-        done();
+    o('second level', () => {
+        rows.childNodes.forEach((c:any, i:number) => {
+            o(c.className.includes('hs-layout')).equals(true)(`class hs-layout in '${c.className}'`);
+            o(c.style.left).equals('0%')(`style left`);
+            o(c.style.right).equals('0%')(`style right`);
+            o(c.style.top).equals((i===0)?'0px':columns[0])(`style top`);
+            o(c.style.bottom).equals((i===0)?'auto':'0px')(`style bottom`);
+            o(c.style.height).equals((i===0)?columns[0]:'auto')(`style height`);
+            o(c.childNodes.length).equals(1)(`has ${c.childNodes.length} children`);
+        });
+    });
+    o('third level', () => {
+        rows.childNodes.forEach((c:any, i:number) => {
+            o(c.childNodes[0].className.includes('hs-leaf')).equals(true)(`class hs-leaf in '${c.childNodes[0].className}'`);
+            o(c.childNodes[0].childNodes[0].nodeValue).equals(titles[i])(`item ${i+1} child leaf text`);
+        });
+    });
+});
+
+o.spec('columns', () => {
+    let rows:any;
+    o.before(() => {
+        m.mount(root, {view: () => m(Container, {
+            css: 'myColumn',
+            columns: columns,
+            content: titles
+            })
+        }); 
+        rows = root.childNodes[0];
+    }); 
+    o('first level', () => {
+        o(rows===undefined).equals(false)('should be defined');
+        o(rows.className.includes('myColumn')).equals(true)(`class myColumn in '${rows.className}'`);
+        o(rows.className.includes('hs-column-layout')).equals(true)(`class hs-column-layout in '${rows.className}'`);
+        o(rows.childNodes.length).equals(2)(`has ${rows.childNodes.length} children`);
     });
 
-    it ('should have defined node', (done) => {
-        expect(node).toBeDefined();
-        expect(node).toBe(null);
-        done();
+    o('second level', () => {
+        rows.childNodes.forEach((c:any, i:number) => {
+            o(c.className.includes('hs-layout')).equals(true)(`class hs-layout in '${c.className}'`);
+            o(c.style.top).equals('0%')(`style top`);
+            o(c.style.bottom).equals('0%')(`style bottom`);
+            o(c.style.left).equals((i===0)?'0px':columns[0])(`style left`);
+            o(c.style.right).equals((i===0)?'auto':'0px')(`style right`);
+            o(c.style.width).equals((i===0)?columns[0]:'auto')(`style width`);
+            o(c.childNodes.length).equals(1)(`has ${c.childNodes.length} children`);
+        });
     });
-
-    it ('should have defined node2', (done) => {
-        expect(node.children).toBeDefined();
-        done();
+    o('third level', () => {
+        rows.childNodes.forEach((c:any, i:number) => {
+            o(c.childNodes[0].className.includes('hs-leaf')).equals(true)(`class hs-leaf in '${c.childNodes[0].className}'`);
+            o(c.childNodes[0].childNodes[0].nodeValue).equals(titles[i])(`item ${i+1} child leaf text`);
+        });
     });
 });

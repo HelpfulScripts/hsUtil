@@ -8,7 +8,8 @@
     "email": "hauke.schmidt@us.bosch.com"
   },
   "scripts": {
-    "start": "grunt"
+    "start": "grunt",
+    "test": "ospec"
   },
   "engines": {
     "node": ">= 0.10.0"
