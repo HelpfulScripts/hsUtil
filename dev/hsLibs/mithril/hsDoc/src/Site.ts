@@ -3,11 +3,11 @@
  */
 
 /** */
-import * as mithril from '../../../mithril';
-import * as layout  from '../../../hsLayout/src/';
-import * as header  from './Header';
-import * as left    from './LeftNav';
-import * as main    from './MainDetail';
+import * as mithril from '../../mithril';
+import * as layout  from '../../hsLayout/src/';
+import * as header  from './view/DocsMenu';
+import * as left    from './view/LeftNav';
+import * as main    from './view/MainDetail';
 
 
 const TitleHeight   = '30px'; 
@@ -29,7 +29,7 @@ const myConfig = {
                         content: SiteName, 
                         href:'/api/' 
                     }},
-                    { MenuTitle:    { css:'.hs-menu-title', docSet:"./data/index.json"}}
+                    { DocsMenu:    { docSet:"./data/index.json"}}
                 ]                
             }},{
             Container:{ // main part

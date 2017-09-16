@@ -3,7 +3,7 @@
  */
 
 /** */
-import { init } from './view/Site';
+import { init } from './Site';
 
 init();
 
