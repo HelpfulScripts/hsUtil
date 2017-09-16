@@ -6,7 +6,7 @@ const showdown  = require('showdown');
  * @param short if true, only the first paragraph is returned
  * @return the marked down comment
  */
-export function markDown(text:string, short:boolean=false):string {
+export function markDown(text:string, short:boolean=false, currentRoute:string):string {
     const converter = new showdown.Converter({
         tables:                 true,   // enables |...| style tables; requires 2nd |---| line
         ghCompatibleHeaderId:   true,   // github-style dash-separated header IDs
@@ -19,7 +19,7 @@ export function markDown(text:string, short:boolean=false):string {
         const i = result.indexOf('</p>');
         if (i>0) { result = result.substring(0, i); }
     }
-    result = substituteLinks(result);
+    result = substituteLinks(result, currentRoute);
     return result;
 }
 
@@ -41,7 +41,8 @@ export function markDown(text:string, short:boolean=false):string {
  * @param comment the comment in which to replace the links
  * @return the comment with substituted links 
  */
-function substituteLinks(comment:string):string {
+function substituteLinks(comment:string, currentRoute:string):string {
+/*    
     comment = comment.replace(/[^"`']{@link ([\S]*):([\S]*)\s*(.+)}/gi, (match, ...args) => {
         const lib = args[0];
         const module = args[1];
@@ -51,4 +52,41 @@ function substituteLinks(comment:string):string {
                 ` <a href="#!/api/${lib}/${lib}.${module}">${text}</a>`;
     });
     return comment;
+*/
+    function deconstructRoute(route:string) {
+        let lib, mod;
+        route.replace(/\/([^\/.]*)\/([^\/\s]*$)/gi, (match, ...args) => {
+            lib = args[0];
+            mod = args[1];
+            return '';
+        }); 
+        return [lib, mod];
+    }
+
+    function getLibMod(path:string) {
+        let lib, mod, frag; 
+        if (path.indexOf(':')>0) {
+            [lib, mod] = path.split(':');
+        } else  {
+            lib = defLib;
+            mod = path;
+        }
+        if (mod.indexOf('#')>0) {
+            [mod, frag] = mod.split('#');
+        }
+        return [lib, mod, frag];       
+    }
+
+    let [defLib] = deconstructRoute(currentRoute);
+
+    comment = comment.replace(/[^"`']{@link ([\S]*)\s*(.+)}/gi, (match, ...args) => {
+        const path = args[0];
+        const text = args[1];
+        let [lib, module] = getLibMod(path);        
+        return (module === '0' || module === 'overview')?
+                ` <a href="#!/api/${lib}/0">${text}</a>` :
+                ` <a href="#!/api/${lib}/${lib}.${module}">${text}</a>`;
+    });
+    return comment;
+
 }

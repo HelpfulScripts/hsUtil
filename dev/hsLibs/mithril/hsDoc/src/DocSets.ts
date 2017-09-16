@@ -10,7 +10,8 @@
 import { m }    from '../../mithril';
 
 /**
- * the directory to look for .json files, relative to the web page.
+ * the default location for the index .json files, relative to the web page:
+ * `'./data/index.json'`
  */
 const FILE:string = './data/index.json';
 
@@ -35,8 +36,8 @@ export class DocSets {
 
     /**
      * loads an index set and the docsets it contains from driectory `dir`.
-     * @param dir the optional directory to read from. If unspecified, 
-     * read from the directory specified by `DIR`.
+     * @param file the optional directory to read from. If unspecified, 
+     * read from the index file specified by {@link DocSets.FILE `FILE`}.
      */
     public static loadList(file?:string):Promise<void> {
         file = file || FILE;   
@@ -44,12 +45,18 @@ export class DocSets {
         return DocSets.loadIndexSet(file); 
     }
 
+    /**
+     * returns the specified documentation element.
+     * When called without parameters, a string[] of available docSets is returned.
+     * When called with only `lib` specified, the corresponding docSet overview is returned.
+     * @param lib specifies the docset to scan. 
+     * @param id specifies the element within the docSet, either by its id number, or by its path
+     */
     public static get(lib?:string, id:number|string=0) { 
         if (lib) {
             if (DocSets.gList.index[lib]) { 
                 return DocSets.gList.index[lib][id+'']; 
             } else {
-//                console.log(`list ${lib} not loaded yet ${id}`);
                 return DocSets.gList.set; 
             }
         } else {
@@ -105,7 +112,7 @@ function recursiveIndex(content:any, index:any, lib:string, path='') {
     content.lib = lib;
     if (typeof content === 'object' && content.name) {
         content.name = content.name.replace(/["'](.+)["']|(.+)/g, "$1$2");  // remove quotes 
-        const elName  = content.name.match(/([^\/]+)$/)[1];             // name = part after last /
+        const elName  = content.name.match(/([^\/]+)$/)[1];                 // name = part after last /
         let newPath = (path==='')? elName : `${path}.${elName}`;
         content.fullPath = newPath;
         content.name = elName;

@@ -5,12 +5,12 @@ hsLayout provides means to layout the browser window in various ways.
 ## Concepts
 
 ### Containers and Components
-To define a layout, define a class that extends the abstract {@link hsLayout:Container.Container `Container`} class.
+To define a layout, define a class that extends the abstract {@link Container.Container `Container`} class.
 Being a `Component` itself, the class should implement the `view` method, which should return the result of a call 
 to `this.layout()`.
 
 ### Layouts
-To create new layout styles, define a class that extends the abstract {@link hsLayout:Layout.Layout `Layout`} class.
+To create new layout styles, define a class that extends the abstract {@link Layout.Layout `Layout`} class.
 This class should implement the `getStyles` method which calculates the styles attributes required for each `Component`
 to be layed out in a `Container`.
 
@@ -19,8 +19,8 @@ to be layed out in a `Container`.
 * <file name='script.js'>
 * m.mount(root, {view: () => m(layout.Container, {
 *     css: 'myColumn',
-*     columns: ["200px", "fill"], 
-*     content:['Left Column: 200px', 
+*     columns: ["150px", "fill"], 
+*     content:['Left Column: 150px', 
 *              'Right Column: remainder']
 *     })
 * });
