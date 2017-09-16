@@ -11,22 +11,23 @@ to invoke this layout.
 </code>
  * <example>
  * <file name='script.js'>
- * let c = [];
+ * let c = [1,2,3,4,5];
+ * 
+ * m.mount(root, { 
+ *     view:() => m(layout.Container, {
+ *         tiles:[], 
+ *         content: c.map((c,i)=>(''+i)),
+ *         css: '.myExample'
+ *     })
+ * });
+ *
  * function next() {
  *     if (c.length >= 9) { c = []; }
  *     else { c.push(''); }
  *     setTimeout(next, 2000);
  *     m.redraw();
  * }
- * 
- * m.mount(root, { 
- *     view:() => m(layout.Container, {
- *         tiles:['30%','fill'], 
- *         content: c.map((c,i)=>(''+i)),
- *         css: '.myExample'
- *     })
- * });
- * next();
+ * //next();
  * </file>
  * <file name='style.css'>
  * .myExample .hs-layout { 
@@ -40,13 +41,13 @@ to invoke this layout.
 
 ## Attributes
 The following values **v** are valid entries in The Attributes array:
-- **px(n)** or **"<n>px"** -- a fixed number of pixels 
-- **pc(n)** or **"<n>%"**  -- a fixed percentage of available space
+- **px(n)** or **"_n_ px"** -- a fixed number of pixels 
+- **pc(n)** or **"_n_ %"**  -- a fixed percentage of available space
 - **FILL** or **"fill"**   -- a special constant to indicate - may appear only once per array.
 
 The following options are supported for the Attributes array:
-- **[ ]**: An empty array; The available tiles will cover the entire width and height. Their size will adapt 
-    as tiles are added
+- **[ ]**: An empty array; The available tiles will cover the entire width and height. 
+    Their size will adapt as tiles are added.
 - **[FILL]**: like [ ], except the last tile fills the available space. 
 - **[v]**: All components have the specified width and height (in px or %) and will fill the available space from the left,
     leaving any remaining unused space on the right. 
@@ -109,7 +110,7 @@ class Tiles extends Layout {
                 left: ${left}%;           right:${r};
                 width: ${w};              height: ${h};
             `;
-            if ((left += width) > 100-width) { left = 0; top += height; }
+            if (Math.round(left += width) > 100-Math.floor(width)) { left = 0; top += height; }
             return style;
          });
         return styles;    // reverse a second time for original sequence.

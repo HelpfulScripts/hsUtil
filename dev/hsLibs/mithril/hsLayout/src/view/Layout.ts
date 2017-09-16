@@ -74,7 +74,7 @@ export abstract class Layout {
      * @param style the `Layout` implementation to instantiate when encountering `keyword` 
      */
     public static register(keyword:string, style:typeof Layout) {
-        console.log(`registering ${keyword} layout`);
+//        console.log(`registering ${keyword} layout`);
         Layout.layoutStyles[keyword] = style;
     }
 

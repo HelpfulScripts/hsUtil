@@ -23,28 +23,27 @@ export abstract class Component {
 }
 
 /**
-Abstract base class for applying layouts. Subclasses should implement a `view` method that returns
-the result of a call to `this.layout()`, as in the following example:
+Abstract base class for applying layouts. Subclasses should implement a {@link Container.Container.getComponents `getComponents`} method that returns
+the components to render. The default implementation returns the conponents passed in `node.attrs.content`.
+Optionally, the subclass can also implement {@link Container.Container.getCSS `getCSS`} to provide the CSS class to 
+assign to the component, and override the default implementation, which returns `node.attrs.css`. 
+### Example:
 <code>
 import { Container, px, FILL }  from 'hsLayout';
 const TitleHeight   = px(30); 
 const FooterHeight  = px(10); 
 class MyLayout extends Container {
-    view(node:Vnode):Vnode {
+    getComponents(node:Vnode):Vnode {
         return this.layout('.my-layout', { rows:[TitleHeight, FILL, FooterHeight] }, [
             m(), 
             m(),
             m()
         ]);
     }
+    getCSS(node:Vnode):string {
+    }
 } 
 </code>
-The call to `this.layout` takes as parameters
-- the css class to associate with the Container,
-- the Container Vnode,
-- the layout configration (see {@link #methods_layout layout} method), and
-- the components to be layed out.
-
  */
 export abstract class Container extends Component {
     /**

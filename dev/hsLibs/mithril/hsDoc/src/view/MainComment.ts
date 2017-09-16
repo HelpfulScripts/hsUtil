@@ -4,7 +4,7 @@
 
 /** */
 import { m, Vnode } from '../../../mithril';
-import { markDown } from '../showdown';
+import { markDown } from '../markdown';
 import { example }  from './MainExample';
 
 /**
@@ -20,9 +20,6 @@ export function commentLong(mdl:any):Vnode {
         content.push(textOrShortTextOrDescription(mdl.comment, false));
         content.push(returns(mdl.comment, false));
         content.push(commentRemainder(mdl.comment));
-//        if (mdl.parameters) {
-//            content = content.concat(mainCommentParams(mdl.parameters));
-//        }
     }
     return m('.hs-item-comment', content);
 }
@@ -149,5 +146,5 @@ function prettifyCode(comment:string, short:boolean):Vnode {
     }
 
     result = result.replace(/<code>([\S\s]*?)<\/code>/gi, braceIndenting);
-    return m.trust(markDown(result, short));
+    return m.trust(markDown(result, short, m.route.get()));
 }

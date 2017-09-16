@@ -5,7 +5,7 @@ hsDoc.js is a code documentation viewer for [Typescript](https://www.typescriptl
 It renders JSON documentation files as created by [typedoc](http://typedoc.org).
 
 ## Creating the documentation docset
-Follow the instruction for typedoc in commenting the code. 
+Follow the instruction for typedoc in commenting the code. {@link hsDoc:overview#configuring-typedoc configuring}
 
 In addition to the documented source files,
 `hsDoc` recognizes a special **`overview.ts`** file that will be displayed as a project overview. 
@@ -14,17 +14,18 @@ If the second comment is missing, `typedoc` will not generate a comment in the d
 
 ### Linking across the docsets
 Links to items across the docsets can be placed via a link directive: 
-- "{@link *docset*:*module*.*item* linked text}", 
+- "{@link [*docset*:]*module*.*item* linked text}", 
 where
- - *docset* is the name of the docset
+ - *docset* optional; the name of the docset. If omitted, a link withinthe current docSet will be created
  - *module* is name of the module to link to; 
    if *module* is `overview`, or unspecified, the link will point to the docset overview page.
  - *item* is the name, or period-separated path, of the item within the module. 
- - linked text is displayed with a link to path within module
+ - *linked text* is displayed with a link to path within module
 
 Examples:
 - '{@link hsDoc: Overview of hsDoc docSet}' -> {@link hsDoc: Overview of hsDoc docSet}
 - '{@link hsDoc:DocSets.DocSets.add the `adds` function}' --> {@link hsDoc:DocSets.DocSets.add the `adds` function}
+- '{@link DocSets.DocSets.add the `adds` function}' --> {@link DocSets.DocSets.add the `adds` function}
 
 
 ### Mithril Code Examples
