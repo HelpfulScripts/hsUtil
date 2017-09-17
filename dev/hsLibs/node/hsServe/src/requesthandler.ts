@@ -1,5 +1,5 @@
 const path	= require("path");
-import { log, fsUtil }  from "../hsNode/";
+import { log, fsUtil }  from "hsnode";
 
 log.prefix('reqHdlr');
 const TYPES	= {

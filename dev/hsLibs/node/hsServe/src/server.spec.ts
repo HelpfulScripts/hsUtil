@@ -1,7 +1,7 @@
 
 const http	= require('http');
-import { log }      from "../hsNode";
-import { server }           from "./server";
+import { log }      from "hsnode";
+import { server }   from "./server";
 
 log.prefix('httpServerTest');
 

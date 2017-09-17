@@ -1,5 +1,4 @@
-import { log }  from "../hsNode";
-// import * as main        from './main';
+import { log }  from "hsnode";
 
 /*globals Player:false, Song: false*/
 log.prefix('httpMainTest');

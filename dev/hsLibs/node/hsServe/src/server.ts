@@ -2,7 +2,7 @@ const http    	= require("http");
 const url     	= require("url");
 const os      	= require("os");
 
-import { log, fsUtil }  from "../hsNode";
+import { log, fsUtil }  from "hsnode";
 import { router }       from "./router";
 
 const STD_HDLR	= "requestHandler.js";

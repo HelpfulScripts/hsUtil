@@ -1,8 +1,7 @@
+const path = require('path');
 
 /*global module:false*/
 module.exports = function(grunt) {
-    const staging = '../../../../staging/node/';
-
 	// Project configuration.
 	grunt.initConfig({
 		// Metadata.
@@ -14,27 +13,39 @@ module.exports = function(grunt) {
 				' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
 
 		clean: {
-            all:   ['dist', 'docs'],
-			src:   ['dist/src'],
-			spec:  ['dist/spec'],
-            docs:  ['docs'],
-            test:  ['docs/tests']
+			src:    ['_dist'],
+            docs:   ['_dist/docs'],
+            test:   ['_dist/**/tests'],
+            example:['_example', '_dist/example']
 		},
 		
 		// Task configuration.
 		copy: {
-		    pre: { files: [{src: ['package.json'], dest: 'dist/src/serverlogs/'}]},
-			deploy: { 
-                files: [{
-	                expand: true, cwd: 'dist/src/',
-	                src: ['**/*.js', '!**/*.spec.js'],    dest: staging+'hsServe/'
-	            },{
-	                src: ['packageDeploy.json'],    dest: staging+'../package.json'
-                }]
-            }
+            build:  { expand:true, cwd:'src/', 
+                src:['*.html'], dest:'_dist/'
+            },
+            example:{ expand:true, cwd: 'src/example', 
+                src:['**/*', '!**/*.ts'], dest:'_dist/example' 
+            },
+            deploy: { files: [
+                { expand:true, cwd: '_dist/src', 
+                    src:['**/*'], dest:'node_modules/<%= pkg.name %>/' },
+                { expand:true, cwd: './', 
+                    src:['./package.json'], dest:'node_modules/<%= pkg.name %>/'
+                }
+            ]},
+            docs:   { expand:true, cwd: '_dist/docs', 
+                src:['**/*'], dest:'node_modules/<%= pkg.name %>/docs' 
+            },
+		    test: { files: [
+                { expand:true, cwd:'_dist/',    
+                    src:['*.js', '*.css', '*.html'], dest:'test/'
+                },
+//                { cwd:'example/', expand:true, src:['*.json'], dest:'test/'}
+            ]}
 		},
 		
-        tslint: {
+       tslint: {
             options: {
                 configuration: 'tslint.json',
                 force:  false,
@@ -49,18 +60,18 @@ module.exports = function(grunt) {
         },
 
         ts: {
-            options: {
-                module:             "commonjs",
-                moduleResolution:   "node",
-                allowJs:            true
-            },
             src : {
-                outDir: "dist", 
-                src: ["src/**/*.ts", "!src/**/*.spec.ts"],
+                outDir:     "_dist/src",
+                src: ["src/**/*.ts", "!src/**/*.spec.ts", "!src/example/*.ts"],
                 tsconfig:   true,
             },
-            spec : {
-                outDir: "dist", 
+            example : {
+                outDir:     "_example",
+                src: ["src/example/*.ts"],
+                tsconfig:   true,
+            },
+            test : {
+                outDir:     "_dist/tests",
                 src: ["src/**/*.spec.ts"],
                 tsconfig:   true,
             }
@@ -72,15 +83,12 @@ module.exports = function(grunt) {
                     target: 'es6',
                     tsconfig: 'typedoc.json',
                     module: 'commonjs',
-                    out:    './docs',
+                    json:   '_dist/docs/<%= pkg.name %>.json',
+                    out:    '_dist/docs',
                     mode:   'modules',
-//                    listInvalidSymbolLinks: true,
-//                    json:   'docs.json',
-//                    theme:  'themes/hs',
-                    name:   'hsCrossFrameWork',
-                    readme: 'readme.txt'
+                    name:   '<%= pkg.name %>'
                 },
-                src: ['src/**/*.ts', '!src/**/*.spec.ts']
+                src: ['src/**/*.ts']
             }
         },
 
@@ -88,9 +96,9 @@ module.exports = function(grunt) {
 			options: { forceExit: true },
 			all: {
 				options: {
-                    projectRoot: 'dist',
+                    projectRoot: '_dist/tests',
 					coverage: {
-						reportDir: 'docs/tests',
+						reportDir: '_dist/docs/tests',
                         relativize: true,
 						includeAllSources: true,
 						report: ['html']
@@ -98,11 +106,11 @@ module.exports = function(grunt) {
 					jasmine: {
 						spec_dir: '',
 						spec_files: [
-						    'dist/src/*.spec.js'
+						    '_dist/tests/*.spec.js'
 						]
 					}
 				},
-				src: ['dist/src/**/*.js'] 
+				src: ['_dist/test/**/*.js'] 
 			}
 		},
 
@@ -112,8 +120,8 @@ module.exports = function(grunt) {
 				tasks: ['make']
 			},
 			js: {
-				files: ['src/**/*.ts', '!src/**/*.spec.ts'],
-				tasks: ['build']
+				files: ['src/**/*.ts', '!src/**/*.spec.ts', '!src/**/*.less'],
+				tasks: ['make']
 			},
 			specs: {
 				files: ['src/**/*.spec.ts'],
@@ -131,11 +139,13 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-tslint');
     grunt.loadNpmTasks('grunt-ts');
 
-    grunt.registerTask('doc', ['clean:docs', 'typedoc']);
-    grunt.registerTask('test', ['clean:spec', 'copy:pre', 'tslint:spec', 'ts:spec', 'jasmine_node']);
-    grunt.registerTask('build', ['clean:src', 'tslint:src', 'ts:src']);
-    grunt.registerTask('deploy', ['copy:deploy']);
-	grunt.registerTask('make', ['build', 'test', 'doc']);
-    grunt.registerTask('watch', ['clean:all', 'make', 'watch']);	
-    grunt.registerTask('default', ['clean:all', 'make']);	
+    grunt.registerTask('doc', ['clean:docs', 'typedoc', 'copy:docs']);
+    grunt.registerTask('stage', []);
+    grunt.registerTask('build-example', ['clean:example', 'copy:example', 'ts:example']);
+    grunt.registerTask('build-js', ['tslint:src', 'ts:src']);
+    grunt.registerTask('build-spec', ['tslint:spec', 'ts:test']);
+    grunt.registerTask('test', ['clean:test', 'copy:test', 'build-spec', 'jasmine_node' ]);
+    grunt.registerTask('build', ['clean:src', 'build-js', 'build-example']);
+	grunt.registerTask('make', ['build', 'test', 'doc', 'stage']);
+    grunt.registerTask('default', ['make', 'watch']);	
 };

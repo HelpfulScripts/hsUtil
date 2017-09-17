@@ -1,6 +1,6 @@
 const http     = require("http");
 
-import { log, fsUtil }  from "../hsNode";
+import { log, fsUtil }  from "hsnode";
 import { rh }           from "./requesthandler.js";
 
 const handlers:{list:any[]} = {list: []};
