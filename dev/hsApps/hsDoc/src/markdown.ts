@@ -35,8 +35,8 @@ export function markDown(text:string, short:boolean=false, currentRoute:string):
  * - if *path* is omittied, or is `overview`, the library overview will be shown.
  *   
  * Examples: 
- * - '{@link hsDoc: Doc Overview}' -> {@link hsDoc: Doc Overview}
- * - '{@link hsDoc:DocSets.DocSets.add the `adds` function}' --> {@link hsDoc:DocSets.DocSets.add the `adds` function}
+ * - '{@link hsdoc: Doc Overview}' -> {@link hsdoc: Doc Overview}
+ * - '{@link hsdoc:DocSets.DocSets.add the `adds` function}' --> {@link hsdoc:DocSets.DocSets.add the `adds` function}
  * 
  * @param comment the comment in which to replace the links
  * @return the comment with substituted links 
@@ -83,7 +83,7 @@ function substituteLinks(comment:string, currentRoute:string):string {
         const path = args[0];
         const text = args[1];
         let [lib, module] = getLibMod(path);        
-        return (module === '0' || module === 'overview')?
+        return (module === '' || module === '0' || module === 'overview')?
                 ` <a href="#!/api/${lib}/0">${text}</a>` :
                 ` <a href="#!/api/${lib}/${lib}.${module}">${text}</a>`;
     });
