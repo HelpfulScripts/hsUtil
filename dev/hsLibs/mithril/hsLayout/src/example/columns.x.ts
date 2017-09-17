@@ -1,4 +1,4 @@
-import { m, Vnode }             from '../../../mithril';
+import { m, Vnode }             from '../mithril';
 import { Container, HsConfig }  from '../';
 
 
@@ -67,4 +67,4 @@ const example = {
     }
 };
 
-new HsConfig([example]).attachNodeTree(myConfig, document.body);
+export const cfg = new HsConfig([example]).attachNodeTree(myConfig, document.body);

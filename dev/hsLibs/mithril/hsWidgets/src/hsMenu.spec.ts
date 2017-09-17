@@ -1,11 +1,7 @@
 
-// Polyfill DOM env for mithril
-global['window'] = require("mithril/test-utils/browserMock.js")();
-global['document'] = window.document;
-
-const m = require("mithril");
-const o = require("mithril/ospec/ospec");
-const root = window.document.createElement("div");
+const layout = require('hslayout');
+const m = layout.m;
+const o = layout.o;
 
 const hsMenu = require("../src/hsMenu");
 const Menu = hsMenu.Menu;
@@ -21,8 +17,8 @@ o.spec('hsMenu', () => {
             items: title,
             select: (item:string) => { console.log('selected'); }
         };
-        m.mount(root, {view: () => m(Menu, { desc: md }) }); 
-        menu = root.childNodes[0];
+        m.mount(o.root, {view: () => m(Menu, { desc: md }) }); 
+        menu = o.root.childNodes[0];
     });
 
     o('Menu', () => {

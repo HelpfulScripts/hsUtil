@@ -43,7 +43,7 @@ The following options are supported for the Attributes array:
 import { Container }    from './Container';
 import { Layout }       from './Layout';
 import { LayoutToken, DefinedToken, PixelToken }    from './Tokens';
-import { Vnode}         from '../../../mithril';
+import { Vnode}         from '../mithril';
 
 
 

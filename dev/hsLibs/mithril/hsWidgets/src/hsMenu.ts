@@ -46,8 +46,7 @@
  */
 
  /** */
-import { m, Vnode} from '../../mithril';
-import { Container } from '../../hsLayout/src/';
+import { Container, m, Vnode } from 'hslayout';
 
 /** passed into Menu from the calling application */
 export interface MenuDesc {
@@ -62,7 +61,7 @@ export interface MenuDesc {
 }
 
 /** interface of the parameter passed to a `MenuItem` */
-interface MenuItemDesc {
+export interface MenuItemDesc {
     /** the item's title */
     title: string;
     /** the item's select status */

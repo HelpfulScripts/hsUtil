@@ -38,8 +38,7 @@ The default `Container` implementation recognizes the following special `<Attr>`
 */
 
 /** */
-import { m, Vnode } from '../../mithril'; 
-import * as mithril from '../../mithril';
+import { m, Vnode } from './mithril'; 
 import * as layout from './';
 
 /**
@@ -66,7 +65,7 @@ function copy(struct:any): any {
  */
 function resolve(sym:string, context:any[]) {
     let cl:any;
-    context.concat(mithril, layout).some((c:any) =>  cl = c[sym]);
+    context.concat(layout).some((c:any) =>  cl = c[sym]);
     return cl;
 }
 

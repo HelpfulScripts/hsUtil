@@ -1,9 +1,11 @@
 import { fsUtil } from './';
 
 
+
 describe("hsFSutil", function() {
 	let called:any;
-    let dir = __dirname; // + '/testTmp/';
+    const dir = __dirname; // + '/testTmp/';
+    const TEST_DIR = dir+'/../example/';
 
     function getCalled(done:()=>void) {
         let result:string, error:string;
@@ -246,8 +248,8 @@ describe("hsFSutil", function() {
 	});
 	
 	describe('readFile' , () => {
-        const file1 = dir+'/../../spec/test.xlsx';
-        const file2 = dir+'/../../spec/test.xlsx2';
+        const file1 = TEST_DIR+'test.xlsx';
+        const file2 = TEST_DIR+'test.xlsx2';
 		describe(file1 , () => {
 			beforeEach(done => {
 				called = getCalled(done);
@@ -306,7 +308,7 @@ describe("hsFSutil", function() {
 				expect(called.resolved).toHaveBeenCalled();
 				expect(called.rejected).not.toHaveBeenCalled();
 				expect(typeof called.getResult()).toBe('object');
-				expect(called.getResult().name).toBe('hsNode');
+				expect(called.getResult().name).toBe('hsnode');
 				done();
 			});
 		});

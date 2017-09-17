@@ -1,7 +1,7 @@
+const path = require('path');
 
 /*global module:false*/
 module.exports = function(grunt) {
-
 	// Project configuration.
 	grunt.initConfig({
 		// Metadata.
@@ -13,19 +13,55 @@ module.exports = function(grunt) {
 				' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
 
 		clean: {
-			src:   ['dist/src'],
-			spec:  ['dist/spec'],
-            docs:  ['docs'],
-            test:  ['docs/tests']
+			src:    ['_dist'],
+            docs:   ['_dist/docs'],
+            test:   ['_dist/**/tests'],
+            example:['_example', '_dist/example']
 		},
 		
 		// Task configuration.
 		copy: {
-		    pre: {},
-			post: {}
+            build:  { expand:true, cwd:'src/', 
+                src:['*.html'], dest:'_dist/' 
+            },
+            example:{ expand:true, cwd: 'src/example', 
+                src:['**/*', '!**/*.ts'], dest:'_dist/example' 
+            },
+            deploy: { files: [
+                { expand:true, cwd: '_dist/src', 
+                    src:['**/*'], dest:'node_modules/<%= pkg.name %>/' },
+                { expand:true, cwd: './', 
+                    src:['./package.json'], dest:'node_modules/<%= pkg.name %>/'
+                }
+            ]},
+            docs:   { expand:true, cwd: '_dist/docs', 
+                src:['**/*'], dest:'node_modules/<%= pkg.name %>/docs' 
+            },
+		    test: { files: [
+                { expand:true, cwd:'_dist/',    
+                    src:['*.js', '*.css', '*.html'], dest:'test/'
+                },
+//                { cwd:'example/', expand:true, src:['*.json'], dest:'test/'}
+            ]}
 		},
 		
-        tslint: {
+        less: {
+            options: {
+                sourceMap: true
+            },
+            css: {
+                files: {
+                    '_dist/src/<%= pkg.name %>.css': 'src/css/*.less'
+                }
+            },
+            example: {
+                files: {
+                    '_dist/example/<%= pkg.name %>.css': 'src/example/<%= pkg.name %>.less'
+                }
+            }
+        }, 
+        
+       tslint: {
             options: {
                 configuration: 'tslint.json',
                 force:  false,
@@ -40,17 +76,18 @@ module.exports = function(grunt) {
         },
 
         ts: {
-            options: {
-                module:             "commonjs",
-                moduleResolution:   "node",
-            },
             src : {
-                outDir:     "dist/src",
-                src: ["src/**/*.ts", "!src/**/*.spec.ts"],
+                outDir:     "_dist/src",
+                src: ["src/**/*.ts", "!src/**/*.spec.ts", "!src/example/*.ts"],
                 tsconfig:   true,
             },
-            spec : {
-                outDir:     "dist/spec",
+            example : {
+                outDir:     "_example",
+                src: ["src/example/*.ts"],
+                tsconfig:   true,
+            },
+            test : {
+                outDir:     "_dist/tests",
                 src: ["src/**/*.spec.ts"],
                 tsconfig:   true,
             }
@@ -62,51 +99,34 @@ module.exports = function(grunt) {
                     target: 'es6',
                     tsconfig: 'typedoc.json',
                     module: 'commonjs',
-                    out:    './docs',
+                    json:   '_dist/docs/<%= pkg.name %>.json',
+                    out:    '_dist/docs',
                     mode:   'modules',
-//                    listInvalidSymbolLinks: true,
-//                    json:   'docs.json',
-//                    theme:  'themes/hs',
-                    name:   'hsCrossFrameWork',
-                    readme: 'readme.txt'
+                    name:   '<%= pkg.name %>'
                 },
-                src: ['src/**/*.ts', '!src/**/*.spec.ts']
+                src: ['src/**/*.ts']
             }
         },
-
-		jasmine_node: {
-			options: { forceExit: true },
-			all: {
-				options: {
-                    projectRoot: 'dist',
-					coverage: {
-						reportDir: 'docs/tests',
-                        relativize: true,
-						includeAllSources: true,
-						report: ['html']
-					},
-					jasmine: {
-						spec_dir: '',
-						spec_files: [
-						    'dist/spec/*.spec.js'
-						]
-					}
-				},
-				src: ['dist/**/*.js'] 
-			}
-		},
 
 		watch: {
 			gruntfile: {
                 files: ['Gruntfile.js'],
-				tasks: ['makeAll']
+				tasks: ['make']
 			},
 			js: {
-				files: ['src/**/*.ts'],
-				tasks: ['build']
+				files: ['src/**/*.ts', '!src/**/*.spec.ts', '!src/**/*.less'],
+				tasks: ['make']
+			},
+			less: {
+				files: ['src/**/*.less'],
+				tasks: ['build-css', 'stage']
+			},
+			html: {
+				files: ['src/**/*.html'],
+				tasks: ['build-html', 'stage']
 			},
 			specs: {
-				files: ['spec/**/*.ts'],
+				files: ['src/**/*.spec.ts'],
 				tasks: ['test']
 			}
 		}
@@ -116,14 +136,24 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-jasmine-node-coverage');
+    grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-typedoc');
     grunt.loadNpmTasks('grunt-tslint');
     grunt.loadNpmTasks('grunt-ts');
+    grunt.loadNpmTasks('grunt-webpack');
 
-    grunt.registerTask('doc', ['clean:docs', 'typedoc']);
-    grunt.registerTask('test', ['clean:spec', 'tslint:spec', 'ts:spec', 'jasmine_node']);
-    grunt.registerTask('build', ['clean:src', 'tslint:src', 'ts:src']);
-	grunt.registerTask('makeAll', ['build', 'test', 'doc']);
-    grunt.registerTask('default', ['build', 'test', 'watch']);	
+    grunt.registerTask('ospec', () => {
+        require('child_process').spawnSync('npm', ['test'], {stdio: 'inherit'}); 
+    });
+    grunt.registerTask('doc', ['clean:docs', 'typedoc', 'copy:docs']);
+    grunt.registerTask('stage', ['copy:deploy']);
+    grunt.registerTask('build-html', ['copy:build']);
+    grunt.registerTask('build-css', ['less']);
+    grunt.registerTask('build-example', ['clean:example', 'copy:example', 'ts:example']);
+    grunt.registerTask('build-js', ['tslint:src', 'ts:src']);
+    grunt.registerTask('build-spec', ['tslint:spec', 'ts:test']);
+    grunt.registerTask('test', ['clean:test', 'copy:test', 'build-spec', 'ospec' ]);
+    grunt.registerTask('build', ['clean:src', 'build-html', 'build-css', 'build-js', 'build-example']);
+	grunt.registerTask('make', ['build', 'test', 'doc', 'stage']);
+    grunt.registerTask('default', ['make', 'watch']);	
 };

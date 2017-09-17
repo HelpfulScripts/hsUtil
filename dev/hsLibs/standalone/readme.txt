@@ -1,1 +1,0 @@
-# hsLibs Cross-Framework Libraries

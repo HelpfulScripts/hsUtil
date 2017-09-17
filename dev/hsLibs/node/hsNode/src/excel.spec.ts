@@ -1,6 +1,6 @@
 import { hsExcel } from './';
 
-const TEST_FILE = '../../spec/test.xlsx';
+const TEST_FILE = '../example/test.xlsx';
 
 describe("hsExcel", function() {
 	it('should have hsExcel defined', function() {

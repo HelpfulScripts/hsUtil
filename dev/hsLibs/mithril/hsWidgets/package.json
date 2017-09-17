@@ -1,8 +1,10 @@
 {
-  "name": "hsDoc",
-  "version": "0.9.5",
+  "name": "hswidget",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "version": "2.0.0",
   "keywords": [],
-  "description": "Helpful Scripts documentation utility",
+  "description": "Helpful Scripts UI widgets",
   "author": {
     "name": "Hauke Schmidt",
     "email": "hauke.schmidt@us.bosch.com"

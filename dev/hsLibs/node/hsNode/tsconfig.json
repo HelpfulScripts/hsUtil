@@ -4,9 +4,10 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "inlineSourceMap": true,
-    "removeComments": false,
+    "removeComments": true,
     "noImplicitAny": true,
-    "suppressImplicitAnyIndexErrors": true
+    "suppressImplicitAnyIndexErrors": true,
+    "declaration": true
   },
   "compileOnSave": true,
   "include": [],

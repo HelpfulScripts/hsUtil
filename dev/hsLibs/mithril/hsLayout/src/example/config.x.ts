@@ -1,4 +1,4 @@
-import { m, Vnode}  from '../../../mithril';
+import { m, Vnode}  from '../mithril';
 import * as layout from '../';
 //import * as widgets from '../../hsWidgets/src/';
 

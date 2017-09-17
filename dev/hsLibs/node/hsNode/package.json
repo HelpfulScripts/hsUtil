@@ -1,6 +1,8 @@
 {
-  "name": "hsNode",
-  "version": "0.9.5",
+  "name": "hsnode",
+  "version": "2.0.0",
+  "main": "./index.js",
+  "types": "./index.d.ts",
   "keywords": [],
   "description": "Helpful Scripts cross-framework libraries ",
   "author": {
@@ -8,7 +10,8 @@
     "email": "hauke.schmidt@us.bosch.com"
   },
   "scripts": {
-    "start": "grunt"
+    "start": "grunt",
+    "test": "ospec"
   },
   "engines": {
     "node": ">= 0.10.0"

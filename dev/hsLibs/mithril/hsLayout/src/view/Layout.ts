@@ -10,7 +10,7 @@ For example,
 */
 
 /** */
-import { Vnode} from '../../../mithril';
+import { Vnode} from '../mithril';
 
 import { LayoutToken }  from './Tokens';
 import { Container }    from './Container';

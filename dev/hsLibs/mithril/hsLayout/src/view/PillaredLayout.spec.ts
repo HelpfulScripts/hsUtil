@@ -1,16 +1,8 @@
-// Polyfill DOM env for mithril
-global['window'] = require("mithril/test-utils/browserMock.js")();
-global['document'] = window.document;
-
-const m = require("mithril");
-const o = require("mithril/ospec/ospec");
-const root = window.document.createElement("div");  
-
 
 const layout = require('../src/');
+const m = layout.m;
+const o = layout.o;
 
-type Vnode = typeof m.Vnode;
-const Container = layout.Container;
 
 const columns = ["150px", "fill"];
 const titles  = ['Left Column: 150px', 'Right Column: remainder'];
@@ -19,13 +11,13 @@ const titles  = ['Left Column: 150px', 'Right Column: remainder'];
 o.spec('rows', () => {
     let rows:any;
     o.before(() => {
-        m.mount(root, {view: () => m(Container, {
+        m.mount(o.root, {view: () => m(layout.Container, {
             css: 'myRow',
             rows: columns,
             content: titles
             })
         }); 
-        rows = root.childNodes[0];
+        rows = o.root.childNodes[0];
     }); 
     o('first level', () => {
         o(rows===undefined).equals(false)('should be defined');
@@ -56,13 +48,13 @@ o.spec('rows', () => {
 o.spec('columns', () => {
     let rows:any;
     o.before(() => {
-        m.mount(root, {view: () => m(Container, {
+        m.mount(o.root, {view: () => m(layout.Container, {
             css: 'myColumn',
             columns: columns,
             content: titles
             })
         }); 
-        rows = root.childNodes[0];
+        rows = o.root.childNodes[0];
     }); 
     o('first level', () => {
         o(rows===undefined).equals(false)('should be defined');

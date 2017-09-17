@@ -61,7 +61,7 @@ The following options are supported for the Attributes array:
 import { Container }    from './Container';
 import { Layout }       from './Layout';
 import { LayoutToken, FillToken, DefinedToken, PixelToken }    from './Tokens';
-import { Vnode}         from '../../../mithril';
+import { Vnode}         from '../mithril';
 
 type descriptor = {top:string, left:string, right:string, bottom:string, width:string, height:string};
 

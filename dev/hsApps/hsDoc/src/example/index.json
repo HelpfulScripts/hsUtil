@@ -1,0 +1,10 @@
+{
+    "docs": [
+        "hsdoc.json",
+        "hslayout.json",
+        "hswidget.json",
+        "hsgraph.json",
+        "hsnode.json"
+    ],
+    "title": "HS Libraries"
+}

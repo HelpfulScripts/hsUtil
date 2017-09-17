@@ -1,9 +1,9 @@
 /**
- Definitions of the abstratc base classes `Component` and `Container`.
+ Definitions of the abstract base classes `Component` and `Container`.
  */
 
 /** */
-import { m, Vnode}      from '../../../mithril';
+import { m, Vnode}      from '../mithril';
 
 import { Layout }       from './Layout'; 
 

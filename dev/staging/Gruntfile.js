@@ -1,11 +1,13 @@
 const path = require('path');
 
-const basePath = '../hsLibs/mithril/';
+const basePath = '../';
 const paths = [
-    'hsDoc/',
-    'hsLayout/',
-    'hsWidgets/',
-    'hsConfig/'
+    ['hsApps/', 'hsDoc/'],
+    ['hsLibs/mithril/', 'hsLayout/'],
+    ['hsLibs/mithril/', 'hsWidgets/'],
+    ['hsLibs/mithril/', 'hsGraph/'],
+    ['hsLibs/mithril/', 'hsConfig/'],
+    ['hsLibs/node/',    'hsNode/']
 ];
 
 /*global module:false*/
@@ -17,50 +19,43 @@ module.exports = function(grunt) {
 		copy: {
             stage: { files: 
                 // program files
-                paths.map(p => { return {
+                paths.map((p,i) => { return (i>0)? {} : {
                     expand: true, 
-                    cwd: basePath+p+'dist/', 
-                    src: ['*.js', '*.css', '*.css.map', '*.html', '!mithril.js'], 
-                    dest: staging+p
+                    cwd: basePath+p[0]+p[1]+'_dist/', 
+                    src: ['*.js', '*.css*', '*.html', '!mithril.js'], 
+                    dest: staging+p[1]
                 }})
                 // doc files
                 .concat(paths.map(p => { return {
                     expand: true, 
-                    cwd: basePath+p+'docs/', 
+                    cwd: basePath+p[0]+p[1]+'_dist/docs/', 
                     src: ['*.json'], 
                     dest: staging+'hsDoc/data/' 
                 }}))
-                // example files
-                .concat(paths.map(p => { return {
-                    expand: true, 
-                    cwd: basePath+p+'example/', 
-                    src: ['*.js', '*.css', '*.html', '*.json'], 
-                    dest: staging+p+'example/' 
-                }}))
                 // example files in docs
-                .concat(paths.map(p => { return {
+                .concat(paths.map(p => { return { 
                     expand: true, 
-                    cwd: basePath+p+'example/', 
+                    cwd: basePath+p[0]+p[1]+'_dist/example/', 
                     src: ['*.js', '*.css', '*.html', '*.json'], 
                     dest: staging+'hsDoc/example/' 
                 }}))
                 // data files
                 .concat(paths.map(p => { return {
                     expand: true, 
-                    cwd: basePath+p+'dist/data/', 
+                    cwd: basePath+p[0]+p[1]+'_dist/data/', 
                     src: ['*.*'], 
-                    dest: staging+p+'data/' 
+                    dest: staging+'hsDoc/data/' 
                 }}))
             }
-        },
+        }, 
         
         sourceCode: { 
             main: { files:
                 paths.map(p => { return {
                     expand: true, 
-                    cwd: basePath+p+'src/', 
+                    cwd: basePath+p[0]+p[1]+'src/', 
                     src: ['**/*.ts'], 
-                    dest: staging+'hsDoc/src/'+p +'src/'
+                    dest: staging+'hsDoc/src/'+p[1] +'src/'
                 }})
             }
         },
@@ -71,10 +66,7 @@ module.exports = function(grunt) {
 				tasks: ['stage']
 			},
 			stage: { 
-                files:      paths.map(p => basePath+p+'dist/*.js')
-                    .concat(paths.map(p => basePath+p+'dist/*.css'))
-                    .concat(paths.map(p => basePath+p+'docs/*.json'))
-                    .concat(paths.map(p => basePath+p+'example/*.*')),
+                files:  paths.map(p => basePath+p[0]+p[1]+'_dist/**/*'),
 				tasks: ['stage']
 			},
 		}
