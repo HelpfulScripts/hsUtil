@@ -29,7 +29,7 @@ Optionally, the subclass can also implement {@link Container.Container.getCSS `g
 assign to the component, and override the default implementation, which returns `node.attrs.css`. 
 ### Example:
 <code>
-import { Container, px, FILL }  from 'hsLayout';
+import { Container, px, FILL }  from 'hslayout';
 const TitleHeight   = px(30); 
 const FooterHeight  = px(10); 
 class MyLayout extends Container {

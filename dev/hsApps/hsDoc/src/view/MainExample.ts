@@ -32,7 +32,7 @@
  * for use in the scripts:
  * - **m**: the `Mithril` m function    
  * - **layout**: the {@link hsLayout: `hsLayout`} namespace, providing functions to layout the browser window.
- * - **widget**: the {@link hsWidget: `hsWidget`} namespace, providing various UI widget functions.
+ * - **widget**: the {@link hsGraph: `hsGraph`} namespace, providing various UI widget functions.
  * - additionally, the parameter **root** is provided as the DOM element to mount to.
  * 
  * [Function]:https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function
@@ -99,7 +99,7 @@ const gInitialized:{string?:CommentDescriptor} = {};
  * import * as layout from "layout";
  * text = text.replace(/<example>([\S\s]*?)<\/example>/gi, example({layout:layout}));
  * </pre></code>
- * The modules `m`, `hsLayout`, and `hsWidget` will be added by default as 
+ * The modules `m`, `hsLayout`, and `hsGraph` will be added by default as 
  * ` { m: m, layout: layout, widget: widget } `
  * @param example the example string extracted from the comment, including the `<example>` tags.
  * @param context the context in which the example script should be run, expressed as `name`:`namespace` pairs.

@@ -17,7 +17,7 @@
     }]
  }
  </code>
-`<Class>` is either {@link hsLayout:Container.Container Container} or a subclass thereof.
+`<Class>` is either {@link hsGraph:Container.Container Container} or a subclass thereof.
 `<Configuration>` is an object literal `{ <Attr>:<Value>[, ...] }`
 
 Arrays and Object Literals in `<Configuration>` define a layout tree that will be traversed,

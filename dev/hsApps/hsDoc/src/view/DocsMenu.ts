@@ -1,6 +1,6 @@
 import { m, Vnode, Container }  from 'hslayout';
 import { DocSets }              from '../DocSets'; 
-import { Menu, MenuDesc }       from 'hswidget';
+import { Menu, MenuDesc }       from 'hsGraph';
 
 /**
  * Creates the title menu for selecting between the different docsets.
@@ -13,7 +13,7 @@ import { Menu, MenuDesc }       from 'hswidget';
  *   `docSet` field of the `node.attrs` parameter. If none is specified, the 
  *   default is used as specified in the {@link hsdoc:DocSets.FILE DocSets FILE} setting.
  * - DocsMenu retrieves all available docSets via {@link hsdoc:DocSets.DocSets.get DocSets.get}.
- * - DocsMenu creates a `MenuDesc` structure with a {@link hsWidget:hsMenu.MenuDesc.select `select`} callback that initiates a route change 
+ * - DocsMenu creates a `MenuDesc` structure with a {@link hsGraph:hsMenu.MenuDesc.select `select`} callback that initiates a route change 
  *   to the selected docSet
  */
 export class DocsMenu extends Container {

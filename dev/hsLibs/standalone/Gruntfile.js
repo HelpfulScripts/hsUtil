@@ -2,6 +2,8 @@ const path = require('path');
 
 /*global module:false*/
 module.exports = function(grunt) {
+    const lib = '<%= pkg.name %>';
+    const libPath = lib.toLowerCase();
 	// Project configuration.
 	grunt.initConfig({
 		// Metadata.
@@ -29,13 +31,13 @@ module.exports = function(grunt) {
             },
             deploy: { files: [
                 { expand:true, cwd: '_dist/src', 
-                    src:['**/*'], dest:'node_modules/<%= pkg.name %>/' },
+                    src:['**/*'], dest:`node_modules/${libPath}/` },
                 { expand:true, cwd: './', 
-                    src:['./package.json'], dest:'node_modules/<%= pkg.name %>/'
+                    src:['./package.json'], dest:`node_modules/${libPath}/`
                 }
             ]},
             docs:   { expand:true, cwd: '_dist/docs', 
-                src:['**/*'], dest:'node_modules/<%= pkg.name %>/docs' 
+                src:['**/*'], dest:`node_modules/${libPath}/docs`
             },
 		    test: { files: [
                 { expand:true, cwd:'_dist/',    
@@ -99,10 +101,10 @@ module.exports = function(grunt) {
                     target: 'es6',
                     tsconfig: 'typedoc.json',
                     module: 'commonjs',
-                    json:   '_dist/docs/<%= pkg.name %>.json',
+                    json:   `_dist/docs/${libPath}.json`,
                     out:    '_dist/docs',
                     mode:   'modules',
-                    name:   '<%= pkg.name %>'
+                    name:   `${libPath}`
                 },
                 src: ['src/**/*.ts']
             }
