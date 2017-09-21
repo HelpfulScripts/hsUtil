@@ -19,12 +19,17 @@ module.exports = function(grunt) {
 		copy: {
             stage: { files: 
                 // program files
-                paths.map((p,i) => { return (i>0)? {} : {
+                [{
                     expand: true, 
-                    cwd: basePath+p[0]+p[1]+'_dist/', 
+                    cwd: basePath+'hsApps/hsDoc/_dist/', 
                     src: ['*.js', '*.css*', '*.html', '!mithril.js'], 
-                    dest: staging+p[1]
-                }})
+                    dest: staging+'hsDocs/'
+                },{
+                    expand: true, 
+                    cwd: basePath+'hsApps/hsDoc/_dist/example', 
+                    src: ['*.json'], 
+                    dest: staging+'hsDoc/data/' 
+                }]
                 // doc files
                 .concat(paths.map(p => { return {
                     expand: true, 

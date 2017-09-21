@@ -308,7 +308,7 @@ describe("hsFSutil", function() {
 				expect(called.resolved).toHaveBeenCalled();
 				expect(called.rejected).not.toHaveBeenCalled();
 				expect(typeof called.getResult()).toBe('object');
-				expect(called.getResult().name).toBe('hsnode');
+				expect(called.getResult().name).toBe('hsNode');
 				done();
 			});
 		});

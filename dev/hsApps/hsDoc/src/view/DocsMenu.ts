@@ -1,6 +1,6 @@
 import { m, Vnode, Container }  from 'hslayout';
 import { DocSets }              from '../DocSets'; 
-import { Menu, MenuDesc }       from 'hsGraph';
+import { Menu, MenuDesc }       from 'hswidget';
 
 /**
  * Creates the title menu for selecting between the different docsets.
