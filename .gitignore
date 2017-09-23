@@ -1,4 +1,5 @@
 node_modules
 .baseDir.*
 .tscache/
+_example/
 _dist/
