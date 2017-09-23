@@ -71,7 +71,7 @@ module.exports = function(grunt) {
 				tasks: ['stage']
 			},
 			stage: { 
-                files:  paths.map(p => basePath+p[0]+p[1]+'_dist/**/*'),
+                files:  paths.map(p => 'node_modules/'+p[1].toLowerCase()+'*'),
 				tasks: ['stage']
 			},
 		}

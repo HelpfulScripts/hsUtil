@@ -1,3 +1,0 @@
-Helpful Scripts Doc Generator
-=================
-

@@ -1,1 +1,0 @@
-src/cpUtil.ts src/date.ts src/excel.ts src/fsUtil.ts src/httpUtil.ts src/index.ts src/log.ts src/node.ts src/.baseDir.ts --declaration --removeComments --noImplicitAny --suppressImplicitAnyIndexErrors --inlineSourceMap --moduleResolution node --target ES6 --module commonjs --outDir _dist/src
