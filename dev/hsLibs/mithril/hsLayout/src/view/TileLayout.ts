@@ -27,7 +27,7 @@ to invoke this layout.
  *     setTimeout(next, 2000);
  *     m.redraw();
  * }
- * //next();
+ * next();
  * </file>
  * <file name='style.css'>
  * .myExample .hs-layout { 
