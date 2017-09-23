@@ -23,7 +23,7 @@ module.exports = function(grunt) {
                     expand: true, 
                     cwd: basePath+'hsApps/hsDoc/_dist/', 
                     src: ['*.js', '*.css*', '*.html', '!mithril.js'], 
-                    dest: staging+'hsDocs/'
+                    dest: staging+'hsDoc/'
                 },{
                     expand: true, 
                     cwd: basePath+'hsApps/hsDoc/_dist/example', 
@@ -60,7 +60,7 @@ module.exports = function(grunt) {
                     expand: true, 
                     cwd: basePath+p[0]+p[1]+'src/', 
                     src: ['**/*.ts'], 
-                    dest: staging+'hsDoc/src/'+p[1] +'src/'
+                    dest: staging+'hsDoc/src/'+p[1] 
                 }})
             }
         },
