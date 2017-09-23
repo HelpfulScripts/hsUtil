@@ -1,14 +1,14 @@
 /**
-# hsdoc
+# hsDoc
 ___
-hsdoc.js is a code documentation viewer for [Typescript](https://www.typescriptlang.org) projects.
+hsDoc.js is a code documentation viewer for [Typescript](https://www.typescriptlang.org) projects.
 It renders JSON documentation files as created by [typedoc](http://typedoc.org).
 
 ## Creating the documentation docset
 Follow the instruction for typedoc in commenting the code.
 
 In addition to the documented source files,
-`hsdoc` recognizes a special **`overview.ts`** file that will be displayed as a project overview. 
+`hsDoc` recognizes a special **`overview.ts`** file that will be displayed as a project overview. 
 For this to work, `typedoc` requires the file to have two separate comment entries.
 If the second comment is missing, `typedoc` will not generate a comment in the docset.
 
@@ -23,14 +23,14 @@ where
  - *linked text* is displayed with a link to path within module
 
 Examples:
-- '{@link hsdoc: Overview of hsdoc docSet}' -> {@link hsdoc: Overview of hsdoc docSet}
-- '{@link hsdoc:DocSets.DocSets.add the `adds` function}' --> {@link hsdoc:DocSets.DocSets.add the `adds` function}
+- '{@link hsDoc: Overview of hsDoc docSet}' -> {@link hsDoc: Overview of hsDoc docSet}
+- '{@link hsDoc:DocSets.DocSets.add the `adds` function}' --> {@link hsDoc:DocSets.DocSets.add the `adds` function}
 - '{@link DocSets.DocSets.add the `adds` function}' --> {@link DocSets.DocSets.add the `adds` function}
 
 
 ### Mithril Code Examples
- * `hsdoc` supports creating inline code examples in comment sections as explained 
- * in the {@link hsdoc:MainExample MainExample overview}.
+ * `hsDoc` supports creating inline code examples in comment sections as explained 
+ * in the {@link hsDoc:MainExample MainExample overview}.
  * <example>
  * <file name="script.js">
  * let tl = [10, 10];
@@ -76,7 +76,7 @@ A `tsconfig.json` file seems to be required by typedoc. The file can be empty
                 json:   './docs/hsDocs.json',
                 out:    './docs',
                 mode:   'modules',
-                name:   'hsdoc'
+                name:   'hsDoc'
             }
             src: ['src/*.ts', '!src/*.spec.ts']
         }
@@ -126,7 +126,7 @@ A `tsconfig.json` file seems to be required by typedoc. The file can be empty
 
 ## Structural Code Overview
 The main entry point for the web-app is index.ts, which initiates loading the docsets 
-and sets up a mithril {@link hsdoc:Router router} 
+and sets up a mithril {@link hsDoc:Router router} 
 
 */
 

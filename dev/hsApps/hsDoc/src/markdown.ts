@@ -35,8 +35,8 @@ export function markDown(text:string, short:boolean=false, currentRoute:string):
  * - if *path* is omittied, or is `overview`, the library overview will be shown.
  *   
  * Examples: 
- * - '{@link hsdoc: Doc Overview}' -> {@link hsdoc: Doc Overview}
- * - '{@link hsdoc:DocSets.DocSets.add the `adds` function}' --> {@link hsdoc:DocSets.DocSets.add the `adds` function}
+ * - '{@link hsDoc: Doc Overview}' -> {@link hsDoc: Doc Overview}
+ * - '{@link hsDoc:DocSets.DocSets.add the `adds` function}' --> {@link hsDoc:DocSets.DocSets.add the `adds` function}
  * 
  * @param comment the comment in which to replace the links
  * @return the comment with substituted links 

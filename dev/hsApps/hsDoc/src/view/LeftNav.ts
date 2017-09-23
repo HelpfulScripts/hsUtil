@@ -5,6 +5,7 @@
 /** */
 import { m, Vnode}  from 'hslayout';
 import { Container }from 'hslayout';
+import { collapsible }from 'hswidget';
 import { DocSets } from '../DocSets'; 
 import { libLink } from './Parts'; 
 
@@ -44,27 +45,25 @@ const ignoreModules = {
     index:      true    // the index.ts file
 };
 
-const expanded: {string?:boolean} = {};
+//const expanded: {string?:boolean} = {};
 
 /**
  * processes a module, i.e. a `.ts` file.
  */
 function externalModule(mdl:any, field:string) {
-    const toggleExpanded = () => { expanded[mdl.fullPath] = !expanded[mdl.fullPath]; };
-    const selected = (field===''+mdl.id || field.indexOf(mdl.fullPath) === 0)?
+    const selected = (field===''+mdl.id || field.indexOf(mdl.fullPath) === 0)? 
         '.hs-left-nav-selected' : '';
 
-    // if field.length condition is commented out, the panel will always stay open
-    if (selected /*&& field.length > mdl.fullPath.length*/) { expanded[mdl.fullPath] = true; }
-
-    // don't show modules from other projects (isExported flag) or modules on the ignore list
-    const skip = (mdl.flags && mdl.flags.isExternal) || ignoreModules[mdl.name];
-    return skip? m('') : m(`.hs-left-nav-module`, { onclick:toggleExpanded }, [
-        libLink(`a.hs-left-nav-module-name ${selected}`, mdl.lib, mdl.fullPath, mdl.name),
-        !mdl.groups? undefined : m('.hs-left-nav-module-content', { class: expanded[mdl.fullPath]?'':'hs-collapsed'}, 
-            mdl.groups.map((g:any) => entries(g, mdl, field)))
-    ]);
-} 
+    // don't show modules from other projects (isExternal flag) or modules on the ignore list
+    if ((mdl.flags && mdl.flags.isExternal) || ignoreModules[mdl.name]) {
+        return m('');
+    } else {
+        return collapsible(`.hs-left-nav-module`, { isExpanded:selected }, [
+            libLink(`a.hs-left-nav-module-name ${selected}`, mdl.lib, mdl.fullPath, mdl.name),
+            !mdl.groups? undefined : mdl.groups.map((g:any) => entries(g, mdl, field))
+        ]);
+    }
+}
 
 /**
  * processes a group of entries, e.g. Variables, Functions, or Classes.
@@ -110,7 +109,7 @@ function entries(group:any, mdl:any, field:string) {
 /**
  * sorting function: sort first by exported status, then alphabetically.
  */
-function exportAscending(a:any, b:any) {
+function exportAscending(a:any, b:any):boolean|number {
     if (a.flags && b.flags) {
         if (a.flags.isExported && b.flags.isExported) { return a.name > b.name; }
         else if (a.flags.isExported) { return -1; }

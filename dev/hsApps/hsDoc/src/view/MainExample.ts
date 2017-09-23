@@ -1,7 +1,7 @@
 /**
  * Comment sections may contain code examples that are placed within &lt;example&gt; tags.
  * 
- * `hsdoc` will interpret and execute Javascript instructions within a &lt;`file name='script.js'`&gt; tag.
+ * `hsDoc` will interpret and execute Javascript instructions within a &lt;`file name='script.js'`&gt; tag.
  * and stylesheet instructions with a &lt;`file name='style.css'`&gt; tag, as in following example:
  * <code>
  *     &lt;example&gt; 
@@ -24,11 +24,11 @@
  * ### Scripts 
  * Scripts are expected to mount a `mithril Vnode` on a root DOM element using `m.mount` or `m.render`. 
  * Do not use `m.route` as only a single call is allowed per web app and that is used to manage the 
- * main hsdoc site menu and navigation.
+ * main hsDoc site menu and navigation.
  * 
- * hsdoc internally uses the [global `Function` object][Function] to parse and execute the script. 
+ * hsDoc internally uses the [global `Function` object][Function] to parse and execute the script. 
  * Thus the script has access only to global objects and to objects provided
- * as parameters in the `Function` constructor. hsdoc currently provides the following namespaces as parameters
+ * as parameters in the `Function` constructor. hsDoc currently provides the following namespaces as parameters
  * for use in the scripts:
  * - **m**: the `Mithril` m function    
  * - **layout**: the {@link hsLayout: `hsLayout`} namespace, providing functions to layout the browser window.
@@ -193,7 +193,6 @@ function addExampleStructure(IDs:CommentDescriptor) {
  */
 function executeScript(IDs:CommentDescriptor) {
     const root = document.getElementById(IDs.mid);
-console.log(root);    
     try { IDs.executeScript(root); }
     catch(e) { console.log("executing script: " + e); }
     m.redraw();
