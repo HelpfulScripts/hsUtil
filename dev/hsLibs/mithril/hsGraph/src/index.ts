@@ -1,1 +1,1 @@
-export { Series } from './Series';
+export { Graph } from './Graph';
