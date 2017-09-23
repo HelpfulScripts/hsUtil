@@ -60,11 +60,13 @@ export function extensionOf(mdl:any) {
 export function sourceLink(mdl:any) {
     const source = mdl.sources? mdl.sources[0] : undefined;
     if (source) {
-        let file = (source && source.fileName)? source.fileName.replace('.ts', '.html') : '';
+        let file = (source.fileName || '').replace('.ts', '.html');
         const index = file.indexOf(mdl.lib);
-        file = file.substr(index); // only consider links within the docSet (everything after the lib name)
+        if (index>0) {
+            file = file.substr(index); // only consider links within the docSet (everything after the lib name)
+        }
         return m('span.hs-item-member-source',  
-            m('a', { href:`${SourceBase}${file}#${Math.max(0,source.line-5)}`, target:"_blank"}, '[source]')
+            m('a', { href:`${SourceBase}${mdl.lib}/${file}#${Math.max(0,source.line-5)}`, target:"_blank"}, '[source]')
         );
     } else {
         return m('span.hs-item-member-source', '');
