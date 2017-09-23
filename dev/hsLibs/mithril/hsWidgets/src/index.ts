@@ -5,4 +5,5 @@
 /**
  * 
  */
-export { Menu, MenuDesc }  from './hsMenu'; 
+export { Menu, MenuDesc }  from './Menu'; 
+export { collapsible }     from './Collapsible'; 

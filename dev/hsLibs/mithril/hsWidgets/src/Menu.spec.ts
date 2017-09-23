@@ -3,7 +3,7 @@ const layout = require('hslayout');
 const m = layout.m;
 const o = layout.o;
 
-const hsMenu = require("../src/hsMenu");
+const hsMenu = require("../src/Menu");
 const Menu = hsMenu.Menu;
 
 const left  = ['0%', '25%', '50%', '75%'];
