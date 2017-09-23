@@ -1,6 +1,7 @@
 const path = require('path');
+const webpack = require("webpack");
 
-module.exports = (grunt, dir, type='lib') => {
+module.exports = (grunt, dir, dependencies, type) => {
     const pkg = grunt.file.readJSON(dir+'/package.json');
     const lib = pkg.name;
     const libPath = lib.toLowerCase();
@@ -40,6 +41,7 @@ module.exports = (grunt, dir, type='lib') => {
     if (type === 'util') { grunt.registerTask('build', ['clean:src', 'build-html', 'build-css', 'build-js']); }
     if (type === 'node') { grunt.registerTask('build', ['clean:src', 'build-html', 'build-css', 'build-js', 'copy:example']); }
 	grunt.registerTask('make', ['build', 'test', 'doc', 'stage']);
+    grunt.registerTask('once', ['make']);	
     grunt.registerTask('default', ['make', 'watch']);	
     
     return {
@@ -102,7 +104,7 @@ module.exports = (grunt, dir, type='lib') => {
         },
         tslint: {
             options: {
-                configuration: 'tslint.json',
+                configuration: __dirname+'/tslint.json',
                 force:  false,
                 fix:    false
             },
@@ -117,25 +119,25 @@ module.exports = (grunt, dir, type='lib') => {
             src : {
                 outDir:     "_dist/src",
                 src: ["src/**/*.ts", "!src/**/*.spec.ts", "!src/example/*.ts"],
-                tsconfig:   true,
+                tsconfig:   __dirname+'/tsconfig.json'
             },
             example : {
                 outDir:     "_example",
                 src: ["src/example/*.ts"],
-                tsconfig:   true,
+                tsconfig:   __dirname+'/tsconfig.json'
             },
             test : {
                 outDir:     "_dist/tests",
                 src: ["src/**/*.spec.ts"],
-                tsconfig:   true,
+                tsconfig:   __dirname+'/tsconfig.json'
             }
         },
         typedoc: {
             code: {
                 options: {
                     target: 'es6',
-                    tsconfig: 'typedoc.json',
                     module: 'commonjs',
+                    moduleResolution: "node",
                     json:   `_dist/docs/${lib}.json`,
                     out:    '_dist/docs',
                     mode:   'modules',
@@ -172,7 +174,10 @@ module.exports = (grunt, dir, type='lib') => {
                 output: {
                     filename: `${lib}.js`,
                     path: path.resolve(dir, './_dist')
-                }
+                },
+                plugins: [
+					new webpack.optimize.UglifyJsPlugin()
+                ]
             },
             appDev: {
                 entry: './_dist/src/index.js',
@@ -200,8 +205,12 @@ module.exports = (grunt, dir, type='lib') => {
             }
         },
         watch: {
+            dependencies: {
+                files: dependencies.map(d => `./node_modules/${d.toLowerCase()}/*.*`),
+				tasks: ['make']
+            },
 			gruntfile: {
-                files: ['Gruntfile.js'],
+                files: ['Gruntfile.js', __dirname+'/sharedGruntConfig.js'], 
 				tasks: ['make']
 			},
 			js: {
