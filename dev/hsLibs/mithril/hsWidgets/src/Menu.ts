@@ -18,7 +18,7 @@
  * const content   = ['1st', '2nd', '3rd'];
  * let  theContent = content[1];
  * 
- * m.mount(root, {view: () => m(layout.Container, {
+ * m.mount(root, {view: () => m(hslayout.Container, {
  *     rows:["30px", "fill"],
  *     content:[
  *         m(widget.Menu, {desc: {
@@ -27,7 +27,7 @@
  *             select: item => 
  *                theContent = content[items.indexOf(item)]
  *         }}),
- *         m(layout.Container, { css:'myMain', content: theContent })
+ *         m(hslayout.Container, { css:'myMain', content: theContent })
  *     ]
  * })});
  *

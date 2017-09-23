@@ -17,7 +17,7 @@ to be layed out in a `Container`.
 ### Example
 * <example>
 * <file name='script.js'>
-* m.mount(root, {view: () => m(layout.Container, {
+* m.mount(root, {view: () => m(hslayout.Container, {
 *     css: 'myColumn',
 *     columns: ["150px", "fill"], 
 *     content:['Left Column: 150px', 

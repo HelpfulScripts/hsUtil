@@ -1,5 +1,5 @@
 import { m, Vnode}  from '../mithril';
-import * as layout from '../';
+import * as hslayout from '../';
 //import * as widgets from '../../hsWidgets/src/';
 
 const myConfig = {
@@ -38,27 +38,27 @@ const myConfig = {
 }; 
 
 const example = {
-    LeftHead: class extends layout.Container{ 
+    LeftHead: class extends hslayout.Container{ 
         getComponents(node:Vnode) { 
             return 'The Left Head'; 
         } 
     },
-    MainHead: class extends layout.Container{ 
+    MainHead: class extends hslayout.Container{ 
         getComponents(node:Vnode) { return m('', 'The Main Head'); } 
     },
-    LeftNav: class extends layout.Container{ 
+    LeftNav: class extends hslayout.Container{ 
         getComponents(node:Vnode) { return m('', 'The Left Nav'); } 
     },
-    MainNav: class extends layout.Container{ 
+    MainNav: class extends hslayout.Container{ 
         getComponents(node:Vnode) { return m('', 'The Main Nav'); } 
     },
-    Footer: class extends layout.Container{ 
+    Footer: class extends hslayout.Container{ 
         getComponents(node:Vnode) { return m('.hs-site-footer', '(c) Helpful ; Scripts'); } 
     }
 };
 
 
 
-new layout.HsConfig([layout, example])
+new hslayout.HsConfig([hslayout, example])
     .attachNodeTree(myConfig, document.getElementById('exampleBase'));
 

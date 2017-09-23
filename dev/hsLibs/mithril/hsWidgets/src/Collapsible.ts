@@ -23,7 +23,7 @@ const getKey = () => 'hs'+Math.floor(Math.random()*2000000);
 export function collapsible(css:string, attrs:any, components:Vnode[]) {
     function toggle() {
         expanded[key] = !expanded[key];
-        m.redraw();
+//        m.redraw();
     }
     if (!components) { components = attrs; attrs = undefined; }
     const key = getKey();

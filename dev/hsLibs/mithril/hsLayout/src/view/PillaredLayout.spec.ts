@@ -1,7 +1,7 @@
 
-const layout = require('../src/');
-const m = layout.m;
-const o = layout.o;
+const hslayout = require('../src/');
+const m = hslayout.m;
+const o = hslayout.o;
 
 
 const columns = ["150px", "fill"];
@@ -11,7 +11,7 @@ const titles  = ['Left Column: 150px', 'Right Column: remainder'];
 o.spec('rows', () => {
     let rows:any;
     o.before(() => {
-        m.mount(o.root, {view: () => m(layout.Container, {
+        m.mount(o.root, {view: () => m(hslayout.Container, {
             css: 'myRow',
             rows: columns,
             content: titles
@@ -48,7 +48,7 @@ o.spec('rows', () => {
 o.spec('columns', () => {
     let rows:any;
     o.before(() => {
-        m.mount(o.root, {view: () => m(layout.Container, {
+        m.mount(o.root, {view: () => m(hslayout.Container, {
             css: 'myColumn',
             columns: columns,
             content: titles

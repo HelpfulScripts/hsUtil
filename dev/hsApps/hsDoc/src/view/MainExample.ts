@@ -7,7 +7,7 @@
  *     &lt;example&gt; 
  *     <file name='script.js'>
  *     m.mount(root, { 
- *         view:() => m(layout.Container, { columns:[], 
+ *         view:() => m(hslayout.Container, { columns:[], 
  *             content:['first line','second line')]
  *         })
  *     });
@@ -44,7 +44,7 @@
  * <example>
  * <file name='script.js'>
  * m.mount(root, { 
- *     view:() => m(layout.Container, {
+ *     view:() => m(hslayout.Container, {
  *         css:'.myExample', 
  *         columns:[], 
  *         content:[
@@ -74,16 +74,20 @@ import { m }                    from 'hslayout';
 import { Menu, MenuDesc }       from 'hswidget';
 import { Container }            from 'hslayout';
 import { shortCheckSum, delay } from 'hsutil';
-import * as layout              from 'hslayout';
-import * as widget              from 'hswidget';
+import * as hslayout            from 'hslayout';
+import * as hswidget            from 'hswidget';
+import * as hsgraph             from 'hsgraph';
 
 
-interface CommentDescriptor {
-    eid:    string;             // example tag ID
-    mid:    string;             // menu tag ID
-    desc:   MenuDesc;           // menu items
-    pages:  {string?:string};   // page content for each menu item
-    executeScript?: (root:any) => void;
+/**
+ * describes an executable comment example
+ */
+interface CommentDescriptor { 
+    eid:    string;                     // example tag ID
+    mid:    string;                     // menu tag ID
+    desc:   MenuDesc;                   // menu items
+    pages:  {string?:string};           // page content for each menu item
+    executeScript?: (root:any) => void; // the example code to execute
 }
 
 /**
@@ -106,8 +110,9 @@ const gInitialized:{string?:CommentDescriptor} = {};
  */
 export function example(context:any) { 
     context.m      = m;
-    context.layout = layout;
-    context.widget = widget;
+    context.hslayout = hslayout;
+    context.hswidget = hswidget;
+    context.hsgraph  = hsgraph;
     const names = Object.keys(context);
     const modules = names.map(n => context[n]);
     return (example:string) => { 

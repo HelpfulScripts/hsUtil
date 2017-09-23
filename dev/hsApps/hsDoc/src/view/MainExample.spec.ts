@@ -1,6 +1,6 @@
-const layout = require('hslayout');
-const m = layout.m;
-const o = layout.o;
+const hslayout = require('hslayout');
+const m = hslayout.m;
+const o = hslayout.o;
 
 
 o.spec('example', () => {

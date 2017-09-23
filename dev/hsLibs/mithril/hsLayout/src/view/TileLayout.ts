@@ -14,7 +14,7 @@ to invoke this layout.
  * let c = [1,2,3,4,5];
  * 
  * m.mount(root, { 
- *     view:() => m(layout.Container, {
+ *     view:() => m(hslayout.Container, {
  *         tiles:[], 
  *         content: c.map((c,i)=>(''+i)),
  *         css: '.myExample'

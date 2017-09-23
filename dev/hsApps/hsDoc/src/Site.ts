@@ -3,7 +3,7 @@
  */
 
 /** */
-import * as layout  from 'hslayout';
+import * as hslayout  from 'hslayout';
 import * as header  from './view/DocsMenu';
 import * as left    from './view/LeftNav';
 import * as main    from './view/MainDetail';
@@ -56,5 +56,5 @@ const myConfig = {
 
 
 export function init() {
-    new layout.HsConfig([layout, header, left, main]).attachNodeTree(myConfig, document.body);
+    new hslayout.HsConfig([hslayout, header, left, main]).attachNodeTree(myConfig, document.body);
 }

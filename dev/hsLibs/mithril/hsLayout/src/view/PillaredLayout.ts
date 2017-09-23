@@ -247,9 +247,9 @@ abstract class Pillars extends Layout{
  * }
  * 
  * m.mount(root, { 
- *     view:() => m(layout.Container, {
+ *     view:() => m(hslayout.Container, {
  *         rows:[],  // each row a style
- *         content: styles.map(i => m(layout.Container, {
+ *         content: styles.map(i => m(hslayout.Container, {
  *             css: '.myExample', 
  *             content: c.map(c=>(''+i)),
  *             columns: i    // a style from styles
@@ -304,9 +304,9 @@ class Columns extends Pillars {
  * }
  * 
  * m.mount(root, { 
- *     view:() => m(layout.Container, {
+ *     view:() => m(hslayout.Container, {
  *         columns:[],  // each column a style
- *         content: styles.map(i => m(layout.Container, {
+ *         content: styles.map(i => m(hslayout.Container, {
  *             css: '.myExample', 
  *             content: c.map(c=>(''+i)),
  *             rows: i   // a style from styles
