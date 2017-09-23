@@ -1,2 +1,2 @@
-import { Series } from '../';
-if (Series) {}
+import { Graph } from '../';
+if (Graph) {}
