@@ -2,9 +2,22 @@
  * # Graph
  * <example>
  * <file name='script.js'>
- * let c = [1,2,3,4,5];
+ * let series = [
+ *      ['time', 'volume'],
+ *      [0, 0.2],
+ *      [0.2, 0.7],
+ *      [0.4, 0],
+ *      [0.6, 0],
+ *      [0.8, 0.5],
+ *      [1, 0.7]
+ * ];
  * 
  * const cfg = {
+ *      series: { 
+ *          data: series, 
+ *          series: [{ xHeader: 'time', yHeader:'volume'}]
+ *      },
+ *      axes: { primary: { x: { title:'time' }, y: { title:'volume' }}}
  * }
  * m.mount(root, { 
  *      view:() => m(hsgraph.Graph, {cfg: cfg})
@@ -12,76 +25,61 @@
  *
  * </file>
  * <file name='style.css'>
- * .hs-graph { fill: #ddd; }
+ * .hs-graph { fill: #e8e8e8; }
  * .hs-graph-chart { fill: #fff; }
+ * .hs-graph-series { stroke-width: 5;
  * </file>
  * </example>
 
  */
 
 /** */
-import { m, Vnode}      from 'hslayout';
+import { m, Vnode}                      from 'hslayout';
+import { Axes, config as axesCfg }      from './Axes';
+import { Scale, config as scaleCfg }    from './Scale';
+import { Config }                       from './Config';
 
-const viewBoxSize:number  = 1000;     // the viewBox size
-const marginLeft:number   = 100;
-const marginRight:number  = 30;
-const marginTop:number    = 30;
-const marginBottom:number = 100;
+const viewBoxWidth:number  = 1000;  // the viewBox size
+const viewBoxHeight:number = 700;   // the viewBox size
+const marginLeft:number    = 100;
+const marginRight:number   = 30;
+const marginTop:number     = 60;
+const marginBottom:number  = 100;
 
-interface ScaleStruct {
-    domain?: [number, number];
-    range?:  [number, number];
+
+export interface GraphSet {
+    range?:  { w?: number, h?: number };    // graph viewBox width and height
+    bottom?: number;                        // position of chart in viewBox
+    left?:   number;                        // position of chart in viewBox
+    top?:    number;                        // position of chart in viewBox
+    right?:  number;                        // position of chart in viewBox
 }
 
-interface Config {
-    graph?:{
-        range?:  { w?: number, h?: number },    // graph viewBox width and height
-        bottom?: number,                        // position of chart in viewBox
-        left?:   number,                        // position of chart in viewBox
-        top?:    number,                        // position of chart in viewBox
-        right?:  number                         // position of chart in viewBox
-    };
-    scale?:{
-        primary:   { x: ScaleStruct, y: ScaleStruct },
-        secondary: { x: ScaleStruct, y: ScaleStruct }
-    };
-    axes?:{
-
-    };
-    chart?:{
-
-    };
-}
-const config:Config = {};
-config.graph = {
-    range:  { w: viewBoxSize, h: viewBoxSize }, // graph width and height
-    bottom: viewBoxSize-marginBottom,           // position of chart in viewBox
-    left:   marginLeft,                         // position of chart in viewBox
-    top:    marginTop,                          // position of chart in viewBox
-    right:  viewBoxSize-marginRight             // position of chart in viewBox
-};
-config.scale = {
-    primary: {
-        x: { domain: [0, 1], range: [config.graph.left, config.graph.right] },
-        y: { domain: [0, 1], range: [config.graph.bottom, config.graph.top] }
-    },
-    secondary: {
-        x: { domain: [0, 1], range: [config.graph.left, config.graph.right] },
-        y: { domain: [0, 1], range: [config.graph.bottom, config.graph.top] }
+const config:Config = {
+    graph: {
+        range:  { w: viewBoxWidth, h: viewBoxHeight },  // graph width and height
+        bottom: viewBoxHeight-marginBottom,             // position of chart in viewBox
+        left:   marginLeft,                             // position of chart in viewBox
+        top:    marginTop,                              // position of chart in viewBox
+        right:  viewBoxWidth-marginRight                // position of chart in viewBox
     }
 };
-config.axes = {
-    primary: {
-        x: { visible: true, crossesAt:config.graph.bottom },
-        y: { visible: true, crossesAt:config.graph.left }
-    },
-    secondary: {
-        x: { visible: false, crossesAt:config.graph.top },
-        y: { visible: false, crossesAt:config.graph.right }
-    }
-};
+
+scaleCfg(config);
+axesCfg(config);
+
 config.chart = {
 };
+config.grid = {
+};
+config.series = {
+};
+config.title = {
+    align: {h:'center', v: 'top' }
+};
+config.legend = {
+};
+
 
 /**
  * Creates a deep copy of `org` in `dest`.
@@ -102,20 +100,6 @@ function copy(org:any, dest:any):any {
 }
 
 
-/**
- * translates a domain into a range
- */
-class Scale {
-    constructor(private _range:number[], private _domain=[0,1]) {}
-    get range():number[]  { return this._range; }
-    get domain():number[] { return this._domain; }
-    set domain(dom:number[]) { this._domain = dom; }
-    convert(domVal:number) { 
-        const dom = this._domain;
-        const range = this._range;
-        return (domVal- dom[0]) / (dom[1] - dom[0]) * (range[1] - range[0]) + range[0];
-    }
-}
 
 export class Graph {
     private scales = { 
@@ -133,23 +117,24 @@ export class Graph {
     }
 
     view(node?: Vnode): Vnode {
+        const background = () => m('rect', { width:cg.range.w, height:cg.range.h});
         const cp = copy(config, node.attrs.cfg || {});
         const cg = cp.graph;
         this.createScales(cg);
-        return m('svg', { width:'100%', height:'100%', viewBox:`0 0 ${cg.range.w} ${cg.range.h}`, preserveAspectRatio:'none'}, [
-            m('rect', { class:'hs-graph', width:cg.range.w, height:cg.range.h}),
-            m(Chart, {  cfg:cp.chart, x:cg.left, y:cg.top, 
-                        width: cg.right-cg.left, height:cg.bottom-cg.top }),
-            m(Axes, {cfg:cp.axes, scales:this.scales }),
-            m(Grid),
-            m(Series),
-            m(Title),
-            m(Legend)
+        return m('svg', { class:'hs-graph', width:'100%', height:'100%', viewBox:`0 0 ${cg.range.w} ${cg.range.h}`, preserveAspectRatio:'none'}, [
+            background(),
+            m(Chart, { cfg:cp.chart, x:cg.left, y:cg.top, 
+                       width: cg.right-cg.left, height:cg.bottom-cg.top }),
+            m(Axes, { cfg:cp.axes, scales:this.scales }),
+            m(Grid, { cfg:cp.grid }),
+            m(Series, { cfg:cp.series, scales:this.scales }),
+            m(Title, { cfg:cp.title }),
+            m(Legend, { cfg:cp.legend })
         ]);
     }
 }
 
-class Chart {
+class Chart { 
     view(node?: Vnode): Vnode {
         const cfg = node.attrs.cfg;   if(cfg){}
         return m('rect', { class:'hs-graph-chart', 
@@ -161,42 +146,6 @@ class Chart {
     }
 }
 
-class Axis {
-    drawLine(x:boolean, range:number[], cross:number) {
-        return x? m('line', {x1:range[0], x2: range[1], y1:cross, y2:cross }) :
-                  m('line', {y1:range[0], y2: range[1], x1:cross, x2:cross });
-    }
-    draw(x:boolean, attrs:any) {
-        const type = attrs.type;
-        const range = attrs.scale.range;
-        const cross = attrs.cfg.crossesAt;
-        return m('svg', { class:`hs-graph-axis hs-graph-axis-${x?'x':'y'} hs-graph-axis-${type}`}, [
-                this.drawLine(x, range, cross)
-                // labels, ticks, ...
-            ]);
-    }
-}
-
-class XAxis extends Axis {
-    view(node?: Vnode): Vnode { return !node.attrs.cfg.visible? undefined : this.draw(true, node.attrs); }
-}
-
-class YAxis extends Axis {
-    view(node?: Vnode): Vnode { return !node.attrs.cfg.visible? undefined : this.draw(false, node.attrs); }
-}
-
-class Axes {
-    view(node?: Vnode): Vnode {
-        const cfg       = node.attrs.cfg;         if(cfg){}
-        const scales    = node.attrs.scales;
-        return m('svg', [
-            m(XAxis, { scale:scales.primary.x,   type:'primary',   cfg: cfg.primary.x }),
-            m(YAxis, { scale:scales.primary.y,   type:'primary',   cfg: cfg.primary.y }),
-            m(XAxis, { scale:scales.secondary.x, type:'secondary', cfg: cfg.primary.x }),
-            m(YAxis, { scale:scales.secondary.y, type:'secondary', cfg: cfg.primary.y })
-        ]);
-    }
-}
 
 class Grid {
     view(node?: Vnode): Vnode {
@@ -206,7 +155,22 @@ class Grid {
 
 class Series {
     view(node?: Vnode): Vnode {
-        return m('svg', { class:'hs-graph-series', width:'100%', height:'100%'});
+        const cfg       = node.attrs.cfg;
+        const scales    = node.attrs.scales.primary;
+        const data      = cfg.data;
+        return m('svg', { class:'hs-graph-series'}, [
+            cfg.series.map((s:any) => {
+                const x = data[0].indexOf(s.xHeader);
+                const y = data[0].indexOf(s.yHeader);
+                if (x<0 || y<0) { 
+                    console.log(`${s.xHeader} or ${s.yHeader} not found in ${data[0]}`); 
+                    return undefined;
+                } else {
+                    return m('polyline', { points: data.map((p:any[], i:number) => i===0?'': 
+                        `${scales.x.convert(p[x])},${scales.y.convert(p[y])}`).join(' ')}); 
+                }
+            })
+        ]);
     }
 }
 
