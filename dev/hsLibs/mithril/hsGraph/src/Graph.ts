@@ -41,10 +41,10 @@ import { Config }                       from './Config';
 
 const viewBoxWidth:number  = 1000;  // the viewBox size
 const viewBoxHeight:number = 700;   // the viewBox size
-const marginLeft:number    = 100;
-const marginRight:number   = 30;
+const marginLeft:number    = 50;
+const marginRight:number   = 10;
 const marginTop:number     = 60;
-const marginBottom:number  = 100;
+const marginBottom:number  = 80;
 
 
 export interface GraphSet {
@@ -108,11 +108,13 @@ export class Graph {
     };
 
     private createScales(cfg:any) {
+        const cg = cfg.graph;
+        const cs = cfg.scale;
         if (!this.scales.primary.x) { 
-            this.scales.primary.x   = new Scale([cfg.left,   cfg.right]);
-            this.scales.primary.y   = new Scale([cfg.bottom, cfg.top]);
-            this.scales.secondary.x = new Scale([cfg.left,   cfg.right]);
-            this.scales.secondary.y = new Scale([cfg.bottom, cfg.top]);
+            this.scales.primary.x   = new Scale(cs.primary.x,   [cg.left,   cg.right]);
+            this.scales.primary.y   = new Scale(cs.primary.y,   [cg.bottom, cg.top]);
+            this.scales.secondary.x = new Scale(cs.secondary.x, [cg.left,   cg.right]);
+            this.scales.secondary.y = new Scale(cs.secondary.y, [cg.bottom, cg.top]);
         }
     }
 
@@ -120,7 +122,7 @@ export class Graph {
         const background = () => m('rect', { width:cg.range.w, height:cg.range.h});
         const cp = copy(config, node.attrs.cfg || {});
         const cg = cp.graph;
-        this.createScales(cg);
+        this.createScales(cp);
         return m('svg', { class:'hs-graph', width:'100%', height:'100%', viewBox:`0 0 ${cg.range.w} ${cg.range.h}`, preserveAspectRatio:'none'}, [
             background(),
             m(Chart, { cfg:cp.chart, x:cg.left, y:cg.top, 
