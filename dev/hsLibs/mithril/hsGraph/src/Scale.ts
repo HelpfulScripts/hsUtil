@@ -11,39 +11,48 @@ export interface ScaleSet {
     secondary: { x: ScaleStruct, y: ScaleStruct };
 }
 
-export function config(config:Config) {
-    config.scale = {
-        primary: {
-            x: { domain: [0, 1], range: [config.graph.left, config.graph.right], scale:'linear' },
-            y: { domain: [0, 1], range: [config.graph.bottom, config.graph.top], scale:'linear' }
-        },
-        secondary: {
-            x: { domain: [0, 1], range: [config.graph.left, config.graph.right], scale:'linear' },
-            y: { domain: [0, 1], range: [config.graph.bottom, config.graph.top], scale:'linear' }
-        }
-    };
-}
 
 /**
  * translates a domain into a range
  */
 export class Scale {
+    static config(config:Config) {
+        const cg = config.graph;
+        config.scale = {
+            primary: {
+                x: <ScaleStruct>{ domain: [0, 1], range: [cg.left, cg.right], scale:'linear' },
+                y: <ScaleStruct>{ domain: [0, 1], range: [cg.bottom, cg.top], scale:'linear' }
+            },
+            secondary: {
+                x: <ScaleStruct>{ domain: [0, 1], range: [cg.left, cg.right], scale:'linear' },
+                y: <ScaleStruct>{ domain: [0, 1], range: [cg.bottom, cg.top], scale:'linear' }
+            }
+        };
+    }
+    
     gMajorTicks:string[] = [];
     gMinorTicks:string[] = [];
     
-    constructor(private cfg:ScaleStruct, private gRange:number[], private gDomain=[0,1]) {
-        this.domain = gDomain;
+    constructor(private cfg:ScaleStruct) { }
+    
+    get range():[number, number]     { return this.cfg.range; }
+    set range(r:[number, number])    { this.cfg.range = r; }
+    get domain():[number, number]    { return this.cfg.domain; }
+    set domain(dom:[number, number]) { this.cfg.domain = dom; }
+
+    majorTicks(numTicks:number=4):string[]   { 
+        this.createTickMarks(this.domain, numTicks);
+        return this.gMajorTicks; 
     }
     
-    get range():number[]        { return this.gRange; }
-    get domain():number[]       { return this.gDomain; }
-    set domain(dom:number[])    { this.gDomain = dom; this.createTickMarks(dom, 4);}
-
-    get majorTicks():string[]   { return this.gMajorTicks; }
+    minorTicks(numTicks:number=4):string[]   { 
+        this.createTickMarks(this.domain, numTicks);
+        return this.gMinorTicks; 
+    }
     
     convert(domVal:number) { 
-        const dom = this.gDomain;
-        const range = this.gRange;
+        const dom = this.domain;
+        const range = this.range;
         return (domVal- dom[0]) / (dom[1] - dom[0]) * (range[1] - range[0]) + range[0];
     }
 

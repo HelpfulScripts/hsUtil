@@ -93,7 +93,7 @@ module.exports = (grunt, dir, dependencies, type) => {
             },
             css: {
                 files: {
-                    '_dist/src/<%= pkg.name %>.css': 'src/css/*.less'
+                    '_dist/src/<%= pkg.name %>.css': 'src/css/<%= pkg.name %>.less'
                 }
             },
             example: {
