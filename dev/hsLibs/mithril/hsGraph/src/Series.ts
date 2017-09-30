@@ -1,6 +1,6 @@
 
 import { m, Vnode}  from 'hslayout';
-import { Config }   from './Config';
+import { Config }   from './Graph';
 import { SVGElem }  from './SVGElem';
 
 

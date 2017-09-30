@@ -1,16 +1,16 @@
 
-import { m, Vnode}  from 'hslayout';
-import { Config }   from './Config';
-import { Scale }    from './Scale';
-import { SVGElem }  from './SVGElem';
+import { m, Vnode}         from 'hslayout';
+import { Config, Area }    from './Graph';
+import { Scale }           from './Scale';
+import { SVGElem, Style }  from './SVGElem';
 
 export interface AxisStruct {
     visible:    boolean;    // to be rendered - or not
     title:      string;     // the axis title
-    crossesAt:  number;      // where the axis crosses the other axis, in viewBox coordinates
+    crossesAt:  number;     // where the axis crosses the other axis, in viewBox coordinates
     ticks: {
-        major: { length: number; }; // length in viewBox coordinates
-        minor: { length: number; }; // length in viewBox coordinates
+        major:  number;     // length in viewBox coordinates
+        minor: number;      // length in viewBox coordinates
     };
 }
 export interface AxisSet {
@@ -19,19 +19,30 @@ export interface AxisSet {
 }
 
 class Axis extends SVGElem {
-    drawAxis(x:boolean, range:number[], cross:number) {
-        return x? this.line([range[0], cross], [range[1], cross]) :
-                  this.line([cross, range[0]], [cross, range[1]]);
+    drawAxis(x:boolean, range:Area, cross:number) {
+        const style:Style = {
+            cssClass: 'hs-graph-axis-line'
+        };
+        return x? this.line({x:range[0], y:cross}, {x:range[1], y:cross}, style) :
+                  this.line({x:cross, y:range[0]}, {x:cross, y:range[1]}, style);
     }
-    drawTitle(title:string, x:boolean, range:number[], cross:number) {
-        return this.text(x?range[1]:cross, x?cross:range[1], title);
+    drawTitle(title:string, x:boolean, range:Area, cross:number) {
+        const style:Style = {
+            cssClass: 'hs-graph-axis-title'
+        };
+        return this.text({x:x?range[1]:cross, y:x?cross:range[1]}, title, style);
     }
     drawTickMarks(x:boolean, scale:Scale, cfg:AxisStruct) {
         const ticks = scale.majorTicks();
         return m('svg', { class:'hs-graph-axis-tick-marks'}, ticks.map((t:string) => { 
             const v = scale.convert(parseFloat(t));
-            return x? this.line([v, cfg.crossesAt], [v, cfg.crossesAt+cfg.ticks.major.length]) :
-                    this.line([cfg.crossesAt, v], [cfg.crossesAt-cfg.ticks.major.length, v]);
+            return this.line({
+                x: x? v : cfg.crossesAt, 
+                y: x? cfg.crossesAt : v
+            }, {
+                x: x? v : cfg.crossesAt-cfg.ticks.major, 
+                y: x? cfg.crossesAt+cfg.ticks.major : v
+            });
         }));
     }
     drawTickLabels(x:boolean, scale:Scale, cfg:AxisStruct) {
@@ -66,27 +77,21 @@ class YAxis extends Axis {
 
 export class Axes {
     static config(config:Config) {
-        const cg = config.graph;
+        const pa = config.plotArea;
         config.axes = <AxisSet>{
             primary: {
                 x: {visible: true, title:'x', 
-                    crossesAt:cg.bottom,
-                    ticks: { 
-                        major: { length: 10 },
-                        minor: { length: 5 },
-                    }
+                    crossesAt:pa.t+pa.h,
+                    ticks: { major: 10, minor: 5 },
                 },
                 y: {visible: true, title:'y', 
-                    crossesAt:cg.left,
-                    ticks: { 
-                        major: { length: 10 },
-                        minor: { length: 5 },
-                    }
+                    crossesAt:pa.l,
+                    ticks: { major: 10, minor: 5 },
                 }
             },
             secondary: {
-                x: { visible: false, title:'x', crossesAt:cg.top },
-                y: { visible: false, title:'y', crossesAt:cg.right }
+                x: { visible: false, title:'x', crossesAt:pa.t },
+                y: { visible: false, title:'y', crossesAt:pa.l+pa.w }
             }
         };
     }

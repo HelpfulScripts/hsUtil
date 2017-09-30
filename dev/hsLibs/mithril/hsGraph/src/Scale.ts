@@ -1,4 +1,4 @@
-import { Config } from './Config';
+import { Config } from './Graph';
 
 export interface ScaleStruct {
     domain?: [number, number];
@@ -17,15 +17,14 @@ export interface ScaleSet {
  */
 export class Scale {
     static config(config:Config) {
-        const cg = config.graph;
-        config.scale = {
+        config.scale = <ScaleSet>{
             primary: {
-                x: <ScaleStruct>{ domain: [0, 1], range: [cg.left, cg.right], scale:'linear' },
-                y: <ScaleStruct>{ domain: [0, 1], range: [cg.bottom, cg.top], scale:'linear' }
+                x: <ScaleStruct>{ domain: [0, 1], range: [0, 1], scale:'linear' },
+                y: <ScaleStruct>{ domain: [0, 1], range: [0, 1], scale:'linear' }
             },
             secondary: {
-                x: <ScaleStruct>{ domain: [0, 1], range: [cg.left, cg.right], scale:'linear' },
-                y: <ScaleStruct>{ domain: [0, 1], range: [cg.bottom, cg.top], scale:'linear' }
+                x: <ScaleStruct>{ domain: [0, 1], range: [0, 1], scale:'linear' },
+                y: <ScaleStruct>{ domain: [0, 1], range: [0, 1], scale:'linear' }
             }
         };
     }

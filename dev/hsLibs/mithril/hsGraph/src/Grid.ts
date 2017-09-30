@@ -1,6 +1,6 @@
 
 import { m, Vnode}  from 'hslayout';
-import { Config }   from './Config';
+import { Config }   from './Graph';
 import { SVGElem }  from './SVGElem';
 
 
@@ -21,7 +21,7 @@ class HorGrid extends SVGElem {
         const range = node.attrs.scale.x.range;
         const ticks = scale.majorTicks();
         return m('svg', { class:'hs-graph-grid-hor' }, ticks.map((t:number) =>
-            this.line([range[0], scale.convert(t)], [range[1], scale.convert(t)])
+            this.line({x:range[0], y:scale.convert(t)}, {x:range[1], y:scale.convert(t)})
         ));
     }    
 }
@@ -32,14 +32,14 @@ class VerGrid extends SVGElem  {
         const range = node.attrs.scale.y.range;
         const ticks = scale.majorTicks();
         return m('svg', { class:'hs-graph-grid-ver' }, ticks.map((t:number) =>
-            this.line([scale.convert(t), range[0]], [scale.convert(t), range[1]])
+            this.line({x:scale.convert(t), y:range[0]}, {x:scale.convert(t), y:range[1]})
         ));
     }    
 }
 
 export class Grid { 
-    static config(config:Config) {
-        config.grid = <GridSet>{
+    static config(cfg:Config) {
+        cfg.grid = <GridSet>{
             major: {
                 hor: { visible:true },
                 ver: { visible:true }

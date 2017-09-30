@@ -1,18 +1,43 @@
-import { m }        from 'hslayout';
-import { Scale }    from './Scale';
+import { m }            from 'hslayout';
+import { Scale }        from './Scale';
+import { Point, Area }  from './Graph';
 
-const round = (num:number) => (''+num).substr(0, 5);
-export class SVGElem {
-    text(x:number, y:number, text:string) {
-        return m('text', { x:round(x), y:round(y) }, text);
+export interface Style {
+    cssClass?:      string; // the css class to set
+    style?:         string; // the style attributes to set
+    textAnchor?:    string; // horizontal text alignment: 'start' | 'middle' | 'end'
+    baselineShift?: string; // vertical text alignment in 'em'
+}
+
+const round = (num:string|number) => (''+num).substr(0, 5);
+
+export abstract class SVGElem {
+    text(xy:Point, text:string, style?:Style) {
+        const param = { 
+            x: round(xy.x), y: round(xy.y),
+            class: style? style.cssClass : undefined,
+            style: style? `text-anchor:${style.textAnchor}; baseline-shift: ${style.baselineShift}` : undefined
+         };
+        return m('text', param, text);
     }
 
-    rect(left:number, top:number, width:number, height:number, cssClass:string) {
-        return m('rect', { class:cssClass, x:round(left), y:round(top), width:round(width), height:round(height) });
+    rect(tl:Point, area:Area, style?:Style) {
+        const param = {
+            x: round(tl.x),       y: round(tl.y),
+            width: round(area.w), height: round(area.h),
+            class: style? style.cssClass : undefined,
+            style: style? `text-anchor:${style.textAnchor}; baseline-shift: ${style.baselineShift}` : undefined
+        };
+        return m('rect', param);
     }
 
-    line(from:[number, number], to:[number, number]) {
-        return m('line', { x1:round(from[0]), x2:round(to[0]), y1:round(from[1]), y2:round(to[1]) });
+    line(from:Point, to:Point, style?:Style) {
+        const param = {
+            x1: round(from.x), y1: round(from.y), 
+            x2: round(to.x),   y2: round(to.y), 
+            class: style? style.cssClass : undefined,
+        };
+        return m('line', param);
     }
 
     /**
