@@ -199,7 +199,10 @@ function addExampleStructure(IDs:CommentDescriptor) {
 function executeScript(IDs:CommentDescriptor) {
     const root = document.getElementById(IDs.mid);
     try { IDs.executeScript(root); }
-    catch(e) { console.log("executing script: " + e); }
+    catch(e) { 
+        console.log("executing script: " + e); 
+        console.log(e.stack);
+    }
     m.redraw();
     return IDs;
 }
