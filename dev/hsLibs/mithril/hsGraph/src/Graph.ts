@@ -13,12 +13,14 @@
  * ];
  * 
  * function myConfig(cfg) {
- *      cfg.series.data = series;
+ *      cfg.series.data   = series;
  *      cfg.series.series = [
  *          { xHeader: 'time', yHeader:'volume'},
  *          { xHeader: 'time', yHeader:'price'}
  *      ];
- *      cfg.chart.title.text = 'Volume over Time';
+ *      cfg.chart.title.text     = 'Volume over Time';
+ *      cfg.chart.title.x        = '50%';
+ *      cfg.chart.title.y        = '0%';
  *      cfg.axes.primary.x.title = 'time';
  *      cfg.axes.primary.y.title = 'volume';
  * }
@@ -30,7 +32,7 @@
  * </file>
  * <file name='style.css'>
  * .hs-graph-chart { fill: #fff; }
- * .hs-graph-series { stroke-width: 5;
+ * .hs-graph-series { stroke-width: 5; }
  * </file>
  * </example>
 
@@ -45,7 +47,7 @@ import { Series, SeriesSet } from './Series';
 import { Chart, ChartSet }   from './Chart';
 import { Grid, GridSet }     from './Grid';
 import { Legend, LegendSet } from './Legend';
-import { SVGElem }           from './SVGElem';
+import { SVGElem, round }    from './SVGElem';
 
 const viewBoxWidth:number  = 1000;  // the viewBox size
 let   viewBoxHeight:number = 700;   // the viewBox size
@@ -55,12 +57,20 @@ const marginTop:number     = 60;
 const marginBottom:number  = 80;
 
 export interface Point {
-    x: number|string;
-    y: number|string;
+    x:   number;
+    y:   number;
+    dx?: number;
+    dy?: number;
+    xunit?: string;
+    yunit?: string;
+    dxunit?: string;
+    dyunit?: string;
 }
 export interface Area {
-    w: number|string;
-    h: number|string;
+    w: number;
+    h: number;
+    wunit?: string;
+    hunit?: string;
 }
 export interface Config {
     viewBox?:  { w: number; h: number; };
@@ -117,7 +127,7 @@ export class Graph extends SVGElem {
         Legend.config(cfg);
         return cfg;
     }
-    
+
     private scales = { 
         primary:  <{x:Scale, y:Scale}> { },
         secondary:<{x:Scale, y:Scale}> { }
@@ -159,10 +169,10 @@ export class Graph extends SVGElem {
         const cp = copy((node.attrs.cfg || Graph.config)());
         const pa = cp.plotArea;
         this.createScales(cp);
-        return m('svg', { class:'hs-graph', width:'100%', height:'100%', viewBox:`0 0 ${cp.viewBox.w} ${cp.viewBox.h}`, preserveAspectRatio:'xMaxYMin'}, [
+        return m('svg', { class:'hs-graph', width:'100%', height:'100%', 
+                viewBox:`0 0 ${round(cp.viewBox.w)} ${round(cp.viewBox.h)}` }, [
             m(Canvas, { cfg:cp.canvas}),
-            m(Chart, { cfg:cp.chart, x:pa.l, y:pa.t, 
-                       width: pa.w, height:pa.h }),
+            m(Chart, { cfg:cp.chart, x:pa.l, y:pa.t, width: pa.w, height:pa.h }),
             m(Axes, { cfg:cp.axes, scales:this.scales }),
             m(Grid, { cfg:cp.grid, scales:this.scales }),
             m(Series, { cfg:cp.series, scales:this.scales }),

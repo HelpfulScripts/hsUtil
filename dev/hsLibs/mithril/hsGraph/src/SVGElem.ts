@@ -9,14 +9,17 @@ export interface Style {
     baselineShift?: string; // vertical text alignment in 'em'
 }
 
-const round = (num:string|number) => (''+num).substr(0, 5);
+export const round = (num:number) => (''+num).substr(0, 5+(num<0?1:0));
 
 export abstract class SVGElem {
     text(xy:Point, text:string, style?:Style) {
         const param = { 
-            x: round(xy.x), y: round(xy.y),
+            x: round(xy.x)     + (xy.xunit||''), 
+            y: round(xy.y)     + (xy.yunit||''),
+            dx:round(xy.dx||0) + (xy.dxunit||''),    
+            dy:round(xy.dy||0) + (xy.dyunit||''),
             class: style? style.cssClass : undefined,
-            style: style? `text-anchor:${style.textAnchor}; baseline-shift: ${style.baselineShift}` : undefined
+            style: style? `text-anchor:${style.textAnchor}; baseline-shift: ${style.baselineShift};` : undefined
          };
         return m('text', param, text);
     }
@@ -24,7 +27,8 @@ export abstract class SVGElem {
     rect(tl:Point, area:Area, style?:Style) {
         const param = {
             x: round(tl.x),       y: round(tl.y),
-            width: round(area.w), height: round(area.h),
+            width: round(area.w)  + (area.wunit||''), 
+            height: round(area.h) + (area.hunit||''),
             class: style? style.cssClass : undefined,
             style: style? `text-anchor:${style.textAnchor}; baseline-shift: ${style.baselineShift}` : undefined
         };

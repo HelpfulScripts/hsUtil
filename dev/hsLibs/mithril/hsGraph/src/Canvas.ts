@@ -15,7 +15,10 @@ export interface CanvasSet {
 export class Canvas extends SVGElem {
     static config(config:Config) {
         config.canvas = <CanvasSet>{
-            range:  { w: '100%', h: '100%' }  // graph width and height
+            range:  { // graph width and height
+                w: 100, wunit:'%',
+                h: 100, hunit:'%'
+            }  
         };
         return config;
     }
