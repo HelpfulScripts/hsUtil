@@ -1,18 +1,33 @@
 /**
  * # Canvas
+ * renders the graph's background .
+ * ### Configurations and Defaults
+ * ```
+ *  title:  {           // the chart title
+ *  }
+ * ```
+ * ### Style classes
+ * ```
+ * styleClasses: {
+ *  }
+ * ```
  */
 
 /** */
 import { m, Vnode}      from 'hslayout';
-import { SVGElem }      from './SVGElem';
-import { Config, Area } from './Graph';
+import { SVGElem, Area }from './SVGElem';
+import { Config }       from './Graph';
 
 
+/**
+ * Defines configurable settings and CSS style classes.
+ */
 export interface CanvasSet {
     range?:  Area;              // graph viewBox width and height
 }
 
 export class Canvas extends SVGElem {
+    /** Defines default values for all configurable parameters */
     static config(config:Config) {
         config.canvas = <CanvasSet>{
             range:  { // graph width and height

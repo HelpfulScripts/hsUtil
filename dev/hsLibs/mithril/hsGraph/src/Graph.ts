@@ -18,15 +18,18 @@
  *          { xHeader: 'time', yHeader:'volume'},
  *          { xHeader: 'time', yHeader:'price'}
  *      ];
- *      cfg.chart.title.text     = 'Volume over Time';
- *      cfg.chart.title.x        = '50%';
- *      cfg.chart.title.y        = '0%';
- *      cfg.axes.primary.x.title = 'time';
- *      cfg.axes.primary.y.title = 'volume';
+ *      const axes = cfg.axes.primary;
+ *      cfg.chart.title.text          = 'Volume over Time';
+ *      cfg.chart.title.x             = '50%';
+ *      cfg.chart.title.y             = '0%';
+ *      axes.x.title.text = 'time';
+ *      axes.y.title.text = 'volume';
+ *      cfg.axes.secondary.x.visible = true;
+ *      cfg.axes.secondary.y.visible = true;
  * }
  * 
  * m.mount(root, { 
- *      view:() => m(hsgraph.Graph, {cfg: hsgraph.Graph.makeConfig(myConfig) })
+ *      view:() => m(hsgraph.Graph, {cfgFn: myConfig })
  * });
  *
  * </file>
@@ -35,7 +38,17 @@
  * .hs-graph-series { stroke-width: 5; }
  * </file>
  * </example>
-
+ * 
+ * ### Configurations and Defaults
+ * ```
+ *  title:  {           // the chart title
+ *  }
+ * ```
+ * ### Style classes
+ * ```
+ * styleClasses: {
+ *  }
+ * ```
  */
 
 /** */
@@ -52,26 +65,10 @@ import { SVGElem, round }    from './SVGElem';
 const viewBoxWidth:number  = 1000;  // the viewBox size
 let   viewBoxHeight:number = 700;   // the viewBox size
 const marginLeft:number    = 50;
-const marginRight:number   = 10;
-const marginTop:number     = 60;
-const marginBottom:number  = 80;
+const marginRight:number   = 50;
+const marginTop:number     = 80;
+const marginBottom:number  = 40;
 
-export interface Point {
-    x:   number;
-    y:   number;
-    dx?: number;
-    dy?: number;
-    xunit?: string;
-    yunit?: string;
-    dxunit?: string;
-    dyunit?: string;
-}
-export interface Area {
-    w: number;
-    h: number;
-    wunit?: string;
-    hunit?: string;
-}
 export interface Config {
     viewBox?:  { w: number; h: number; };
     plotArea?: { t: number; l: number; w: number; h: number; };
@@ -108,6 +105,7 @@ export class Graph extends SVGElem {
         return cfg;
     };}
 
+    /** Defines default values for all configurable parameters */
     protected static config(cfg:Config={}) {      
         cfg.viewBox = { 
             w: viewBoxWidth, 
@@ -166,15 +164,17 @@ export class Graph extends SVGElem {
     }
 
     view(node?: Vnode): Vnode {
-        const cp = copy((node.attrs.cfg || Graph.config)());
+        const cfgFn = node.attrs.cfgFn;
+        const cfg = cfgFn? Graph.makeConfig(cfgFn) : Graph.config;
+        const cp = copy(cfg());
         const pa = cp.plotArea;
         this.createScales(cp);
         return m('svg', { class:'hs-graph', width:'100%', height:'100%', 
                 viewBox:`0 0 ${round(cp.viewBox.w)} ${round(cp.viewBox.h)}` }, [
             m(Canvas, { cfg:cp.canvas}),
             m(Chart, { cfg:cp.chart, x:pa.l, y:pa.t, width: pa.w, height:pa.h }),
-            m(Axes, { cfg:cp.axes, scales:this.scales }),
             m(Grid, { cfg:cp.grid, scales:this.scales }),
+            m(Axes, { cfg:cp.axes, scales:this.scales }),
             m(Series, { cfg:cp.series, scales:this.scales }),
             m(Legend, { cfg:cp.legend })
         ]);
