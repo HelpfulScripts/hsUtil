@@ -14,9 +14,12 @@
  * 
  * function myConfig(cfg) {
  *      cfg.series.data   = series;
+ *      cfg.series.styles[0].marker.visible = true;
+ *      cfg.series.styles[1].marker.visible = true;
+ *      cfg.series.styles[1].marker.shape = hsgraph.Series.marker.square;
  *      cfg.series.series = [
- *          { xHeader: 'time', yHeader:'volume'},
- *          { xHeader: 'time', yHeader:'price'}
+ *          { xName: 'time', yName:'volume'},
+ *          { xName: 'time', yName:'price'}
  *      ];
  *      const axes = cfg.axes.primary;
  *      cfg.chart.title.text          = 'Volume over Time';
@@ -24,8 +27,8 @@
  *      cfg.chart.title.y             = '0%';
  *      axes.x.title.text = 'time';
  *      axes.y.title.text = 'volume';
- *      cfg.axes.secondary.x.visible = true;
- *      cfg.axes.secondary.y.visible = true;
+ *      cfg.axes.secondary.x.visible = false;
+ *      cfg.axes.secondary.y.visible = false;
  * }
  * 
  * m.mount(root, { 
@@ -54,7 +57,7 @@
 /** */
 import { m, Vnode}           from 'hslayout';
 import { Axes, AxisSet }     from './Axes';
-import { Scale, ScaleSet }   from './Scale';
+import { Scale, ScaleSet, XYScale } from './Scale';
 import { Canvas, CanvasSet } from './Canvas';
 import { Series, SeriesSet } from './Series';
 import { Chart, ChartSet }   from './Chart';
@@ -64,10 +67,10 @@ import { SVGElem, round }    from './SVGElem';
 
 const viewBoxWidth:number  = 1000;  // the viewBox size
 let   viewBoxHeight:number = 700;   // the viewBox size
-const marginLeft:number    = 50;
-const marginRight:number   = 50;
-const marginTop:number     = 80;
-const marginBottom:number  = 40;
+let   marginLeft:number    = 10; // 50;
+let   marginRight:number   = 10; // 50;
+let   marginTop:number     = 10; // 80;
+let   marginBottom:number  = 40;
 
 export interface Config {
     viewBox?:  { w: number; h: number; };
@@ -127,8 +130,8 @@ export class Graph extends SVGElem {
     }
 
     private scales = { 
-        primary:  <{x:Scale, y:Scale}> { },
-        secondary:<{x:Scale, y:Scale}> { }
+        primary:  <XYScale> { },
+        secondary:<XYScale> { }
     };
 
     private createScales(cfg:any) {
@@ -163,6 +166,26 @@ export class Graph extends SVGElem {
         window.addEventListener("resize", function() { m.redraw(); });
     }
 
+    static checkMargins(rect:{comp:string, x:number, y:number, width:number, height:number}) {
+        let changed = false;
+        if (rect) {
+            console.log(`${rect.comp}: ${rect.x}/${rect.y}, ${rect.width}x${rect.height}`);
+             if (rect.x < 0) { 
+               marginLeft -= rect.x/2 - 10;  
+               changed = true;
+            }
+            if (rect.x+rect.width > viewBoxWidth) { 
+               marginRight += (rect.x+rect.width-viewBoxWidth)/2 +10; 
+               changed = true;
+            }
+            if (rect.y < 0) { 
+               marginTop -= rect.y/2 - 25; 
+               changed = true;
+            }
+            if (changed) { m.redraw(); }
+        }
+    }
+
     view(node?: Vnode): Vnode {
         const cfgFn = node.attrs.cfgFn;
         const cfg = cfgFn? Graph.makeConfig(cfgFn) : Graph.config;
@@ -174,7 +197,7 @@ export class Graph extends SVGElem {
             m(Canvas, { cfg:cp.canvas}),
             m(Chart, { cfg:cp.chart, x:pa.l, y:pa.t, width: pa.w, height:pa.h }),
             m(Grid, { cfg:cp.grid, scales:this.scales }),
-            m(Axes, { cfg:cp.axes, scales:this.scales }),
+            m(Axes, { cfg:cp.axes, scales:this.scales, sizeFn: Graph.checkMargins }),
             m(Series, { cfg:cp.series, scales:this.scales }),
             m(Legend, { cfg:cp.legend })
         ]);

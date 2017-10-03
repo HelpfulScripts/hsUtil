@@ -23,7 +23,7 @@ attribute with the graph's configuration.
  * m.mount(root, { 
  *      view:() => m(hsgraph.Graph, {cfgFn: cfg => {
  *          cfg.series.data   = series;
- *          cfg.series.series = [{ xHeader: 'time', yHeader:'volume' }];
+ *          cfg.series.series = [{ xName: 'time', yName:'volume' }];
  *      }})
  * });
  *

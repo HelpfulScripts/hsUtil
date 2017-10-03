@@ -1,1 +1,2 @@
-export { Graph as Graph } from './Graph';
+export { Graph }  from './Graph';
+export { Series } from './Series';

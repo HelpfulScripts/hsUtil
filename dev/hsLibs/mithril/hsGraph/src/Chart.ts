@@ -100,7 +100,7 @@ export class Chart extends SVGElem {
     }
 
     drawBackground(na:{x:number, y:number,  width:number, height:number}, cfg:ChartSet) {
-        return this.rect({x:na.x, y:na.y}, {w: na.width, h: na.height}, {cssClass:cfg.styleClasses.background});
+        return this.rect({x:na.x, y:na.y}, {w: na.width, h: na.height});
     }
 
     drawTitle(na:{x:number, y:number,  width:number, height:number}, cfg:ChartSet) {

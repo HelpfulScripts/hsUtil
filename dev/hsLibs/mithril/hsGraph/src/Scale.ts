@@ -16,6 +16,8 @@
 /** */
 import { Config } from './Graph';
 
+export interface XYScale { x: Scale; y:Scale; }
+
 export interface ScaleStruct {
     domain?: [number, number];
     range?:  [number, number];

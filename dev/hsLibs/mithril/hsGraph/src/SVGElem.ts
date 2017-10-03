@@ -1,5 +1,5 @@
-import { m }            from 'hslayout';
-import { Scale }        from './Scale';
+import { m }        from 'hslayout';
+import { XYScale }  from './Scale';
 
 /** defines a [min-max] range */
 export interface Range {
@@ -61,15 +61,18 @@ export abstract class SVGElem {
         return m('text', param, text);
     }
 
-    rect(tl:Point, area:Area, style:Style) {
+    rect(tl:Point, area:Area, style?:string) {
         const param = {
             x: round(tl.x),       y: round(tl.y),
             width: round(area.w)  + (area.wunit||''), 
             height: round(area.h) + (area.hunit||''),
-            class: style? style.cssClass : undefined,
-            style: style? `text-anchor:${style.textAnchor}; baseline-shift: ${style.baselineShift}` : undefined
+            style: style
         };
         return m('rect', param);
+    }
+
+    circle(c:Point, r:number, style?:string) {
+        return m('circle', { cx: round(c.x), cy: round(c.y), r: round(r), style: style });
     }
 
     clipRect(tl:Point, area:Area, id:string) {
@@ -94,13 +97,14 @@ export abstract class SVGElem {
      * plots a polyline from points in `data`. `x` and `y` are the indices to reference 
      * the data for the x-axis, respectively the y-axis in each row in `data`.
      * @param data an array of rows; each row is an array of data. The first row contains the 
-     * series names.
+     * series names and will be skipped.
      * @param x the index in each row to use as x coordinate
      * @param y the index in each row to use as y coordinate
      */
-    polyline(data:[number, number][], x:number, y:number, scales:{x:Scale, y:Scale}, id?:string) {
+    polyline(data:(string | number)[][], x:number, y:number, scales:XYScale, id:string, style?:string) {
         return m('polyline', { 
             'clip-path': id? `url(#${id})` : undefined,
+            style: style,
             points: data.map((p:number[], i:number) => i===0?'': 
                 `${round(scales.x.convert(p[x]))},${round(scales.y.convert(p[y]))}`).join(' ')}); 
     }
