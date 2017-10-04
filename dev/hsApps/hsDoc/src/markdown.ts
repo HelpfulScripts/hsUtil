@@ -79,7 +79,8 @@ function substituteLinks(comment:string, currentRoute:string):string {
 
     let [defLib] = deconstructRoute(currentRoute);
 
-    comment = comment.replace(/[^"`']{@link ([\S]*)\s*(.+)}/gi, (match, ...args) => {
+    // regex: requires whitespace before {@link; otherwise treated as quoted '{@link...}'
+    comment = comment.replace(/\s{@link ([\S]*)\s*(.+)}/gi, (match, ...args) => {
         const path = args[0];
         const text = args[1];
         let [lib, module] = getLibMod(path);        
