@@ -1,12 +1,9 @@
 /**
 Layout.ts provides basic mechanisms for laying out a view container. 
-Two abstract classes provide the basic mechanism:
- 
-##{@link hsLayout:Layout.Container Container}
-Extensions of `Container` layout  `Compnonent`s they hold in one of a number of ways. 
-Being a `Component` themselves, 
-For example, 
-   ``
+Subclasses of `Layout` should
+- implement the {@link Layout.Layout.getStyles getStyles} method.
+- register the subclass and configuration keyword with the static 
+   {@link Layout.Layout.register register} method.
 */
 
 /** */
@@ -69,7 +66,11 @@ export abstract class Layout {
     }
 
     /**
-     * 
+     * Register a new Layout style with corresponding configuration keyword.
+     * Example:```
+     * class ColumnsLayout extends Layout {...}
+     * Layout.register('Column', Columns);
+     * ```
      * @param keyword the keyword used in the attributes to `this.layout`
      * @param style the `Layout` implementation to instantiate when encountering `keyword` 
      */

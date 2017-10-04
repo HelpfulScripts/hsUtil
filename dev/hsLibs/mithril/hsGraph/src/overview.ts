@@ -42,16 +42,6 @@ attribute with the graph's configuration.
  - set the array containing the data: `series.data = data;`  
  - and specify the x- and y-columns to render, by name: `series.series = [{xHeader:<string>, yHeader:<string>}]`
 
-## Graph Components
-The rendered graph is organized in a layered structure of components:
-- {@link Canvas Canvas}:  the background canvas on which all components are rendered
-- {@link Chart Chart}: the chart area and title
-- {@link Axes Axes}: the x- and y-axes, tick marks and labels, and axis title
-- {@link Grid Grid}: the major and minor gridlines
-- {@link Series Series}: the one or more data series to render
-- {@link Legend Legend}: the legend for the shown series
-
-
 ## Configuration
 All graph components are highly configurable. `hsGraph` uses default values for all configurable fields 
 that can easily be changed, either programmatically or via a custom stylesheet.
@@ -61,6 +51,15 @@ to the `cfgFn` attribute when setting up the mithril mount call - see example ab
 The `cfgFn` receives a configuration object that is fully initialized with default values, 
 and should overwrite parameters as needed. See the overview for each component for configurable 
 parameters.
+
+## Graph Components
+The rendered graph is organized in a layered structure of components:
+- {@link Canvas Canvas}:  the background canvas on which all components are rendered
+- {@link Chart Chart}: the chart area and title
+- {@link Axes Axes}: the x- and y-axes, tick marks and labels, and axis title
+- {@link Grid Grid}: the major and minor gridlines
+- {@link Series Series}: the one or more data series to render
+- {@link Legend Legend}: the legend for the shown series
 */
 
 /** */

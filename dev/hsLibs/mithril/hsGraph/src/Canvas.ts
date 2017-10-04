@@ -3,13 +3,10 @@
  * renders the graph's background .
  * ### Configurations and Defaults
  * ```
- *  title:  {           // the chart title
- *  }
- * ```
- * ### Style classes
- * ```
- * styleClasses: {
- *  }
+ *  range:  { // graph width and height
+ *      w: 100, wunit:'%',
+ *      h: 100, hunit:'%'
+ *  }  
  * ```
  */
 

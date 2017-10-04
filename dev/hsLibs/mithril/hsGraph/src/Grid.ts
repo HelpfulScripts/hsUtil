@@ -3,13 +3,14 @@
  * renders the major and minor gridlines in each direction.
  * ### Configurations and Defaults
  * ```
- *  title:  {           // the chart title
- *  }
- * ```
- * ### Style classes
- * ```
- * styleClasses: {
- *  }
+ * major: {
+ *     hor: { visible:true },
+ *     ver: { visible:true }
+ * },
+ * minor: {
+ *     hor: { visible:false },
+ *     ver: { visible:false }
+ * }
  * ```
  */
 

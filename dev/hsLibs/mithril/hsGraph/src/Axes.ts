@@ -3,39 +3,37 @@
  * renders the x- and y-axis with title, tick marks and labels.
  * ### Configurations and Defaults
  * ```
- *  primary: {                              // Primary axis:
- *      x: {visible: true,                  // axis visibility
- *          crossesAt:'min',                // axis crossing in domain: 'min', 'max', or domain value
- *          scale: 'linear',                // scale type: 'linear'|'log'|'date'|'index'|'percent'|'ordinal'|'nominal'
- *          title: {                        // axis title configuration
- *              visible: true,              //    title visibility
- *              text: 'x'                   //    title text
- *              hAlign:  'end',             //    label text-align: 'start' | 'middle' | 'end'
- *              vAlign:  'top',             //    label  vertical align: 'top' | 'center' | 'bottom'
- *              hOffset: -2,                //    horizontal label offset in 'em'
- *              vOffset: 0.4                //    vertical label offset in 'em'
+ * :{@link Axes.AxisSet AxisSet}:
+ *  primary: {                          // Primary axis:
+ *      x: {                            // {@link Axes.AxisCfg AxisCfg}
+ *          visible: true,              // axis visibility
+ *          crossesAt:'min',            // axis crossing in domain: 'min', 'max', or domain value
+ *          scale: {                    // {@link Axes.ScaleCfg ScaleCfg}; axis scaling information
+ *              type: 'linear',             
+ *              domain:['auto', 'auto'] // min/max of domain; set to autodetect
  *          },
- *          ticks: {                        // tick mark configuration
- *              major: {                    // major ticks:
- *                  marks: {                // tick marks:
- *                      visible: true,      //    tick visibility
- *                      length: 10          //    tick length in viewBox coordinates
- *                  },  
- *                  labels: {               // tick labels:
- *                      hAlign: 'middle',   //    label text-align: 'start' | 'middle' | 'end'
- *                      vAlign: 'top',      //    label vertical align: 'top' | 'center' | 'bottom'
- *                      hOffset: 0,         //    horizontal label offset in 'em'
- *                      vOffset: 0.7        //    vertical label offset in 'em'
- *                  }      
+ *          title: {                    // {@link Axes.AxisTitleCfg AxisTitleCfg}; axis title configuration
+ *              visible: true,  text: 'x'                   
+ *              hAlign:  'end', vAlign:  'top',             
+ *              hOffset: -2,    vOffset: 0.4                
+ *          },
+ *          ticks: {                    // tick mark configuration
+ *              major: {                // {@link Axes.TickStruct TickStruct}; major ticks
+ *                  marks: { visible: true, length: 10 },  
+ *                  labels: { hAlign: 'middle', vAlign: 'top', hOffset: 0, vOffset: 0.7 }      
  *              },
- *              minor: { marks: { visible: true,  length: 5, },
- *                      labels:{ hAlign: 'middle', vAlign: 'top', hOffset: 0, vOffset: 0.7 }
+ *              minor: {                // {@link Axes.TickStruct TickStruct}; minor ticks
+ *                  marks: { visible: true,  length: 5 },
+ *                  labels: { hAlign: 'middle', vAlign: 'top', hOffset: 0, vOffset: 0.7 }
  *              }   
  *          } 
  *      },
  *      y: {visible: true, 
  *          crossesAt:'min',
- *          scale: 'linear',
+ *          scale: {       
+ *              type: 'linear', 
+ *              domain:['auto', 'auto']  
+ *          },
  *          title: {text:'y', visible:true,
  *              hAlign:  'middle', hOffset: 0,
  *              vAlign:  'bottom', vOffset: -0.5
@@ -53,7 +51,10 @@
  *  secondary: {                        // Secondary axis:
  *      x: {visible: true, 
  *          crossesAt:'max',
- *          scale: 'linear',
+ *          scale: {       
+ *              type: 'linear', 
+ *              domain:['auto', 'auto']  
+ *          },
  *          title: {text:'x2', visible:true, 
  *                  hAlign:  'end', hOffset: -2,
  *                  vAlign:  'top', vOffset: -1.2
@@ -69,7 +70,10 @@
  *      },
  *      y: {visible: true, 
  *          crossesAt:'max',
- *          scale: 'linear',
+ *          scale: {       
+ *              type: 'linear', 
+ *              domain:['auto', 'auto']  
+ *          },
  *          title: {text:'y2', visible:true, 
  *                  hAlign:  'start', hOffset: 0.3,
  *                  vAlign:  'top', vOffset: 0.7
@@ -140,7 +144,7 @@ export interface AxisTitleCfg {
 }
 
 export interface ScaleCfg {
-    /** scale type: 'linear' | 'log' | ... */
+    /** scale type: 'linear'|'log'|'date'|'index'|'percent'|'ordinal'|'nominal' */
     type: string;
 
     /** scale domain: 'auto' or numeric domain value */
@@ -152,16 +156,16 @@ export interface AxisCfg {
     /** determines if the axis will be rendered */
     visible:    boolean;     
      
-    /** configures the axis title */  
+    /** configures the axis title; see {@link Axes.AxisTitleCfg AxisTitleCfg} */  
     title:      AxisTitleCfg;
 
     /** axis crossing in domain: 'min', 'max', or domain value */
     crossesAt:  number|string; 
 
-    /** scale type: 'linear' | 'log' | ... */
+    /** scale type and domain; see {@link Axes.ScaleCfg ScaleCfg} */
     scale: ScaleCfg;
 
-    /** configures the major and minor ticks */
+    /** configures the major and minor ticks; see {@link Axes.TickStruct TickStruct} */
     ticks: {
         major:  TickStruct;
         minor:  TickStruct;
@@ -170,6 +174,7 @@ export interface AxisCfg {
 
 /**
  * Defines configurable settings and CSS style classes for all primary and secondary axes.
+ * See {@link Axes.AxisCfg AxisCfg}
  */
 export interface AxisSet {
     primary:   { x: AxisCfg, y: AxisCfg };

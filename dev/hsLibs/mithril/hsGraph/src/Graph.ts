@@ -23,10 +23,12 @@
  *      ];
  *      const axes = cfg.axes.primary;
  *      cfg.chart.title.text          = 'Volume over Time';
- *      cfg.chart.title.x             = '50%';
+ *      cfg.chart.title.x             = '0%';
  *      cfg.chart.title.y             = '0%';
  *      axes.x.title.text = 'time';
  *      axes.y.title.text = 'volume';
+ *      axes.x.crossesAt = 0;
+ *      axes.y.crossesAt = 0;
  *      cfg.axes.secondary.x.visible = false;
  *      cfg.axes.secondary.y.visible = false;
  * }
@@ -109,15 +111,6 @@ export class Graph extends SVGElem {
         return cfg;
     };}
 
-    /** adjusts margin so that selected components don't extend outside viewBox */
-    static offset = {
-        left:   0,
-        right:  0,
-        top:    0,
-        bottom: 0,
-        clear:  true
-    };
-
     /** Defines default values for all configurable parameters */
     protected static config(cfg:Config={}) {      
         cfg.viewBox = { 
@@ -133,6 +126,14 @@ export class Graph extends SVGElem {
         return cfg;
     }
 
+    /** adjusts margin so that selected components don't extend outside viewBox */
+    private offset = {
+        left:   0,
+        right:  0,
+        top:    0,
+        bottom: 0
+    };
+
     private scales = { 
         primary:  <XYScale> { },
         secondary:<XYScale> { }
@@ -140,13 +141,13 @@ export class Graph extends SVGElem {
 
     private createPlotArea(cfg:Config) {
         const plotArea = { 
-            t: margin.top + Graph.offset.top, 
-            l: margin.left + Graph.offset.left, 
+            t: margin.top + this.offset.top, 
+            l: margin.left + this.offset.left, 
             w: viewBoxWidth,
             h: viewBoxHeight
         };
-        plotArea.w -= plotArea.l + margin.right + Graph.offset.right;
-        plotArea.h -= plotArea.t + margin.bottom + Graph.offset.bottom;    
+        plotArea.w -= plotArea.l + margin.right + this.offset.right;
+        plotArea.h -= plotArea.t + margin.bottom + this.offset.bottom;    
         return plotArea;
     }
 
@@ -170,7 +171,6 @@ export class Graph extends SVGElem {
             const temp = viewBoxWidth * p.clientHeight / p.clientWidth;
             if (!isNaN(temp) && temp !== viewBoxHeight) {
                 viewBoxHeight = temp; 
-//                console.log('new height = ' + temp);
             }
         }
     }
@@ -179,16 +179,18 @@ export class Graph extends SVGElem {
     oncreate(node?: Vnode) {
         this.adjustHeight(node);
         window.addEventListener("resize", function() { m.redraw(); });
+        m.redraw();
     }
 
     view(node?: Vnode): Vnode {
+        const offset = this.offset;
         function collectRanges(rect:{comp:string, x:number, y:number, width:number, height:number}) {
             let changed = false;
             if (rect) {
-                if (Graph.offset.left < -rect.x) { Graph.offset.left = -rect.x; changed = true; }
-                if (Graph.offset.top  < -rect.y) { Graph.offset.top  = -rect.y; changed = true; }
-                if (Graph.offset.right  < rect.x+rect.width-viewBoxWidth)   { Graph.offset.right  = rect.x+rect.width-viewBoxWidth; changed = true; }
-                if (Graph.offset.bottom < rect.y+rect.height-viewBoxHeight) { Graph.offset.bottom = rect.y+rect.height-viewBoxHeight; changed = true; }
+                if (offset.left < -rect.x) { offset.left = -rect.x; changed = true; }
+                if (offset.top  < -rect.y) { offset.top  = -rect.y; changed = true; }
+                if (offset.right  < rect.x+rect.width-viewBoxWidth)   { offset.right  = rect.x+rect.width-viewBoxWidth; changed = true; }
+                if (offset.bottom < rect.y+rect.height-viewBoxHeight) { offset.bottom = rect.y+rect.height-viewBoxHeight; changed = true; }
             } 
             if (changed) { m.redraw(); } 
         }
