@@ -60,6 +60,21 @@
     font-weight: bold;
 }
 
+@CodeBackground: #f8f8f8;
+@CodeFontColor: #800;
 pre {
-    padding-left: 30px;
+    padding-left: 10px;
+    margin-right: 10px;
+    border-radius: 4px;
+    background-color: @CodeBackground;
+    code {
+        padding: 0;
+    }
+}
+
+code {
+    color: @CodeFontColor;
+    background-color: @CodeBackground;
+    border-radius: 4px;
+    padding:  2px;
 }
