@@ -67,14 +67,15 @@ import { SVGElem, round }    from './SVGElem';
 
 const viewBoxWidth:number  = 1000;  // the viewBox size
 let   viewBoxHeight:number = 700;   // the viewBox size
-let   marginLeft:number    = 10; // 50;
-let   marginRight:number   = 10; // 50;
-let   marginTop:number     = 10; // 80;
-let   marginBottom:number  = 40;
+const margin = {
+    left:   10,
+    right:  10,
+    top:    10,
+    bottom: 10
+};
 
 export interface Config {
     viewBox?:  { w: number; h: number; };
-    plotArea?: { t: number; l: number; w: number; h: number; };
     scale?:  ScaleSet;
     canvas?: CanvasSet;
     axes?:   AxisSet;
@@ -108,19 +109,22 @@ export class Graph extends SVGElem {
         return cfg;
     };}
 
+    /** adjusts margin so that selected components don't extend outside viewBox */
+    static offset = {
+        left:   0,
+        right:  0,
+        top:    0,
+        bottom: 0,
+        clear:  true
+    };
+
     /** Defines default values for all configurable parameters */
     protected static config(cfg:Config={}) {      
         cfg.viewBox = { 
             w: viewBoxWidth, 
             h: viewBoxHeight 
         };
-        cfg.plotArea = { 
-            t: marginTop, l: marginLeft, 
-            w: viewBoxWidth - marginRight - marginLeft,
-            h: viewBoxHeight - marginTop - marginBottom
-        };
         Canvas.config(cfg);
-        Scale.config(cfg);
         Axes.config(cfg);
         Series.config(cfg);
         Grid.config(cfg);
@@ -134,19 +138,30 @@ export class Graph extends SVGElem {
         secondary:<XYScale> { }
     };
 
-    private createScales(cfg:any) {
-        const pa = cfg.plotArea;
-        const cs = cfg.scale;
+    private createPlotArea(cfg:Config) {
+        const plotArea = { 
+            t: margin.top + Graph.offset.top, 
+            l: margin.left + Graph.offset.left, 
+            w: viewBoxWidth,
+            h: viewBoxHeight
+        };
+        plotArea.w -= plotArea.l + margin.right + Graph.offset.right;
+        plotArea.h -= plotArea.t + margin.bottom + Graph.offset.bottom;    
+        return plotArea;
+    }
+
+    private createScales(cfg:any, pa:{t:number, l:number, w:number, h:number}) {
+        const as = cfg.axes;
         if (!this.scales.primary.x) { 
-            this.scales.primary.x   = new Scale(cs.primary.x);
-            this.scales.primary.y   = new Scale(cs.primary.y);
-            this.scales.secondary.x = new Scale(cs.secondary.x);
-            this.scales.secondary.y = new Scale(cs.secondary.y);
+            this.scales.primary.x   = new Scale(as.primary.x.scale);
+            this.scales.primary.y   = new Scale(as.primary.y.scale);
+            this.scales.secondary.x = new Scale(as.secondary.x.scale);
+            this.scales.secondary.y = new Scale(as.secondary.y.scale);
         }
-        this.scales.primary.x.range   = [pa.l, pa.l+pa.w];
-        this.scales.primary.y.range   = [pa.t+pa.h, pa.t];
-        this.scales.secondary.x.range = [pa.l, pa.l+pa.w];
-        this.scales.secondary.y.range = [pa.t+pa.h, pa.t];
+        this.scales.primary.x.range([pa.l, pa.l+pa.w]);
+        this.scales.primary.y.range([pa.t+pa.h, pa.t]);
+        this.scales.secondary.x.range([pa.l, pa.l+pa.w]);
+        this.scales.secondary.y.range([pa.t+pa.h, pa.t]);
     }
 
     adjustHeight(node?: Vnode) {
@@ -166,41 +181,33 @@ export class Graph extends SVGElem {
         window.addEventListener("resize", function() { m.redraw(); });
     }
 
-    static checkMargins(rect:{comp:string, x:number, y:number, width:number, height:number}) {
-        let changed = false;
-        if (rect) {
-            console.log(`${rect.comp}: ${rect.x}/${rect.y}, ${rect.width}x${rect.height}`);
-             if (rect.x < 0) { 
-               marginLeft -= rect.x/2 - 10;  
-               changed = true;
-            }
-            if (rect.x+rect.width > viewBoxWidth) { 
-               marginRight += (rect.x+rect.width-viewBoxWidth)/2 +10; 
-               changed = true;
-            }
-            if (rect.y < 0) { 
-               marginTop -= rect.y/2 - 25; 
-               changed = true;
-            }
-            if (changed) { m.redraw(); }
-        }
-    }
-
     view(node?: Vnode): Vnode {
+        function collectRanges(rect:{comp:string, x:number, y:number, width:number, height:number}) {
+            let changed = false;
+            if (rect) {
+                if (Graph.offset.left < -rect.x) { Graph.offset.left = -rect.x; changed = true; }
+                if (Graph.offset.top  < -rect.y) { Graph.offset.top  = -rect.y; changed = true; }
+                if (Graph.offset.right  < rect.x+rect.width-viewBoxWidth)   { Graph.offset.right  = rect.x+rect.width-viewBoxWidth; changed = true; }
+                if (Graph.offset.bottom < rect.y+rect.height-viewBoxHeight) { Graph.offset.bottom = rect.y+rect.height-viewBoxHeight; changed = true; }
+            } 
+            if (changed) { m.redraw(); } 
+        }
         const cfgFn = node.attrs.cfgFn;
         const cfg = cfgFn? Graph.makeConfig(cfgFn) : Graph.config;
         const cp = copy(cfg());
-        const pa = cp.plotArea;
-        this.createScales(cp);
-        return m('svg', { class:'hs-graph', width:'100%', height:'100%', 
+        const pa = this.createPlotArea(cp);
+        this.createScales(cp, pa);
+        Series.adjustDomains(cp.series, this.scales);
+        const result = m('svg', { class:'hs-graph', width:'100%', height:'100%', 
                 viewBox:`0 0 ${round(cp.viewBox.w)} ${round(cp.viewBox.h)}` }, [
             m(Canvas, { cfg:cp.canvas}),
             m(Chart, { cfg:cp.chart, x:pa.l, y:pa.t, width: pa.w, height:pa.h }),
             m(Grid, { cfg:cp.grid, scales:this.scales }),
-            m(Axes, { cfg:cp.axes, scales:this.scales, sizeFn: Graph.checkMargins }),
+            m(Axes, { cfg:cp.axes, scales:this.scales, sizeFn:collectRanges }),
             m(Series, { cfg:cp.series, scales:this.scales }),
             m(Legend, { cfg:cp.legend })
         ]);
+        return result;
     }
 }
 

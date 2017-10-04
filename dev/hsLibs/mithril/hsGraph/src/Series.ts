@@ -101,10 +101,36 @@ export class Series extends SVGElem {
         };
     }
 
+    static adjustDomains(cfg:SeriesSet, scales:{primary:XYScale, secondary:XYScale}) {
+        const data   = cfg.data;
+        let xmin=1e20, xmax=-1e20,
+            ymin=1e20, ymax=-1e20;
+        cfg.series.map((s:{xName:string, yName:string})=>{
+            const x = data[0].indexOf(s.xName);
+            const y = data[0].indexOf(s.yName);
+            if (x>=0 && y>=0) { 
+                data.filter((e:any, i:number) => i>0)
+                    .map((p:number[]) => {
+                        xmin = Math.min(xmin, p[x]);
+                        xmax = Math.max(xmax, p[x]);
+                        ymin = Math.min(ymin, p[y]);
+                        ymax = Math.max(ymax, p[y]);
+                    });
+            }
+        });
+        scales.primary.x.setAutoDomain(xmin, xmax);
+        scales.primary.y.setAutoDomain(ymin, ymax);
+        scales.secondary.x.setAutoDomain(xmin, xmax);
+        scales.secondary.y.setAutoDomain(ymin, ymax);
+    }
+
     drawClipRect(clipID:string, scales:XYScale) {
         return !clipID? m('') : this.clipRect(
-            {x:scales.x.range[0], y:scales.y.range[1]}, 
-            {w:scales.x.range[1] - scales.x.range[0], h:scales.y.range[0] - scales.y.range[1]}, 
+            {   x:scales.x.range()[0], y:scales.y.range()[1]}, 
+            {
+                w:scales.x.range()[1] - scales.x.range()[0], 
+                h:scales.y.range()[0] - scales.y.range()[1]
+            }, 
             clipID);
     }
 

@@ -73,12 +73,12 @@ export class Grid extends SVGElem{
         const scales = node.attrs.scales.primary;
         return m('svg', { class:'hs-graph-grid'}, [
             m('svg', { class:'hs-graph-grid-major' }, [
-                this.drawHorGrid(cfg.major.hor, scales.y, scales.x.range, scales.y.ticks().major),
-                this.drawVerGrid(cfg.major.ver, scales.x, scales.y.range, scales.y.ticks().major)
+                this.drawHorGrid(cfg.major.hor, scales.y, scales.x.range(), scales.y.ticks().major),
+                this.drawVerGrid(cfg.major.ver, scales.x, scales.y.range(), scales.y.ticks().major)
             ]),
             m('svg', { class:'hs-graph-grid-minor' }, [
-                this.drawHorGrid(cfg.minor.hor, scales.y, scales.x.range, scales.y.ticks().minor),
-                this.drawVerGrid(cfg.minor.ver, scales.x, scales.y.range, scales.y.ticks().minor)
+                this.drawHorGrid(cfg.minor.hor, scales.y, scales.x.range(), scales.y.ticks().minor),
+                this.drawVerGrid(cfg.minor.ver, scales.x, scales.y.range(), scales.y.ticks().minor)
             ])
         ]);
     }

@@ -14,14 +14,19 @@
  */
 
 /** */
-import { Config } from './Graph';
+import { ScaleCfg } from './Axes';
 
 export interface XYScale { x: Scale; y:Scale; }
+
+export interface DomainDef {
+    [0]: number|string;
+    [1]: number|string;
+}
 
 export interface ScaleStruct {
     domain?: [number, number];
     range?:  [number, number];
-    scale?:  Symbol;            // Scale.linear | log | date | index | percent | ordinal | nominal
+    scale?:  string;            // Scale.linear | log | date | index | percent | ordinal | nominal
 }
 
 /**
@@ -33,16 +38,16 @@ export interface ScaleSet {
 }
 
 /** calculates major tick mark domain values */
-function createMajorTickMarks(dom: number[], numTicks:number, scale:Symbol):number[] {
+function createMajorTickMarks(dom: [number, number], numTicks:number, scale:string):number[] {
     const ticks:number[] = [];
     switch(scale) {
-        case Scale.log:     break;
-        case Scale.date:    break;
-        case Scale.percent: break;
-        case Scale.index:   break;
-        case Scale.ordinal: break; 
-        case Scale.nominal: break;
-        case Scale.linear:
+        case 'log':     break;
+        case 'date':    break;
+        case 'percent': break;
+        case 'index':   break;
+        case 'ordinal': break; 
+        case 'nominal': break;
+        case 'linear':
         default:
             let d = (dom[1] - dom[0]) / numTicks;
             let exp = Math.pow(10, Math.floor(Math.log10(d)));
@@ -55,16 +60,16 @@ function createMajorTickMarks(dom: number[], numTicks:number, scale:Symbol):numb
 }
 
 /** calculates minor tick mark domain values */
-function createMinorTickMarks(dom: number[], numTicks:number, scale:Symbol):number[] {
+function createMinorTickMarks(dom:[number, number], numTicks:number, scale:string):number[] {
     const ticks:number[] = [];
     switch(scale) {
-        case Scale.log:     break;
-        case Scale.date:    break;
-        case Scale.percent: break;
-        case Scale.index:   break;
-        case Scale.ordinal: break; 
-        case Scale.nominal: break;
-        case Scale.linear:
+        case 'log':     break;
+        case 'date':    break;
+        case 'percent': break;
+        case 'index':   break;
+        case 'ordinal': break; 
+        case 'nominal': break;
+        case 'linear':
         default:
             let d = (dom[1] - dom[0]) / numTicks;
             let exp = Math.pow(10, Math.floor(Math.log10(d)));
@@ -81,49 +86,73 @@ function createMinorTickMarks(dom: number[], numTicks:number, scale:Symbol):numb
  * translates a domain into a range
  */
 export class Scale {
-    static linear   = Symbol('linear scale');
-    static log      = Symbol('log scale');
-    static date     = Symbol('date scale');
-    static index    = Symbol('index scale');
-    static percent  = Symbol('percent scale');
-    static ordinal  = Symbol('ordinal scale');
-    static nominal  = Symbol('nominal scale');
-    
     /** Defines default values for all configurable parameters */
+/*
     static config(config:Config) {
         config.scale = <ScaleSet>{
             primary: {
-                x: <ScaleStruct>{ domain: [0, 1], range: [0, 1], scale: Scale.linear },
-                y: <ScaleStruct>{ domain: [0, 1], range: [0, 1], scale: Scale.linear }
+                x: <ScaleStruct>{ domain: [0, 1], range: [0, 1], scale: 'linear' },
+                y: <ScaleStruct>{ domain: [0, 1], range: [0, 1], scale: 'linear' }
             },
             secondary: {
-                x: <ScaleStruct>{ domain: [0, 1], range: [0, 1], scale: Scale.linear },
-                y: <ScaleStruct>{ domain: [0, 1], range: [0, 1], scale: Scale.linear }
+                x: <ScaleStruct>{ domain: [0, 1], range: [0, 1], scale: 'linear' },
+                y: <ScaleStruct>{ domain: [0, 1], range: [0, 1], scale: 'linear' }
             }
         };
     }
-    
-    constructor(private cfg:ScaleStruct) { }
-    
-    get range():[number, number]     { return this.cfg.range; }
-    set range(r:[number, number])    { this.cfg.range = r; }
-    get domain():[number, number]    { return this.cfg.domain; }
-    set domain(dom:[number, number]) { this.cfg.domain = dom; }
+*/
+    scaleType   = 'linear';
+    rangeVal:[number, number]   = [0,1];
+    domVal:[number, number]     = [0,1];
+    domMinAuto  = false; 
+    domMaxAuto  = false; 
+
+    constructor(private cfg:ScaleCfg) { 
+        this.scaleType = cfg.type;
+        this.domain(cfg.domain);
+    }
+
+    range(r?:[number, number]):[number, number]   { 
+        if (r) { this.rangeVal = r; }
+        return this.rangeVal;
+    }
+    domain(dom?:[number|string, number|string]):[number, number] { 
+        if (dom) {
+            this.domVal[0] = (dom[0] === 'auto')? 0 : <number>dom[0]; 
+            this.domVal[1] = (dom[1] === 'auto')? 1 : <number>dom[1]; 
+            this.domMinAuto = (dom[0] === 'auto');
+            this.domMaxAuto = (dom[1] === 'auto');
+        }
+        return this.domVal;
+    }
+    get scale(): string             { return this.scaleType; }
+    set scale(s:string)             { this.scaleType = s; }
+
+    /**
+     * If a `domain` limit is set to `auto`, this function sets the 
+     * `domain` range to the min or max of the data set.
+     * Called after a pass through the data.
+     */
+    setAutoDomain(min:number, max:number) {
+        if (this.domMinAuto) { this.domVal[0] = min; }
+        if (this.domMaxAuto) { this.domVal[1] = max; }
+    }
 
     /**
      * Calculates major and minor tick marks in domain coordinates
      * @return { major: number[], minor: number[] }
      */
     ticks(numTicks:number=4):{ major: number[], minor: number[] }   { 
-        const majorTicks = createMajorTickMarks(this.domain, numTicks, this.cfg.scale);
-        const minorTicks = createMinorTickMarks(this.domain, numTicks, this.cfg.scale);
+        const majorTicks = createMajorTickMarks(this.domain(), numTicks, this.scaleType);
+        const minorTicks = createMinorTickMarks(this.domain(), numTicks, this.scaleType);
         return { major: majorTicks, minor: minorTicks };
     }
     
     /** converts a domain value to a range value */
     convert(domVal:number):number { 
-        const dom = this.domain;
-        const range = this.range;
-        return (domVal- dom[0]) / (dom[1] - dom[0]) * (range[1] - range[0]) + range[0];
+        const dom = this.domain();
+        const range = this.range();
+        const rangeVal = (domVal- dom[0]) / (dom[1] - dom[0]) * (range[1] - range[0]) + range[0];
+        return rangeVal;
     }
 }

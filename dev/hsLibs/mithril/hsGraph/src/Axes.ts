@@ -6,6 +6,7 @@
  *  primary: {                              // Primary axis:
  *      x: {visible: true,                  // axis visibility
  *          crossesAt:'min',                // axis crossing in domain: 'min', 'max', or domain value
+ *          scale: 'linear',                // scale type: 'linear'|'log'|'date'|'index'|'percent'|'ordinal'|'nominal'
  *          title: {                        // axis title configuration
  *              visible: true,              //    title visibility
  *              text: 'x'                   //    title text
@@ -34,6 +35,7 @@
  *      },
  *      y: {visible: true, 
  *          crossesAt:'min',
+ *          scale: 'linear',
  *          title: {text:'y', visible:true,
  *              hAlign:  'middle', hOffset: 0,
  *              vAlign:  'bottom', vOffset: -0.5
@@ -51,6 +53,7 @@
  *  secondary: {                        // Secondary axis:
  *      x: {visible: true, 
  *          crossesAt:'max',
+ *          scale: 'linear',
  *          title: {text:'x2', visible:true, 
  *                  hAlign:  'end', hOffset: -2,
  *                  vAlign:  'top', vOffset: -1.2
@@ -66,6 +69,7 @@
  *      },
  *      y: {visible: true, 
  *          crossesAt:'max',
+ *          scale: 'linear',
  *          title: {text:'y2', visible:true, 
  *                  hAlign:  'start', hOffset: 0.3,
  *                  vAlign:  'top', vOffset: 0.7
@@ -135,6 +139,14 @@ export interface AxisTitleCfg {
     vOffset: number; 
 }
 
+export interface ScaleCfg {
+    /** scale type: 'linear' | 'log' | ... */
+    type: string;
+
+    /** scale domain: 'auto' or numeric domain value */
+    domain: [string|number, string|number];
+}
+
 /** Defines coinfigurable settings per axis */
 export interface AxisCfg {
     /** determines if the axis will be rendered */
@@ -145,6 +157,9 @@ export interface AxisCfg {
 
     /** axis crossing in domain: 'min', 'max', or domain value */
     crossesAt:  number|string; 
+
+    /** scale type: 'linear' | 'log' | ... */
+    scale: ScaleCfg;
 
     /** configures the major and minor ticks */
     ticks: {
@@ -169,8 +184,8 @@ export interface AxisSet {
 function getCrossAt(cross:string|number, scale:Scale):number {
     let crossesAt:number;
     switch (cross) {
-        case 'min': crossesAt = scale.domain[0]; break;
-        case 'max': crossesAt = scale.domain[1]; break;
+        case 'min': crossesAt = scale.domain()[0]; break;
+        case 'max': crossesAt = scale.domain()[1]; break;
         default:    crossesAt = <number>cross || 0;
     }
     return scale.convert(crossesAt);
@@ -184,6 +199,10 @@ export class Axes extends SVGElem {
             primary: {
                 x: {visible: true,                  // axis visibility
                     crossesAt:'min',                // axis crossing in domain: 'min', 'max', or domain value
+                    scale: {                        // axis scaling information
+                        type: 'linear',             //    scale type: 'linear'|'log'|'date'|'index'|'percent'|'ordinal'|'nominal'
+                        domain:['auto', 'auto']     //    min/max of domain; set to autodetect
+                    },
                     title: <AxisTitleCfg>{          // axis title configuration
                         visible: true,              //    title visibility
                         text:    'x',               //    title text
@@ -212,6 +231,10 @@ export class Axes extends SVGElem {
                 },
                 y: {visible: true, 
                     crossesAt:'min',
+                    scale: {       
+                        type: 'linear', 
+                        domain:['auto', 'auto']  
+                    },
                     title: {text:'y', visible:true,
                             hAlign:  'middle', hOffset: 0,
                             vAlign:  'bottom', vOffset: -0.5
@@ -229,6 +252,10 @@ export class Axes extends SVGElem {
             secondary: {
                 x: {visible: false, 
                     crossesAt:'max',
+                    scale: {       
+                        type: 'linear', 
+                        domain:['auto', 'auto']  
+                    },
                     title: {text:'x2', visible:true, 
                             hAlign:  'end', hOffset: -2,
                             vAlign:  'top', vOffset: -1.2
@@ -244,6 +271,10 @@ export class Axes extends SVGElem {
                 },
                 y: {visible: false, 
                     crossesAt:'max',
+                    scale: {       
+                        type: 'linear', 
+                        domain:['auto', 'auto']  
+                    },
                     title: {text:'y2', visible:true, 
                             hAlign:  'start', hOffset: 0.3,
                             vAlign:  'top', vOffset: 0.7
@@ -285,6 +316,9 @@ export class Axes extends SVGElem {
         return !ttlCfg.visible? undefined : this.text(xy, ttlCfg.text, cfg);
     }
 
+    /**
+     * draws the tick marks. Labels are plotted for major tick marks only.
+     */
     drawTickMarks(dir:string, type:string, crossesAt:number, scale:Scale, ticks:number[], cfg:TickStruct) {
         const x = dir==='x';
         return m('svg', { class:`hs-graph-axis-${type}-tick-marks`}, 
@@ -331,8 +365,9 @@ export class Axes extends SVGElem {
      */
     drawAxis(dir:string, scales: XYScale, type:string, axisCfg:AxisSet) {
         const x = dir==='x';
-        const range = scales[dir].range;
+        const range = scales[dir].range();
         const cfg   = axisCfg[type][dir];
+        scales[dir].scale = cfg.scale;
         const crossesAt:number = getCrossAt(cfg.crossesAt, scales[x?'y':'x']);
         return !cfg.visible? undefined : m('svg', { class:`hs-graph-axis-${dir} hs-graph-axis-${type}`}, [
             this.drawAxisLine(x, range, crossesAt),
@@ -343,8 +378,10 @@ export class Axes extends SVGElem {
         ]);
     }
 
-    onupdate(node?: Vnode) {
-        if(node) {}
+    /**
+     * check on update of axes bounding box and notify Graph.boxNotify
+     */
+    onupdate() {
         const elems = document.getElementsByClassName('hs-graph-axis');
         const box = Array.prototype.map.call(elems, (e:any)=>e.getBBox());
         if(box && box[0]) { 
@@ -354,6 +391,10 @@ export class Axes extends SVGElem {
         
     }
 
+    /** 
+     * a function to notify Graph of the current box size, 
+     * set by {@link Graph.Graph `Graph`} in call to `view()` and called in `onupdate()`
+     */
     static boxNotify:(box:any)=>void;
 
     view(node?: Vnode): Vnode {
