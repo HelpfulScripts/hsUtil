@@ -52,7 +52,7 @@ export class Grid extends SVGElem{
     /** 
      * Draws horizontal gridlines parallel to the x-axis
      */
-    drawHorGrid(cfg:{visible:boolean}, scale:Scale, range:Range, ticks:number[]) {
+    private drawVerGrid(cfg:{visible:boolean}, scale:Scale, range:Range, ticks:number[]) {
         return m('svg', { class:'hs-graph-grid-hor' }, ticks.map((t:number) =>
             this.line({x:range[0], y:scale.convert(t)}, {x:range[1], y:scale.convert(t)})
         ));
@@ -61,7 +61,7 @@ export class Grid extends SVGElem{
     /** 
      * Draws vertical gridlines parallel to the y-axis
      */
-    drawVerGrid(cfg:{visible:boolean}, scale:Scale, range:Range, ticks:number[]) {
+    private drawHorGrid(cfg:{visible:boolean}, scale:Scale, range:Range, ticks:number[]) {
         return m('svg', { class:'hs-graph-grid-ver' }, ticks.map((t:number) =>
             this.line({x:scale.convert(t), y:range[0]}, {x:scale.convert(t), y:range[1]})
         ));
@@ -73,12 +73,12 @@ export class Grid extends SVGElem{
         const scales = node.attrs.scales.primary;
         return m('svg', { class:'hs-graph-grid'}, [
             m('svg', { class:'hs-graph-grid-major' }, [
-                this.drawHorGrid(cfg.major.hor, scales.y, scales.x.range(), scales.y.ticks().major),
-                this.drawVerGrid(cfg.major.ver, scales.x, scales.y.range(), scales.y.ticks().major)
+                this.drawVerGrid(cfg.major.hor, scales.y, scales.x.range(), scales.y.ticks().major),
+                this.drawHorGrid(cfg.major.ver, scales.x, scales.y.range(), scales.x.ticks().major)
             ]),
             m('svg', { class:'hs-graph-grid-minor' }, [
-                this.drawHorGrid(cfg.minor.hor, scales.y, scales.x.range(), scales.y.ticks().minor),
-                this.drawVerGrid(cfg.minor.ver, scales.x, scales.y.range(), scales.y.ticks().minor)
+                this.drawVerGrid(cfg.minor.hor, scales.y, scales.x.range(), scales.y.ticks().minor),
+                this.drawHorGrid(cfg.minor.ver, scales.x, scales.y.range(), scales.x.ticks().minor)
             ])
         ]);
     }
