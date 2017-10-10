@@ -139,13 +139,34 @@ export function type(t:any, lib:string) {
     function _type(tt:any) {
         switch (tt.type) {
             case undefined:         return '';
-            case 'instrinct':       return tt.id? libLink('span', lib, tt.fullPath, tt.name) : tt.name; 
-            case 'stringLiteral':   return tt.type; 
-            case 'union':           return tt.types.map(_type).join(' | ');
+            case 'tuple':           return m('span.hs-item-type-tuple', [
+                                        '[ ',
+                                        ...tt.elements.map((e:any, i:number) => [i>0?', ':undefined, _type(e)]),
+                                        ' ]'
+                                    ]);
+            case 'instrinct':       return m('span.hs-item-type-instrinct', tt.id? libLink('span', lib, tt.fullPath, tt.name) : tt.name); 
+            case 'stringLiteral':   return m('span.hs-item-type-string-literal', tt.type); 
+            case 'union':           return m('span.hs-item-type-union', [...tt.types.map((e:any, i:number) => [i>0?' | ':undefined, _type(e)])]);
             case 'reference':       const typeRef = DocSets.get(lib, tt.id);
-                                    return typeRef.typeArguments? typeRef.name+'<'+ typeRef.typeArguments.map(_type).join(', ') + '>' : 
-                                           typeRef.id? libLink('a', lib, typeRef.fullPath, typeRef.name) : typeRef.name;
-            case 'reflection':      return tt.declaration? tt.declaration.kindString : 'UNKNOWN';
+                                    let refRes;
+                                    if (typeRef.typeArguments) { refRes = typeRef.name+'<'+ typeRef.typeArguments.map(_type).join(', ') + '>'; }
+                                    else if (typeRef.id)       { refRes = libLink('a', lib, typeRef.fullPath, typeRef.name); }
+                                    else                       { refRes = typeRef.name; }
+                                    return m('span.hs-item-type-reference', refRes);
+            case 'reflection':      let rflRes;
+                                    if (tt.declaration) {
+                                        rflRes = !tt.declaration.children? tt.declaration.kindString :
+                                            m('span.hs-item-reflection', [
+                                                '{ ',
+                                                ...tt.declaration.children.map((c:any, i:number) => 
+                                                    [i>0?', ':undefined, c.name, ': ', _type(c.type)]
+                                                ),
+                                                ' }'
+                                            ]);
+                                    } else {
+                                        rflRes = 'UNKNOWN';
+                                    }
+                                    return m('span.hs-item-type-reflection', rflRes);
             default: console.log('unknown type '+ tt.type);
                      console.log(t);
                      return t.type;
