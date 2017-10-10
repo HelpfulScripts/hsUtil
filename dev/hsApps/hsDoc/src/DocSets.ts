@@ -127,6 +127,9 @@ function recursiveIndex(content:any, index:any, lib:string, path='') {
         if (content.parameters) {
             content.parameters.map((c:any) => recursiveIndex(c, index, lib, newPath));
         }
+        if (content.type && content.type.declaration && content.type.declaration.children) {
+            content.type.declaration.children.map((c:any) => recursiveIndex(c, index, lib, newPath));
+        }
     }
 }
 /**
