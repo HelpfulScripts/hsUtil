@@ -127,8 +127,12 @@ export function signature(s:any, lib:string): Vnode {
  * adds a default value, if defined
  */
 export function defaultVal(s:any, lib:string): Vnode {
-    return !(s && s.defaultValue)? undefined : 
-        m('span.hs-item-default', `=${s.defaultValue}`);
+    if (s && s.defaultValue) {
+        let val = ` = ${s.defaultValue}`.replace(/{/gi, '{ ').replace(/}/gi, ' }');
+        return m('span.hs-item-default', val);
+    } else {
+        return;
+    }        
 }
 
 export function type(t:any, lib:string) {
