@@ -1,184 +1,87 @@
 /**
  * # Axes
  * renders the x- and y-axis with title, tick marks and labels.
+ * ### Example
+ * <example>
+ * <file name='script.js'>
+ * let series = [
+ *      ['time', 'volume', 'price'],
+ *      [0.2, 0.7, 0.87],
+ *      [0.4, 0.015, 0.7],
+ *      [0.6, 0.01, 0.7],
+ *      [0.8, 5, 0.6],
+ *      [1, 10, 0.75]
+ * ];
+ * 
+ * function myConfig(cfg) {
+ *      cfg.series.data   = series;
+ *      cfg.series.styles[0].marker.visible = true;
+ *      cfg.series.styles[1].marker.visible = true;
+ *      cfg.series.styles[1].marker.shape = hsgraph.Series.marker.square;
+ *      cfg.series.series = [
+ *          { xName: 'time', yName:'volume'},
+ *          { xName: 'time', yName:'price'}
+ *      ];
+ *      const axes = cfg.axes.primary;
+ *      cfg.chart.title.text          = 'Volume over Time';
+ *      cfg.chart.title.xpos          = 'end';
+ *      cfg.chart.title.ypos          = 'top';
+ *      cfg.chart.title.vOffset       = -1.5;
+ *      axes.x.title.text = 'time';
+ *      axes.y.title.text = 'volume';
+ *      axes.y.scale.type = hsgraph.Scale.type.log;
+ *      cfg.axes.secondary.x.visible = false;
+ *      cfg.axes.secondary.y.visible = false;
+ * }
+ * 
+ * m.mount(root, { 
+ *      view:() => m(hsgraph.Graph, {cfgFn: myConfig })
+ * });
+ *
+ * </file>
+ * <file name='style.css'>
+ * .hs-graph-chart { fill: #fff; }
+ * .hs-graph-series { stroke-width: 5; }
+ * </file>
+ * </example>
+ * 
  * ### Configurations and Defaults
- * ```
- * :{@link Axes.AxisSet AxisSet}:
- *  primary: {                          // Primary axis:
- *      x: {                            // {@link Axes.AxisCfg AxisCfg}
- *          visible: true,              // axis visibility
- *          crossesAt:'min',            // axis crossing in domain: 'min', 'max', or domain value
- *          scale: {                    // {@link Axes.ScaleCfg ScaleCfg}; axis scaling information
- *              type: 'linear',             
- *              domain:['auto', 'auto'] // min/max of domain; set to autodetect
- *          },
- *          title: {                    // {@link Axes.AxisTitleCfg AxisTitleCfg}; axis title configuration
- *              visible: true,  text: 'x'                   
- *              hAlign:  'end', vAlign:  'top',             
- *              hOffset: -2,    vOffset: 0.4                
- *          },
- *          ticks: {                    // tick mark configuration
- *              major: {                // {@link Axes.TickStruct TickStruct}; major ticks
- *                  marks: { visible: true, length: 10 },  
- *                  labels: { hAlign: 'middle', vAlign: 'top', hOffset: 0, vOffset: 0.7 }      
- *              },
- *              minor: {                // {@link Axes.TickStruct TickStruct}; minor ticks
- *                  marks: { visible: true,  length: 5 },
- *                  labels: { hAlign: 'middle', vAlign: 'top', hOffset: 0, vOffset: 0.7 }
- *              }   
- *          } 
- *      },
- *      y: {visible: true, 
- *          crossesAt:'min',
- *          scale: {       
- *              type: 'linear', 
- *              domain:['auto', 'auto']  
- *          },
- *          title: {text:'y', visible:true,
- *              hAlign:  'middle', hOffset: 0,
- *              vAlign:  'bottom', vOffset: -0.5
- *          },
- *          ticks: { 
- *              major: { marks: { visible:true, length:10 },
- *                      labels:{ hAlign: 'end', vAlign: 'center', hOffset: -0.7, vOffset: 0 }
- *              }, 
- *              minor: { marks: { visible:true, length:5 },
- *                       labels:{ hAlign: 'end', vAlign: 'center', hOffset: -0.7, vOffset: 0 }
- *              } 
- *          }
- *      }
- *  },
- *  secondary: {                        // Secondary axis:
- *      x: {visible: true, 
- *          crossesAt:'max',
- *          scale: {       
- *              type: 'linear', 
- *              domain:['auto', 'auto']  
- *          },
- *          title: {text:'x2', visible:true, 
- *                  hAlign:  'end', hOffset: -2,
- *                  vAlign:  'top', vOffset: -1.2
- *          },
- *          ticks: { 
- *              major: { marks: { visible:true, length:-10 },
- *                          labels:{ hAlign: 'middle', vAlign: 'bottom', hOffset: 0, vOffset: -0.7 }
- *              }, 
- *              minor: { marks: { visible:true, length:-5 },
- *                          labels:{ hAlign: 'middle', vAlign: 'bottom', hOffset: 0, vOffset: -0.7 }
- *              } 
- *          }
- *      },
- *      y: {visible: true, 
- *          crossesAt:'max',
- *          scale: {       
- *              type: 'linear', 
- *              domain:['auto', 'auto']  
- *          },
- *          title: {text:'y2', visible:true, 
- *                  hAlign:  'start', hOffset: 0.3,
- *                  vAlign:  'top', vOffset: 0.7
- *          },
- *          ticks: { 
- *              major: { marks: { visible:true, length:-10 },
- *                          labels:{ hAlign: 'start', vAlign: 'center', hOffset: 0.7, vOffset: 0 }
- *              }, 
- *              minor: { marks: { visible:true, length:-5 },
- *                          labels:{ hAlign: 'start', vAlign: 'center', hOffset: 0.7, vOffset: 0 }
- *              } 
- *          }
- *      }
- *  }
- * ```
+ * See {@link Axes.Axes.config Axes.config}
  */
 
  /** */
-import { m, Vnode}  from 'hslayout';
-import { Config }   from './Graph';
-import { Scale, XYScale }    from './Scale';
-import { SVGElem, round, Area, Point, TextCfg } 
-                    from './SVGElem';
+import { m, Vnode}                          from 'hslayout';
+import { Config }                           from './Graph';
+import { Scale, XYScale, Scales, ScaleCfg, DomainCfg  }           from './Scale';
+import { SVGElem, round, Area, TitleCfg }   from './SVGElem';
+
+/** Defines configurable settings for tick marks */
+export interface MarkCfg {
+    /** determines if the axis ticks will be rendered */
+    visible: boolean;
+
+    /** length in viewBox coordinates */
+    length:  number; 
+}
 
 /** Defines configurable settings for tick marks and labels per axis */
 export interface TickStruct {
-    marks: {
-        /** determines if the axis ticks will be rendered */
-        visible: boolean;
-
-        /** length in viewBox coordinates */
-        length:  number; 
-    };
-    labels: {
-        /** label text-align: 'start' | 'middle' | 'end' */
-        hAlign:  string;  
-
-        /** label  vertical align: 'top' | 'center' | 'bottom' */
-        vAlign:  string; 
-
-        /** horizontal label offset in 'em' */
-        hOffset: number; 
-
-        /** vertical label offset in 'em' */
-        vOffset: number; 
-    };
+    marks:  MarkCfg;
+    labels: TitleCfg;
 }
 
-/** Defines settings for the axis title */
-export interface AxisTitleCfg {
-    /** determines if the axis title will be rendered */
-    visible:boolean;
-
-    /** the axis title */
-    text: string;       
-
-    /** label text-align: 'start' | 'middle' | 'end' */
-    hAlign:  string; 
-
-    /** label  vertical align: 'top' | 'center' | 'bottom' */
-    vAlign:  string; 
-
-    /** horizontal label offset in 'em' */
-    hOffset: number; 
-
-    /** vertical label offset in 'em' */
-    vOffset: number; 
-}
-
-export interface ScaleCfg {
-    /** scale type: 'linear'|'log'|'date'|'index'|'percent'|'ordinal'|'nominal' */
-    type: string;
-
-    /** scale domain: 'auto' or numeric domain value */
-    domain: [string|number, string|number];
-}
-
-/** Defines coinfigurable settings per axis */
-export interface AxisCfg {
-    /** determines if the axis will be rendered */
-    visible:    boolean;     
-     
-    /** configures the axis title; see {@link Axes.AxisTitleCfg AxisTitleCfg} */  
-    title:      AxisTitleCfg;
-
-    /** axis crossing in domain: 'min', 'max', or domain value */
-    crossesAt:  number|string; 
-
-    /** scale type and domain; see {@link Axes.ScaleCfg ScaleCfg} */
-    scale: ScaleCfg;
-
-    /** configures the major and minor ticks; see {@link Axes.TickStruct TickStruct} */
-    ticks: {
-        major:  TickStruct;
-        minor:  TickStruct;
-    };
+/** Defines configurable settings for major and minor ticks (marks and labels) */
+export interface TicksCfg {
+    major:  TickStruct;
+    minor:  TickStruct;
 }
 
 /**
  * Defines configurable settings and CSS style classes for all primary and secondary axes.
- * See {@link Axes.AxisCfg AxisCfg}
  */
-export interface AxisSet {
-    primary:   { x: AxisCfg, y: AxisCfg };
-    secondary: { x: AxisCfg, y: AxisCfg };
+export interface AxesSet {
+    primary:   { x: AxisCfg; y: AxisCfg; };
+    secondary: { x: AxisCfg; y: AxisCfg; };
 }
 
 /** 
@@ -196,103 +99,156 @@ function getCrossAt(cross:string|number, scale:Scale):number {
     return scale.convert(crossesAt);
 }
 
+/** Defines configurable settings per axis */
+export interface AxisCfg {
+    /** determines if the axis will be rendered */
+    visible:    boolean;     
+     
+    /** configures the axis title */  
+    title:      TitleCfg;
+
+    /** axis crossing in domain: 'min', 'max', or domain value */
+    crossesAt:  number|string; 
+
+    /** scale type and domain */
+    scale: ScaleCfg;
+
+    /** configures the major and minor ticks */
+    ticks: TicksCfg;
+}
 
 export class Axes extends SVGElem {
-    /** Defines default values for all configurable parameters */
-    static config(config:Config) {
-        config.axes = <AxisSet>{
-            primary: {
-                x: {visible: true,                  // axis visibility
-                    crossesAt:'min',                // axis crossing in domain: 'min', 'max', or domain value
-                    scale: {                        // axis scaling information
-                        type: 'linear',             //    scale type: 'linear'|'log'|'date'|'index'|'percent'|'ordinal'|'nominal'
-                        domain:['auto', 'auto']     //    min/max of domain; set to autodetect
+   /** 
+    * Defines default values for display elements in `Axes`
+    * sets the default configuration for the primary and secondary axes
+    * 
+    * ### Configurations and Defaults
+    * #### defaultScale: {@link Scale.ScaleCfg Scale.ScaleCfg} =
+    * ```
+    *  {
+    *      type: Scale.type.linear,   // {@link Scale.Scale.type Scale.type} 
+    *      domain:['auto', 'auto']    // {@link Scale.DomainCfg Scale.DomainCfg}: min/max of domain; 'auto', or a domain value
+    *  }
+    * ```
+    * #### cfg.[primary|secondary>].[x|y].title: {@link SVGElem.TitleCfg titleCfg} =
+    * ```
+    *  {
+    *     visible: true,  
+    *     text:    (x? 'x' : 'y') + (primary? '' : '2'),    // 'x'/'y' or 'x2'/'y2'
+    *     xpos:    x? 'end' : (primary? 'middle' : 'start'),          
+    *     ypos:    x? 'top' : (primary? 'bottom' : 'top'),           
+    *     hOffset: x? -2 : (primary? 0 : 0.3),            
+    *     vOffset: x? (primary? 0.4 : -1.2) : (primary? -0.5 : 0.7) 
+    *  }      
+    * ```
+    * #### cfg.[primary|secondary].[x|y].ticks.[major|minor].marks: {@link AxisDefaultCfg.MarkCfg markCfg} =
+    * ```
+    *  {
+    *     visible: true, 
+    *     length: (primary? 1 : -1) * (major? 10 : 5) 
+    *  }      
+    * ```
+    * #### cfg.[primary|secondary].[x|y].ticks.[major|minor].labels: {@link SVGElem.TitleCfg labelCfg} =
+    * ```
+    *  {
+    *     visible: true, 
+    *     xpos: x? 'middle' : (primary? 'end' : 'start')
+    *     ypos: x? (primary? 'top' : 'bottom') : 'center', 
+    *     hOffset: x? 0 (primary? -0.7 : 0.7), 
+    *     vOffset: x? (primary? 0.7 : -0.7) : 0
+    *  }      
+    * ```
+    * #### cfg.[primary|secondary].[x|y]: {@link Axis.AxisCfg axisCfg} =
+    * ```
+    *  {
+    *     visible:    primary? true : false,   // hide secondary axes
+    *     crossesAt:  primary?'min':'max',     // default axis crossing
+    *     scale:      defaultScale,            // see above
+    *     title:      titleCfg(primary, x),
+    *     ticks: {                    
+    *         major: {                
+    *             marks: markCfg(primary, true),  
+    *             labels: tickLabelCfg(primary, x)      
+    *         },
+    *         minor: { 
+    *             marks: markCfg(primary, false),
+    *             labels: tickLabelCfg(primary, x)     
+    *         }
+    *     } 
+    *  }
+    * ```
+    * #### cfg.axes: {@link Axes.AxesSet AxesSet} =
+    * ```
+    * {
+    *    primary: {                // Primary axis:
+    *       x: axisCfg(true, true),
+    *       y: axisCfg(true, false)
+    *    },
+    *    secondary: {               // Secondary axis:
+    *       x: axisCfg(false, true),
+    *       y: axisCfg(false, false)
+    *    }
+    *  }
+    * ```
+    * @param cfg the configuration object, containing default settings for all 
+    * previously configured components. See {@link Graph.Graph.makeConfig Graph.makeConfig} for 
+    * the sequence of initializations.
+    */
+    static config(cfg:Config) {
+        const defaultScale:ScaleCfg = {         // axis scaling information
+            type: Scale.type.linear,            //    scale type
+            domain:<DomainCfg>['auto', 'auto']  //    min/max of domain; 'auto', or a domain value
+        };
+        function labelCfg(primary:boolean, x:boolean):TitleCfg {
+            return { 
+                visible: true, text: '',
+                xpos: x? 'middle' : (primary? 'end' : 'start'),
+                ypos: x? (primary? 'top' : 'bottom') : 'center', 
+                hOffset: x? 0 : (primary? -0.7 : 0.7), 
+                vOffset: x? (primary? 0.7 : -0.7) : 0
+            }; 
+        }
+        function markCfg(primary: boolean, major:boolean):MarkCfg {
+            return { 
+                visible: true, 
+                length: (primary? 1 : -1) * (major? 10 : 5) 
+            };
+        }
+        function titleCfg(primary:boolean, x:boolean):TitleCfg {
+            return {
+                visible: true,  text: (x? 'x' : 'y') + (primary? '' : '2'),    
+                xpos:  x? 'end' : (primary? 'middle' : 'start'),          
+                ypos:  x? 'top' : (primary? 'bottom' : 'top'),           
+                hOffset: x? -2 : (primary? 0 : 0.3),            
+                vOffset: x? (primary? 0.4 : -1.2) : (primary? -0.5 : 0.7)       
+            };
+        }
+        function axisCfg(primary:boolean, x:boolean):AxisCfg {
+            return {
+                visible:    primary? true : false, 
+                crossesAt:  primary?'min':'max', 
+                scale:      defaultScale,
+                title: titleCfg(primary, x),
+                ticks: {                    
+                    major: {                
+                        marks:  markCfg(primary, true),  
+                        labels: labelCfg(primary, x)      
                     },
-                    title: <AxisTitleCfg>{          // axis title configuration
-                        visible: true,              //    title visibility
-                        text:    'x',               //    title text
-                        hAlign:  'end',             // label text-align: 'start' | 'middle' | 'end'
-                        vAlign:  'top',             // label  vertical align: 'top' | 'center' | 'bottom'
-                        hOffset: -2,                // horizontal label offset in 'em'
-                        vOffset: 0.4                // vertical label offset in 'em'
-                    },
-                    ticks: {                        // tick mark configuration
-                        major: {                    // major ticks:
-                            marks: {                // tick marks:
-                                visible: true,      //    tick visibility
-                                length: 10          //    tick length in viewBox coordinates
-                            },  
-                            labels: {               // tick labels:
-                                hAlign: 'middle',   //    label text-align: 'start' | 'middle' | 'end'
-                                vAlign: 'top',      //    label vertical align: 'top' | 'center' | 'bottom'
-                                hOffset: 0,         //    horizontal label offset in 'em'
-                                vOffset: 0.7        //    vertical label offset in 'em'
-                            }      
-                        },
-                        minor: { marks: { visible: true,  length: 5, },
-                                 labels:{ hAlign: 'middle', vAlign: 'top', hOffset: 0, vOffset: 0.7 }      
-                        }
-                    } // length of tick marks
-                },
-                y: {visible: true, 
-                    crossesAt:'min',
-                    scale: {       
-                        type: 'linear', 
-                        domain:['auto', 'auto']  
-                    },
-                    title: {text:'y', visible:true,
-                            hAlign:  'middle', hOffset: 0,
-                            vAlign:  'bottom', vOffset: -0.5
-                    },
-                    ticks: { 
-                        major: { marks: { visible:true, length:10 },
-                                 labels:{ hAlign: 'end', vAlign: 'center', hOffset: -0.7, vOffset: 0 }
-                        }, 
-                        minor: { marks: { visible:true, length:5 },
-                                 labels:{ hAlign: 'end', vAlign: 'center', hOffset: -0.7, vOffset: 0 }
-                        } 
+                    minor: { 
+                        marks:  markCfg(primary, false),
+                        labels: labelCfg(primary, x)     
                     }
-                }
+                } 
+            };
+        }
+        cfg.axes = {
+            primary: {
+                x: axisCfg(true, true),
+                y: axisCfg(true, false)
             },
             secondary: {
-                x: {visible: false, 
-                    crossesAt:'max',
-                    scale: {       
-                        type: 'linear', 
-                        domain:['auto', 'auto']  
-                    },
-                    title: {text:'x2', visible:true, 
-                            hAlign:  'end', hOffset: -2,
-                            vAlign:  'top', vOffset: -1.2
-                    },
-                    ticks: { 
-                        major: { marks: { visible:true, length:-10 },
-                                 labels:{ hAlign: 'middle', vAlign: 'bottom', hOffset: 0, vOffset: -0.7 }
-                        }, 
-                        minor: { marks: { visible:true, length:-5 },
-                                 labels:{ hAlign: 'middle', vAlign: 'bottom', hOffset: 0, vOffset: -0.7 }
-                        } 
-                    }
-                },
-                y: {visible: false, 
-                    crossesAt:'max',
-                    scale: {       
-                        type: 'linear', 
-                        domain:['auto', 'auto']  
-                    },
-                    title: {text:'y2', visible:true, 
-                            hAlign:  'start', hOffset: 0.3,
-                            vAlign:  'top', vOffset: 0.7
-                    },
-                    ticks: { 
-                        major: { marks: { visible:true, length:-10 },
-                                 labels:{ hAlign: 'start', vAlign: 'center', hOffset: 0.7, vOffset: 0 }
-                        }, 
-                        minor: { marks: { visible:true, length:-5 },
-                                 labels:{ hAlign: 'start', vAlign: 'center', hOffset: 0.7, vOffset: 0 }
-                        } 
-                    }
-                }
+                x: axisCfg(false, true),
+                y: axisCfg(false, false)
             }
         };
     }
@@ -301,24 +257,18 @@ export class Axes extends SVGElem {
      * draws the axis line
      */
     drawAxisLine(x:boolean, range:Area, cross:number) {
-        return this.line(
-            { x: x?range[0]:cross, y: x?cross:range[0]}, 
-            { x: x?range[1]:cross, y: x?cross:range[1]}, 
-            { cssClass: 'hs-graph-axis-line' } 
-        );
+        return x? this.horLine(range[0], range[1], cross, 'hs-graph-axis-line') :
+                  this.verLine(cross, range[0], range[1], 'hs-graph-axis-line');
     }
 
     /**
      * draws the axis title
      */
-    drawTitle(x:boolean, ttlCfg:AxisTitleCfg, type: string, range:Area, cross:number) {
-        const cfg:TextCfg = { cssClass: 'hs-graph-axis-title' };
-        cfg.hAlign = ttlCfg.hAlign;
-        cfg.vAlign = ttlCfg.vAlign;
-        cfg.hOffset= ttlCfg.hOffset;
-        cfg.vOffset= ttlCfg.vOffset;
-        const xy = { x: x?range[1]:cross, y: x?cross:range[1] };
-        return !ttlCfg.visible? undefined : this.text(xy, ttlCfg.text, cfg);
+    drawTitle(x:boolean, ttlCfg:TitleCfg, type: string, range:Area, cross:number) {
+        ttlCfg.cssClass = 'hs-graph-axis-title';
+        const xy = { transform:`translate(${x?range[1]:cross}, ${x?cross:range[1]})` };
+        return !ttlCfg.visible? undefined : 
+            m('g', xy, this.text(ttlCfg, ttlCfg.text));
     }
 
     /**
@@ -328,36 +278,23 @@ export class Axes extends SVGElem {
         const x = dir==='x';
         return m('svg', { class:`hs-graph-axis-${type}-tick-marks`}, 
             !cfg.marks.visible? '' : ticks.map((t:number) => { 
-                const v:number = scale.convert(t);
-                return this.line({
-                    x: x? v : crossesAt, 
-                    y: x? crossesAt : v
-                }, {
-                    x: x? v : crossesAt-cfg.marks.length, 
-                    y: x? crossesAt+cfg.marks.length : v
-                });
-            }
-        ));
+                return x? this.verLine(scale.convert(t), crossesAt, crossesAt+cfg.marks.length) :
+                          this.horLine(crossesAt, crossesAt-cfg.marks.length, scale.convert(t));
+            })
+        );
     }
 
     /**
      * draws the tick labels. Labels are plotted for major tick marks only.
      */
-    drawTickLabels(x:boolean, crossesAt:number, scale:Scale, ticks:number[], tickCfg:TickStruct) {
-        return m('svg', {class:'hs-graph-axis-tick-label'}, ticks.map((t:number) => { 
-            const v = scale.convert(t);
-            const xy:Point = {
-                x: x?v:crossesAt, 
-                y: x?crossesAt:v
-            };
-            const cfg:TextCfg = {
-                hAlign:  tickCfg.labels.hAlign,
-                vAlign:  tickCfg.labels.vAlign, 
-                hOffset: tickCfg.labels.hOffset,
-                vOffset: tickCfg.labels.vOffset
-            };
-            return this.text(xy, round(t), cfg);
-        }));
+    drawTickLabels(x:boolean, crossesAt:number, scale:Scale, ticks:number[], cfg:TickStruct) {
+        return m('svg', {class:'hs-graph-axis-tick-label'}, 
+            !cfg.labels.visible? '' : ticks.map((t:number) => { 
+                const v = scale.convert(t);
+                const xy = { transform:`translate(${x?v:crossesAt}, ${x?crossesAt:v})` };
+                return m('g', xy, this.text(cfg.labels, round(t)));
+            })
+        );
     }
 
     /**
@@ -368,11 +305,11 @@ export class Axes extends SVGElem {
      * - scales:
      * - cfg: 
      */
-    drawAxis(dir:string, scales: XYScale, type:string, axisCfg:AxisSet) {
+    drawAxis(dir:string, scales: XYScale, type:string, axisCfg:AxesSet) {
         const x = dir==='x';
         const range = scales[dir].range();
         const cfg   = axisCfg[type][dir];
-        scales[dir].scale = cfg.scale;
+        scales[dir].scaleType(cfg.scale);
         const crossesAt:number = getCrossAt(cfg.crossesAt, scales[x?'y':'x']);
         return !cfg.visible? undefined : m('svg', { class:`hs-graph-axis-${dir} hs-graph-axis-${type}`}, [
             this.drawAxisLine(x, range, crossesAt),
@@ -383,29 +320,17 @@ export class Axes extends SVGElem {
         ]);
     }
 
-    /**
-     * check on update of axes bounding box and notify Graph.boxNotify
-     */
-    onupdate() {
-        const elems = document.getElementsByClassName('hs-graph-axis');
-        const box = Array.prototype.map.call(elems, (e:any)=>e.getBBox());
-        if(box && box[0]) { 
-            box[0].comp='Axes';
-            Axes.boxNotify(box[0]); 
-        }
-        
+    setScaleTypes(cfg: AxesSet, scales: Scales) {
+        scales.primary.x.scaleType(cfg.primary.x.scale.type);
+        scales.primary.y.scaleType(cfg.primary.y.scale.type);
+        scales.secondary.x.scaleType(cfg.secondary.x.scale.type);
+        scales.secondary.y.scaleType(cfg.secondary.y.scale.type);
     }
 
-    /** 
-     * a function to notify Graph of the current box size, 
-     * set by {@link Graph.Graph `Graph`} in call to `view()` and called in `onupdate()`
-     */
-    static boxNotify:(box:any)=>void;
-
     view(node?: Vnode): Vnode {
-        const cfg       = node.attrs.cfg;
-        const scales    = node.attrs.scales;
-        Axes.boxNotify  = node.attrs.sizeFn;
+        const cfg:AxesSet    = node.attrs.cfg;
+        const scales = node.attrs.scales;
+//        this.setScaleTypes(cfg, scales);
         return m('svg', {class:'hs-graph-axis'}, [
             this.drawAxis('x', scales.primary, 'primary', cfg),
             this.drawAxis('y', scales.primary, 'primary', cfg),

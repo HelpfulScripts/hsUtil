@@ -2,40 +2,55 @@
  * # Series
  * renders the one or more series in a variety of styles.
  * ### Configurations and Defaults
+ * #### cfg.series: {@link Series.SeriesSet SeriesSet}:  =
  * ```
- * data: null,
- * clip: true,
- * series: <[{xName:string, yName:string}]>[],
- * styles: [
- *     { line:   { color: '#f00', width: 5, visible: true },
- *       marker: { color: '#f00', size: 10, shape: Series.marker.circle, visible: true }},
- *     { line:   { color: '#0f0', width: 5, visible: true },
- *       marker: { color: '#0f0', size: 10, shape: Series.marker.circle, visible: true }},
- *     { line:   { color: '#00f', width: 5, visible: true },
- *       marker: { color: '#00f', size: 10, shape: Series.marker.circle, visible: true }},
- *     { line:   { color: '#ff0', width: 5, visible: true },
- *       marker: { color: '#ff0', size: 10, shape: Series.marker.circle, visible: true }},
- *     { line:   { color: '#0ff', width: 5, visible: true },
- *       marker: { color: '#0ff', size: 10, shape: Series.marker.circle, visible: true }},
- *     { line:   { color: '#f0f', width: 5, visible: true },
- *       marker: { color: '#f0f', size: 10, shape: Series.marker.circle, visible: true }},
- *     { line:   { color: '#000', width: 5, visible: true },
- *       marker: { color: '#000', size: 10, shape: Series.marker.circle, visible: true }},
- *     { line:   { color: '#444', width: 5, visible: true },
- *       marker: { color: '#444', size: 10, shape: Series.marker.circle, visible: true }},
- *     { line:   { color: '#888', width: 5, visible: true },
- *       marker: { color: '#888', size: 10, shape: Series.marker.circle, visible: true }},
- *     { line:   { color: '#ccc', width: 5, visible: true },
- *       marker: { color: '#ccc', size: 10, shape: Series.marker.circle, visible: true }}
- * ]
+ * {
+ *    data:<[][]>null,  // row array of columns, initialized to null; first row contains column names
+ *    clip: true,       // series an markers are clipped to the plot area
+ *    series: <[{       // array of series descriptors:
+ *       xName:string,  //    name of x-column in `data`
+ *       yName:string   //    name of y-column in `data`
+ *    }]>[],            // initialized to empty array (no series)
+ *    styles: [         // arra of predefined styles. styles[i] will be assigned to series[i].
+ *       { line:   { 
+ *            color: '#f00', // the line color to use
+ *            width: 5,      // the line width in viewbox units
+ *            visible: true  // whether line is draw or not
+ *       },
+ *         marker: { 
+ *            color: '#f00', // the marker color to use
+ *            size: 10,      // the marker size in viewbox coordinates
+ *            shape: Series.marker.circle, // the marker shaper, See {@link Series.Series.marker Series.marker}
+ *            visible: true 
+ *       }},
+ *       { line:   { color: '#0f0', width: 5, visible: true },
+ *         marker: { color: '#0f0', size: 10, shape: Series.marker.circle, visible: true }},
+ *       { line:   { color: '#00f', width: 5, visible: true },
+ *         marker: { color: '#00f', size: 10, shape: Series.marker.circle, visible: true }},
+ *       { line:   { color: '#ff0', width: 5, visible: true },
+ *         marker: { color: '#ff0', size: 10, shape: Series.marker.circle, visible: true }},
+ *       { line:   { color: '#0ff', width: 5, visible: true },
+ *         marker: { color: '#0ff', size: 10, shape: Series.marker.circle, visible: true }},
+ *       { line:   { color: '#f0f', width: 5, visible: true },
+ *         marker: { color: '#f0f', size: 10, shape: Series.marker.circle, visible: true }},
+ *       { line:   { color: '#000', width: 5, visible: true },
+ *         marker: { color: '#000', size: 10, shape: Series.marker.circle, visible: true }},
+ *       { line:   { color: '#444', width: 5, visible: true },
+ *         marker: { color: '#444', size: 10, shape: Series.marker.circle, visible: true }},
+ *       { line:   { color: '#888', width: 5, visible: true },
+ *         marker: { color: '#888', size: 10, shape: Series.marker.circle, visible: true }},
+ *       { line:   { color: '#ccc', width: 5, visible: true },
+ *         marker: { color: '#ccc', size: 10, shape: Series.marker.circle, visible: true }}
+ *    ]
+ * }
  * ```
  */
 
 /** */
-import { m, Vnode}  from 'hslayout';
-import { Config }   from './Graph';
-import { SVGElem }  from './SVGElem';
-import { XYScale }  from './Scale';
+import { m, Vnode}          from 'hslayout';
+import { Config }           from './Graph';
+import { SVGElem }          from './SVGElem';
+import { XYScale, Scales }  from './Scale';
 
 export interface SeriesStyle {
     line: {
@@ -62,12 +77,20 @@ export interface SeriesSet {
 }
 
 export class Series extends SVGElem { 
+    /**
+     * Defines available styles for series marker:
+     * - circle
+     * - square
+     * - diamond
+     * - upTriangle
+     * - downTriangle
+     */
     static marker = {
         circle:         Symbol('circle marker'),
         square:         Symbol('square marker'),
         diamond:        Symbol('diamond marker'),
-        uptriangle:     Symbol('upward triangle marker'),
-        downtriangle:   Symbol('downward triangle marker')
+        upTriangle:     Symbol('upward triangle marker'),
+        downTriangle:   Symbol('downward triangle marker')
     };
 
     /** Defines default values for all configurable parameters */
@@ -101,7 +124,7 @@ export class Series extends SVGElem {
         };
     }
 
-    static adjustDomains(cfg:SeriesSet, scales:{primary:XYScale, secondary:XYScale}) {
+    static adjustDomains(cfg:SeriesSet, scales:Scales) {
         const data   = cfg.data;
         let xmin=1e20, xmax=-1e20,
             ymin=1e20, ymax=-1e20;
@@ -149,8 +172,16 @@ export class Series extends SVGElem {
                     const cy = scales.y.convert(p[y]);
                     const r  = sStyle.marker.size;
                     switch (sStyle.marker.shape) {
-                        case mrk.circle: return this.circle({x:cx, y:cy}, r, style);
-                        case mrk.square: return this.rect({x:cx-r, y:cy-r}, {w:2*r, h:2*r}, style);
+                        case mrk.circle: 
+                            return this.circle({x:cx, y:cy}, r, style);
+                        case mrk.square: 
+                            return this.rect({x:cx-r, y:cy-r}, {w:2*r, h:2*r}, style);
+                        case mrk.diamond: 
+                            return this.polygon([[cx-r, cy], [cx, cy+r], [cx+r, cy], [cx, cy-r]], undefined, style);
+                        case mrk.upTriangle: 
+                            return this.polygon([[cx-r, cy+r], [cx+r, cy+r], [cx, cy-r]], undefined, style);
+                        case mrk.downTriangle: 
+                            return this.polygon([[cx-r, cy-r], [cx+r, cy-r], [cx, cy+r]], undefined, style);
                     }
                     return m(`.unkown-marker-${sStyle.marker.shape}`,'');
                 })

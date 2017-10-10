@@ -52,14 +52,23 @@ The `cfgFn` receives a configuration object that is fully initialized with defau
 and should overwrite parameters as needed. See the overview for each component for configurable 
 parameters.
 
+Available configurations include:
+- &nbsp; {@link Graph.Graph.config cfg.graph}
+- &nbsp; {@link Canvas.Canvas.config cfg.canvas}
+- &nbsp; {@link Chart.Chart.config cfg.chart}
+- &nbsp; {@link Axes.Axes.config cfg.axes}
+- &nbsp; {@link Grid.Grid.config cfg.grid}
+- &nbsp; {@link Series.Series.config cfg.series}
+- &nbsp; {@link Legend.Legend.config cfg.legend}
+
 ## Graph Components
 The rendered graph is organized in a layered structure of components:
-- {@link Canvas Canvas}:  the background canvas on which all components are rendered
-- {@link Chart Chart}: the chart area and title
-- {@link Axes Axes}: the x- and y-axes, tick marks and labels, and axis title
-- {@link Grid Grid}: the major and minor gridlines
-- {@link Series Series}: the one or more data series to render
-- {@link Legend Legend}: the legend for the shown series
+- &nbsp; {@link Canvas Canvas}:  the background canvas on which all components are rendered
+- &nbsp; {@link Chart Chart}: the chart area and title
+- &nbsp; {@link Axes Axes}: the x- and y-axes, tick marks and labels, and axis title
+- &nbsp; {@link Grid Grid}: the major and minor gridlines
+- &nbsp; {@link Series Series}: the one or more data series to render
+- &nbsp; {@link Legend Legend}: the legend for the shown series
 */
 
 /** */

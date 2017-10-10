@@ -20,19 +20,27 @@ import { Config }           from './Graph';
 import { SVGElem, Range }   from './SVGElem';
 import { Scale }            from './Scale';
 
+/** defines configurable parameters for a grid */
+export interface GridCfg {
+    /** defines if the grid is visible */
+    visible:boolean;
+}
+
+/** defines configurable parameters for horizontal and vertical grids */
+export interface  GridsCfg {
+    hor: GridCfg;
+    ver: GridCfg;
+}
 
 /**
- * Defines configurable settings and CSS style classes.
+ * Defines configurable settings for the Grid collection.
  */
 export interface GridSet {
-    major: {
-        hor: { visible:boolean; };
-        ver: { visible:boolean; };
-    };
-    minor: {
-        hor: { visible:boolean; };
-        ver: { visible:boolean; };
-    };
+    /** major grid lines */
+    major: GridsCfg;
+
+    /** minor grid lines */
+    minor: GridsCfg;
 }
 
 export class Grid extends SVGElem{ 
@@ -55,7 +63,7 @@ export class Grid extends SVGElem{
      */
     private drawVerGrid(cfg:{visible:boolean}, scale:Scale, range:Range, ticks:number[]) {
         return m('svg', { class:'hs-graph-grid-hor' }, ticks.map((t:number) =>
-            this.line({x:range[0], y:scale.convert(t)}, {x:range[1], y:scale.convert(t)})
+            this.horLine(range[0], range[1], scale.convert(t))
         ));
     }
 
@@ -64,7 +72,7 @@ export class Grid extends SVGElem{
      */
     private drawHorGrid(cfg:{visible:boolean}, scale:Scale, range:Range, ticks:number[]) {
         return m('svg', { class:'hs-graph-grid-ver' }, ticks.map((t:number) =>
-            this.line({x:scale.convert(t), y:range[0]}, {x:scale.convert(t), y:range[1]})
+            this.verLine(scale.convert(t), range[0], range[1])
         ));
     }
 
