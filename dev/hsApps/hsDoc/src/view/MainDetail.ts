@@ -2,7 +2,9 @@ import { m, Vnode}      from 'hslayout';
 import { Container }    from 'hslayout';
 import { DocSets }      from '../DocSets'; 
 import { comment, commentLong }  from './MainComment';
-import { flags, sourceLink, signature, type, extensionOf, kindString, itemLongName, makeID } 
+import { flags, sourceLink, signature, type, 
+         extensionOf, inheritedFrom,
+         kindString, itemLongName, makeID } 
                         from './Parts'; 
 
 
@@ -89,6 +91,9 @@ function parameter(g:any[], lib:string): Vnode {
 }
 
 function member(group:any, lib:string): Vnode {
+    const resolve           = ((c:number) => DocSets.get(lib, c));
+    const directChildren    = ((mdl:any) => !mdl['inheritedFrom']);
+    const inheritedChildren = ((mdl:any) =>  mdl['inheritedFrom']);
     const groupMap = {
         'External modules': '.hs-item-external-module',
         'Constructors':     '.hs-item-constructor',
@@ -102,14 +107,16 @@ function member(group:any, lib:string): Vnode {
         'Type aliases':     '.hs-item-alias',          
     };
     const fn = groupMap[group.title] || '.hs-item-unknown-member';
-    let content = group.children.map((c:number) => {
-            let mdl = DocSets.get(lib, c);
-            return m(fn, {id:makeID(group.title, mdl)}, itemChild(mdl));
-        }
-    );
+    const content = group.children.map(resolve).filter(directChildren)
+        .map((mdl:any) => m(fn, {id:makeID(group.title, mdl)}, itemChild(mdl)));
+    const inherited = group.children.map(resolve).filter(inheritedChildren)
+        .map((mdl:any) => m(`.hs-item-inherited ${fn}`, {id:makeID(group.title, mdl)}, itemChild(mdl)));
 
+    if (inherited.length>0) {
+        inherited.unshift(m('.hs-item-inherited .hs-item-member-title', m('span', `Inherited ${group.title}`)));
+    }
     content.unshift(m('.hs-item-member-title', {id:group.title.toLowerCase()}, m('span', group.title)));
-    return m('.hs-item-member', content);
+    return m('.hs-item-member', content.concat(inherited));
 }
 
 function itemDescriptor(mdl:any, sig:any):Vnode {
@@ -119,8 +126,9 @@ function itemDescriptor(mdl:any, sig:any):Vnode {
             kindString(mdl),
             itemLongName(mdl, mdl),
             signature(sig, mdl.lib),
-            type(sig.type,  mdl.lib),
+            type(sig,  mdl.lib),
             extensionOf(mdl),
+            inheritedFrom(mdl),
             sourceLink(mdl)
         ]);
     }

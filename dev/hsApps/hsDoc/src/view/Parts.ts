@@ -37,7 +37,7 @@ export function itemName(mdl:any, sub:any) {
 }
 
 export function itemLongName(mdl:any, sub:any) {
-    return m('span.hs-item-name', libLink('a', mdl.lib, mdl.fullPath, sub.name));
+    return m('span.hs-item-name', !mdl.fullPath? sub.name : libLink('a', mdl.lib, mdl.fullPath, sub.name));
 }
 
 
@@ -55,6 +55,19 @@ export function extensionOf(mdl:any) {
             ])
         )),
     ]);
+}
+
+export function inheritedFrom(mdl:any) {
+    if (mdl.inheritedFrom) {
+        let parent = DocSets.get(mdl.lib, mdl.inheritedFrom.id);
+        parent = DocSets.get(mdl.lib, parent.fullPath.substring(0, parent.fullPath.lastIndexOf('.')));
+        return m('span.hs-item-inherited-from', [
+            m('span', 'inherited from '),
+            libLink('a', parent.lib, parent.fullPath, parent.name)
+        ]);
+    } else {
+        return m('span.hs-item-inherited-from', undefined);
+    }
 }
 
 export function sourceLink(mdl:any) {
@@ -86,34 +99,11 @@ export function libLink(css:string, lib:string, id:string, name:string) {
     return m(css, { href:`/api/${lib}/${id}`, oncreate: m.route.link, onupdate: m.route.link }, name);
 };
 
-export function type(t:any, lib:string) {
-    function _type(t:any) {
-        switch (t.type) { 
-            case 'instrinct':       return t.id? libLink('span', lib, t.fullPath, t.name) : t.name; 
-            case 'stringLiteral':   return t.type; 
-            case 'union':           return t.types.map(_type).join(' | ');
-            case 'reference':       return t.typeArguments? t.name+'<'+ t.typeArguments.map(_type).join(', ') + '>' : 
-                                           t.id? libLink('span', lib, t.fullPath, t.name) : t.name;
-            case 'reflection':      return t.declaration? t.declaration.kindString : 'UNKNOWN';
-            default: console.log('unknown type '+ t.type);
-                     console.log(t);
-                     return t.type;
-        }
-    }
-
-    try {
-       return m('span', t?[
-           m('span.hs-item-name',':'), 
-           m('span.hs-item-sig-type', _type(t))
-        ] : undefined);
-    } catch(e) { console.log(e); console.log(e.trace); }
-}
-
 /**
  * creates a function or method signature
  */
 export function signature(s:any, lib:string): Vnode {
-    function comma(i:number)      { return (i>0)? ', ': ''; }
+    const comma = (i:number) => (i>0)? ', ': '';
     function optional(flags: any) {
         return (flags && flags.isOptional)? '.hs-item-optional' : '';
     }
@@ -124,13 +114,47 @@ export function signature(s:any, lib:string): Vnode {
             comma(i),
             m('span.hs-item-sig-param', [
                 m(`span.hs-item-name${optional(p.flags)}`, p.name),
-                type(p.type, lib)
+                type(p, lib)
             ])
         ]));
         sig.unshift(m('span.hs-item-name', '('));
         sig.push(m('span.hs-item-name', ')'));
     }
     return m('span.hs-item-signature', sig);
+}
+
+/**
+ * adds a default value, if defined
+ */
+export function defaultVal(s:any, lib:string): Vnode {
+    return !(s && s.defaultValue)? undefined : 
+        m('span.hs-item-default', `=${s.defaultValue}`);
+}
+
+export function type(t:any, lib:string) {
+    function _type(tt:any) {
+        switch (tt.type) {
+            case undefined:         return '';
+            case 'instrinct':       return tt.id? libLink('span', lib, tt.fullPath, tt.name) : tt.name; 
+            case 'stringLiteral':   return tt.type; 
+            case 'union':           return tt.types.map(_type).join(' | ');
+            case 'reference':       const typeRef = DocSets.get(lib, tt.id);
+                                    return typeRef.typeArguments? typeRef.name+'<'+ typeRef.typeArguments.map(_type).join(', ') + '>' : 
+                                           typeRef.id? libLink('a', lib, typeRef.fullPath, typeRef.name) : typeRef.name;
+            case 'reflection':      return tt.declaration? tt.declaration.kindString : 'UNKNOWN';
+            default: console.log('unknown type '+ tt.type);
+                     console.log(t);
+                     return t.type;
+        }
+    }
+
+    try {
+       return m('span', !t.type? '': [
+           m('span.hs-item-name',':'), 
+           m('span.hs-item-sig-type', _type(t.type)),
+           defaultVal(t, lib)
+        ]);
+    } catch(e) { console.log(e); console.log(e.trace); }
 }
 
 export function makeID(section:string, mdl:any) {
