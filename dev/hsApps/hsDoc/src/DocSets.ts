@@ -121,6 +121,12 @@ function recursiveIndex(content:any, index:any, lib:string, path='') {
         if (content.children) {
             content.children.map((c:any) => recursiveIndex(c, index, lib, newPath));
         }
+        if (content.signatures) {
+            content.signatures.map((c:any) => recursiveIndex(c, index, lib, newPath));
+        }
+        if (content.parameters) {
+            content.parameters.map((c:any) => recursiveIndex(c, index, lib, newPath));
+        }
     }
 }
 /**
