@@ -104,25 +104,34 @@
     }
 }
 
+@ItemBorderRadius: 4px;
+
 .hs-item-default {
     font-size: 90%;
     background-color: #beb;
-//    color: #0a0;
     padding: 2px;
-    border-radius: 3px;
+    border-radius: @ItemBorderRadius;
     font-style: italic;
     font-weight: bold;
 }
 
 .hs-item-sig-type {
-    border-radius: 3px;
+    border-radius: @ItemBorderRadius;
     background-color: #ddb;
-    padding:  2px;
-    margin-left: 4px;
+    padding:  2px 4px;
+    margin-left: 2px;
+    margin-right: 2px;
     font-size: 0.9em;
     :link {
         text-decoration: none;
     }
+    .hs-item-reflection {
+    }
+}
+
+.hs-item-type-instrinct {
+    font-style: italic;
+    color: #800;
 }
 
 .hs-item-optional {
