@@ -17,7 +17,7 @@ export interface DomainCfg {
 }
 
 export interface ScaleCfg {
-    /** scale type: 'linear'|'log'|'date'|'index'|'percent'|'ordinal'|'nominal' */
+    /** scale type: {@link Scale.Scale.type Scale.type}.linear | log | date | index | percent | ordinal | nominal */
     type: symbol;
 
     /** scale domain: 'auto' or numeric domain value */

@@ -1,49 +1,10 @@
 /**
  * # Series
  * renders the one or more series in a variety of styles.
+ * 
  * ### Configurations and Defaults
- * #### cfg.series: {@link Series.SeriesSet SeriesSet}:  =
- * ```
- * {
- *    data:<[][]>null,  // row array of columns, initialized to null; first row contains column names
- *    clip: true,       // series an markers are clipped to the plot area
- *    series: <[{       // array of series descriptors:
- *       xName:string,  //    name of x-column in `data`
- *       yName:string   //    name of y-column in `data`
- *    }]>[],            // initialized to empty array (no series)
- *    styles: [         // arra of predefined styles. styles[i] will be assigned to series[i].
- *       { line:   { 
- *            color: '#f00', // the line color to use
- *            width: 5,      // the line width in viewbox units
- *            visible: true  // whether line is draw or not
- *       },
- *         marker: { 
- *            color: '#f00', // the marker color to use
- *            size: 10,      // the marker size in viewbox coordinates
- *            shape: Series.marker.circle, // the marker shaper, See {@link Series.Series.marker Series.marker}
- *            visible: true 
- *       }},
- *       { line:   { color: '#0f0', width: 5, visible: true },
- *         marker: { color: '#0f0', size: 10, shape: Series.marker.circle, visible: true }},
- *       { line:   { color: '#00f', width: 5, visible: true },
- *         marker: { color: '#00f', size: 10, shape: Series.marker.circle, visible: true }},
- *       { line:   { color: '#ff0', width: 5, visible: true },
- *         marker: { color: '#ff0', size: 10, shape: Series.marker.circle, visible: true }},
- *       { line:   { color: '#0ff', width: 5, visible: true },
- *         marker: { color: '#0ff', size: 10, shape: Series.marker.circle, visible: true }},
- *       { line:   { color: '#f0f', width: 5, visible: true },
- *         marker: { color: '#f0f', size: 10, shape: Series.marker.circle, visible: true }},
- *       { line:   { color: '#000', width: 5, visible: true },
- *         marker: { color: '#000', size: 10, shape: Series.marker.circle, visible: true }},
- *       { line:   { color: '#444', width: 5, visible: true },
- *         marker: { color: '#444', size: 10, shape: Series.marker.circle, visible: true }},
- *       { line:   { color: '#888', width: 5, visible: true },
- *         marker: { color: '#888', size: 10, shape: Series.marker.circle, visible: true }},
- *       { line:   { color: '#ccc', width: 5, visible: true },
- *         marker: { color: '#ccc', size: 10, shape: Series.marker.circle, visible: true }}
- *    ]
- * }
- * ```
+ * See {@link Series.Series.config Series.config}
+ * 
  */
 
 /** */
@@ -66,6 +27,7 @@ export interface SeriesStyle {
     };
 }
 
+/** Defines configurable settings. */
 export interface SeriesSet {
     data: Array<number|string>[];   // array of rows; 1st row contains column headers
     clip: boolean;                  // clip series to the chart area
@@ -93,9 +55,58 @@ export class Series extends SVGElem {
         downTriangle:   Symbol('downward triangle marker')
     };
 
-    /** Defines default values for all configurable parameters */
-    static config(config:Config) {
-        config.series = <SeriesSet>{
+    /** 
+     * Defines default values for all configurable parameters in `Series`
+     * See {@link Graph.Graph.makeConfig Graph.makeConfig} for the sequence of initializations.
+     * 
+     * ### Configurations and Defaults
+     * ```
+     *  cfg.series = {@link Series.SeriesSet <SeriesSet>}{
+     *    data:<[][]>null,  // row array of columns, initialized to null; first row contains column names
+     *    clip: true,       // series an markers are clipped to the plot area
+     *    series: <[{       // array of series descriptors:
+     *       xName:string,  //    name of x-column in `data`
+     *       yName:string   //    name of y-column in `data`
+     *    }]>[],            // initialized to empty array (no series)
+     *    styles: [         // arra of predefined styles. styles[i] will be assigned to series[i].
+     *       { line:   { 
+     *            color: '#f00', // the line color to use
+     *            width: 5,      // the line width in viewbox units
+     *            visible: true  // whether line is draw or not
+     *       },
+     *         marker: { 
+     *            color: '#f00', // the marker color to use
+     *            size: 10,      // the marker size in viewbox coordinates
+     *            shape: Series.marker.circle, // the marker shaper, See {@link Series.Series.marker Series.marker}
+     *            visible: true 
+     *       }},
+     *       { line:   { color: '#0f0', width: 5, visible: true },
+     *         marker: { color: '#0f0', size: 10, shape: Series.marker.circle, visible: true }},
+     *       { line:   { color: '#00f', width: 5, visible: true },
+     *         marker: { color: '#00f', size: 10, shape: Series.marker.circle, visible: true }},
+     *       { line:   { color: '#ff0', width: 5, visible: true },
+     *         marker: { color: '#ff0', size: 10, shape: Series.marker.circle, visible: true }},
+     *       { line:   { color: '#0ff', width: 5, visible: true },
+     *         marker: { color: '#0ff', size: 10, shape: Series.marker.circle, visible: true }},
+     *       { line:   { color: '#f0f', width: 5, visible: true },
+     *         marker: { color: '#f0f', size: 10, shape: Series.marker.circle, visible: true }},
+     *       { line:   { color: '#000', width: 5, visible: true },
+     *         marker: { color: '#000', size: 10, shape: Series.marker.circle, visible: true }},
+     *       { line:   { color: '#444', width: 5, visible: true },
+     *         marker: { color: '#444', size: 10, shape: Series.marker.circle, visible: true }},
+     *       { line:   { color: '#888', width: 5, visible: true },
+     *         marker: { color: '#888', size: 10, shape: Series.marker.circle, visible: true }},
+     *       { line:   { color: '#ccc', width: 5, visible: true },
+     *         marker: { color: '#ccc', size: 10, shape: Series.marker.circle, visible: true }}
+     *    ]
+     *  } 
+     * ``` 
+     * @param cfg the configuration object, containing default settings for all 
+     * previously configured components. See {@link Graph.Graph.makeConfig Graph.makeConfig} for 
+     * the sequence of initializations.
+     */
+    static config(cfg:Config) {
+        cfg.series = <SeriesSet>{
             data: null,
             clip: true,
             series: <[{xName:string, yName:string}]>[],

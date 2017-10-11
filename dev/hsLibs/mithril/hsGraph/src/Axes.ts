@@ -1,6 +1,9 @@
 /**
  * # Axes
  * renders the x- and y-axis with title, tick marks and labels.
+ * ### Configurations and Defaults
+ * See {@link Axes.Axes.config Axes.config}
+ * 
  * ### Example
  * <example>
  * <file name='script.js'>
@@ -76,9 +79,7 @@ export interface TicksCfg {
     minor:  TickStruct;
 }
 
-/**
- * Defines configurable settings and CSS style classes for all primary and secondary axes.
- */
+/** Defines configurable settings. */
 export interface AxesSet {
     primary:   { x: AxisCfg; y: AxisCfg; };
     secondary: { x: AxisCfg; y: AxisCfg; };
@@ -120,7 +121,8 @@ export interface AxisCfg {
 export class Axes extends SVGElem {
    /** 
     * Defines default values for display elements in `Axes`
-    * sets the default configuration for the primary and secondary axes
+    * sets the default configuration for the primary and secondary axes.
+    * See {@link Graph.Graph.makeConfig Graph.makeConfig} for the sequence of initializations. 
     * 
     * ### Configurations and Defaults
     * #### defaultScale: {@link Scale.ScaleCfg Scale.ScaleCfg} =
@@ -130,7 +132,7 @@ export class Axes extends SVGElem {
     *      domain:['auto', 'auto']    // {@link Scale.DomainCfg Scale.DomainCfg}: min/max of domain; 'auto', or a domain value
     *  }
     * ```
-    * #### cfg.[primary|secondary>].[x|y].title: {@link SVGElem.TitleCfg titleCfg} =
+    * #### cfg.[primary|secondary].[x|y].title: {@link SVGElem.TitleCfg titleCfg} =
     * ```
     *  {
     *     visible: true,  

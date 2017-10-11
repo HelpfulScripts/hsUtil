@@ -1,17 +1,10 @@
 /**
  * # Grid
  * renders the major and minor gridlines in each direction.
+ * 
  * ### Configurations and Defaults
- * ```
- * major: {
- *     hor: { visible:true },
- *     ver: { visible:true }
- * },
- * minor: {
- *     hor: { visible:false },
- *     ver: { visible:false }
- * }
- * ```
+ * See {@link Axes.Axes.config Axes.config}
+ * 
  */
 
 /** */
@@ -32,9 +25,7 @@ export interface  GridsCfg {
     ver: GridCfg;
 }
 
-/**
- * Defines configurable settings for the Grid collection.
- */
+/** Defines configurable settings. */
 export interface GridSet {
     /** major grid lines */
     major: GridsCfg;
@@ -44,7 +35,25 @@ export interface GridSet {
 }
 
 export class Grid extends SVGElem{ 
-    /** Defines default values for all configurable parameters */
+    /** 
+     * Defines default values for all configurable parameters in `Graph`
+     * See {@link Graph.Graph.makeConfig Graph.makeConfig} for the sequence of initializations.
+     * 
+     * ### Configurations and Defaults
+     * ```
+     *  cfg.canvas = {@link Canvas.CanvasSet <CanvasSet>}{
+     *     range: {         // the graphs background rect:
+     *        w: 100,       //    width
+     *        h: 100,       //    height
+     *        wunit:'%',    //    unit for width
+     *        hunit:'%'     //    unit for height
+     *     }   
+     *  } 
+     * ``` 
+     * @param cfg the configuration object, containing default settings for all 
+     * previously configured components. See {@link Graph.Graph.makeConfig Graph.makeConfig} for 
+     * the sequence of initializations.
+     */
     static config(cfg:Config) {
         cfg.grid = <GridSet>{
             major: {

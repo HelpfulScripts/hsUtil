@@ -3,7 +3,7 @@
  * renders the graph's background.
  * 
  * ### Configurations and Defaults
- * See {@link Graph.Graph.config Graph.config}
+ * See {@link Canvas.Canvas.config Canvas.config}
  */
 
 /** */
@@ -12,16 +12,16 @@ import { SVGElem, Area }from './SVGElem';
 import { Config }       from './Graph';
 
 
-/**
- * Defines configurable settings and CSS style classes.
- */
+/** Defines configurable settings. */
 export interface CanvasSet {
     range?:  Area;              // graph width and height
 }
 
 export class Canvas extends SVGElem {
     /** 
-     * Defines default values for all configurable parameters in `Graph`
+     * Defines default values for all configurable parameters in `Graph`.
+     * See {@link Graph.Graph.makeConfig Graph.makeConfig} for the sequence of initializations.
+     * 
      * ### Configurations and Defaults
      * ```
      *  cfg.canvas = {@link Canvas.CanvasSet <CanvasSet>}{
@@ -34,8 +34,7 @@ export class Canvas extends SVGElem {
      *  } 
      * ``` 
      * @param cfg the configuration object, containing default settings for all 
-     * previously configured components. See {@link Graph.Graph.makeConfig Graph.makeConfig} for 
-     * the sequence of initializations.
+     * previously configured components. 
      */
     static config(cfg:Config) {
         cfg.canvas = <CanvasSet>{

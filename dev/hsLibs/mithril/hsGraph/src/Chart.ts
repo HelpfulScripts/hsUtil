@@ -3,16 +3,6 @@
  * renders the chart background and title.
  * ### Configurations and Defaults
  * See {@link Chart.Chart.config Chart.config}
- * ```
- *  title:  {               // the chart title
- *      visible: true,      // Chart title is visible 
- *      text:'',            // the sting to display
- *      xpos:'middle',      // hor. title position: 'left'|'middle'|'right', rel. to Graph
- *      ypos:'top',         // ver. title position: 'top'|'center'|'bottom', rel. to Graph
- *      hOffset: number,    // horizontal label offset in 'em'
- *      vOffset: number     // vertical label offset in 'em'
- *  }
- * ```
  */
 
  /** */
@@ -20,9 +10,7 @@ import { m, Vnode}  from 'hslayout';
 import { Config }   from './Graph';
 import { SVGElem, TextCfg, Rect, TitleCfg }  from './SVGElem';
 
-/**
- * Defines configurable settings and CSS style classes.
- */
+/** Defines configurable settings. */
 export interface ChartSet {
     /** the title text and positioning  */
     title:  TitleCfg;
@@ -34,6 +22,8 @@ export interface ChartSet {
 export class Chart extends SVGElem { 
     /** 
      * Defines default values for display elements in `Chart`
+     * See {@link Graph.Graph.makeConfig Graph.makeConfig} for the sequence of initializations.
+     * 
      * ### Configurations and Defaults
      * ```
      *  cfg.chart = {@link Chart.ChartSet <ChartSet>}{

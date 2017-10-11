@@ -81,10 +81,7 @@ function members(mdl:any, sig:any): Vnode {
             ...mdl.groups.map((g:any) => member(g, mdl.lib, false))
         ]);
     } else if (mdl.parameters) {
-        return m('.hs-item-members', [
-            ...parameter(mdl.parameters, mdl.lib),
-            ...parameter(mdl.parameters, mdl.lib)
-        ]);
+        return m('.hs-item-members', parameter(mdl.parameters, mdl.lib));
     } else {
         return m('.hs-item-members');
     }
@@ -114,10 +111,14 @@ function member(group:any, lib:string, statc:boolean): Vnode {
     };
     const fn = groupMap[group.title] || '.hs-item-unknown-member';
 
-    const content = group.children.map(resolve).filter(directChildren)
+    const content = group.children
+        .map(resolve)
+        .filter(directChildren)
         .filter((mdl:any) => statc? mdl.flags.isStatic : !mdl.flags.isStatic)
         .map((mdl:any) => m(fn, {id:makeID(group.title, mdl)}, itemChild(mdl)));
-    const inherited = group.children.map(resolve).filter(inheritedChildren)
+    const inherited = group.children
+        .map(resolve)
+        .filter(inheritedChildren)
         .filter((mdl:any) => statc? mdl.flags.isStatic : !mdl.flags.isStatic)
         .map((mdl:any) => m(`.hs-item-inherited ${fn}`, {id:makeID(group.title, mdl)}, itemChild(mdl)));
 
