@@ -8,10 +8,11 @@
  */
 
 /** */
-import { m, Vnode}          from 'hslayout';
-import { Config }           from './Graph';
-import { SVGElem }          from './SVGElem';
-import { XYScale, Scales }  from './Scale';
+import { m, Vnode}                  from 'hslayout';
+import { Config }                   from './Graph';
+import { DataSet }                  from './Data';
+import { SVGElem }                  from './SVGElem';
+import { XYScale, Scale, Scales }   from './Scale';
 
 export interface SeriesStyle {
     line: {
@@ -29,12 +30,12 @@ export interface SeriesStyle {
 
 /** Defines configurable settings. */
 export interface SeriesSet {
-    data: Array<number|string>[];   // array of rows; 1st row contains column headers
-    clip: boolean;                  // clip series to the chart area
-    styles: SeriesStyle[];          // the series' style
-    series: [{                      // array of series descriptions
-        xName:string;               // the name to index the x values
-        yName:string;               // the name to index the y values
+    data: DataSet;          // array of rows; 1st row contains column headers
+    clip: boolean;          // clip series to the chart area
+    styles: SeriesStyle[];  // the series' style
+    series: [{              // array of series descriptions
+        xName:string;       // the name to index the x values
+        yName:string;       // the name to index the y values
     }];
 }
 
@@ -102,8 +103,7 @@ export class Series extends SVGElem {
      *  } 
      * ``` 
      * @param cfg the configuration object, containing default settings for all 
-     * previously configured components. See {@link Graph.Graph.makeConfig Graph.makeConfig} for 
-     * the sequence of initializations.
+     * previously configured components.
      */
     static config(cfg:Config) {
         cfg.series = <SeriesSet>{
@@ -135,27 +135,32 @@ export class Series extends SVGElem {
         };
     }
 
+    /** detrmines the max ranges each coordinate of each series and auto-sets the domains on the respective scales. */
     static adjustDomains(cfg:SeriesSet, scales:Scales) {
-        const data   = cfg.data;
-        let xmin=1e20, xmax=-1e20,
-            ymin=1e20, ymax=-1e20;
-        cfg.series.map((s:{xName:string, yName:string})=>{
-            const x = data[0].indexOf(s.xName);
-            const y = data[0].indexOf(s.yName);
-            if (x>=0 && y>=0) { 
-                data.filter((e:any, i:number) => i>0)
-                    .map((p:number[]) => {
-                        xmin = Math.min(xmin, p[x]);
-                        xmax = Math.max(xmax, p[x]);
-                        ymin = Math.min(ymin, p[y]);
-                        ymax = Math.max(ymax, p[y]);
-                    });
+        function findDomain(dateType:boolean, name:string, minMax:[number, number]) {
+            const index = cfg.data[0].indexOf(name);
+            if (index<0) { console.log(`coordinate ${name} not found in setAutoDomain`); }
+            else {
+                cfg.data.forEach((p:Array<string|number>, i:number) => {
+                    if (i>0) {
+                        let v:number = dateType? Date.parse(<string>p[index]) : <number>p[index];
+                        minMax[0] = Math.min(minMax[0], v);
+                        minMax[1] = Math.max(minMax[1], v);
+                    } 
+                });
             }
+        }
+        
+        let xMinMax:[number, number] = [1e20, -1e20];
+        let yMinMax:[number, number] = [1e20, -1e20];
+        const xDateType = scales.primary.x.scaleType() === Scale.type.date;
+        const yDateType = scales.primary.y.scaleType() === Scale.type.date;
+        cfg.series.map((s:{xName:string, yName:string})=>{ // for each series:
+            findDomain(xDateType, s.xName, xMinMax);
+            findDomain(yDateType, s.yName, yMinMax);
         });
-        scales.primary.x.setAutoDomain(xmin, xmax);
-        scales.primary.y.setAutoDomain(ymin, ymax);
-        scales.secondary.x.setAutoDomain(xmin, xmax);
-        scales.secondary.y.setAutoDomain(ymin, ymax);
+        scales.primary.x.setAutoDomain(xMinMax);
+        scales.primary.y.setAutoDomain(yMinMax);
     }
 
     drawClipRect(clipID:string, scales:XYScale) {
@@ -197,6 +202,15 @@ export class Series extends SVGElem {
                     return m(`.unkown-marker-${sStyle.marker.shape}`,'');
                 })
         );
+    }
+
+    generate(data: number[]) {
+        const genFunc = function* () {
+            for (let i=0; i<data.length; i++) {
+                yield data[i];
+            }
+        };
+        for (let d of genFunc()) { console.log(d); }
     }
 
 
