@@ -42,17 +42,6 @@ export function markDown(text:string, short:boolean=false, currentRoute:string):
  * @return the comment with substituted links 
  */
 function substituteLinks(comment:string, currentRoute:string):string {
-/*    
-    comment = comment.replace(/[^"`']{@link ([\S]*):([\S]*)\s*(.+)}/gi, (match, ...args) => {
-        const lib = args[0];
-        const module = args[1];
-        const text = args[2];
-        return (module === '' || module === 'overview')?
-                ` <a href="#!/api/${lib}/0">${text}</a>` :
-                ` <a href="#!/api/${lib}/${lib}.${module}">${text}</a>`;
-    });
-    return comment;
-*/
     function deconstructRoute(route:string) {
         let lib, mod;
         route.replace(/\/([^\/.]*)\/([^\/\s]*$)/gi, (match, ...args) => {
