@@ -3,8 +3,8 @@ import { XYScale }  from './Scale';
 
 /** defines a [min-max] range */
 export interface Range {
-    min: number;
-    max: number;
+    [0]: number;
+    [1]: number;
 }
 
 export interface Rect {
@@ -64,7 +64,15 @@ export interface TextCfg {
     vOffset:    number;
 }
 
-export const round = (num:number) => (''+num).substr(0, 5+(num<0?1:0));
+export function round (num:number):string { 
+    let snum = ''+num;
+    let len = snum.indexOf('.');
+    if (len>0) { 
+        len = Math.max(5+(num<0?1:0), len+2); 
+        snum = snum.substr(0, len);
+    }
+    return snum;
+}
 
 export abstract class SVGElem {
     /**
