@@ -39,8 +39,7 @@ export class Chart extends SVGElem {
      *  } 
      * ``` 
      * @param cfg the configuration object, containing default settings for all 
-     * previously configured components. See {@link Graph.Graph.makeConfig Graph.makeConfig} for 
-     * the sequence of initializations.
+     * previously configured components.
      */
     static config(cfg:Config) {
         cfg.chart = <ChartSet>{

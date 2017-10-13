@@ -68,6 +68,7 @@ import { SVGElem, Rect, round }    from './SVGElem';
 const viewBoxWidth:number  = 1000;  // the viewBox size in px
 let   viewBoxHeight:number = 700;   // the viewBox size in px
 
+
 /**
  */
 export interface Config {
@@ -150,6 +151,8 @@ export class Graph extends SVGElem {
 
     /** 
      * Defines default values for all configurable parameters in `Graph`
+     * See {@link Graph.Graph.makeConfig Graph.makeConfig} for the sequence of initializations.
+     * 
      * #### Configurations and Defaults
      * ```
      *  cfg.graph = {@link Graph.GraphSet <GraphSet>} {
@@ -162,8 +165,7 @@ export class Graph extends SVGElem {
      *  } 
      * ``` 
      * @param cfg the configuration object, containing default settings for all 
-     * previously configured components. See {@link Graph.Graph.makeConfig Graph.makeConfig} for 
-     * the sequence of initializations.
+     * previously configured components.
      */
     protected static config(cfg:Config={}) {      
         cfg.graph = <GraphSet>{

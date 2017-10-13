@@ -3,7 +3,7 @@
  * renders the major and minor gridlines in each direction.
  * 
  * ### Configurations and Defaults
- * See {@link Axes.Axes.config Axes.config}
+ * See {@link Grid.Grid.config Grid.config}
  * 
  */
 
@@ -41,18 +41,19 @@ export class Grid extends SVGElem{
      * 
      * ### Configurations and Defaults
      * ```
-     *  cfg.canvas = {@link Canvas.CanvasSet <CanvasSet>}{
-     *     range: {         // the graphs background rect:
-     *        w: 100,       //    width
-     *        h: 100,       //    height
-     *        wunit:'%',    //    unit for width
-     *        hunit:'%'     //    unit for height
-     *     }   
+     *  cfg.grid = {@link Grid.GridSet <GridSet>}{
+     *      major: {
+     *          hor: { visible:true },
+     *          ver: { visible:true }
+     *      },
+     *      minor: {
+     *          hor: { visible:false },
+     *          ver: { visible:false }
+     *      }
      *  } 
      * ``` 
      * @param cfg the configuration object, containing default settings for all 
-     * previously configured components. See {@link Graph.Graph.makeConfig Graph.makeConfig} for 
-     * the sequence of initializations.
+     * previously configured components.
      */
     static config(cfg:Config) {
         cfg.grid = <GridSet>{
@@ -90,13 +91,13 @@ export class Grid extends SVGElem{
         const cfg = node.attrs.cfg;
         const scales = node.attrs.scales.primary;
         return m('svg', { class:'hs-graph-grid'}, [
-            m('svg', { class:'hs-graph-grid-major' }, [
-                this.drawVerGrid(cfg.major.hor, scales.y, scales.x.range(), scales.y.ticks().major),
-                this.drawHorGrid(cfg.major.ver, scales.x, scales.y.range(), scales.x.ticks().major)
-            ]),
             m('svg', { class:'hs-graph-grid-minor' }, [
                 this.drawVerGrid(cfg.minor.hor, scales.y, scales.x.range(), scales.y.ticks().minor),
                 this.drawHorGrid(cfg.minor.ver, scales.x, scales.y.range(), scales.x.ticks().minor)
+            ]),
+            m('svg', { class:'hs-graph-grid-major' }, [
+                this.drawVerGrid(cfg.major.hor, scales.y, scales.x.range(), scales.y.ticks().major),
+                this.drawHorGrid(cfg.major.ver, scales.x, scales.y.range(), scales.x.ticks().major)
             ])
         ]);
     }

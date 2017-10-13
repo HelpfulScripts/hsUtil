@@ -13,7 +13,7 @@ import { Config }   from './Graph';
 //import { SVGElem }  from './SVGElem';
 
 
-/** Defines configurable settings. */
+/** Defines configurable settings. */ 
 export interface LegendSet {
 };
 
@@ -28,8 +28,7 @@ export class Legend {
      *  } 
      * ``` 
      * @param cfg the configuration object, containing default settings for all 
-     * previously configured components. See {@link Graph.Graph.makeConfig Graph.makeConfig} for 
-     * the sequence of initializations.
+     * previously configured components.
      */
     static config(cfg:Config) {
         cfg.legend = <LegendSet>{
