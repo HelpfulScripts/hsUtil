@@ -144,6 +144,7 @@ export function type(t:any, lib:string) {
                                         ...tt.elements.map((e:any, i:number) => [i>0?', ':undefined, _type(e)]),
                                         ' ]'
                                     ]);
+            case 'intrinsic':
             case 'instrinct':       return m('span.hs-item-type-instrinct', tt.id? libLink('span', lib, tt.fullPath, tt.name) : tt.name); 
             case 'stringLiteral':   return m('span.hs-item-type-string-literal', tt.type); 
             case 'union':           return m('span.hs-item-type-union', [...tt.types.map((e:any, i:number) => [i>0?' | ':undefined, _type(e)])]);
