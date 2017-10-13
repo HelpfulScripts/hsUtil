@@ -69,6 +69,51 @@ The rendered graph is organized in a layered structure of components:
 - &nbsp; {@link Grid Grid}: the major and minor gridlines
 - &nbsp; {@link Series Series}: the one or more data series to render
 - &nbsp; {@link Legend Legend}: the legend for the shown series
+
+## Scaling Examples
+### Logarithmic Axis
+* <example>
+* <file name='script.js'>
+* let series = [
+*      ['time', 'volume'],
+*      [0, 0.2], [0.2, 0.7], [0.4, 8], [0.6, 10], [0.8, 0.5], [1, 15]
+* ];
+* 
+* m.mount(root, { 
+*      view:() => m(hsgraph.Graph, {cfgFn: cfg => {
+*          cfg.series.data   = series;
+*          cfg.series.series = [{ xName: 'time', yName:'volume' }];
+*          cfg.axes.primary.y.scale.type = hsgraph.Scale.type.log;
+*      }})
+* });
+*
+* </file>
+* <file name='style.css'>
+* .hs-graph-series { stroke-width: 5; }
+* </file>
+* </example>
+
+### Date Axis
+* <example>
+* <file name='script.js'>
+* let series = [
+*      ['time', 'volume'],
+*      ['2/6/17', 0.2], ['3/18/17', 0.7], ['5/1/17', 8], ['11/20/17', 10], ['1/15/18', 0.5]
+* ];
+* 
+* m.mount(root, { 
+*      view:() => m(hsgraph.Graph, {cfgFn: cfg => {
+*          cfg.series.data   = series;
+*          cfg.series.series = [{ xName: 'time', yName:'volume' }];
+*          cfg.axes.primary.x.scale.type = hsgraph.Scale.type.date;
+*      }})
+* });
+*
+* </file>
+* <file name='style.css'>
+* .hs-graph-series { stroke-width: 5; }
+* </file>
+* </example>
 */
 
 /** */
