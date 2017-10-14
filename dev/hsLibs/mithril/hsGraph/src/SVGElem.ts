@@ -65,13 +65,7 @@ export interface TextCfg {
 }
 
 export function round (num:number):string { 
-    let snum = ''+num;
-    let len = snum.indexOf('.');
-    if (len>0) { 
-        len = Math.max(5+(num<0?1:0), len+2); 
-        snum = snum.substr(0, len);
-    }
-    return snum;
+    return num.toFixed(1);
 }
 
 export abstract class SVGElem {
