@@ -80,17 +80,29 @@
 .hs-item-comment-return {     // text for normal comment
     .hs-item-comment-param;
     margin-top: 0px;
-    background-color: #d0ffd0;
 }
 
 .hs-item-comment-tag {      // tag for special comment tag, e.g. @ngdoc
     padding:3px 5px;
     font-weight: bold;
     font-size: 1.1em;
-    color: #040;
+    color: #000;
+    .hs-item-comment-return & {     // text for normal comment
+        color: #00A;
+        .hs-item-public & {     // text for normal comment
+            color: #060;
+        }
+    }
 }
 .hs-item-comment-text {     // text for special comment tag, e.g. @ngdoc
     padding:3px 5px;
+    color: #000;
+    .hs-item-comment-return & {     // text for normal comment
+        color: #00A;
+        .hs-item-public & {     // text for normal comment
+            color: #060;
+        }
+    }
 }
 
 .hs-item-comment-default-value {
