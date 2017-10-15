@@ -77,8 +77,10 @@ function title(mdl:any, sig:any): Vnode {
 function members(mdl:any, sig:any): Vnode {
     if (mdl.groups) {
         return m('.hs-item-members', [
-            ...mdl.groups.map((g:any) => member(g, mdl.lib, true)),
-            ...mdl.groups.map((g:any) => member(g, mdl.lib, false))
+            ...mdl.groups.map((g:any) => member(g, mdl.lib, true, true)),
+            ...mdl.groups.map((g:any) => member(g, mdl.lib, true, false)),
+            ...mdl.groups.map((g:any) => member(g, mdl.lib, false, true)),
+            ...mdl.groups.map((g:any) => member(g, mdl.lib, false, false))
         ]);
     } else if (mdl.parameters) {
         return m('.hs-item-members', parameter(mdl.parameters, mdl.lib));
@@ -93,7 +95,7 @@ function parameter(g:any[], lib:string): Vnode {
     return m('.hs-item-member', content);
 }
 
-function member(group:any, lib:string, statc:boolean): Vnode {
+function member(group:any, lib:string, statc:boolean, publc: boolean): Vnode {
     const resolve           = ((c:number) => DocSets.get(lib, c));
     const directChildren    = ((mdl:any) => !mdl['inheritedFrom']);
     const inheritedChildren = ((mdl:any) =>  mdl['inheritedFrom']);
@@ -110,31 +112,35 @@ function member(group:any, lib:string, statc:boolean): Vnode {
         'Type aliases':     '.hs-item-alias',          
     };
     const fn = groupMap[group.title] || '.hs-item-unknown-member';
+    const isPublic = (flags:any) => flags.isPublic || (flags.isExported && !flags.isPrivate);
 
     const content = group.children
         .map(resolve)
         .filter(directChildren)
         .filter((mdl:any) => statc? mdl.flags.isStatic : !mdl.flags.isStatic)
+        .filter((mdl:any) => publc? isPublic(mdl.flags) : !isPublic(mdl.flags))
         .map((mdl:any) => m(fn, {id:makeID(group.title, mdl)}, itemChild(mdl)));
     const inherited = group.children
         .map(resolve)
         .filter(inheritedChildren)
         .filter((mdl:any) => statc? mdl.flags.isStatic : !mdl.flags.isStatic)
+        .filter((mdl:any) => publc? mdl.flags.isPublic : !mdl.flags.isPublic)
         .map((mdl:any) => m(`.hs-item-inherited ${fn}`, {id:makeID(group.title, mdl)}, itemChild(mdl)));
 
+    const publStr = publc?'Public':'Protected or Private';
+    const statStr = statc?'Static':''; 
     if (inherited.length>0) {
-        inherited.unshift(m('.hs-item-inherited .hs-item-member-title', m('span', `${statc?'Static':''} Inherited ${group.title}`)));
+        inherited.unshift(m('.hs-item-inherited .hs-item-member-title', m('span', `${publStr} ${statStr} Inherited ${group.title}`)));
     }
     if (content.length>0) {
-        content.unshift(m('.hs-item-member-title', {id:group.title.toLowerCase()}, m('span', `${statc?'Static':''} ${group.title}`)));
+        content.unshift(m('.hs-item-member-title', {id:group.title.toLowerCase()}, m('span', `${publStr} ${statStr} ${group.title}`)));
     }
-    return m('.hs-item-member', content.concat(inherited));
+    return m(`.hs-item-member ${statc?'.hs-item-static':''} ${publc?'.hs-item-public':''}`, content.concat(inherited));
 }
 
 function itemDescriptor(mdl:any, sig:any):Vnode {
     try { return m('.hs-item-desc', [ 
-//            flags(mdl.flags, ['export']),
-            flags(mdl.flags, []),
+            flags(mdl),
             kindString(mdl),
             itemLongName(mdl, mdl),
             signature(sig, mdl.lib),
@@ -149,7 +155,7 @@ function itemDescriptor(mdl:any, sig:any):Vnode {
 
 function itemChild(mdl:any, sig=mdl): Vnode[] {
     return mdl.signatures? 
-        mdl.signatures.map((s:any) => m('',[itemDescriptor(mdl, s), comment(s)])) : 
+        mdl.signatures.map((s:any) => m('.hs-item-child-signature',[itemDescriptor(mdl, s), comment(s)])) : 
         [itemDescriptor(mdl, sig), comment(sig)];
 }
 

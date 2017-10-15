@@ -6,10 +6,11 @@ const SourceBase = 'src/';
 
 
 // TODO: sort flags in array to garantee sequence of printing
-export function flags(flags:any, ignore:string[]=[]) {
+export function flags(mdl:any, ignore:string[]=[]) {
+    const ignoreExportInKind = ['Method', 'Property'];
     const knownFlags = {
         isExported:             'export',
-        isExternal:             '',
+        isExternal:             'external', // 
         isPublic:               'public',
         isPrivate:              'private',
         isProtected:            'protected',
@@ -17,12 +18,13 @@ export function flags(flags:any, ignore:string[]=[]) {
         isStatic:               'static',
         isOptional:             'optional'
     };
-    return m('span', !flags? [] : 
-        Object.keys(flags).map((f:string) => {
+    return m('span.hs-item-flags', !mdl.flags? [] : 
+        Object.keys(mdl.flags).map((f:string) => {
             let ign = false;
             let flag = knownFlags[f];
-            if (flag !== undefined) { ign = (ignore.indexOf(flag) >= 0); }
-            else { flag = f; }
+            if (flag === undefined) { flag = f; }
+            else { ign = (ignore.indexOf(flag) >= 0); }
+            if (flag === 'export' && ignoreExportInKind.indexOf(mdl.kindString)>=0) { ign = true; }
             return m(`span.hs-item-${ign?'ignore':(flag===f?'unknown':flag)}-flag`, ign? undefined : flag);
         })
     );
@@ -136,9 +138,11 @@ export function defaultVal(s:any, lib:string): Vnode {
 }
 
 export function type(t:any, lib:string) {
-    function _type(tt:any) {
+    function _type(tt:any):any {
         switch (tt.type) {
             case undefined:         return '';
+            case 'array':           return m('span.hs-item-type-array', ['Array<', _type(tt.elementType), '>']);
+                                    
             case 'tuple':           return m('span.hs-item-type-tuple', [
                                         '[ ',
                                         ...tt.elements.map((e:any, i:number) => [i>0?', ':undefined, _type(e)]),
@@ -148,11 +152,13 @@ export function type(t:any, lib:string) {
             case 'instrinct':       return m('span.hs-item-type-instrinct', tt.id? libLink('span', lib, tt.fullPath, tt.name) : tt.name); 
             case 'stringLiteral':   return m('span.hs-item-type-string-literal', tt.type); 
             case 'union':           return m('span.hs-item-type-union', [...tt.types.map((e:any, i:number) => [i>0?' | ':undefined, _type(e)])]);
-            case 'reference':       const typeRef = DocSets.get(lib, tt.id);
-                                    let refRes;
-                                    if (typeRef.typeArguments) { refRes = typeRef.name+'<'+ typeRef.typeArguments.map(_type).join(', ') + '>'; }
-                                    else if (typeRef.id)       { refRes = libLink('a', lib, typeRef.fullPath, typeRef.name); }
-                                    else                       { refRes = typeRef.name; }
+            case 'reference':       let refRes = tt.name;
+                                    if (tt.id) {
+                                        const typeRef = DocSets.get(lib, tt.id);
+                                        if (typeRef.typeArguments) { refRes = typeRef.name+'<'+ typeRef.typeArguments.map(_type).join(', ') + '>'; }
+                                        else if (typeRef.id)       { refRes = libLink('a', lib, typeRef.fullPath, typeRef.name); }
+                                        else                       { refRes = typeRef.name; }
+                                    }
                                     return m('span.hs-item-type-reference', refRes);
             case 'reflection':      let rflRes;
                                     if (tt.declaration) {
