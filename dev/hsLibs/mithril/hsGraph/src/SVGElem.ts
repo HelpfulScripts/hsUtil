@@ -1,4 +1,4 @@
-import { m }        from 'hslayout';
+import { m, Vnode }        from 'hslayout';
 import { XYScale }  from './Scale';
 
 /** defines a [min-max] range */
@@ -74,7 +74,7 @@ export abstract class SVGElem {
      * @param cfg configures the text alignment and positioning
      * @param text the text to plot
      */
-    text(cfg:TextCfg, text:string) {
+    text(cfg:TextCfg, text:string):Vnode {
         let baselineShift = '0em';
         let hAlign = cfg.xpos;
         switch(cfg.xpos) {
@@ -106,7 +106,7 @@ export abstract class SVGElem {
      * @param area the width and height of the rect
      * @param style optional css style setting, such as stroke or stroke-width
      */
-    rect(tl:Point, area:Area, style?:string) {
+    rect(tl:Point, area:Area, style?:string):Vnode {
         const param = {
             x: round(tl.x),       y: round(tl.y),
             width: round(area.w)  + (area.wunit||''), 
@@ -122,7 +122,7 @@ export abstract class SVGElem {
      * @param r the circle's radius, in domain coordinates
      * @param style optional css style setting, such as stroke or stroke-width
      */
-    circle(c:Point, r:number, style?:string) {
+    circle(c:Point, r:number, style?:string):Vnode {
         return m('circle', { cx: round(c.x), cy: round(c.y), r: round(r), style: style });
     }
 
@@ -132,7 +132,7 @@ export abstract class SVGElem {
      * @param area width and height of the `clipRect` in domain coordinates
      * @param id a unique clip id to reference the `clipRect` by
      */
-    clipRect(tl:Point, area:Area, id:string) {
+    clipRect(tl:Point, area:Area, id:string):Vnode {
         const param = {
             x: round(tl.x),       y: round(tl.y),
             width: round(area.w)  + (area.wunit||''), 
@@ -149,7 +149,7 @@ export abstract class SVGElem {
      * @param y1 ending point y domain coordinate 
      * @param cssClass optional css class attribute
      */
-    line(x0:number, x1:number, y0:number, y1:number, cssClass?:string) {
+    line(x0:number, x1:number, y0:number, y1:number, cssClass?:string):Vnode {
         const param = {
             x1: round(x0), y1: round(y0), 
             x2: round(x1),   y2: round(y1), 
@@ -165,7 +165,7 @@ export abstract class SVGElem {
      * @param y  starting and ending point y domain coordinate 
      * @param cssClass optional css class attribute
      */
-    horLine(x0:number, x1:number, y:number, cssClass?:string) {
+    horLine(x0:number, x1:number, y:number, cssClass?:string):Vnode {
         const param = {
             x1: round(x0), y1: round(y), 
             x2: round(x1), y2: round(y), 
@@ -181,7 +181,7 @@ export abstract class SVGElem {
      * @param y1 ending point y domain coordinate 
      * @param cssClass optional css class attribute
      */
-    verLine(x:number, y0:number, y1:number, cssClass?:string) {
+    verLine(x:number, y0:number, y1:number, cssClass?:string):Vnode {
         const param = {
             x1: round(x), y1: round(y0), 
             x2: round(x), y2: round(y1), 
@@ -202,7 +202,7 @@ export abstract class SVGElem {
      * @param id the unique clip-path id to use, or undefined
      * @param style an optional `style` attribute, e.g. to set the stroke and stroke-width.
      */
-    polyline(data:(string | number)[][], x:number, y:number, scales:XYScale, id:string, style?:string) {
+    polyline(data:(string | number)[][], x:number, y:number, scales:XYScale, id:string, style?:string):Vnode {
         return m('polyline', { 
             'clip-path': id? `url(#${id})` : undefined,
             style: style,
@@ -222,7 +222,7 @@ export abstract class SVGElem {
      * @param id the unique clip-path id to use, or undefined
      * @param style an optional `style` attribute, e.g. to set the stroke and stroke-width.
      */
-    polygon(points:[number, number][], id:string, style?:string) {
+    polygon(points:[number, number][], id:string, style?:string):Vnode {
         return m('polyline', { 
             'clip-path': id? `url(#${id})` : undefined,
             style: style,

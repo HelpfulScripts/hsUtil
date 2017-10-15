@@ -22,8 +22,8 @@
  *      cfg.series.styles[1].marker.visible = true;
  *      cfg.series.styles[1].marker.shape = hsgraph.Series.marker.square;
  *      cfg.series.series = [
- *          { xName: 'time', yName:'volume'},
- *          { xName: 'time', yName:'price'}
+ *          { xCol: 'time', yCol:'volume'},
+ *          { xCol: 'time', yCol:'price'}
  *      ];
  *      cfg.chart.title.text          = 'Volume over Time';
  *      cfg.chart.title.xpos          = 'end';
@@ -266,7 +266,7 @@ export class Axes extends SVGElem {
     /**
      * draws the axis title
      */
-    drawTitle(x:boolean, ttlCfg:TitleCfg, type: string, range:Area, cross:number) {
+    drawTitle(x:boolean, ttlCfg:TitleCfg, type: string, range:Area, cross:number):Vnode {
         ttlCfg.cssClass = 'hs-graph-axis-title';
         const xy = { transform:`translate(${x?range[1]:cross}, ${x?cross:range[1]})` };
         return !ttlCfg.visible? undefined : 
@@ -276,7 +276,7 @@ export class Axes extends SVGElem {
     /**
      * draws the tick marks. Labels are plotted for major tick marks only.
      */
-    drawTickMarks(dir:string, type:string, crossesAt:number, scale:Scale, ticks:number[], cfg:TickStruct) {
+    drawTickMarks(dir:string, type:string, crossesAt:number, scale:Scale, ticks:number[], cfg:TickStruct):Vnode {
         const x = dir==='x';
         return m('svg', { class:`hs-graph-axis-${type}-tick-marks`}, 
             !cfg.marks.visible? '' : ticks.map((t:number) => { 
@@ -289,7 +289,7 @@ export class Axes extends SVGElem {
     /**
      * draws the tick labels. Labels are plotted for major tick marks only.
      */
-    drawTickLabels(x:boolean, crossesAt:number, scale:Scale, ticks:number[], cfg:TickStruct) {
+    drawTickLabels(x:boolean, crossesAt:number, scale:Scale, ticks:number[], cfg:TickStruct):Vnode {
         return m('svg', {class:'hs-graph-axis-tick-label'}, 
             !cfg.labels.visible? '' : ticks.map((t:number) => { 
                 const v = scale.convert(t);
@@ -307,7 +307,7 @@ export class Axes extends SVGElem {
      * - scales:
      * - cfg: 
      */
-    drawAxis(dir:string, scales: XYScale, type:string, axisCfg:AxesSet) {
+    drawAxis(dir:string, scales: XYScale, type:string, axisCfg:AxesSet):Vnode {
         const x = dir==='x';
         const range = scales[dir].range();
         const cfg   = axisCfg[type][dir];
