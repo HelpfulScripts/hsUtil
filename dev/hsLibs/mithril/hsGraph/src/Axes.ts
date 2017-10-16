@@ -7,14 +7,15 @@
  * ### Example
  * <example>
  * <file name='script.js'>
- * let series = [
- *      ['time', 'volume', 'price'],
+ * let series = {
+ *    names:['time', 'volume', 'price'],
+ *    rows:[
  *      [0.2, 0.7, 0.87],
  *      [0.4, 0.015, 0.7],
  *      [0.6, 0.01, 0.7],
  *      [0.7, 5, 0.6],
  *      [0.8, 10, 0.75]
- * ];
+ * ]};
  * 
  * function myConfig(cfg) {
  *      cfg.series.data   = series;

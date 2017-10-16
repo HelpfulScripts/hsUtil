@@ -7,15 +7,16 @@
  * ### Example
  * <example>
  * <file name='script.js'>
- * let series = [
- *      ['time', 'volume', 'price'],
- *      [-1, 0.2, 0.8],
- *      [0.2, 0.7, 0.87],
- *      [0.4, -0.2, 0.7],
- *      [0.6, 0, 0.7],
- *      [0.8, 0.5, 0.6],
- *      [1, 0.7, 0.75]
- * ];
+ * let series = {
+ *    names:['time', 'volume', 'price'],
+ *    rows:[
+ *          [-1,   0.2, 0.8],
+ *          [0.2,  0.7, 0.87],
+ *          [0.4, -0.2, 0.7],
+ *          [0.6,    0, 0.7],
+ *          [0.8,  0.5, 0.6],
+ *          [1,    0.7, 0.75]
+ *    ]};
  * 
  * function myConfig(cfg) {
  *      cfg.series.data   = series;
@@ -23,8 +24,8 @@
  *      cfg.series.styles[1].marker.visible = true;
  *      cfg.series.styles[1].marker.shape = hsgraph.Series.marker.diamond;
  *      cfg.series.series = [
- *          { xName: 'time', yName:'volume'},
- *          { xName: 'time', yName:'price'}
+ *          { xCol: 'time', yCol:'volume'},
+ *          { xCol: 'time', yCol:'price'}
  *      ];
  *      const axes = cfg.axes.primary;
  *      cfg.chart.title.text          = 'Volume over Time';
@@ -56,6 +57,7 @@
 
 /** */
 import { m, Vnode}           from 'hslayout';
+import { Data }              from './Data';
 import { Axes, AxesSet }     from './Axes';
 import { Scale, Scales }     from './Scale';
 import { Canvas, CanvasSet } from './Canvas';
@@ -63,7 +65,7 @@ import { Series, SeriesSet } from './Series';
 import { Chart, ChartSet }   from './Chart';
 import { Grid, GridSet }     from './Grid';
 import { Legend, LegendSet } from './Legend';
-import { SVGElem, Rect, round }    from './SVGElem';
+import { SVGElem, Rect, round } from './SVGElem';
 
 const viewBoxWidth:number  = 1000;  // the viewBox size in px
 let   viewBoxHeight:number = 700;   // the viewBox size in px
@@ -136,7 +138,7 @@ export class Graph extends SVGElem {
      * @param userCfg a user defined configuration function with the signature 
      * `(cfg:{@link Config Config}):void.`
      */
-    static makeConfig(userCfg?:CfgFn) { return ():Config => {
+    private static makeConfig(userCfg?:CfgFn) { return ():Config => {
         const cfg = {};
         Graph.config(cfg);
         Canvas.config(cfg);
@@ -187,7 +189,8 @@ export class Graph extends SVGElem {
     };
 
 
-    private scales:Scales;
+    private scales: Scales;
+    private data:   Data;
 
     private createPlotArea(cfg:Config):Rect {
         const cfgm = cfg.graph.margin;
@@ -201,6 +204,14 @@ export class Graph extends SVGElem {
         plotArea.w -= plotArea.l + cfgm.right + this.marginOffset.right;
         plotArea.h -= plotArea.t + cfgm.bottom + this.marginOffset.bottom; 
         return plotArea;
+    }
+
+    private createData(cfg:any) {
+        if (!cfg.series.data || !cfg.series.data.rows || !cfg.series.data.names) {
+            throw new Error('cfg.series.data not set');
+        }
+        this.data = new Data();
+        this.data.setData(cfg.series.data.rows, cfg.series.data.names);
     }
 
     private createScales(cfg:any) {
@@ -274,19 +285,20 @@ export class Graph extends SVGElem {
     view(node?: Vnode): Vnode {
         const cfgFn = node.attrs.cfgFn;
         const cfg = Graph.makeConfig(cfgFn);
-        const cp = copy(cfg());
+        const cp = cfg();
         node.attrs.cfg = cp;
         const plotArea = this.createPlotArea(cp);
         this.createScales(cp);
+        this.createData(cp);
         this.adjustRange(plotArea);
-        Series.adjustDomains(cp.series, this.scales);
+        this.data.adjustDomains(cp.series, this.scales);
         const result = m('svg', { class:'hs-graph', width:'100%', height:'100%', 
                 viewBox:`0 0 ${round(viewBoxWidth)} ${round(viewBoxHeight)}` }, [
             m(Canvas, { cfg:cp.canvas}),
             m(Chart, { cfg:cp.chart, plotArea:plotArea }),
             m(Grid, { cfg:cp.grid, scales:this.scales }),
             m(Axes, { cfg:cp.axes, scales:this.scales }),
-            m(Series, { cfg:cp.series, scales:this.scales }),
+            m(Series, { cfg:cp.series, scales:this.scales, data:this.data }),
             m(Legend, { cfg:cp.legend })
         ]);
         return result;

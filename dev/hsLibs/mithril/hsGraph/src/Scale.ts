@@ -4,8 +4,7 @@
  */
 
 /** */ 
-import { Range }    from './SVGElem';
-//import { DataSet }  from './Graph';
+import { Range }    from './Data';
 
 export interface XYScale { x: Scale; y:Scale; }
 
@@ -136,7 +135,6 @@ export class Scale {
     public range(r?:Range):Range   { 
         if (r) { 
             this.rangeVal = r; 
-console.log(`new range: ${this.rangeVal[0]}...${this.rangeVal[1]}`);
         }
         return this.rangeVal;
     }
@@ -170,10 +168,9 @@ console.log(`new range: ${this.rangeVal[0]}...${this.rangeVal[1]}`);
      * `setAutoDomain` is typically called by {@link Series.Series.adjustDomains Series.adjustDomains} 
      * and receives a generator that passes through the data.
      */
-    public setAutoDomain(minMax:[number, number]) {
-        if (this.domMinAuto) { this.domVal[0] = minMax[0]; }
-        if (this.domMaxAuto) { this.domVal[1] = minMax[1]; }
-console.log(`setting domain for ${name} to ${this.domVal[0]} ... ${this.domVal[1]}`);        
+    public setAutoDomain(dom:Range) {
+        if (this.domMinAuto) { this.domVal[0] = dom[0]; }
+        if (this.domMaxAuto) { this.domVal[1] = dom[1]; }
     }
 
     /**
@@ -187,8 +184,6 @@ console.log(`setting domain for ${name} to ${this.domVal[0]} ... ${this.domVal[1
     convert(domVal:number):number { 
         const dom = this.domain();
         const range = this.range();
-//console.log(`domain: ${this.domain[0]} / ${this.domain[1]}`);        
-//console.log(`range: ${this.range[0]} / ${this.range[1]}`);        
         let result;
         switch(this.scaleType()) {
             case Scale.type.log: 
@@ -203,7 +198,6 @@ console.log(`setting domain for ${name} to ${this.domVal[0]} ... ${this.domVal[1
             default:
                 result = (domVal- dom[0]) / (dom[1] - dom[0]) * (range[1] - range[0]) + range[0];
         }
-//console.log(`convert  ${this.scaleType()} ${domVal} -> ${result}`);
         return result;
     }
 }

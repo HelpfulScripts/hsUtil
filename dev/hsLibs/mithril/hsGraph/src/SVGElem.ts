@@ -1,11 +1,6 @@
-import { m, Vnode }        from 'hslayout';
+import { m, Vnode } from 'hslayout';
 import { XYScale }  from './Scale';
-
-/** defines a [min-max] range */
-export interface Range {
-    [0]: number;
-    [1]: number;
-}
+import { DataRows } from './Data';
 
 export interface Rect {
     nm?:string; // optional name field
@@ -202,11 +197,11 @@ export abstract class SVGElem {
      * @param id the unique clip-path id to use, or undefined
      * @param style an optional `style` attribute, e.g. to set the stroke and stroke-width.
      */
-    polyline(data:(string | number)[][], x:number, y:number, scales:XYScale, id:string, style?:string):Vnode {
+    polyline(data:DataRows, x:number, y:number, scales:XYScale, id:string, style?:string):Vnode {
         return m('polyline', { 
             'clip-path': id? `url(#${id})` : undefined,
             style: style,
-            points: data.map((row:number[], i:number) => i===0?'': 
+            points: data.map((row:number[]) =>
                 `${round(scales.x.convert(row[x]))},${round(scales.y.convert(row[y]))}`).join(' ')}); 
     }
 
@@ -222,7 +217,7 @@ export abstract class SVGElem {
      * @param id the unique clip-path id to use, or undefined
      * @param style an optional `style` attribute, e.g. to set the stroke and stroke-width.
      */
-    polygon(points:[number, number][], id:string, style?:string):Vnode {
+    polygon(points:DataRows, id:string, style?:string):Vnode {
         return m('polyline', { 
             'clip-path': id? `url(#${id})` : undefined,
             style: style,

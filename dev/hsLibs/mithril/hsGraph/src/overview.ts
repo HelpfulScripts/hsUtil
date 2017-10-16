@@ -10,20 +10,21 @@ attribute with the graph's configuration.
 ### Simple Example
  * <example>
  * <file name='script.js'>
- * let series = [
- *      ['time', 'volume'],
+ * let series = {
+ *    names:['time', 'volume'],
+ *    rows:[
  *      [-1, 0.2],
  *      [0.2, 0.7],
  *      [0.4, -0.2],
  *      [0.6, 0],
  *      [0.8, 0.5],
  *      [1, 0.7]
- * ];
+ * ]};
  * 
  * m.mount(root, { 
  *      view:() => m(hsgraph.Graph, {cfgFn: cfg => {
  *          cfg.series.data   = series;
- *          cfg.series.series = [{ xName: 'time', yName:'volume' }];
+ *          cfg.series.series = [{ xCol: 'time', yCol:'volume' }];
  *      }})
  * });
  *
@@ -74,15 +75,16 @@ The rendered graph is organized in a layered structure of components:
 ### Logarithmic Axis
 * <example>
 * <file name='script.js'>
-* let series = [
-*      ['time', 'volume'],
+* let series = {
+*    names:['time', 'volume'],
+*    rows:[
 *      [0, 0.2], [0.2, 0.7], [0.4, 8], [0.6, 10], [0.8, 0.5], [1, 15]
-* ];
+* ]};
 * 
 * m.mount(root, { 
 *      view:() => m(hsgraph.Graph, {cfgFn: cfg => {
 *          cfg.series.data   = series;
-*          cfg.series.series = [{ xName: 'time', yName:'volume' }];
+*          cfg.series.series = [{ xCol: 'time', yCol:'volume' }];
 *          cfg.axes.primary.y.scale.type = hsgraph.Scale.type.log;
 *      }})
 * });
@@ -96,15 +98,15 @@ The rendered graph is organized in a layered structure of components:
 ### Date Axis
 * <example>
 * <file name='script.js'>
-* let series = [
-*      ['time', 'volume'],
-*      ['2/6/17', 0.2], ['3/18/17', 0.7], ['5/1/17', 8], ['11/20/17', 10], ['1/15/18', 0.5]
-* ];
+* let series = {
+*    names:['time', 'volume'],
+*    rows:[['2/6/17', 0.2], ['3/18/17', 0.7], ['5/1/17', 8], ['11/20/17', 10], ['1/15/18', 0.5]]
+* };
 * 
 * m.mount(root, { 
 *      view:() => m(hsgraph.Graph, {cfgFn: cfg => {
 *          cfg.series.data   = series;
-*          cfg.series.series = [{ xName: 'time', yName:'volume' }];
+*          cfg.series.series = [{ xCol: 'time', yCol:'volume' }];
 *          cfg.axes.primary.x.scale.type = hsgraph.Scale.type.date;
 *      }})
 * });

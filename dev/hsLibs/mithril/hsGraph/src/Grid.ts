@@ -8,10 +8,11 @@
  */
 
 /** */
-import { m, Vnode}          from 'hslayout';
-import { Config }           from './Graph';
-import { SVGElem, Range }   from './SVGElem';
-import { Scale }            from './Scale';
+import { m, Vnode}  from 'hslayout';
+import { Config }   from './Graph';
+import { SVGElem }  from './SVGElem';
+import { Range }    from './DAta';
+import { Scale }    from './Scale';
 
 /** defines configurable parameters for a grid */
 export interface GridCfg {

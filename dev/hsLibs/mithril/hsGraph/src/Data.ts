@@ -3,23 +3,37 @@
  */
 
 
+import { Scales }       from './Scale';
+import { SeriesCfg, SeriesSet }    from './Series';
+
+/** defines a [min-max] range */
+export type Range = [number, number];
+
+/** defines domain that includes all values of a column */
+export type Domain = Range | string[];
+
 export type ColIndex = number|string;
 
 export type DataVal = number|string|Date;
 
 export type DataRow = DataVal[];
 
+export type DataRows = DataRow[];
+
 /** */
-export type DataSet = DataRow[];
+export type DataSet = {
+    names: string[];
+    rows:  DataRows;
+};
 
 interface TypeStruct { type: string; count: number;};
 
 interface MetaStruct {
-    name:       string;
-    accessed:   boolean;
-    column:     number;
-    cast:       boolean;
-    types:      TypeStruct[];
+    name:       string;         // column name
+    column:     number;         // column index
+    accessed:   boolean;        // has column data been accessed?
+    cast:       boolean;        // has column data been cast 
+    types:      TypeStruct[];   // data types, sorted by likelihood
 }
 
 export class Data {
@@ -31,17 +45,32 @@ export class Data {
         percent:    'percent data',
         nominal:    'nominal data'
     };
-    private data: DataSet;
-    private meta: MetaStruct[];
+    private data: DataRows;
+    private meta: MetaStruct[] = [];
 
     private getMeta(col:ColIndex):MetaStruct { 
+        if (!this.meta) { this.meta = []; }
         if (!this.meta[col]) { return undefined; }
        	this.meta[col].accessed = true;
         return this.meta[col]; 
     }
 
+    private addColumn(newCol:string):number {
+        var m = this.getMeta(newCol);
+        if (m === undefined) { 
+            m = this.meta[newCol] = <MetaStruct>{};
+            m.name   = newCol; 
+            m.column = this.meta.length;
+            this.meta.push(m);      // access name by both column name and index
+        }
+        m.cast 	   = false;         // has not been cast yet
+        m.accessed = false;         // has not been accessed yet
+        return this.meta.length-1;
+    }
+
+     
     /**
-     * @description returns the column index of the specified column. 
+     * returns the column index of the specified column. 
      * `col` can be either an index or a name.
      * @param column the data column, name or index, for which to return the index. 
      * @return the column number or `undefined`.
@@ -53,29 +82,45 @@ export class Data {
         return m.column; 
     }
     
-    private addColumn(newCol:string) {
-        if (!this.meta) { this.meta = []; }
-        let m = this.meta[newCol];
-        if (m === undefined) { 
-            m = this.meta[newCol] = <MetaStruct>{};
-            m.name   = newCol; 
-            m.column = this.meta.length-1;
-            this.meta.push(m);           // access name by both column name and index
-        }
-        m.cast 	   = false;         // has not been cast yet
-        m.accessed = false;         // has not been accessed yet
-        return this.meta.length-1;
-    }
-    
     /**
-     * @param {number|string} col an object of series-names:series-values-array pairs. 
-     * @return {Array} an array sorted by frequency of encountered types in column `name` of `data`
+     * returns the column name for the specified column. 
+     * `col` can be either an index or a name.
+     * @param column the data column, name or index. 
+     * @return the column name or `undefined`.
      */
-    private findTypes(col:ColIndex):TypeStruct[] {
+    public colName(col:ColIndex) {
+        var m = this.getMeta(col);
+        if (!m) { return undefined; }
+        m.accessed = true; 
+        return m.name; 
+    }
+
+    /**
+     * returns the column type for the specified column. 
+     * `col` can be either an index or a name.
+     * @param column the data column, name or index. 
+     * @return the column type.
+     */
+    public colType(col:ColIndex) { 
+        return this.getMeta(col).types[0].type;
+    }
+
+
+    /**
+     * Determines the type of data in `col`. An array of counts is created for all
+     * encountered types, sorted by descending frequency. THe most likely type in position 0
+     * of the array is returned.
+     * @param col the index of the column to be typed. 
+     * @return the most likely type of data in `col`.
+     */
+    private findTypes(col:ColIndex):string {
         const m = this.getMeta(col);
-        const types:TypeStruct[] = Object.keys(Data.type).map((t:string) => 
-            { return { type: t, count: 0 }; });
-        types.forEach((s:TypeStruct) => types[s.type] = s);
+        const types:TypeStruct[] = [];
+        Object.keys(Data.type).forEach((t:string) => {
+            const ts = { type: Data.type[t], count: 0 }; 
+            types.push(ts);
+            types[Data.type[t]] = ts;
+        });
         for (let v of this.allRows(col)) {
             const t = this.findType(v);
             if (t !== null) { types[t].count++; }
@@ -85,18 +130,20 @@ export class Data {
             if (b.type==='currency'&&b.count>0) { return 1; }
             return b.count - a.count;
         });
-        return m.types = types;
+        m.types = types;
+        return types[0].type;
     }
 
     /**
-     * @param sample .
-     * @returns the type ('real', 'date', 'percent', 'nominal') corresponding to the sample
-     * @description determines the data type. Supported types are <pre>
+     * @description determines the data type. Supported types are 
+     * ```
      * 'date':    sample represents a Date, either as a Date object or a String 
      * 'number':  sample represents a number
      * 'percent': sample represents a percentage (special case of a real number)
      * 'nominal': sample represents a nominal (ordinal or categorical) value
-     * </pre>
+     * ```
+     * @param val the value to bve typed.
+     * @returns the type ('number', 'date', 'percent', 'nominal', 'currency') corresponding to the sample
      */
     private findType(val:DataVal) {
         if (val && val!=='') {
@@ -124,38 +171,57 @@ export class Data {
         return null;
     }    
 
-    public getType(col:ColIndex) { 
-        return this.getMeta(col).types[0].type;
+    /**
+     * modifies `domain` to include all values in column `col`.
+     * @param col the column name or index 
+     * @param domain the 
+     */
+    private findDomain(col:ColIndex, domain:Domain) {
+        const c = this.colNumber(col);
+        const type = this.colType(col);
+        this.data.forEach((r:DataRow) => {
+            switch(type) {
+                case Data.type.nominal: 
+                    const nomDom = <string[]>domain;
+                    if (nomDom.indexOf(''+r[c]) < 0) { nomDom.push(''+r[c]); }
+                    break;
+                default: 
+                    let v:number = <number>r[c];
+                    domain[0] = (v<domain[0])? v : domain[0];
+                    domain[1] = (v>domain[1])? v : domain[1];
+            }
+        });
+    }
+
+    /** 
+     * determines the max ranges each coordinate of each series and auto-sets the domains on the respective scales. 
+     */
+    public adjustDomains(cfg:SeriesSet, scales:Scales) {
+        let xDomain:Domain = [1e20, -1e20];
+        let yDomain:Domain = [1e20, -1e20];
+        cfg.series.map((s:SeriesCfg)=>{ // for each series:
+            this.findDomain(s.xCol, xDomain);
+            this.findDomain(s.yCol, yDomain);
+        });
+        scales.primary.x.setAutoDomain(xDomain);
+        scales.primary.y.setAutoDomain(yDomain);
     }
 
     /**
-     * Adds `data` to the existing data set. If data has previously been set, 
-     * `data` will be added to the end of the list if all `names`  match thos of the 
-     * existing set.
+     * sets `data` to the existing data set. If data has previously been set, 
+     * `data` will be added to the end of the list if all `names`  match those of the 
+     * existing set. 
      * @param data the data to add
      * @param names an array of names that match the columns
+     * @param autoType unless set to false, the method will attempt to determine the 
+     * type of data and automatically cast data points to their correct value
      */
-    public add(data:DataSet, names:string[]) {
-        function allNamesSet() {
-            return this.meta.every((m:MetaStruct) => names.indexOf(m.name)>0);
-        }
-
-        if (names.length !== data[0].length) {
-            console.log(`Data.add: number of names ${names.length} does not equal numer of columns ${data[0].length}`);
-            return;
-        }
-        if (allNamesSet()) { // then add data to existing set
-            data.forEach((d:DataRow) => this.data.push(d));
-        } else {             // else replace all data
-            this.meta = undefined;
-            this.data = data;
-            names.forEach((col:string) => this.addColumn(col));
-        }
-        names.forEach((col:string) => {
-            const type = this.findTypes(col)[0].type;
-            const c = this.colNumber(col);
-            this.data.forEach((r:DataRow) => r[c] = this.castData(type, r[c]));
-        });
+    public setData(data:DataRows, names:ColIndex[], autoType=true):void {
+        this.meta = undefined;
+        this.data = data;
+        names.forEach((col:string) => this.addColumn(col));
+        names.forEach((col:string) => this.findTypes(col));
+        this.castData();
     }
 
     public * allRows(column:ColIndex):Iterable<DataVal> {
@@ -163,6 +229,20 @@ export class Data {
         for (let r=0; r<this.data.length; r++) {
             yield this.data[r][c];
         }
+    }
+
+    public getData():DataRows {
+        return this.data;
+    }
+
+    public castData() {
+        this.meta.forEach((c:MetaStruct) => {
+            const col = c.column;
+            if (!c.cast) {
+                this.data.forEach((row:DataRow) => row[col] = this.castVal(c.types[0].type, row[col]));
+            }
+            c.cast = true;
+        });
     }
 
     /**
@@ -194,22 +274,22 @@ export class Data {
      * @returns The result of the cast. 
      * @description Casts the sample to the specified data type.
      */
-    private castData(type:string, val:DataVal):DataVal {
+    private castVal(type:string, val:DataVal):DataVal {
         switch (type) {
-            case 'date':    if (val instanceof Date) { return val; }
+            case Data.type.date:    if (val instanceof Date) { return val; }
                             val = this.toDate(val);
                             if (isNaN(val.getTime())) { val = null; }
                             break;
-            case 'percent': if (typeof val === 'string') {
+            case Data.type.percent: if (typeof val === 'string') {
                                 const num = parseFloat(val);
                                 val = (<string>val).endsWith('%')? num/100 : num;
                             } 
                             if (isNaN(<number>val)) { val = null; }
                             break;
-            case 'currency':// replace all except 'e/E', '.', '+/-' and digits
+            case Data.type.currency:// replace all except 'e/E', '.', '+/-' and digits
             				if (typeof val === 'string') { val = val.replace(/[^eE\+\-\.\d]/g, ''); }            				
             				/* falls through */
-            case 'number':  if (typeof val === 'string') { val = parseFloat(val); }
+            case Data.type.number:  if (typeof val === 'string') { val = parseFloat(val); }
                             if (isNaN(<number>val)) { val = null; }
                             break;
             default:        val = ''+val;

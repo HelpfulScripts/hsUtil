@@ -8,11 +8,11 @@
  */
 
 /** */
-import { m, Vnode}                  from 'hslayout';
-import { Config }                   from './Graph';
-import { DataSet }                  from './Data';
-import { SVGElem }                  from './SVGElem';
-import { XYScale, Scale, Scales }   from './Scale';
+import { m, Vnode}              from 'hslayout';
+import { Config }               from './Graph';
+import { DataSet, ColIndex }    from './Data';
+import { SVGElem }              from './SVGElem';
+import { XYScale }              from './Scale';
 
 export interface SeriesStyle {
     line: {
@@ -28,15 +28,18 @@ export interface SeriesStyle {
     };
 }
 
+/** Defines Series columns and values to use. */
+export interface SeriesCfg {
+    xCol:ColIndex;     // the column name or index for the x values
+    yCol:ColIndex;     // the column name or index for the y values
+}
+
 /** Defines configurable settings. */
 export interface SeriesSet {
     data: DataSet;          // array of rows; 1st row contains column headers
     clip: boolean;          // clip series to the chart area
     styles: SeriesStyle[];  // the series' style
-    series: [{              // array of series descriptions
-        xName:string;       // the name to index the x values
-        yName:string;       // the name to index the y values
-    }];
+    series: SeriesCfg[];    // array of series descriptions
 }
 
 export class Series extends SVGElem { 
@@ -66,8 +69,8 @@ export class Series extends SVGElem {
      *    data:<[][]>null,  // row array of columns, initialized to null; first row contains column names
      *    clip: true,       // series an markers are clipped to the plot area
      *    series: <[{       // array of series descriptors:
-     *       xName:string,  //    name of x-column in `data`
-     *       yName:string   //    name of y-column in `data`
+     *       xCol:string,  //    name of x-column in `data`
+     *       yCol:string   //    name of y-column in `data`
      *    }]>[],            // initialized to empty array (no series)
      *    styles: [         // arra of predefined styles. styles[i] will be assigned to series[i].
      *       { line:   { 
@@ -107,9 +110,9 @@ export class Series extends SVGElem {
      */
     static config(cfg:Config) {
         cfg.series = <SeriesSet>{
-            data: null,
+            data: {names:[], rows:[]},
             clip: true,
-            series: <[{xName:string, yName:string}]>[],
+            series: <SeriesCfg[]>[],
             styles: [
                 { line:   { color: '#f00', width: 5, visible: true },
                   marker: { color: '#f00', size: 10, shape: Series.marker.circle, visible: false }},
@@ -133,34 +136,6 @@ export class Series extends SVGElem {
                   marker: { color: '#ccc', size: 10, shape: Series.marker.circle, visible: false }}
             ]
         };
-    }
-
-    /** detrmines the max ranges each coordinate of each series and auto-sets the domains on the respective scales. */
-    static adjustDomains(cfg:SeriesSet, scales:Scales) {
-        function findDomain(dateType:boolean, name:string, minMax:[number, number]) {
-            const index = cfg.data[0].indexOf(name);
-            if (index<0) { console.log(`coordinate ${name} not found in setAutoDomain`); }
-            else {
-                cfg.data.forEach((p:Array<string|number>, i:number) => {
-                    if (i>0) {
-                        let v:number = dateType? Date.parse(<string>p[index]) : <number>p[index];
-                        minMax[0] = Math.min(minMax[0], v);
-                        minMax[1] = Math.max(minMax[1], v);
-                    } 
-                });
-            }
-        }
-        
-        let xMinMax:[number, number] = [1e20, -1e20];
-        let yMinMax:[number, number] = [1e20, -1e20];
-        const xDateType = scales.primary.x.scaleType() === Scale.type.date;
-        const yDateType = scales.primary.y.scaleType() === Scale.type.date;
-        cfg.series.map((s:{xName:string, yName:string})=>{ // for each series:
-            findDomain(xDateType, s.xName, xMinMax);
-            findDomain(yDateType, s.yName, yMinMax);
-        });
-        scales.primary.x.setAutoDomain(xMinMax);
-        scales.primary.y.setAutoDomain(yMinMax);
     }
 
     drawClipRect(clipID:string, scales:XYScale) {
@@ -217,20 +192,20 @@ export class Series extends SVGElem {
     view(node?: Vnode): Vnode {
         const cfg    = node.attrs.cfg;
         const scales = node.attrs.scales.primary;
-        const data   = cfg.data;
+        const data   = node.attrs.data;
         const clipID = cfg.clip? 'hs'+Math.floor(Math.random()*10000) : undefined;
         return m('svg', { class:'hs-graph-series'}, [
             this.drawClipRect(clipID, scales),
-            m('svg', cfg.series.map((series:{xName:string, yName:string}, i:number) => { 
-                const x = data[0].indexOf(series.xName);
-                const y = data[0].indexOf(series.yName);
+            m('svg', cfg.series.map((series:SeriesCfg, i:number) => { 
+                const x = data.colNumber(series.xCol);
+                const y = data.colNumber(series.yCol);
                 if (x<0 || y<0) { 
-                    console.log(`${series.xName} or ${series.yName} not found in ${data[0]}`); 
+                    console.log(`${series.xCol} or ${series.yCol} not found in data`); 
                     return m('.error','');
                 } else {
                     return m('svg', {class:`hs-graph-series-${i}`}, [
-                        this.drawLine(clipID, data, x, y, scales, cfg.styles[i]),
-                        this.drawMarker(clipID, data, x, y, scales, cfg.styles[i])
+                        this.drawLine(clipID, data.getData(), x, y, scales, cfg.styles[i]),
+                        this.drawMarker(clipID, data.getData(), x, y, scales, cfg.styles[i])
                     ]);
                 }
             }))
