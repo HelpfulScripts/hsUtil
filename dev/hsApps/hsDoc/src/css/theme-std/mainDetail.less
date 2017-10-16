@@ -23,6 +23,7 @@
 
 @StaticBackground: #efefe0;
 @StaticTitleColor: #600;
+@Transparent: rgba(255, 255, 255, 0);
 
 .hs-item-member-title {
     background-color: @Background;
@@ -34,7 +35,7 @@
 }
 
 .hs-item-desc {
-    background: linear-gradient(to bottom, @Background, #fff); 
+    background: linear-gradient(to bottom, @Background, @Transparent); 
     padding-left: 0.5em;
     .hs-item-title & {
         background-image: none;
@@ -50,7 +51,7 @@
             color: @PublicTitleColor;
         }
         .hs-item-desc {
-            background: linear-gradient(to bottom, @PublicBackground, #fff); 
+            background: linear-gradient(to bottom, @PublicBackground, @Transparent); 
         }
     }
     &.hs-item-static {
@@ -59,7 +60,7 @@
             color: @StaticTitleColor;
         }
         .hs-item-desc {
-            background: linear-gradient(to bottom, @StaticBackground, #fff); 
+            background: linear-gradient(to bottom, @StaticBackground, @Transparent); 
         }
     }
 }
@@ -67,7 +68,6 @@
 .hs-item-child {
     padding: 4px 0 10px 5px;  
     font-size: 1em;
-//    background: linear-gradient(to bottom, @ChildBackground, #fff, #fff); 
 }
 
 
@@ -110,7 +110,7 @@
     font-weight: bold;
 }
 
-@CodeBackground: #eee;
+@CodeBackground: #f4f4f4;
 @CodeFontColor: #800;
 pre {
     padding-left: 10px;
