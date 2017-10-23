@@ -155,8 +155,8 @@ function itemDescriptor(mdl:any, sig:any):Vnode {
 
 function itemChild(mdl:any, sig=mdl): Vnode[] {
     return mdl.signatures? 
-        mdl.signatures.map((s:any) => m('.hs-item-child-signature',[itemDescriptor(mdl, s), comment(s)])) : 
-        [itemDescriptor(mdl, sig), comment(sig)];
+        mdl.signatures.map((s:any) => m('.hs-item-child-signature',[itemDescriptor(mdl, s), comment(s, true)])) : 
+        [itemDescriptor(mdl, sig), comment(sig,true)];
 }
 
 

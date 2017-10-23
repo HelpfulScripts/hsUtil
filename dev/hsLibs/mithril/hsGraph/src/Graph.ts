@@ -66,6 +66,7 @@ import { Chart, ChartSet }   from './Chart';
 import { Grid, GridSet }     from './Grid';
 import { Legend, LegendSet } from './Legend';
 import { SVGElem, Rect, round } from './SVGElem';
+import { delay }             from 'hsutil';
 
 const viewBoxWidth:number  = 1000;  // the viewBox size in px
 let   viewBoxHeight:number = 700;   // the viewBox size in px
@@ -138,18 +139,18 @@ export class Graph extends SVGElem {
      * @param userCfg a user defined configuration function with the signature 
      * `(cfg:{@link Config Config}):void.`
      */
-    private static makeConfig(userCfg?:CfgFn) { return ():Config => {
-        const cfg = {};
-        Graph.config(cfg);
-        Canvas.config(cfg);
-        Axes.config(cfg);
-        Series.config(cfg);
-        Grid.config(cfg);
-        Chart.config(cfg);
-        Legend.config(cfg);
-        if (userCfg) { userCfg(cfg); }
-        return cfg;
-    };}
+    private static makeConfig(userCfg?:CfgFn) { 
+        return (cfg:Config) => {
+            Graph.config(cfg);
+            Canvas.config(cfg);
+            Axes.config(cfg);
+            Series.config(cfg);
+            Grid.config(cfg);
+            Chart.config(cfg);
+            Legend.config(cfg);
+            if (userCfg) { userCfg(cfg); }
+        };
+    }
 
     /** 
      * Defines default values for all configurable parameters in `Graph`
@@ -220,13 +221,14 @@ export class Graph extends SVGElem {
             primary:   { x: new Scale(as.primary.x.scale),   y: new Scale(as.primary.y.scale) },
             secondary: { x: new Scale(as.secondary.x.scale), y: new Scale(as.secondary.y.scale) }
         };}
+        return this.scales;
     }
 
-    adjustRange(plotArea:Rect) { 
-        this.scales.primary.x.range([plotArea.l, plotArea.l+plotArea.w]);
-        this.scales.primary.y.range([plotArea.t+plotArea.h, plotArea.t]);
-        this.scales.secondary.x.range([plotArea.l, plotArea.l+plotArea.w]);
-        this.scales.secondary.y.range([plotArea.t+plotArea.h, plotArea.t]);
+    adjustRange(plotArea:Rect, scales:Scales) { 
+        scales.primary.x.range([plotArea.l, plotArea.l+plotArea.w]);
+        scales.primary.y.range([plotArea.t+plotArea.h, plotArea.t]);
+        scales.secondary.x.range([plotArea.l, plotArea.l+plotArea.w]);
+        scales.secondary.y.range([plotArea.t+plotArea.h, plotArea.t]);
     }
 
     /**
@@ -276,21 +278,21 @@ export class Graph extends SVGElem {
     oncreate(node?: Vnode) {
         window.addEventListener("resize", function() { m.redraw(); });
         this.adjustHeight(node); 
-        setTimeout(() => {
-            this.adjustMargins(node.attrs.cfg);
-            m.redraw();
-        }, 0);
+        Promise.resolve(node.attrs.cfg)
+               .then(delay(10))
+               .then(this.adjustMargins.bind(this))
+               .then(m.redraw);
     }
 
     view(node?: Vnode): Vnode {
         const cfgFn = node.attrs.cfgFn;
-        const cfg = Graph.makeConfig(cfgFn);
-        const cp = cfg();
+        const cp:Config = {};
+        Graph.makeConfig(cfgFn)(cp);
         node.attrs.cfg = cp;
         const plotArea = this.createPlotArea(cp);
-        this.createScales(cp);
+        const scales = this.createScales(cp);
         this.createData(cp);
-        this.adjustRange(plotArea);
+        this.adjustRange(plotArea, scales);
         this.data.adjustDomains(cp.series, this.scales);
         const result = m('svg', { class:'hs-graph', width:'100%', height:'100%', 
                 viewBox:`0 0 ${round(viewBoxWidth)} ${round(viewBoxHeight)}` }, [

@@ -8,11 +8,11 @@
  */
 
 /** */
-import { m, Vnode}  from 'hslayout';
-import { Config }   from './Graph';
-import { SVGElem }  from './SVGElem';
-import { Range }    from './DAta';
-import { Scale }    from './Scale';
+import { m, Vnode}          from 'hslayout';
+import { Config }           from './Graph';
+import { SVGElem }          from './SVGElem';
+import { NumRange }         from './Data';
+import { Scale, TickType }  from './Scale';
 
 /** defines configurable parameters for a grid */
 export interface GridCfg {
@@ -72,18 +72,18 @@ export class Grid extends SVGElem{
     /** 
      * Draws horizontal gridlines parallel to the x-axis
      */
-    private drawVerGrid(cfg:{visible:boolean}, scale:Scale, range:Range, ticks:number[]) {
-        return m('svg', { class:'hs-graph-grid-hor' }, ticks.map((t:number) =>
-            this.horLine(range[0], range[1], scale.convert(t))
+    private drawVerGrid(cfg:{visible:boolean}, scale:Scale, range:NumRange, ticks:TickType[]) {
+        return m('svg', { class:'hs-graph-grid-hor' }, ticks.map((t:TickType) =>
+            this.horLine(range[0], range[1], scale.convert(t.pos))
         ));
     }
 
     /** 
      * Draws vertical gridlines parallel to the y-axis
      */
-    private drawHorGrid(cfg:{visible:boolean}, scale:Scale, range:Range, ticks:number[]) {
-        return m('svg', { class:'hs-graph-grid-ver' }, ticks.map((t:number) =>
-            this.verLine(scale.convert(t), range[0], range[1])
+    private drawHorGrid(cfg:{visible:boolean}, scale:Scale, range:NumRange, ticks:TickType[]) {
+        return m('svg', { class:'hs-graph-grid-ver' }, ticks.map((t:TickType) =>
+            this.verLine(scale.convert(t.pos), range[0], range[1])
         ));
     }
 

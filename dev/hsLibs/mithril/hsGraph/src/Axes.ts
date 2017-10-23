@@ -56,8 +56,9 @@
  /** */
 import { m, Vnode}                          from 'hslayout';
 import { Config }                           from './Graph';
-import { Scale, XYScale, Scales, ScaleCfg, DomainCfg  }           from './Scale';
-import { SVGElem, round, Area, TitleCfg }   from './SVGElem';
+import { Scale, XYScale, Scales }           from './Scale';
+import { ScaleCfg, DomainCfg, TickType  }   from './Scale';
+import { SVGElem, Area, TitleCfg }          from './SVGElem';
 
 /** Defines configurable settings for tick marks */
 export interface MarkCfg {
@@ -72,6 +73,7 @@ export interface MarkCfg {
 export interface TickStruct {
     marks:  MarkCfg;
     labels: TitleCfg;
+    labelFmt: string;
 }
 
 /** Defines configurable settings for major and minor ticks (marks and labels) */
@@ -84,21 +86,6 @@ export interface TicksCfg {
 export interface AxesSet {
     primary:   { x: AxisCfg; y: AxisCfg; };
     secondary: { x: AxisCfg; y: AxisCfg; };
-}
-
-/** 
- * calculates the range value of axis crossing from a domain value.
- * @param cross the domain value where the axis crosses. Either 'min', 'max', or a numeric domain value
- * @param scale the Scale object for the perpendicular axis.
- */
-function getCrossAt(cross:string|number, scale:Scale):number {
-    let crossesAt:number;
-    switch (cross) {
-        case 'min': crossesAt = scale.domain()[0]; break;
-        case 'max': crossesAt = scale.domain()[1]; break;
-        default:    crossesAt = <number>cross || 0;
-    }
-    return scale.convert(crossesAt);
 }
 
 /** Defines configurable settings per axis */
@@ -117,6 +104,21 @@ export interface AxisCfg {
 
     /** configures the major and minor ticks */
     ticks: TicksCfg;
+}
+
+/** 
+ * calculates the range value of axis crossing from a domain value.
+ * @param cross the domain value where the axis crosses. Either 'min', 'max', or a numeric domain value
+ * @param scale the Scale object for the perpendicular axis.
+ */
+function getCrossAt(cross:string|number, scale:Scale):number {
+    let crossesAt:number;
+    switch (cross) {
+        case 'min': crossesAt = <number>scale.domain()[0]; break;
+        case 'max': crossesAt = <number>scale.domain()[1]; break;
+        default:    crossesAt = <number>cross || 0;
+    }
+    return scale.convert(crossesAt);
 }
 
 export class Axes extends SVGElem {
@@ -143,16 +145,18 @@ export class Axes extends SVGElem {
     *  cfg.[primary|secondary].[x|y] = {@link Axes.AxisCfg <Axes.AxisCfg>}{
     *     visible:    primary? true : false,   // hide secondary axes
     *     crossesAt:  primary? 'min':'max',    // default axis crossing
-    *     scale:      scaleCfg,                // see above
+    *     scale:      scaleCfg,                // see {@link Scale.ScaleCfg Scale.ScaleCfg}
     *     title:      titleCfg(primary, x),
     *     ticks: {                    
     *         major: {                
     *             marks:  markCfg(primary, true),  
-    *             labels: labelCfg(primary, x, true)      
+    *             labels: labelCfg(primary, x, true),     
+    *             labelFmt: undefined 
     *         },
     *         minor: { 
     *             marks:  markCfg(primary, false),
-    *             labels: labelCfg(primary, x, false)     
+    *             labels: labelCfg(primary, x, false),     
+    *             labelFmt: undefined 
     *         }
     *     } 
     *  }
@@ -235,11 +239,13 @@ export class Axes extends SVGElem {
                 ticks: {                    
                     major: {                
                         marks:  markCfg(primary, true),  
-                        labels: labelCfg(primary, x, true)      
+                        labels: labelCfg(primary, x, true),
+                        labelFmt: undefined    
                     },
                     minor: { 
                         marks:  markCfg(primary, false),
-                        labels: labelCfg(primary, x, false)     
+                        labels: labelCfg(primary, x, false),    
+                        labelFmt: undefined    
                     }
                 } 
             };
@@ -277,12 +283,12 @@ export class Axes extends SVGElem {
     /**
      * draws the tick marks. Labels are plotted for major tick marks only.
      */
-    drawTickMarks(dir:string, type:string, crossesAt:number, scale:Scale, ticks:number[], cfg:TickStruct):Vnode {
+    drawTickMarks(dir:string, type:string, crossesAt:number, scale:Scale, ticks:TickType[], cfg:TickStruct):Vnode {
         const x = dir==='x';
         return m('svg', { class:`hs-graph-axis-${type}-tick-marks`}, 
-            !cfg.marks.visible? '' : ticks.map((t:number) => { 
-                return x? this.verLine(scale.convert(t), crossesAt, crossesAt+cfg.marks.length) :
-                          this.horLine(crossesAt, crossesAt-cfg.marks.length, scale.convert(t));
+            !cfg.marks.visible? '' : ticks.map((t:TickType) => { 
+                return x? this.verLine(scale.convert(t.pos), crossesAt, crossesAt+cfg.marks.length) :
+                          this.horLine(crossesAt, crossesAt-cfg.marks.length, scale.convert(t.pos));
             })
         );
     }
@@ -290,12 +296,13 @@ export class Axes extends SVGElem {
     /**
      * draws the tick labels. Labels are plotted for major tick marks only.
      */
-    drawTickLabels(x:boolean, crossesAt:number, scale:Scale, ticks:number[], cfg:TickStruct):Vnode {
+    drawTickLabels(x:boolean, crossesAt:number, scale:Scale, ticks:TickType[], cfg:TickStruct):Vnode {
+        scale.setLabelFormat(cfg.labelFmt);
         return m('svg', {class:'hs-graph-axis-tick-label'}, 
-            !cfg.labels.visible? '' : ticks.map((t:number) => { 
-                const v = scale.convert(t);
+            !cfg.labels.visible? '' : ticks.map((t:TickType) => { 
+                const v = scale.convert(t.pos);
                 const xy = { transform:`translate(${x?v:crossesAt}, ${x?crossesAt:v})` };
-                return m('g', xy, this.text(cfg.labels, round(t)));
+                return m('g', xy, this.text(cfg.labels, t.label));
             })
         );
     }
@@ -342,4 +349,94 @@ export class Axes extends SVGElem {
             this.drawAxis('y', scales.secondary, 'secondary', cfg)
         ]);
     }
+}
+
+class Examples {
+    /**
+     * ### Simple Example
+     * <example>
+     * <file name='script.js'>
+     * let series = {
+     *    names:['time', 'volume'],
+     *    rows:[
+     *      [-1, 0.2],
+     *      [0.2, 0.7],
+     *      [0.4, -0.2],
+     *      [0.6, 0],
+     *      [0.8, 0.5],
+     *      [1, 0.7]
+     * ]};
+     * 
+     * m.mount(root, { 
+     *      view:() => m(hsgraph.Graph, {cfgFn: cfg => {
+     *          cfg.chart.title.text          = 'Simple Example';
+     *          cfg.series.data   = series;
+     *          cfg.series.series = [{ xCol: 'time', yCol:'volume' }];
+     *      }})
+     * });
+     *
+     * </file>
+     * <file name='style.css'>
+     * .hs-graph-chart { fill: #fff; }
+     * .hs-graph-series { stroke-width: 5; }
+     * </file>
+     * </example>
+     */
+    exampleLinearAxes() {}
+
+    /**
+    * ### Logarithmic Axis
+    * <example>
+    * <file name='script.js'>
+    * let series = {
+    *    names:['time', 'volume'],
+    *    rows:[
+    *      [0, 0.2], [0.2, 0.7], [0.4, 8], [0.6, 10], [0.8, 0.5], [1, 15]
+    * ]};
+    * 
+    * m.mount(root, { 
+    *      view:() => m(hsgraph.Graph, {cfgFn: cfg => {
+    *          cfg.chart.title.text = 'Log Y Axis';
+    *          cfg.series.data   = series;
+    *          cfg.series.series = [{ xCol: 'time', yCol:'volume' }];
+    *          cfg.axes.primary.y.scale.type = hsgraph.Scale.type.log;
+    *          cfg.axes.primary.y.scale.domain = ['tight', 'tight'];
+    *      }})
+    * });
+    *
+    * </file>
+    * <file name='style.css'>
+    * .hs-graph-series { stroke-width: 5; }
+    * </file>
+    * </example>
+    */
+    exampleLogAxis() {}
+
+    /**
+    * ### Date Axis
+    * <example>
+    * <file name='script.js'>
+    * let series = {
+    *    names:['time', 'volume'],
+    *    rows:[['2/6/17', 0.2], ['3/18/17', 0.7], ['5/1/17', 8], ['11/20/17', 10], ['1/15/18', 0.5]]
+    * };
+    * 
+    * m.mount(root, { 
+    *      view:() => m(hsgraph.Graph, {cfgFn: cfg => {
+    *          cfg.chart.title.text = 'Date X Axis';
+    *          cfg.series.data   = series;
+    *          cfg.series.series = [{ xCol: 'time', yCol:'volume' }];
+    *          cfg.axes.primary.x.scale.type = hsgraph.Scale.type.date;
+    *          cfg.axes.primary.x.ticks.major.labelFmt = '%MMM %YY';
+    *      }})
+    * });
+    *
+    * </file>
+    * <file name='style.css'>
+    * .hs-graph-series { stroke-width: 5; }
+    * </file>
+    * </example>
+    */
+    exampleDateAxis() {}
+
 }

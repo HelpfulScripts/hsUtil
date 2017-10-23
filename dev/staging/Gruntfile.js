@@ -2,12 +2,13 @@ const path = require('path');
 
 const basePath = '../';
 const paths = [
-    ['hsApps/', 'hsDoc/'],
-    ['hsLibs/mithril/', 'hsLayout/'],
-    ['hsLibs/mithril/', 'hsWidgets/'],
-    ['hsLibs/mithril/', 'hsGraph/'],
-    ['hsLibs/mithril/', 'hsConfig/'],
-    ['hsLibs/node/',    'hsNode/']
+    ['hsApps/',             'hsDoc/'],
+    ['hsLibs/mithril/',     'hsLayout/'],
+    ['hsLibs/mithril/',     'hsWidgets/'],
+    ['hsLibs/mithril/',     'hsGraph/'],
+    ['hsLibs/mithril/',     'hsConfig/'],
+    ['hsLibs/node/',        'hsNode/'],
+    ['hsLibs/standalone/',  'hsUtil/']
 ];
 
 /*global module:false*/

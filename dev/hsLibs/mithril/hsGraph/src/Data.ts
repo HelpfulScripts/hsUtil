@@ -7,10 +7,13 @@ import { Scales }       from './Scale';
 import { SeriesCfg, SeriesSet }    from './Series';
 
 /** defines a [min-max] range */
-export type Range = [number, number];
+export type NumRange = [number, number];
 
 /** defines domain that includes all values of a column */
-export type Domain = Range | string[];
+export type NumDomain = [number, number];
+export type DateDomain = [Date, Date];
+export type NameDomain = string[];
+export type Domain = NumDomain | DateDomain | NameDomain;
 
 export type ColIndex = number|string;
 

@@ -132,22 +132,3 @@ function recursiveIndex(content:any, index:any, lib:string, path='') {
         }
     }
 }
-/**
- * Validates the `name` of `External module`s. If the `name` starts with the `lib` name
- * then truncate the name by removing '`lib`/src/' from the left side of the name.
- * @param content the docset to evaluate
- * @param lib the library name
- */
-/*
-function validExternalModuleName(content:any, lib:string):boolean {
-    let result = false;
-    if (content.kindString !== 'External module') { return true; }
-    else if (content.name.indexOf('/')>0 && content.name.indexOf(lib+'/src/')===0) {
-        let j = (lib+'/src/').length;
-        content.name = content.name.substring(j);
-        result = true;
-    }
-    return result;
-}
-*/
-

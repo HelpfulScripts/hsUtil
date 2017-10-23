@@ -70,21 +70,22 @@
  */
 
 /** */
-import { m }                    from 'hslayout';
-import { Menu, MenuDesc }       from 'hswidget';
-import { Container }            from 'hslayout';
-import { shortCheckSum, delay } from 'hsutil';
-import * as hslayout            from 'hslayout';
-import * as hswidget            from 'hswidget';
-import * as hsgraph             from 'hsgraph';
+import { m }                from 'hslayout';
+import { Menu, MenuDesc }   from 'hswidget';
+import { Container }        from 'hslayout';
+import { shortCheckSum }    from 'hsutil'; 
+import { delay }            from 'hsutil'; 
+import * as hslayout        from 'hslayout';
+import * as hswidget        from 'hswidget';
+import * as hsgraph         from 'hsgraph';
 
 
 /**
  * describes an executable comment example
  */
 interface CommentDescriptor { 
-    eid:    string;                     // example tag ID
-    mid:    string;                     // menu tag ID
+    exampleID: string;                  // example tag ID
+    menuID:    string;                  // menu tag ID
     desc:   MenuDesc;                   // menu items
     pages:  {string?:string};           // page content for each menu item
     executeScript?: (root:any) => void; // the example code to execute
@@ -113,29 +114,33 @@ export function example(context:any) {
     context.hslayout = hslayout;
     context.hswidget = hswidget;
     context.hsgraph  = hsgraph;
-    const names = Object.keys(context);
-    const modules = names.map(n => context[n]);
+    const libNames = Object.keys(context);
+    const modules = libNames.map(n => context[n]);
     return (example:string) => { 
         const instance = shortCheckSum(example);
         let IDs = gInitialized[instance]; 
         if (!IDs) {
-            IDs = gInitialized[instance] = initDesc(() => addExample(IDs).then(executeScript));
+            IDs = gInitialized[instance] = initDesc(() => addExample(IDs).then(executeScript)); // called when source menu changes
             try {
-                const script = new Function('root', ...names, getCommentDescriptor(IDs, example));    
-                IDs.executeScript = (root:any) => script(root, ...modules);
+                const scriptFn = new Function('root', ...libNames, getCommentDescriptor(IDs, example));    
+                IDs.executeScript = (root:any) => scriptFn(root, ...modules);
             }
             catch(e) { console.log('creating script:' + e); }
         }
-        if (!document.getElementById(IDs.mid)) { 
-            addExample(IDs).then(delay(1)).then(executeScript);
+        if (document.getElementById(IDs.menuID)) { 
+//console.log(`ID ${IDs.menuID} exists`);
+//            executeScript(IDs);
+        } else {
+//console.log(`adding example for ID ${IDs.menuID}`);
+            addExample(IDs).then(executeScript);
         }
         const styles = IDs.pages['css']; 
 
         // prefix css selectors with ID of main execution area to sandbox the scope
         const style = (styles===undefined)? '': styles.replace(/(^|})\s*?(\S*?)\s*?{/gi, (x:string, ...args:any[]) =>
-            x.replace(args[1], `#${IDs.mid} ${args[1]}`)
+            x.replace(args[1], `#${IDs.menuID} ${args[1]}`)
         );
-        return `<style>${style}</style><example id=${IDs.eid} class="hs-layout-frame"></example>`;
+        return `<style>${style}</style><example id=${IDs.exampleID} class="hs-layout-frame"></example>`;
     };
 }
 
@@ -144,8 +149,8 @@ export function example(context:any) {
  */
 function initDesc(fn:any):CommentDescriptor {
     return {
-        eid:     getNewID(),    // example tag ID
-        mid:     getNewID(),    // main execution area tag ID
+        exampleID:  getNewID(),    // example tag ID
+        menuID:     getNewID(),    // main execution area tag ID
         desc:<MenuDesc>{ 
             items:<string[]>[],
             selectedItem: 'js',
@@ -162,8 +167,8 @@ function getNewID():string {
 }
 
 /** asynchronously adds the example structure on the page and then executed the script. */
-function addExample(IDs:CommentDescriptor) {
-    return Promise.resolve(IDs).then(addExampleStructure);
+function addExample(IDs:CommentDescriptor):Promise<CommentDescriptor> {
+    return Promise.resolve(IDs).then(addExampleStructure).then(delay(1)); 
 }
 
 /**
@@ -171,15 +176,17 @@ function addExample(IDs:CommentDescriptor) {
  * mount the menu and execute the script function provided in `IDs`. 
  * @param IDs the `CommentDescriptor` to execute on. 
  */
-function addExampleStructure(IDs:CommentDescriptor) { 
+function addExampleStructure(IDs:CommentDescriptor):CommentDescriptor { 
     const item = IDs.desc.selectedItem;
     const source = m.trust(`<code><pre>${IDs.pages[item]}</pre></code>`);
-    const root = document.getElementById(IDs.eid);
+    const root = document.getElementById(IDs.exampleID);
 
     m.mount(root, {view: () => m(Container, { 
         columns: ["50%"],
         content: [
-            m(Container, {content: m('.hs-layout .hs-execution', {id:IDs.mid})}),
+            m(Container, {
+                content: m('.hs-layout .hs-execution', {id:IDs.menuID}, 'placeholder')
+            }),
             m(Container, {
                 rows:["30px", "fill"],
                 content:[
@@ -197,10 +204,10 @@ function addExampleStructure(IDs:CommentDescriptor) {
  * @param IDs provides the context in which the script is exceuted/
  */
 function executeScript(IDs:CommentDescriptor) {
-    const root = document.getElementById(IDs.mid);
+    const root = document.getElementById(IDs.menuID);
     try { IDs.executeScript(root); }
     catch(e) { 
-        console.log("executing script: " + e); 
+        console.log("error executing script: " + e); 
         console.log(e.stack);
     }
     m.redraw();
@@ -217,9 +224,9 @@ function getCommentDescriptor(IDs:CommentDescriptor, example:string):string {
     let result = '';
     example.replace(/<file[\s]*name=[\S]*?\.([\s\S]*?)['|"]>([\S\s]*?)<\/file>/gi, function(text:string) {
         const args = [...arguments];
-        const content = args[2].trim();
-        IDs.desc.items.push(args[1]);
-        IDs.pages[args[1]] = content;
+        const content = args[2].trim(); // the part between <file> and </file>
+        IDs.desc.items.push(args[1]);   // record available extensions, i.e. 'js', 'html', etc 
+        IDs.pages[args[1]] = content;   // associate the content with the extension
         return result;
     });
     return IDs.pages['js'];

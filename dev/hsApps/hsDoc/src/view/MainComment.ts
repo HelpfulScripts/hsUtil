@@ -63,10 +63,13 @@ function textOrShortTextOrDescription(comment:any, short:boolean):Vnode {
     if (comment.tags) {
         comment.tags.map((tag:any) => {if (tag.tag==='description') { text = tag.text;}} );
     }
-    text = text.replace(/<example>([\S\s]*?)<\/example>/gi, example({}));
+    text = text.replace(/<example>([\S\s]*?)<\/example>/gi, short? '' : example({}));
     return m('.hs-item-comment-desc', prettifyCode(text, short));
 }
 
+/**
+ * creates the `returns` message for a function or method.
+ */
 function returns(comment:any, short:boolean):Vnode {
     let text = comment.returns;
     return m('.hs-item-comment-return', !text? '': [            
