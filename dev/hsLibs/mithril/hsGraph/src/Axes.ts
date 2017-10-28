@@ -351,92 +351,87 @@ export class Axes extends SVGElem {
     }
 }
 
-class Examples {
-    /**
-     * ### Simple Example
-     * <example>
-     * <file name='script.js'>
-     * let series = {
-     *    names:['time', 'volume'],
-     *    rows:[
-     *      [-1, 0.2],
-     *      [0.2, 0.7],
-     *      [0.4, -0.2],
-     *      [0.6, 0],
-     *      [0.8, 0.5],
-     *      [1, 0.7]
-     * ]};
-     * 
-     * m.mount(root, { 
-     *      view:() => m(hsgraph.Graph, {cfgFn: cfg => {
-     *          cfg.chart.title.text          = 'Simple Example';
-     *          cfg.series.data   = series;
-     *          cfg.series.series = [{ xCol: 'time', yCol:'volume' }];
-     *      }})
-     * });
-     *
-     * </file>
-     * <file name='style.css'>
-     * .hs-graph-chart { fill: #fff; }
-     * .hs-graph-series { stroke-width: 5; }
-     * </file>
-     * </example>
-     */
-    exampleLinearAxes() {}
+/**
+ * ### Simple Example
+ * <example>
+ * <file name='script.js'>
+ * let series = {
+ *    names:['time', 'volume'],
+ *    rows:[
+ *      [-1, 0.2],
+ *      [0.2, 0.7],
+ *      [0.4, -0.2],
+ *      [0.6, 0],
+ *      [0.8, 0.5],
+ *      [1, 0.7]
+ * ]};
+ * 
+ * m.mount(root, { 
+ *      view:() => m(hsgraph.Graph, {cfgFn: cfg => {
+ *          cfg.chart.title.text          = 'Simple Example';
+ *          cfg.series.data   = series;
+ *          cfg.series.series = [{ xCol: 'time', yCol:'volume' }];
+ *      }})
+ * });
+ *
+ * </file>
+ * <file name='style.css'>
+ * .hs-graph-chart { fill: #fff; }
+ * .hs-graph-series { stroke-width: 5; }
+ * </file>
+ * </example>
+ */
+class ExampleLinearAxis {}
 
-    /**
-    * ### Logarithmic Axis
-    * <example>
-    * <file name='script.js'>
-    * let series = {
-    *    names:['time', 'volume'],
-    *    rows:[
-    *      [0, 0.2], [0.2, 0.7], [0.4, 8], [0.6, 10], [0.8, 0.5], [1, 15]
-    * ]};
-    * 
-    * m.mount(root, { 
-    *      view:() => m(hsgraph.Graph, {cfgFn: cfg => {
-    *          cfg.chart.title.text = 'Log Y Axis';
-    *          cfg.series.data   = series;
-    *          cfg.series.series = [{ xCol: 'time', yCol:'volume' }];
-    *          cfg.axes.primary.y.scale.type = hsgraph.Scale.type.log;
-    *          cfg.axes.primary.y.scale.domain = ['tight', 'tight'];
-    *      }})
-    * });
-    *
-    * </file>
-    * <file name='style.css'>
-    * .hs-graph-series { stroke-width: 5; }
-    * </file>
-    * </example>
-    */
-    exampleLogAxis() {}
+/**
+* ### Logarithmic Axis
+* <example>
+* <file name='script.js'>
+* let series = {
+*    names:['time', 'volume'],
+*    rows:[[0.3, 0.2], [0.32, 0.7], [0.4, 8], [0.56, 10], [0.7, 0.5], [0.8, 15]]
+* };
+* 
+* m.mount(root, { 
+*      view:() => m(hsgraph.Graph, {cfgFn: cfg => {
+*          cfg.chart.title.text = 'Log Y Axis';
+*          cfg.series.data   = series;
+*          cfg.series.series = [{ xCol: 'time', yCol:'volume' }];
+*          cfg.axes.primary.x.scale.type = hsgraph.Scale.type.log;
+*          cfg.axes.primary.x.scale.domain = ['tight', 'tight'];
+*          cfg.axes.primary.y.scale.type = hsgraph.Scale.type.log;
+*          cfg.axes.primary.y.scale.domain = ['auto', 'auto'];
+*      }})
+* });
+*
+* </file>
+* </example>
+*/
+class ExampleLogAxis {}
 
-    /**
-    * ### Date Axis
-    * <example>
-    * <file name='script.js'>
-    * let series = {
-    *    names:['time', 'volume'],
-    *    rows:[['2/6/17', 0.2], ['3/18/17', 0.7], ['5/1/17', 8], ['11/20/17', 10], ['1/15/18', 0.5]]
-    * };
-    * 
-    * m.mount(root, { 
-    *      view:() => m(hsgraph.Graph, {cfgFn: cfg => {
-    *          cfg.chart.title.text = 'Date X Axis';
-    *          cfg.series.data   = series;
-    *          cfg.series.series = [{ xCol: 'time', yCol:'volume' }];
-    *          cfg.axes.primary.x.scale.type = hsgraph.Scale.type.date;
-    *          cfg.axes.primary.x.ticks.major.labelFmt = '%MMM %YY';
-    *      }})
-    * });
-    *
-    * </file>
-    * <file name='style.css'>
-    * .hs-graph-series { stroke-width: 5; }
-    * </file>
-    * </example>
-    */
-    exampleDateAxis() {}
-
-}
+/**
+* ### Date Axis
+* <example>
+* <file name='script.js'>
+* let series = {
+*    names:['time', 'volume'],
+*    rows:[['2/6/17', 0.2], ['3/18/17', 0.7], ['5/1/17', 8], ['11/20/17', 10], ['1/15/18', 0.5]]
+* };
+* 
+* m.mount(root, { 
+*      view:() => m(hsgraph.Graph, {cfgFn: cfg => {
+*          cfg.chart.title.text = 'Date X Axis';
+*          cfg.series.data   = series;
+*          cfg.series.series = [{ xCol: 'time', yCol:'volume' }];
+*          cfg.axes.primary.x.scale.type = hsgraph.Scale.type.date;
+*          cfg.axes.primary.x.ticks.major.labelFmt = '%MMM %YY';
+*      }})
+* });
+*
+* </file>
+* <file name='style.css'>
+* .hs-graph-series { stroke-width: 5; }
+* </file>
+* </example>
+*/
+class ExampleDateAxis {}
