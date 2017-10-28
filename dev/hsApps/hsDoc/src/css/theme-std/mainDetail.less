@@ -34,9 +34,14 @@
     span { .hs-indent; }
 }
 
+@BgStop: 30%;
+
 .hs-item-desc {
-    background: linear-gradient(to bottom, @Background, @Transparent); 
     padding-left: 0.5em;
+}
+
+.hs-item-variable {
+    background: linear-gradient(to bottom, @Background @BgStop , @Transparent); 
     .hs-item-title & {
         background-image: none;
     }
@@ -50,8 +55,8 @@
             background-color: @PublicBackground;
             color: @PublicTitleColor;
         }
-        .hs-item-desc {
-            background: linear-gradient(to bottom, @PublicBackground, @Transparent); 
+        .hs-item-variable {
+            background: linear-gradient(to bottom, @PublicBackground @BgStop, @Transparent); 
         }
     }
     &.hs-item-static {
@@ -59,14 +64,14 @@
             background-color: @StaticBackground;
             color: @StaticTitleColor;
         }
-        .hs-item-desc {
-            background: linear-gradient(to bottom, @StaticBackground, @Transparent); 
+        .hs-item-variable {
+            background: linear-gradient(to bottom, @StaticBackground @BgStop, @Transparent); 
         }
     }
 }
 
 .hs-item-child {
-    padding: 4px 0 10px 5px;  
+    padding: 4px 0 10px 0px;  
     font-size: 1em;
 }
 
