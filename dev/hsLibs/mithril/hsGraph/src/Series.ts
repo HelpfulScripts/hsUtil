@@ -13,6 +13,7 @@ import { Config }               from './Graph';
 import { DataSet, ColIndex }    from './Data';
 import { SVGElem }              from './SVGElem';
 import { XYScale }              from './Scale';
+import { PlotLine }             from './PlotLine';
 
 export interface SeriesStyle {
     line: {
@@ -69,41 +70,24 @@ export class Series extends SVGElem {
      *    data:<[][]>null,  // row array of columns, initialized to null; first row contains column names
      *    clip: true,       // series an markers are clipped to the plot area
      *    series: <[{       // array of series descriptors:
-     *       xCol:string,  //    name of x-column in `data`
-     *       yCol:string   //    name of y-column in `data`
+     *       xCol:string,   //    name of x-column in `data`
+     *       yCol:string    //    name of y-column in `data`
      *    }]>[],            // initialized to empty array (no series)
-     *    styles: [         // arra of predefined styles. styles[i] will be assigned to series[i].
+     *    styles: [         // array of predefined styles. styles[i] will be assigned to series[i].
      *       { line:   { 
-     *            color: '#f00', // the line color to use
+     *            color: <color>,// the line color to use
      *            width: 5,      // the line width in viewbox units
      *            visible: true  // whether line is draw or not
      *       },
      *         marker: { 
-     *            color: '#f00', // the marker color to use
+     *            color: <color>,// the marker color to use
      *            size: 10,      // the marker size in viewbox coordinates
      *            shape: Series.marker.circle, // the marker shaper, See {@link Series.Series.marker Series.marker}
      *            visible: true 
-     *       }},
-     *       { line:   { color: '#0f0', width: 5, visible: true },
-     *         marker: { color: '#0f0', size: 10, shape: Series.marker.circle, visible: true }},
-     *       { line:   { color: '#00f', width: 5, visible: true },
-     *         marker: { color: '#00f', size: 10, shape: Series.marker.circle, visible: true }},
-     *       { line:   { color: '#ff0', width: 5, visible: true },
-     *         marker: { color: '#ff0', size: 10, shape: Series.marker.circle, visible: true }},
-     *       { line:   { color: '#0ff', width: 5, visible: true },
-     *         marker: { color: '#0ff', size: 10, shape: Series.marker.circle, visible: true }},
-     *       { line:   { color: '#f0f', width: 5, visible: true },
-     *         marker: { color: '#f0f', size: 10, shape: Series.marker.circle, visible: true }},
-     *       { line:   { color: '#000', width: 5, visible: true },
-     *         marker: { color: '#000', size: 10, shape: Series.marker.circle, visible: true }},
-     *       { line:   { color: '#444', width: 5, visible: true },
-     *         marker: { color: '#444', size: 10, shape: Series.marker.circle, visible: true }},
-     *       { line:   { color: '#888', width: 5, visible: true },
-     *         marker: { color: '#888', size: 10, shape: Series.marker.circle, visible: true }},
-     *       { line:   { color: '#ccc', width: 5, visible: true },
-     *         marker: { color: '#ccc', size: 10, shape: Series.marker.circle, visible: true }}
+     *       }}
      *    ]
      *  } 
+     * with <color> in sequence ['#f00', '#0f0', '#00f', '#ff0', '#0ff', '#f0f', '#000', '#444', '#888', '#ccc']
      * ``` 
      * @param cfg the configuration object, containing default settings for all 
      * previously configured components.
@@ -113,28 +97,12 @@ export class Series extends SVGElem {
             data: {names:[], rows:[]},
             clip: true,
             series: <SeriesCfg[]>[],
-            styles: [
-                { line:   { color: '#f00', width: 5, visible: true },
-                  marker: { color: '#f00', size: 10, shape: Series.marker.circle, visible: false }},
-                { line:   { color: '#0f0', width: 5, visible: true },
-                  marker: { color: '#0f0', size: 10, shape: Series.marker.circle, visible: false }},
-                { line:   { color: '#00f', width: 5, visible: true },
-                  marker: { color: '#00f', size: 10, shape: Series.marker.circle, visible: false }},
-                { line:   { color: '#ff0', width: 5, visible: true },
-                  marker: { color: '#ff0', size: 10, shape: Series.marker.circle, visible: false }},
-                { line:   { color: '#0ff', width: 5, visible: true },
-                  marker: { color: '#0ff', size: 10, shape: Series.marker.circle, visible: false }},
-                { line:   { color: '#f0f', width: 5, visible: true },
-                  marker: { color: '#f0f', size: 10, shape: Series.marker.circle, visible: false }},
-                { line:   { color: '#000', width: 5, visible: true },
-                  marker: { color: '#000', size: 10, shape: Series.marker.circle, visible: false }},
-                { line:   { color: '#444', width: 5, visible: true },
-                  marker: { color: '#444', size: 10, shape: Series.marker.circle, visible: false }},
-                { line:   { color: '#888', width: 5, visible: true },
-                  marker: { color: '#888', size: 10, shape: Series.marker.circle, visible: false }},
-                { line:   { color: '#ccc', width: 5, visible: true },
-                  marker: { color: '#ccc', size: 10, shape: Series.marker.circle, visible: false }}
-            ]
+            styles: ['#f00', '#0f0', '#00f', '#ff0', '#0ff', '#f0f', '#000', '#444', '#888', '#ccc']
+                .map((c:string) => {
+                    return {line:   { color: c, width: 5, visible: true},
+                            marker: { color: c, size: 10, shape: Series.marker.circle, visible: false }
+                    };
+                })              
         };
     }
 
@@ -147,47 +115,6 @@ export class Series extends SVGElem {
             }, 
             clipID);
     }
-
-    drawLine(clipID:string, data:Array<number|string>[], x:number, y:number, scales:XYScale, sStyle:SeriesStyle) {
-        const style = `stroke: ${sStyle.line.color}; stroke-width:${sStyle.line.width};`;
-        return !sStyle.line.visible? m('.invisible-line','') : this.polyline(data, x, y, scales, clipID, style);
-    }
-
-    drawMarker(clipID:string, data:Array<number|string>[], x:number, y:number, scales:XYScale, sStyle:SeriesStyle) {
-        const mrk = Series.marker;
-        let style = `fill:${sStyle.marker.color}`;
-        return !sStyle.marker.visible? m('.invisible-marker','') : m('svg', {class:'hs-graph-series-markers'},
-            data.filter((e:any, i:number) => i>0)
-                .map((p:number[]) => {
-                    const cx = scales.x.convert(p[x]);
-                    const cy = scales.y.convert(p[y]);
-                    const r  = sStyle.marker.size;
-                    switch (sStyle.marker.shape) {
-                        case mrk.circle: 
-                            return this.circle({x:cx, y:cy}, r, style);
-                        case mrk.square: 
-                            return this.rect({x:cx-r, y:cy-r}, {w:2*r, h:2*r}, style);
-                        case mrk.diamond: 
-                            return this.polygon([[cx-r, cy], [cx, cy+r], [cx+r, cy], [cx, cy-r]], undefined, style);
-                        case mrk.upTriangle: 
-                            return this.polygon([[cx-r, cy+r], [cx+r, cy+r], [cx, cy-r]], undefined, style);
-                        case mrk.downTriangle: 
-                            return this.polygon([[cx-r, cy-r], [cx+r, cy-r], [cx, cy+r]], undefined, style);
-                    }
-                    return m(`.unkown-marker-${sStyle.marker.shape}`,'');
-                })
-        );
-    }
-
-    generate(data: number[]) {
-        const genFunc = function* () {
-            for (let i=0; i<data.length; i++) {
-                yield data[i];
-            }
-        };
-        for (let d of genFunc()) { console.log(d); }
-    }
-
 
     view(node?: Vnode): Vnode {
         const cfg    = node.attrs.cfg;
@@ -203,10 +130,10 @@ export class Series extends SVGElem {
                     console.log(`${series.xCol} or ${series.yCol} not found in data`); 
                     return m('.error','');
                 } else {
-                    return m('svg', {class:`hs-graph-series-${i}`}, [
-                        this.drawLine(clipID, data.getData(), x, y, scales, cfg.styles[i]),
-                        this.drawMarker(clipID, data.getData(), x, y, scales, cfg.styles[i])
-                    ]);
+                    const plot = new PlotLine();
+                    return m('svg', {class:`hs-graph-series-${i}`}, 
+                        plot.plot(data, x, y, scales, cfg.styles[i], clipID)
+                    );
                 }
             }))
         ]);
