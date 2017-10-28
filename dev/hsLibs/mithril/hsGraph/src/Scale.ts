@@ -263,6 +263,7 @@ export class Scale {
         const ticks:TicksCfg =  createTickMarks(this.scaleType(), this.domain(), numTicks, this.labelFmt);
         ticks.minor = ticks.minor.filter(inRange);
         ticks.major = ticks.major.filter(inRange);
+        if (ticks.major.length === 0) { ticks.major = ticks.minor; ticks.minor = []; }
         return ticks;
     }
     
