@@ -120,7 +120,10 @@ export function example(context:any) {
         const instance = shortCheckSum(example);
         let IDs = gInitialized[instance]; 
         if (!IDs) {
-            IDs = gInitialized[instance] = initDesc(() => addExample(IDs).then(executeScript)); // called when source menu changes
+            IDs = gInitialized[instance] = initDesc(() => addExample(IDs)   // called when source menu changes
+                .then(executeScript) 
+                .catch(executeError)
+            );
             try {
                 const scriptFn = new Function('root', ...libNames, getCommentDescriptor(IDs, example));    
                 IDs.executeScript = (root:any) => scriptFn(root, ...modules);
@@ -128,11 +131,8 @@ export function example(context:any) {
             catch(e) { console.log('creating script:' + e); }
         }
         if (document.getElementById(IDs.menuID)) { 
-//console.log(`ID ${IDs.menuID} exists`);
-//            executeScript(IDs);
         } else {
-//console.log(`adding example for ID ${IDs.menuID}`);
-            addExample(IDs).then(executeScript);
+            addExample(IDs).then(executeScript).catch(executeError);
         }
         const styles = IDs.pages['css']; 
 
@@ -212,6 +212,11 @@ function executeScript(IDs:CommentDescriptor) {
     }
     m.redraw();
     return IDs;
+}
+
+function executeError(e:any) {
+    console.log('rejection executing script:');
+    console.log(e);
 }
  
 /**
