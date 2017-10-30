@@ -4,26 +4,44 @@
 
 
 import { Scales }       from './Scale';
-import { SeriesCfg, SeriesSet }    from './Series';
+import { SeriesDef, SeriesConfig }    from './Series';
 
 /** defines a [min-max] range */
 export type NumRange = [number, number];
 
-/** defines domain that includes all values of a column */
+/** defines a numeric domain that includes all values of a column */
 export type NumDomain = [number, number];
+
+/** defines a Date domain that includes all values of a column */
 export type DateDomain = [Date, Date];
+
+/** defines a categorical domain that includes all values of a column */
 export type NameDomain = string[];
+
+/** defines a generic domain that can be any of the typed domains. */
 export type Domain = NumDomain | DateDomain | NameDomain;
 
-export type ColIndex = number|string;
+/** defines a Column Specifier, either as column name or index in the {@link Data.DataRow `DataRow`} array */
+export type ColSpecifier = number|string;
 
+/** a generic data value type, used in the {@link Data.DataRow `DataRow`} array */
 export type DataVal = number|string|Date;
 
+/** a single row of column values */
 export type DataRow = DataVal[];
 
+/** a row-of-column array of data. Values are accessed as `data[row][column]` */
 export type DataRows = DataRow[];
 
-/** */
+/** 
+ * Description of a data set:
+ * ```
+ * {
+ *    names: string[],  // array of names for columns in `rows` 
+ *    rows:  DataRows   // row array of columns, accessed as `` 
+ * }
+ * ```
+ */
 export type DataSet = {
     names: string[];
     rows:  DataRows;
@@ -51,7 +69,7 @@ export class Data {
     private data: DataRows;
     private meta: MetaStruct[] = [];
 
-    private getMeta(col:ColIndex):MetaStruct { 
+    private getMeta(col:ColSpecifier):MetaStruct { 
         if (!this.meta) { this.meta = []; }
         if (!this.meta[col]) { return undefined; }
        	this.meta[col].accessed = true;
@@ -78,11 +96,13 @@ export class Data {
      * @param column the data column, name or index, for which to return the index. 
      * @return the column number or `undefined`.
      */
-    public colNumber(col:ColIndex) {
+    public colNumber(col:ColSpecifier) {
         var m = this.getMeta(col);
         if (!m) { return undefined; }
-        m.accessed = true; 
-        return m.column; 
+        else {
+            m.accessed = true; 
+            return m.column; 
+        }
     }
     
     /**
@@ -91,7 +111,7 @@ export class Data {
      * @param column the data column, name or index. 
      * @return the column name or `undefined`.
      */
-    public colName(col:ColIndex) {
+    public colName(col:ColSpecifier) {
         var m = this.getMeta(col);
         if (!m) { return undefined; }
         m.accessed = true; 
@@ -104,7 +124,7 @@ export class Data {
      * @param column the data column, name or index. 
      * @return the column type.
      */
-    public colType(col:ColIndex) { 
+    public colType(col:ColSpecifier) { 
         return this.getMeta(col).types[0].type;
     }
 
@@ -116,7 +136,7 @@ export class Data {
      * @param col the index of the column to be typed. 
      * @return the most likely type of data in `col`.
      */
-    private findTypes(col:ColIndex):string {
+    private findTypes(col:ColSpecifier):string {
         const m = this.getMeta(col);
         const types:TypeStruct[] = [];
         Object.keys(Data.type).forEach((t:string) => {
@@ -179,35 +199,46 @@ export class Data {
      * @param col the column name or index 
      * @param domain the 
      */
-    private findDomain(col:ColIndex, domain:Domain) {
-        const c = this.colNumber(col);
-        const type = this.colType(col);
-        this.data.forEach((r:DataRow) => {
-            switch(type) {
-                case Data.type.nominal: 
-                    const nomDom = <string[]>domain;
-                    if (nomDom.indexOf(''+r[c]) < 0) { nomDom.push(''+r[c]); }
-                    break;
-                default: 
-                    let v:number = <number>r[c];
-                    domain[0] = (v<domain[0])? v : domain[0];
-                    domain[1] = (v>domain[1])? v : domain[1];
-            }
-        });
+    private findDomain(col:ColSpecifier, domain:Domain) {
+        if (col === undefined) { // use array index as domain
+            domain[0] = 0;
+            domain[1] = this.data.length-1;
+        } else {
+            const c = this.colNumber(col);
+            const type = this.colType(col);
+            this.data.forEach((r:DataRow) => {
+                switch(type) {
+                    case Data.type.nominal: 
+                        const nomDom = <string[]>domain;
+                        if (nomDom.indexOf(''+r[c]) < 0) { nomDom.push(''+r[c]); }
+                        break;
+                    default: 
+                        let v:number = <number>r[c];
+                        domain[0] = (v<domain[0])? v : domain[0];
+                        domain[1] = (v>domain[1])? v : domain[1];
+                }
+            });
+        }
     }
 
     /** 
      * determines the max ranges each coordinate of each series and auto-sets the domains on the respective scales. 
      */
-    public adjustDomains(cfg:SeriesSet, scales:Scales) {
-        let xDomain:Domain = [1e20, -1e20];
-        let yDomain:Domain = [1e20, -1e20];
-        cfg.series.map((s:SeriesCfg)=>{ // for each series:
-            this.findDomain(s.xCol, xDomain);
-            this.findDomain(s.yCol, yDomain);
+    public adjustDomains(cfg:SeriesConfig, scales:Scales) {
+        let domainDims = 0;
+        cfg.series.forEach((s:SeriesDef) => 
+            domainDims = Math.max(domainDims,s.cols.length)
+        );
+
+        const domains:Domain[] = Array(domainDims).fill(1).map(() => <NumDomain>[1e20, -1e20]);
+    
+        cfg.series.map((s:SeriesDef) => { // for each series:
+            s.cols.forEach((colIdx:ColSpecifier, i:number) => {
+                this.findDomain(colIdx, domains[i]);
+            });
         });
-        scales.primary.x.setAutoDomain(xDomain);
-        scales.primary.y.setAutoDomain(yDomain);
+        scales.primary.x.setAutoDomain(<NumDomain>domains[0]);
+        scales.primary.y.setAutoDomain(<NumDomain>domains[1]);
     }
 
     /**
@@ -219,7 +250,7 @@ export class Data {
      * @param autoType unless set to false, the method will attempt to determine the 
      * type of data and automatically cast data points to their correct value
      */
-    public setData(data:DataRows, names:ColIndex[], autoType=true):void {
+    public setData(data:DataRows, names:ColSpecifier[], autoType=true):void {
         this.meta = undefined;
         this.data = data;
         names.forEach((col:string) => this.addColumn(col));
@@ -227,7 +258,7 @@ export class Data {
         this.castData();
     }
 
-    public * allRows(column:ColIndex):Iterable<DataVal> {
+    public * allRows(column:ColSpecifier):Iterable<DataVal> {
         const c = this.colNumber(column);
         for (let r=0; r<this.data.length; r++) {
             yield this.data[r][c];

@@ -8,40 +8,31 @@
  */
 
 /** */
-import { m, Vnode}              from 'hslayout';
-import { Config }               from './Graph';
-import { DataSet, ColIndex }    from './Data';
-import { SVGElem }              from './SVGElem';
-import { XYScale }              from './Scale';
-import { PlotLine }             from './PlotLine';
+import { m, Vnode}      from 'hslayout';
+import { Config,
+         VisibleCfg }   from './Graph';
+import { Data, 
+         DataSet }      from './Data';
+import { ColSpecifier } from './Data';
+import { SVGElem }      from './SVGElem';
+import { XYScale }      from './Scale';
+import { Plot }         from './Plot';
+import { PlotLine }     from './Plot';
+import { PlotBar }      from './Plot';
 
-export interface SeriesStyle {
-    line: {
-        visible: boolean;           
-        color: string;              // the stroke color in hex
-        width: number;              // the stroke width in px
-    };
-    marker: {
-        visible: boolean;           
-        color: string;              // the stroke color in hex (#xxx)
-        size:  number;              // the stroke width in px
-        shape: Symbol;              
-    };
+
+function copyDefault(target:any, source:any, defaults:any) {
+    Object.keys(source).forEach((key:string) => {
+        if (typeof source[key] === 'object') { 
+            if (target[key] === undefined) { target[key] = {}; }
+            copyDefault(target[key], source[key], defaults); 
+        } else {
+            if (target[key] === undefined) { target[key] = source[key]; }
+            if (target[key] === 'default') { target[key] = defaults[key]; }
+        }
+    });
 }
 
-/** Defines Series columns and values to use. */
-export interface SeriesCfg {
-    xCol:ColIndex;     // the column name or index for the x values
-    yCol:ColIndex;     // the column name or index for the y values
-}
-
-/** Defines configurable settings. */
-export interface SeriesSet {
-    data: DataSet;          // array of rows; 1st row contains column headers
-    clip: boolean;          // clip series to the chart area
-    styles: SeriesStyle[];  // the series' style
-    series: SeriesCfg[];    // array of series descriptions
-}
 
 export class Series extends SVGElem { 
     /**
@@ -60,20 +51,28 @@ export class Series extends SVGElem {
         downTriangle:   Symbol('downward triangle marker')
     };
 
+    /**
+     * Defines available plot types:
+     * - line
+     * - bar
+     */
+    static plot = {
+        line:   new PlotLine(),
+        bar:    new PlotBar()
+    };
+
     /** 
      * Defines default values for all configurable parameters in `Series`
      * See {@link Graph.Graph.makeConfig Graph.makeConfig} for the sequence of initializations.
      * 
      * ### Configurations and Defaults
      * ```
-     *  cfg.series = {@link Series.SeriesSet <SeriesSet>}{
-     *    data:<[][]>null,  // row array of columns, initialized to null; first row contains column names
+     *  cfg.series = {@link Series.SeriesConfig <SeriesConfig>}{
+     *    data: {@link Data.DataSet <DataSet>},  // data to be plotted, initialized as `undefined`
      *    clip: true,       // series an markers are clipped to the plot area
-     *    series: <[{       // array of series descriptors:
-     *       xCol:string,   //    name of x-column in `data`
-     *       yCol:string    //    name of y-column in `data`
-     *    }]>[],            // initialized to empty array (no series)
-     *    styles: [         // array of predefined styles. styles[i] will be assigned to series[i].
+     *    series: {@link Series.SeriesDef <SeriesDef>} // array of series descriptors:
+     *          [],         // initialized to empty array (no series)
+     *    styles: {@link Series.SeriesStyle <SeriesStyle[]>} [ // array of predefined styles. styles[i] will be assigned to series[i].
      *       { line:   { 
      *            color: <color>,// the line color to use
      *            width: 5,      // the line width in viewbox units
@@ -84,6 +83,15 @@ export class Series extends SVGElem {
      *            size: 10,      // the marker size in viewbox coordinates
      *            shape: Series.marker.circle, // the marker shaper, See {@link Series.Series.marker Series.marker}
      *            visible: true 
+     *       },
+     *         fill: { 
+     *            color: <color>,// the fill color to use
+     *            visible: true 
+     *       },
+     *         bar: { 
+     *            color: <color>,// the bar color to use
+     *            width: 10,
+     *            visible: true 
      *       }}
      *    ]
      *  } 
@@ -93,17 +101,7 @@ export class Series extends SVGElem {
      * previously configured components.
      */
     static config(cfg:Config) {
-        cfg.series = <SeriesSet>{
-            data: {names:[], rows:[]},
-            clip: true,
-            series: <SeriesCfg[]>[],
-            styles: ['#f00', '#0f0', '#00f', '#ff0', '#0ff', '#f0f', '#000', '#444', '#888', '#ccc']
-                .map((c:string) => {
-                    return {line:   { color: c, width: 5, visible: true},
-                            marker: { color: c, size: 10, shape: Series.marker.circle, visible: false }
-                    };
-                })              
-        };
+        cfg.series = new SeriesConfig();
     }
 
     drawClipRect(clipID:string, scales:XYScale) {
@@ -117,25 +115,97 @@ export class Series extends SVGElem {
     }
 
     view(node?: Vnode): Vnode {
-        const cfg    = node.attrs.cfg;
-        const scales = node.attrs.scales.primary;
-        const data   = node.attrs.data;
+        const cfg:SeriesConfig  = node.attrs.cfg;
+        const scales:XYScale = node.attrs.scales.primary;
+        const data:Data      = node.attrs.data;
         const clipID = cfg.clip? 'hs'+Math.floor(Math.random()*10000) : undefined;
+        cfg.series.map((series:SeriesDef) => series.type.setDefaults(data, series, scales));
         return m('svg', { class:'hs-graph-series'}, [
             this.drawClipRect(clipID, scales),
-            m('svg', cfg.series.map((series:SeriesCfg, i:number) => { 
-                const x = data.colNumber(series.xCol);
-                const y = data.colNumber(series.yCol);
-                if (x<0 || y<0) { 
-                    console.log(`${series.xCol} or ${series.yCol} not found in data`); 
-                    return m('.error','');
-                } else {
-                    const plot = new PlotLine();
-                    return m('svg', {class:`hs-graph-series-${i}`}, 
-                        plot.plot(data, x, y, scales, cfg.styles[i], clipID)
-                    );
-                }
+            m('svg', cfg.series.map((series:SeriesDef, i:number) => { 
+                return m('svg', {class:`hs-graph-series-${i}`}, series.type.plot(data, series, scales, i, clipID));
             }))
         ]);
     }
 }
+
+export interface LineStyle extends VisibleCfg {
+    color: string;              // the stroke color in hex
+    width: number;              // the stroke width in px
+}
+
+export interface MarkerStyle extends VisibleCfg {
+    color: string;              // the stroke color in hex (#xxx)
+    size:  number;              // the stroke width in px
+    shape: Symbol;              
+}
+
+export interface FillStyle extends VisibleCfg {
+    color: string;              // the stroke color in hex (#xxx)
+}
+
+export interface BarStyle extends VisibleCfg {
+    color: string;              // the fill color in hex (#xxx)
+    width: number;              // width of bars in range pixels
+    offset:number;              // offset in range pixel between column series
+}
+
+export interface SeriesStyle {
+    line:   LineStyle;
+    marker: MarkerStyle;
+    fill:   FillStyle;
+    bar:    BarStyle;
+}
+
+/** 
+ * Defines Series columns and values to use, as well as the plot type to apply 
+ */
+export interface SeriesDef {
+    /** 
+     * required column names or indices. 
+     * [0] is reserved for the x direction. 
+     * Further elements are dependent on the {@link Series.type plot} type. 
+     */
+    cols:ColSpecifier[];  
+    /** optional plot type, selected from {@link Series.Series.plot Series.plot}; defaults to  `Series.plot.line` */
+    type?:Plot;   
+    /** style information to use for plotting; if ommitted, a `type`-dependent default is used */
+    style?:SeriesStyle;
+}
+
+
+/** Defines configurable settings. */
+export class SeriesConfig {
+    static defaultColors = ['#f00', '#0f0', '#00f', '#ff0', '#0ff', '#f0f', '#000', '#444', '#888', '#ccc'];
+    static defaultStyle = {
+        line:   { color:'default', visible: true, width: 5},
+        marker: { color:'default', visible: false, size: 10, shape: Series.marker.circle},
+        fill:   { color:'default', visible: false },
+        bar:    { color:'default', visible: false, width: 30, offset: 10 }
+    };       
+
+    private seriesDefs:SeriesDef[] = [];
+
+    /** the data set to plot, describing the column names and the rows-of-columns data */
+    data: DataSet; 
+
+    /** determines if seires plot will be clipped to the chart area */
+    clip = true;   
+           
+    /** array of series to plot.*/
+    set series(cfg: SeriesDef[]) {    // array of series descriptions
+        const defStyle = SeriesConfig.defaultStyle;
+        const defColors = SeriesConfig.defaultColors;
+        cfg.forEach((s:SeriesDef) => {
+            s.type = s.type || Series.plot.line;
+            s.style = s.style || <SeriesStyle>{};
+            const defaults = {
+                color:defColors[this.seriesDefs.length]
+            };
+            copyDefault(s.style, defStyle, defaults);
+            this.seriesDefs.push(s);
+        });
+    }
+    get series() { return this.seriesDefs; }
+}
+

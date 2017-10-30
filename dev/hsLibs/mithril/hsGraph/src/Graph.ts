@@ -20,13 +20,13 @@
  * 
  * function myConfig(cfg) {
  *      cfg.series.data   = series;
- *      cfg.series.styles[0].marker.visible = true;
- *      cfg.series.styles[1].marker.visible = true;
- *      cfg.series.styles[1].marker.shape = hsgraph.Series.marker.diamond;
  *      cfg.series.series = [
- *          { xCol: 'time', yCol:'volume'},
- *          { xCol: 'time', yCol:'price'}
+ *          { cols: ['time', 'volume']},
+ *          { cols: ['time', 'price']}
  *      ];
+ *      cfg.series.series[0].style.marker.visible = true;
+ *      cfg.series.series[1].style.marker.visible = true;
+ *      cfg.series.series[1].style.shape = hsgraph.Series.marker.diamond;
  *      const axes = cfg.axes.primary;
  *      cfg.chart.title.text          = 'Volume over Time';
  *      cfg.chart.title.xpos          = 'end';
@@ -56,33 +56,48 @@
  */
 
 /** */
-import { m, Vnode}           from 'hslayout';
-import { Data }              from './Data';
-import { Axes, AxesSet }     from './Axes';
-import { Scale, Scales }     from './Scale';
-import { Canvas, CanvasSet } from './Canvas';
-import { Series, SeriesSet } from './Series';
-import { Chart, ChartSet }   from './Chart';
-import { Grid, GridSet }     from './Grid';
-import { Legend, LegendSet } from './Legend';
-import { SVGElem, Rect, round } from './SVGElem';
-import { delay }             from 'hsutil';
+import { m, Vnode}              from 'hslayout';
+import { Data }                 from './Data';
+import { Axes, AxesConfig }        from './Axes';
+import { Scale, Scales }        from './Scale';
+import { Canvas, CanvasConfig } from './Canvas';
+import { Series, SeriesConfig } from './Series';
+import { Chart, ChartConfig }   from './Chart';
+import { Grid, GridsConfig }        from './Grid';
+import { Legend, LegendConfig }    from './Legend';
+import { SVGElem, TextElem,
+         Rect, round }          from './SVGElem';
+import { delay }                from 'hsutil';
 
 const viewBoxWidth:number  = 1000;  // the viewBox size in px
 let   viewBoxHeight:number = 700;   // the viewBox size in px
 
 
+export interface VisibleCfg extends GraphBaseCfg{
+    visible: boolean;
+}
+
+/** 
+ * Configurator for a title, such as Chart title, or Axis title. 
+ * Titles have their own visible switch.
+ */
+export interface LabelCfg extends TextElem, VisibleCfg {
+}
+
+export interface GraphBaseCfg {
+}
+
 /**
  */
 export interface Config {
     viewBox?: { w: number; h: number; };
-    graph?:  GraphSet;
-    canvas?: CanvasSet;
-    axes?:   AxesSet;
-    chart?:  ChartSet;
-    grid?:   GridSet;
-    series?: SeriesSet;
-    legend?: LegendSet;
+    graph?:  GraphConfig;
+    canvas?: CanvasConfig;
+    axes?:   AxesConfig;
+    chart?:  ChartConfig;
+    grid?:   GridsConfig;
+    series?: SeriesConfig;
+    legend?: LegendConfig;
 }
 
 /**
@@ -90,7 +105,7 @@ export interface Config {
  * See {@link Graph.Graph.makeConfig Graph.makeConfig} for all configurations and
  * {@link Graph.Graph.config Graph.config} for default `Graph` configuration.
  */
-export interface GraphSet {
+export interface GraphConfig extends GraphBaseCfg {
     margin :{           // in viewBox units 
         top:    number;          
         left:   number;   
@@ -158,7 +173,7 @@ export class Graph extends SVGElem {
      * 
      * #### Configurations and Defaults
      * ```
-     *  cfg.graph = {@link Graph.GraphSet <GraphSet>} {
+     *  cfg.graph = {@link Graph.GraphConfig <GraphConfig>} {
      *     margin: {      // the margin between viewBox edges and nearest plot component
      *        top: 10,    // viewBox units      
      *        left: 10,   // viewBox units    
@@ -171,7 +186,7 @@ export class Graph extends SVGElem {
      * previously configured components.
      */
     protected static config(cfg:Config={}) {      
-        cfg.graph = <GraphSet>{
+        cfg.graph = <GraphConfig>{
             margin :{
                 top: 10,    // viewBox units      
                 left: 10,   // viewBox units    
@@ -182,7 +197,6 @@ export class Graph extends SVGElem {
     }
 
     private marginOffset = {
-        nm:     'marginOffset',
         left:   0,     // in px
         right:  0,     // in px
         top:    0,     // in px
@@ -195,16 +209,15 @@ export class Graph extends SVGElem {
 
     private createPlotArea(cfg:Config):Rect {
         const cfgm = cfg.graph.margin;
-        const plotArea:Rect = { 
-            nm: 'plotArea',
-            t: cfgm.top + this.marginOffset.top, 
-            l: cfgm.left + this.marginOffset.left, 
-            w: viewBoxWidth, // not final
-            h: viewBoxHeight // not final
+        const tl = {
+            x: cfgm.top + this.marginOffset.top, 
+            y: cfgm.left + this.marginOffset.left
         };
-        plotArea.w -= plotArea.l + cfgm.right + this.marginOffset.right;
-        plotArea.h -= plotArea.t + cfgm.bottom + this.marginOffset.bottom; 
-        return plotArea;
+        const br = {
+            x: viewBoxWidth  - cfgm.right  - this.marginOffset.right,
+            y: viewBoxHeight - cfgm.bottom - this.marginOffset.bottom
+        };
+        return { tl: tl, br: br };
     }
 
     private createData(cfg:any) {
@@ -225,10 +238,10 @@ export class Graph extends SVGElem {
     }
 
     adjustRange(plotArea:Rect, scales:Scales) { 
-        scales.primary.x.range([plotArea.l, plotArea.l+plotArea.w]);
-        scales.primary.y.range([plotArea.t+plotArea.h, plotArea.t]);
-        scales.secondary.x.range([plotArea.l, plotArea.l+plotArea.w]);
-        scales.secondary.y.range([plotArea.t+plotArea.h, plotArea.t]);
+        scales.primary.x.range([plotArea.tl.x, plotArea.br.x]);
+        scales.primary.y.range([plotArea.br.y, plotArea.tl.y]);
+        scales.secondary.x.range([plotArea.tl.x, plotArea.br.x]);
+        scales.secondary.y.range([plotArea.br.y, plotArea.tl.y]);
     }
 
     /**
@@ -255,7 +268,6 @@ export class Graph extends SVGElem {
             const elems = document.getElementsByClassName(css);
             const box = Array.prototype.map.call(elems, (e:any)=>e.getBBox());
             if(box && box[0]) { 
-                box[0].nm = css;
                 margin.t = Math.max(margin.t, cfgm.top-box[0].y);               
                 margin.l = Math.max(margin.l, cfgm.left-box[0].x);               
                 margin.b = Math.max(margin.b,  box[0].y+box[0].height+cfgm.bottom-viewBoxHeight);               

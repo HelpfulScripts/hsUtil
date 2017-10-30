@@ -14,7 +14,7 @@ import { Config }   from './Graph';
 
 
 /** Defines configurable settings. */ 
-export interface LegendSet {
+export interface LegendConfig {
 };
 
 export class Legend {
@@ -24,14 +24,14 @@ export class Legend {
      * 
      * ### Configurations and Defaults
      * ```
-     *  cfg.legend = {@link Legend.LegendSet <LegendSet>}{
+     *  cfg.legend = {@link Legend.LegendConfig <LegendConfig>}{
      *  } 
      * ``` 
      * @param cfg the configuration object, containing default settings for all 
      * previously configured components.
      */
     static config(cfg:Config) {
-        cfg.legend = <LegendSet>{
+        cfg.legend = <LegendConfig>{
         };
     }
     view(node?: Vnode): Vnode {

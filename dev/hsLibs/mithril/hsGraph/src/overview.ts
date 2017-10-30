@@ -10,7 +10,7 @@ attribute with the graph's configuration.
 ### Simple Example
  * <example>
  * <file name='script.js'>
- * let series = {
+ * let data = {
  *    names:['time', 'volume'],
  *    rows:[
  *      [-1, 0.2],
@@ -24,8 +24,8 @@ attribute with the graph's configuration.
  * m.mount(root, { 
  *      view:() => m(hsgraph.Graph, {cfgFn: cfg => {
  *          cfg.chart.title.text          = 'Simple Example';
- *          cfg.series.data   = series;
- *          cfg.series.series = [{ xCol: 'time', yCol:'volume' }];
+ *          cfg.series.data   = data;
+ *          cfg.series.series = [{ cols: ['time', 'volume'] }];
  *      }})
  * });
  *

@@ -19,13 +19,13 @@
  * 
  * function myConfig(cfg) {
  *      cfg.series.data   = series;
- *      cfg.series.styles[0].marker.visible = true;
- *      cfg.series.styles[1].marker.visible = true;
- *      cfg.series.styles[1].marker.shape = hsgraph.Series.marker.square;
  *      cfg.series.series = [
- *          { xCol: 'time', yCol:'volume'},
- *          { xCol: 'time', yCol:'price'}
+ *          { cols: ['time','volume']},
+ *          { cols: ['time', 'price']}
  *      ];
+ *      cfg.series.series[0].style.marker.visible = true;
+ *      cfg.series.series[1].style.marker.visible = true;
+ *      cfg.series.series[1].style.marker.shape = hsgraph.Series.marker.square;
  *      cfg.chart.title.text          = 'Volume over Time';
  *      cfg.chart.title.xpos          = 'end';
  *      cfg.chart.title.ypos          = 'top';
@@ -54,17 +54,21 @@
  */
 
  /** */
-import { m, Vnode}                          from 'hslayout';
-import { Config }                           from './Graph';
-import { Scale, XYScale, Scales }           from './Scale';
-import { ScaleCfg, DomainCfg, TickType  }   from './Scale';
-import { SVGElem, Area, TitleCfg }          from './SVGElem';
+import { m, Vnode}  from 'hslayout';
+import { Config, 
+         VisibleCfg, 
+         LabelCfg } from './Graph';
+import { Scale, 
+         XYScale, 
+         Scales }   from './Scale';
+import { ScaleCfg, 
+         TickType } from './Scale';
+import { Domain }   from './Data';
+import { SVGElem, 
+         Area }     from './SVGElem';
 
 /** Defines configurable settings for tick marks */
-export interface MarkCfg {
-    /** determines if the axis ticks will be rendered */
-    visible: boolean;
-
+export interface MarkCfg extends VisibleCfg {
     /** length in viewBox coordinates */
     length:  number; 
 }
@@ -72,7 +76,7 @@ export interface MarkCfg {
 /** Defines configurable settings for tick marks and labels per axis */
 export interface TickStruct {
     marks:  MarkCfg;
-    labels: TitleCfg;
+    labels: LabelCfg;
     labelFmt: string;
 }
 
@@ -83,18 +87,15 @@ export interface TicksCfg {
 }
 
 /** Defines configurable settings. */
-export interface AxesSet {
+export interface AxesConfig  {
     primary:   { x: AxisCfg; y: AxisCfg; };
     secondary: { x: AxisCfg; y: AxisCfg; };
 }
 
 /** Defines configurable settings per axis */
-export interface AxisCfg {
-    /** determines if the axis will be rendered */
-    visible:    boolean;     
-     
+export interface AxisCfg extends VisibleCfg{
     /** configures the axis title */  
-    title:      TitleCfg;
+    title:      LabelCfg;
 
     /** axis crossing in domain: 'min', 'max', or domain value */
     crossesAt:  number|string; 
@@ -129,7 +130,7 @@ export class Axes extends SVGElem {
     * 
     * ### Configurations and Defaults
     * ```
-    * cfg.axes = {@link Axes.AxesSet <AxesSet>} {
+    * cfg.axes = {@link Axes.AxesConfig <AxesConfig>} {
     *    primary: {                // Primary axis:
     *       x: axisCfg(true, true),
     *       y: axisCfg(true, false)
@@ -170,7 +171,7 @@ export class Axes extends SVGElem {
     * ```
     * #### titleCfg(primary:boolean, x:boolean):
     * ```
-    *  cfg.[primary|secondary].[x|y].title = {@link SVGElem.TitleCfg <SVGElem.TitleCfg>}{
+    *  cfg.[primary|secondary].[x|y].title = {@link SVGElem.TextElem <SVGElem.TextElem>}{
     *     visible: true,  
     *     text:    (x? 'x' : 'y') + (primary? '' : '2'),    // 'x'/'y' or 'x2'/'y2'
     *     xpos:    x? 'end' : (primary? 'middle' : 'start'),          
@@ -188,7 +189,7 @@ export class Axes extends SVGElem {
     * ```
     * #### labelCfg(primary:boolean, x:boolean, major:boolean):
     * ```
-    *  cfg.[primary|secondary].[x|y].ticks.[major|minor].labels = {@link SVGElem.TitleCfg <SVGElem.TitleCfg>}{
+    *  cfg.[primary|secondary].[x|y].ticks.[major|minor].labels = {@link SVGElem.TextElem <SVGElem.TextElem>}{
     *     visible: major, 
     *     xpos: x? 'middle' : (primary? 'end' : 'start')
     *     ypos: x? (primary? 'top' : 'bottom') : 'center', 
@@ -201,12 +202,12 @@ export class Axes extends SVGElem {
     */
     static config(cfg:Config) {
         function scaleCfg():ScaleCfg {
-            return {                                // axis scaling information
-                type: Scale.type.linear,            //    scale type
-                domain:<DomainCfg>['auto', 'auto']  //    min/max of domain; 'auto', or a domain value
+            return {                             // axis scaling information
+                type: Scale.type.linear,         //    scale type
+                domain:<Domain>['auto', 'auto']  //    min/max of domain; 'auto', or a domain value
             };
         }
-        function labelCfg(primary:boolean, x:boolean, major:boolean):TitleCfg {
+        function labelCfg(primary:boolean, x:boolean, major:boolean):LabelCfg {
             return { 
                 visible: major, text: '',
                 xpos: x? 'middle' : (primary? 'end' : 'start'),
@@ -221,7 +222,7 @@ export class Axes extends SVGElem {
                 length: (primary? 1 : -1) * (major? 10 : 5) 
             };
         }
-        function titleCfg(primary:boolean, x:boolean):TitleCfg {
+        function titleCfg(primary:boolean, x:boolean):LabelCfg {
             return {
                 visible: true,  text: (x? 'x' : 'y') + (primary? '' : '2'),    
                 xpos:  x? 'end' : (primary? 'middle' : 'start'),          
@@ -273,7 +274,7 @@ export class Axes extends SVGElem {
     /**
      * draws the axis title
      */
-    drawTitle(x:boolean, ttlCfg:TitleCfg, type: string, range:Area, cross:number):Vnode {
+    drawTitle(x:boolean, ttlCfg:LabelCfg, type: string, range:Area, cross:number):Vnode {
         ttlCfg.cssClass = 'hs-graph-axis-title';
         const xy = { transform:`translate(${x?range[1]:cross}, ${x?cross:range[1]})` };
         return !ttlCfg.visible? undefined : 
@@ -315,7 +316,7 @@ export class Axes extends SVGElem {
      * - scales:
      * - cfg: 
      */
-    drawAxis(dir:string, scales: XYScale, type:string, axisCfg:AxesSet):Vnode {
+    drawAxis(dir:string, scales: XYScale, type:string, axisCfg:AxesConfig):Vnode {
         const x = dir==='x';
         const range = scales[dir].range();
         const cfg   = axisCfg[type][dir];
@@ -331,7 +332,7 @@ export class Axes extends SVGElem {
         ]);
     }
 
-    setScaleTypes(cfg: AxesSet, scales: Scales) {
+    setScaleTypes(cfg: AxesConfig, scales: Scales) {
         scales.primary.x.scaleType(cfg.primary.x.scale.type);
         scales.primary.y.scaleType(cfg.primary.y.scale.type);
         scales.secondary.x.scaleType(cfg.secondary.x.scale.type);
@@ -339,7 +340,7 @@ export class Axes extends SVGElem {
     }
 
     view(node?: Vnode): Vnode {
-        const cfg:AxesSet    = node.attrs.cfg;
+        const cfg:AxesConfig    = node.attrs.cfg;
         const scales = node.attrs.scales;
 //        this.setScaleTypes(cfg, scales);
         return m('svg', {class:'hs-graph-axis'}, [
@@ -370,7 +371,7 @@ export class Axes extends SVGElem {
  *      view:() => m(hsgraph.Graph, {cfgFn: cfg => {
  *          cfg.chart.title.text          = 'Simple Example';
  *          cfg.series.data   = series;
- *          cfg.series.series = [{ xCol: 'time', yCol:'volume' }];
+ *          cfg.series.series = [{ cols: ['time', 'volume'] }];
  *      }})
  * });
  *
@@ -396,7 +397,7 @@ class ExampleLinearAxis {}
 *      view:() => m(hsgraph.Graph, {cfgFn: cfg => {
 *          cfg.chart.title.text = 'Log Y Axis';
 *          cfg.series.data   = series;
-*          cfg.series.series = [{ xCol: 'time', yCol:'volume' }];
+*          cfg.series.series = [{ cols: ['time', 'volume'] }];
 *          cfg.axes.primary.x.scale.type = hsgraph.Scale.type.log;
 *          cfg.axes.primary.x.scale.domain = ['tight', 'tight'];
 *          cfg.axes.primary.y.scale.type = hsgraph.Scale.type.log;
@@ -422,7 +423,7 @@ class ExampleLogAxis {}
 *      view:() => m(hsgraph.Graph, {cfgFn: cfg => {
 *          cfg.chart.title.text = 'Date X Axis';
 *          cfg.series.data   = series;
-*          cfg.series.series = [{ xCol: 'time', yCol:'volume' }];
+*          cfg.series.series = [{ cols: ['time', 'volume'] }];
 *          cfg.axes.primary.x.scale.type = hsgraph.Scale.type.date;
 *          cfg.axes.primary.x.ticks.major.labelFmt = '%MMM %YY';
 *      }})

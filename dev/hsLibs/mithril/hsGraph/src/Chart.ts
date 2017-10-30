@@ -6,14 +6,17 @@
  */
 
  /** */
-import { m, Vnode}  from 'hslayout';
-import { Config }   from './Graph';
-import { SVGElem, TextCfg, Rect, TitleCfg }  from './SVGElem';
+import { m, Vnode}          from 'hslayout';
+import { Config, 
+         LabelCfg,
+         VisibleCfg }       from './Graph';
+import { SVGElem,  Rect }   from './SVGElem';
+
 
 /** Defines configurable settings. */
-export interface ChartSet {
+export interface ChartConfig extends VisibleCfg {
     /** the title text and positioning  */
-    title:  TitleCfg;
+    title:  LabelCfg;
 };
 
 /**
@@ -26,7 +29,7 @@ export class Chart extends SVGElem {
      * 
      * ### Configurations and Defaults
      * ```
-     *  cfg.chart = {@link Chart.ChartSet <ChartSet>}{
+     *  cfg.chart = {@link Chart.ChartConfig <ChartConfig>}{
      *     visible: true,          // Chart area is visible
      *     title:  {               // the chart title
      *        visible: true,      // Chart title is visible
@@ -42,9 +45,9 @@ export class Chart extends SVGElem {
      * previously configured components.
      */
     static config(cfg:Config) {
-        cfg.chart = <ChartSet>{
+        cfg.chart = <ChartConfig>{
             visible: true,          // Chart area is visible
-            title:  {               // the chart title
+            title:  <LabelCfg>{     // the chart title
                 visible: true,      // Chart title is visible
                 text:'',            // the sting to display
                 hOffset: 0,         // horizontal label offset in 'em'
@@ -78,32 +81,30 @@ export class Chart extends SVGElem {
     }
 
     drawBackground(plotArea:Rect) {
-        return this.rect({x:plotArea.l, y:plotArea.t}, {w: plotArea.w, h: plotArea.h});
+        const tl = plotArea.tl;
+        const br = plotArea.br;
+        return this.rect({x:tl.x, y:tl.y}, {w: br.x-tl.x, h: br.y-tl.y});
     }
 
-    drawTitle(plotArea:Rect, cfg:ChartSet) {
-        const txtCfg:TextCfg = {
-            xpos: cfg.title.xpos,
-            ypos: cfg.title.ypos,
-            cssClass: 'hs-graph-chart-title',
-            hOffset: cfg.title.hOffset,
-            vOffset: cfg.title.vOffset
-        };
+    drawTitle(plotArea:Rect, cfg:ChartConfig) {
+        const tl = plotArea.tl;
+        const br = plotArea.br;
+        cfg.title.cssClass = 'hs-graph-chart-title';
         switch(cfg.title.xpos) {
-            case 'start':   txtCfg.x = plotArea.l+'';   break;
-            case 'middle':  txtCfg.x = plotArea.l+plotArea.w/2+'';  break;
-            case 'end':     txtCfg.x = plotArea.l+plotArea.w+''; break;
+            case 'start':   cfg.title.x = tl.x+'';   break;
+            case 'middle':  cfg.title.x = (tl.x+br.x)/2+'';  break;
+            case 'end':     cfg.title.x = br.x+''; break;
         }
         switch(cfg.title.ypos) {
-            case 'top':     txtCfg.y = plotArea.t+'';   break;
-            case 'center':  txtCfg.y = plotArea.t+plotArea.h/2+'';  break;
-            case 'bottom':  txtCfg.y = plotArea.t+plotArea.h+''; break;
+            case 'top':     cfg.title.y = tl.y+'';   break;
+            case 'center':  cfg.title.y = (tl.y+br.y)/2+'';  break;
+            case 'bottom':  cfg.title.y = br.y+''; break;
         }
-        return !cfg.title.visible? undefined : this.text(txtCfg, cfg.title.text);
+        return !cfg.title.visible? undefined : this.text(cfg.title, cfg.title.text);
     }
 
     view(node?: Vnode): Vnode {
-        const cfg:ChartSet = node.attrs.cfg;
+        const cfg:ChartConfig = node.attrs.cfg;
         const plotArea:Rect = node.attrs.plotArea;
         return m('svg', { class:'hs-graph-chart'}, [
             this.drawBackground(plotArea),

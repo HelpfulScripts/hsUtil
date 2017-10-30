@@ -7,13 +7,13 @@
  */
 
 /** */
-import { m, Vnode}      from 'hslayout';
-import { SVGElem, Area }from './SVGElem';
-import { Config }       from './Graph';
+import { m, Vnode}              from 'hslayout';
+import { SVGElem, Area }        from './SVGElem';
+import { Config, VisibleCfg }   from './Graph';
 
 
 /** Defines configurable settings. */
-export interface CanvasSet {
+export interface CanvasConfig extends VisibleCfg{
     range?:  Area;              // graph width and height
 }
 
@@ -24,7 +24,7 @@ export class Canvas extends SVGElem {
      * 
      * ### Configurations and Defaults
      * ```
-     *  cfg.canvas = {@link Canvas.CanvasSet <CanvasSet>}{
+     *  cfg.canvas = {@link Canvas.CanvasConfig <CanvasConfig>}{
      *     range: {         // the graphs background rect:
      *        w: 100,       //    width
      *        h: 100,       //    height
@@ -37,7 +37,7 @@ export class Canvas extends SVGElem {
      * previously configured components. 
      */
     static config(cfg:Config) {
-        cfg.canvas = <CanvasSet>{
+        cfg.canvas = <CanvasConfig>{
             range:  <Area>{ // graph width and height
                 w: 100, wunit:'%',
                 h: 100, hunit:'%'

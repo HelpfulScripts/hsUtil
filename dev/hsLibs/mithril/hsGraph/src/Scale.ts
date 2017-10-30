@@ -33,7 +33,7 @@ export interface ScaleCfg {
     type: string;
 
     /** scale domain: `auto`, `tight` or numeric domain value */
-    domain: DomainCfg;
+    domain: Domain;
 }
 
 export interface TicksCfg {
@@ -204,7 +204,7 @@ export class Scale {
         }
         return this.rangeVal;
     }
-    public domain(dom?:DomainCfg):Domain { 
+    public domain(dom?:Domain):Domain { 
         if (dom) {
             if (this.scaleType() === Scale.type.date) {
                 if (typeof dom[0] === 'string'|| typeof dom[1] === 'string') {

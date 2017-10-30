@@ -2,24 +2,37 @@ import { m, Vnode } from 'hslayout';
 import { XYScale }  from './Scale';
 import { DataRows } from './Data';
 
-export interface Rect {
-    nm?:string; // optional name field
-    t:number;   // top
-    l:number;   // left
-    w:number;   // width
-    h:number;   // height
+/** svg primitive Point, measured in viewbox coordinates.  */
+export interface Point {
+    /** x-viewbox value of the point */
+    x:   number;
+    /** y-viewbox value of the point */
+    y:   number;
+    /** viewbox unit to use for x coordinate. Allowed values are 'px' or '%'; defaults to 'px' */
+    xunit?: string;
+    /** viewbox unit to use for y coordinate. Allowed values are 'px' or '%'; defaults to 'px' */
+    yunit?: string;
 }
 
-export interface Point {
-    x:   number;
-    y:   number;
+/** svg primitive Rect, measured in viewbox coordinates.  */
+export interface Rect {
+    /** top left point */
+    tl: Point;
+    /** bottom right point */
+    br: Point;
+}
+
+/** 
+ * svg extended Point, measured in viewbox coordinates. 
+ * Extends `Point` with optional `dx` and 'dy' offsets and optional units.
+ */
+export interface ExtendedPoint extends Point{
     dx?: number;
     dy?: number;
-    xunit?: string;
-    yunit?: string;
     dxunit?: string;
     dyunit?: string;
 }
+
 
 export interface Area {
     w: number;
@@ -28,15 +41,10 @@ export interface Area {
     hunit?: string;
 }
 
-export interface TitleCfg extends TextCfg {
-    /** determines if the axis title will be rendered */
-    visible:boolean;
-
-    /** the axis title */
+export interface TextElem {
+    /** the text to show */
     text: string; 
-}
 
-export interface TextCfg {
     /** the css class to set */
     cssClass?:  string;   
 
@@ -69,7 +77,7 @@ export abstract class SVGElem {
      * @param cfg configures the text alignment and positioning
      * @param text the text to plot
      */
-    text(cfg:TextCfg, text:string):Vnode {
+    text(cfg:TextElem, text:string):Vnode {
         let baselineShift = '0em';
         let hAlign = cfg.xpos;
         switch(cfg.xpos) {
@@ -102,6 +110,14 @@ export abstract class SVGElem {
      * @param style optional css style setting, such as stroke or stroke-width
      */
     rect(tl:Point, area:Area, style?:string):Vnode {
+        if (area.w < 0) {
+            tl.x += area.w;
+            area.w = -area.w;
+        }
+        if (area.h < 0) {
+            tl.y += area.h;
+            area.h = -area.h;
+        }
         const param = {
             x: round(tl.x),       y: round(tl.y),
             width: round(area.w)  + (area.wunit||''), 

@@ -9,15 +9,14 @@
 
 /** */
 import { m, Vnode}          from 'hslayout';
-import { Config }           from './Graph';
+import { Config, 
+         VisibleCfg }       from './Graph';
 import { SVGElem }          from './SVGElem';
 import { NumRange }         from './Data';
 import { Scale, TickType }  from './Scale';
 
 /** defines configurable parameters for a grid */
-export interface GridCfg {
-    /** defines if the grid is visible */
-    visible:boolean;
+export interface GridCfg extends VisibleCfg{
 }
 
 /** defines configurable parameters for horizontal and vertical grids */
@@ -27,7 +26,7 @@ export interface  GridsCfg {
 }
 
 /** Defines configurable settings. */
-export interface GridSet {
+export interface GridsConfig {
     /** major grid lines */
     major: GridsCfg;
 
@@ -42,7 +41,7 @@ export class Grid extends SVGElem{
      * 
      * ### Configurations and Defaults
      * ```
-     *  cfg.grid = {@link Grid.GridSet <GridSet>}{
+     *  cfg.grid = {@link Grid.GridsConfig <GridsConfig>}{
      *      major: {
      *          hor: { visible:true },
      *          ver: { visible:true }
@@ -57,7 +56,7 @@ export class Grid extends SVGElem{
      * previously configured components.
      */
     static config(cfg:Config) {
-        cfg.grid = <GridSet>{
+        cfg.grid = <GridsConfig>{
             major: {
                 hor: { visible:true },
                 ver: { visible:true }
