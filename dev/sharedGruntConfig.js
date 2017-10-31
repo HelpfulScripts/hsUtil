@@ -28,12 +28,12 @@ module.exports = (grunt, dir, dependencies, type) => {
     grunt.registerTask('build-example', ['clean:example', 'copy:example', 'ts:example', 'webpack:exDev']);
     grunt.registerTask('build-app',     ['copy:example', 'webpack:appDev']);
     grunt.registerTask('build-js', ['tslint:src', 'ts:src']);
-    grunt.registerTask('build-spec', ['tslint:spec', 'ts:test']);
+    grunt.registerTask('build-spec', ['tslint:spec', 'ts:test']);    
     if (type === 'node') { 
         grunt.loadNpmTasks('grunt-jasmine-node-coverage');
-        grunt.registerTask('test', ['clean:test', 'copy:test', 'build-spec', 'jasmine_node' ]); }
+        grunt.registerTask('test', ['clean:test', 'copy:test', 'build-spec', /*'jasmine_node'*/ ]); }
     else { 
-        grunt.registerTask('test', ['clean:test', 'copy:test', 'build-spec', 'ospec' ]); 
+        grunt.registerTask('test', ['clean:test', 'copy:test', 'build-spec', /*'ospec'*/ ]); 
     }
     
     if (type === 'lib') { grunt.registerTask('build', ['clean:src', 'build-html', 'build-css', 'build-js', 'build-example']); }
@@ -119,17 +119,17 @@ module.exports = (grunt, dir, dependencies, type) => {
             src : {
                 outDir:     "_dist/src",
                 src: ["src/**/*.ts", "!src/**/*.spec.ts", "!src/example/*.ts"],
-                tsconfig:   __dirname+'/tsconfig.json'
+                tsconfig:   __dirname+'/tsconfigGrunt.json'
             },
             example : {
                 outDir:     "_example",
                 src: ["src/example/*.ts"],
-                tsconfig:   __dirname+'/tsconfig.json'
+                tsconfig:   __dirname+'/tsconfigGrunt.json'
             },
             test : {
                 outDir:     "_dist/tests",
                 src: ["src/**/*.spec.ts"],
-                tsconfig:   __dirname+'/tsconfig.json'
+                tsconfig:   __dirname+'/tsconfigGrunt.json'
             }
         },
         typedoc: {
