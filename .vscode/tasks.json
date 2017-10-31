@@ -6,23 +6,13 @@
     "isShellCommand": true,
     "tasks": [
         {
-            "type": "typescript",
-            "tsconfig": "tsconfig.json",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        },
-        {
             "taskName": "default",
-            "identifier": "default",
             "args": [],
             "isBuildCommand": true,
-            "isWatching": false,
+            "isBackground": true,
             "problemMatcher": [
                 "$lessCompile",
-                "$tsc",
-                "$jshint"
+                "$tsc"
             ]
         }
     ]
