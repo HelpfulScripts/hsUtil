@@ -8,12 +8,13 @@
  */
 
 /** */
-import { m, Vnode}          from 'hslayout';
+import { m, Vnode}      from 'hslayout';
 import { Config, 
-         VisibleCfg }       from './Graph';
-import { SVGElem }          from './SVGElem';
-import { NumRange }         from './Data';
-import { Scale, TickType }  from './Scale';
+         VisibleCfg }   from './Graph';
+import { SVGElem }      from './SVGElem';
+import { NumRange }     from './Data';
+import { Scale }        from './Scale';
+import { TickDefs }     from './AxesTypes';
 
 /** defines configurable parameters for a grid */
 export interface GridCfg extends VisibleCfg{
@@ -55,7 +56,7 @@ export class Grid extends SVGElem{
      * @param cfg the configuration object, containing default settings for all 
      * previously configured components.
      */
-    static config(cfg:Config) {
+    static defaultConfig(cfg:Config) {
         cfg.grid = <GridsConfig>{
             major: {
                 hor: { visible:true },
@@ -68,21 +69,28 @@ export class Grid extends SVGElem{
         };
     }
 
+    /**
+     * Makes adjustments to cfg based on current settings
+     * @param cfg the configuration object, containing default settings for all components
+     */
+    static adjustConfig(cfg:Config) {     
+    }
+    
     /** 
      * Draws horizontal gridlines parallel to the x-axis
      */
-    private drawVerGrid(cfg:{visible:boolean}, scale:Scale, range:NumRange, ticks:TickType[]) {
-        return m('svg', { class:'hs-graph-grid-hor' }, ticks.map((t:TickType) =>
-            this.horLine(range[0], range[1], scale.convert(t.pos))
+    private drawHorGrid(cfg:{visible:boolean}, scale:Scale, range:NumRange, ticks:TickDefs) {
+        return !cfg.visible? m('svg') : m('svg', { class:'hs-graph-grid-hor' }, ticks.marks.map((t) =>
+            this.horLine(range[0], range[1], scale.convert(t))
         ));
     }
 
     /** 
      * Draws vertical gridlines parallel to the y-axis
      */
-    private drawHorGrid(cfg:{visible:boolean}, scale:Scale, range:NumRange, ticks:TickType[]) {
-        return m('svg', { class:'hs-graph-grid-ver' }, ticks.map((t:TickType) =>
-            this.verLine(scale.convert(t.pos), range[0], range[1])
+    private drawVerGrid(cfg:{visible:boolean}, scale:Scale, range:NumRange, ticks:TickDefs) {
+        return !cfg.visible? m('svg') : m('svg', { class:'hs-graph-grid-ver' }, ticks.marks.map((t) =>
+            this.verLine(scale.convert(t), range[0], range[1])
         ));
     }
 
@@ -92,12 +100,12 @@ export class Grid extends SVGElem{
         const scales = node.attrs.scales.primary;
         return m('svg', { class:'hs-graph-grid'}, [
             m('svg', { class:'hs-graph-grid-minor' }, [
-                this.drawVerGrid(cfg.minor.hor, scales.y, scales.x.range(), scales.y.ticks().minor),
-                this.drawHorGrid(cfg.minor.ver, scales.x, scales.y.range(), scales.x.ticks().minor)
+                this.drawHorGrid(cfg.minor.hor, scales.y, scales.x.range(), scales.y.ticks().minor),
+                this.drawVerGrid(cfg.minor.ver, scales.x, scales.y.range(), scales.x.ticks().minor)
             ]),
             m('svg', { class:'hs-graph-grid-major' }, [
-                this.drawVerGrid(cfg.major.hor, scales.y, scales.x.range(), scales.y.ticks().major),
-                this.drawHorGrid(cfg.major.ver, scales.x, scales.y.range(), scales.x.ticks().major)
+                this.drawHorGrid(cfg.major.hor, scales.y, scales.x.range(), scales.y.ticks().major),
+                this.drawVerGrid(cfg.major.ver, scales.x, scales.y.range(), scales.x.ticks().major)
             ])
         ]);
     }

@@ -26,7 +26,7 @@
  *      ];
  *      cfg.series.series[0].style.marker.visible = true;
  *      cfg.series.series[1].style.marker.visible = true;
- *      cfg.series.series[1].style.shape = hsgraph.Series.marker.diamond;
+ *      cfg.series.series[1].style.marker.shape = hsgraph.Series.marker.diamond;
  *      const axes = cfg.axes.primary;
  *      cfg.chart.title.text          = 'Volume over Time';
  *      cfg.chart.title.xpos          = 'end';
@@ -56,18 +56,27 @@
  */
 
 /** */
-import { m, Vnode}              from 'hslayout';
-import { Data }                 from './Data';
-import { Axes, AxesConfig }        from './Axes';
-import { Scale, Scales }        from './Scale';
-import { Canvas, CanvasConfig } from './Canvas';
-import { Series, SeriesConfig } from './Series';
-import { Chart, ChartConfig }   from './Chart';
-import { Grid, GridsConfig }        from './Grid';
-import { Legend, LegendConfig }    from './Legend';
-import { SVGElem, TextElem,
-         Rect, round }          from './SVGElem';
-import { delay }                from 'hsutil';
+import { m, Vnode}      from 'hslayout';
+import { Data }         from './Data';
+import { Axes }         from './Axes';
+import { AxesConfig,
+         Scales }       from './AxesTypes';
+import { Scale }        from './Scale';
+import { Canvas, 
+         CanvasConfig } from './Canvas';
+import { Series, 
+         SeriesConfig } from './Series';
+import { Chart, 
+         ChartConfig }  from './Chart';
+import { Grid, 
+         GridsConfig }  from './Grid';
+import { Legend, 
+         LegendConfig } from './Legend';
+import { SVGElem, 
+         TextElem,
+         Rect, 
+         round }        from './SVGElem';
+import { delay }        from 'hsutil';
 
 const viewBoxWidth:number  = 1000;  // the viewBox size in px
 let   viewBoxHeight:number = 700;   // the viewBox size in px
@@ -154,20 +163,41 @@ export class Graph extends SVGElem {
      * @param userCfg a user defined configuration function with the signature 
      * `(cfg:{@link Config Config}):void.`
      */
-    private static makeConfig(userCfg?:CfgFn) { 
-        return (cfg:Config) => {
-            Graph.config(cfg);
-            Canvas.config(cfg);
-            Axes.config(cfg);
-            Series.config(cfg);
-            Grid.config(cfg);
-            Chart.config(cfg);
-            Legend.config(cfg);
-            if (userCfg) { userCfg(cfg); }
-        };
+    private static makeConfig(userCfg?:CfgFn):Config { 
+        const cfg:Config = {};
+        Graph.defaultConfig(cfg);
+        Canvas.defaultConfig(cfg);
+        Axes.defaultConfig(cfg);
+        Series.defaultConfig(cfg);
+        Grid.defaultConfig(cfg);
+        Chart.defaultConfig(cfg);
+        Legend.defaultConfig(cfg);
+        if (userCfg) { 
+            try { 
+                userCfg(cfg); 
+            } catch(e) {
+                console.log('error in usercfg');
+                console.log(e);
+                console.log(e.stack);
+            }
+        }
+        return cfg;
     }
 
-    /** 
+    /**
+     * Makes adjustments to cfg based on current settings
+     * @param cfg the configuration object, containing default settings for all components
+     */
+    protected static adjustConfig(cfg:Config) {
+        Canvas.adjustConfig(cfg);
+        Axes.adjustConfig(cfg);
+        Series.adjustConfig(cfg);
+        Grid.adjustConfig(cfg);
+        Chart.adjustConfig(cfg);
+        Legend.adjustConfig(cfg);
+    }
+
+/** 
      * Defines default values for all configurable parameters in `Graph`
      * See {@link Graph.Graph.makeConfig Graph.makeConfig} for the sequence of initializations.
      * 
@@ -185,7 +215,7 @@ export class Graph extends SVGElem {
      * @param cfg the configuration object, containing default settings for all 
      * previously configured components.
      */
-    protected static config(cfg:Config={}) {      
+    protected static defaultConfig(cfg:Config) {      
         cfg.graph = <GraphConfig>{
             margin :{
                 top: 10,    // viewBox units      
@@ -207,8 +237,7 @@ export class Graph extends SVGElem {
     private scales: Scales;
     private data:   Data;
 
-    private createPlotArea(cfg:Config):Rect {
-        const cfgm = cfg.graph.margin;
+    private createPlotArea(cfgm:{top:number, left:number, bottom:number, right:number}):Rect {
         const tl = {
             x: cfgm.top + this.marginOffset.top, 
             y: cfgm.left + this.marginOffset.left
@@ -228,11 +257,10 @@ export class Graph extends SVGElem {
         this.data.setData(cfg.series.data.rows, cfg.series.data.names);
     }
 
-    private createScales(cfg:any) {
-        const as = cfg.axes;
+    private createScales(axes:any):Scales {
         if (!this.scales) { this.scales = {
-            primary:   { x: new Scale(as.primary.x.scale),   y: new Scale(as.primary.y.scale) },
-            secondary: { x: new Scale(as.secondary.x.scale), y: new Scale(as.secondary.y.scale) }
+            primary:   { x: new Scale(axes.primary.x.scale),   y: new Scale(axes.primary.y.scale) },
+            secondary: { x: new Scale(axes.secondary.x.scale), y: new Scale(axes.secondary.y.scale) }
         };}
         return this.scales;
     }
@@ -298,22 +326,23 @@ export class Graph extends SVGElem {
 
     view(node?: Vnode): Vnode {
         const cfgFn = node.attrs.cfgFn;
-        const cp:Config = {};
-        Graph.makeConfig(cfgFn)(cp);
-        node.attrs.cfg = cp;
-        const plotArea = this.createPlotArea(cp);
-        const scales = this.createScales(cp);
-        this.createData(cp);
+        const cfg:Config = Graph.makeConfig(cfgFn);
+        const plotArea = this.createPlotArea(cfg.graph.margin);
+        const scales:Scales = this.createScales(cfg.axes);
         this.adjustRange(plotArea, scales);
-        this.data.adjustDomains(cp.series, this.scales);
+        this.createData(cfg);
+        this.data.adjustDomains(cfg.series, scales);
+
+        Graph.adjustConfig(cfg);
+        node.attrs.cfg = cfg;
         const result = m('svg', { class:'hs-graph', width:'100%', height:'100%', 
                 viewBox:`0 0 ${round(viewBoxWidth)} ${round(viewBoxHeight)}` }, [
-            m(Canvas, { cfg:cp.canvas}),
-            m(Chart, { cfg:cp.chart, plotArea:plotArea }),
-            m(Grid, { cfg:cp.grid, scales:this.scales }),
-            m(Axes, { cfg:cp.axes, scales:this.scales }),
-            m(Series, { cfg:cp.series, scales:this.scales, data:this.data }),
-            m(Legend, { cfg:cp.legend })
+            m(Canvas, { cfg:cfg.canvas}),
+            m(Chart, { cfg:cfg.chart, plotArea:plotArea }),
+            m(Grid, { cfg:cfg.grid, scales:scales }),
+            m(Axes, { cfg:cfg.axes, scales:scales }),
+            m(Series, { cfg:cfg.series, scales:scales, data:this.data }),
+            m(Legend, { cfg:cfg.legend })
         ]);
         return result;
     }

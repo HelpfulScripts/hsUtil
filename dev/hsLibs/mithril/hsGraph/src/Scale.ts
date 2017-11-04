@@ -1,64 +1,32 @@
 /**
- * # Scale
- * provides scaling functionality for an axis.
+ * @module Axes
  */
 
 /** */ 
-import { Domain, NumRange } from './Data';
-import { hsDate }           from 'hsutil';
+import { Domain, 
+         NumRange }     from './Data';
+import { Axes }         from './Axes';
+import { hsDate }       from 'hsutil';
+import { Ticks,
+         TickDefs,
+         TickLabel,
+         ScaleCfg }     from './AxesTypes';
 
-export interface XYScale { x: Scale; y:Scale; }
 
-export interface Scales {
-    primary:   XYScale;
-    secondary: XYScale;
+function addTickNumber(t:TickDefs, v:number) { 
+    t.labels.push({ pos: v, text: ''+Math.round(v*1000000)/1000000 }); 
 }
 
-/**
- * Configures the domain boundaries `[min, max]` to be displayed.
- * For ordinal values these are the numeric min and max values of the domain,
- * or the special values 
- * - `auto`: determines the domain automatically from the data. Boundaries are set 'loosely' 
- *   so that the major tick mark below and above the data range are displayed as well.
- * - `tight`: same as `auto`, except the domain covers exactly the values contained in data. 
- * Both values can be set indepoendently for `min` and `max`
- */
-export interface DomainCfg {
-    [0]: string|number;
-    [1]: string|number;
-}
-
-export interface ScaleCfg {
-    /** scale type: {@link Scale.Scale.type Scale.type}.`linear` | `log` | `date` | `index` | `percent` | `ordinal` | `nominal` */
-    type: string;
-
-    /** scale domain: `auto`, `tight` or numeric domain value */
-    domain: Domain;
-}
-
-export interface TicksCfg {
-    major: TickType[];
-    minor: TickType[];
-}
-
-export interface TickType {
-    pos?:   number;    // domain value, at which to print tick mark, or undefined for nominal types
-    label?: string;    // string to print at pos, or category name for nominal types
-}
-
-function addTickNumber(t:TickType[], v:number) { 
-    t.push({ pos: v, label: ''+Math.round(v*1000000)/1000000 }); 
-}
-
-function addTickDate(t:TickType[], v:Date, fmt:string) { 
-    t.push({ pos: v.getTime(), label:hsDate(fmt, v) }); 
+function addTickDate(t:TickDefs, v:Date, fmt:string) { 
+    t.labels.push({ pos: v.getTime(), text:hsDate(fmt, v) }); 
 }
 
 /** calculate major and minor ticks on a lionear scale. The first and last tick will be smaller and larger than the provided domain. */
-function linScaleTickMarks(dom:NumRange, ticks:TicksCfg, numTicks:number) {
-    function addTicks(unit:number, ticks:TickType[]):number {
+function linScaleTickMarks(dom:NumRange, ticks:Ticks, numTicks:number) {
+    function addTicks(unit:number, ticks:TickDefs):number {
         let exp = Math.pow(10, Math.floor(Math.log10(unit)));
         unit = Math.floor(unit / exp)*exp;
+console.log(unit);        
         const min = Math.floor(dom[0]/unit)*unit;
         const max = Math.ceil(dom[1]/unit)*unit;
         for (let v=min; v<=max; v+=unit) { addTickNumber(ticks, v); }
@@ -68,14 +36,14 @@ function linScaleTickMarks(dom:NumRange, ticks:TicksCfg, numTicks:number) {
     addTicks(majorUnit / numTicks, ticks.minor);
 }
 
-function percentScaleTickMarks(dom:NumRange, ticks:TicksCfg, numTicks:number) {
-    const formatPercent = (m:TickType) => m.label = `${Math.round(m.pos)*100}%`;
+function percentScaleTickMarks(dom:NumRange, ticks:Ticks, numTicks:number) {
+    const formatPercent = (m:TickLabel) => m.text = `${Math.round(m.pos)*100}%`;
     linScaleTickMarks(dom, ticks, numTicks);
-    ticks.major.forEach(formatPercent);
-    ticks.minor.forEach(formatPercent);
+    ticks.major.labels.forEach(formatPercent);
+    ticks.minor.labels.forEach(formatPercent);
 }
 
-function logScaleTickMarks(dom:NumRange, ticks:TicksCfg) {
+function logScaleTickMarks(dom:NumRange, ticks:Ticks) {
     let min = Math.pow(10, Math.floor(Math.log10(dom[0])));
     let max = Math.pow(10, Math.ceil(Math.log10(dom[1])));
     for (let i=1; i<10; i++) {
@@ -90,8 +58,8 @@ const tickCategories = [
     [10,0,0], [1,0,0], [0,3,0], [0,1,0], [0,0,7], [0,0,1]
 ];
 
-function dateScaleTickMarks(dom:Domain, ticks:TicksCfg, fmt='%MM/%DD/%YY') {
-    function addDates(i:number, ticks:TickType[]) {
+function dateScaleTickMarks(dom:Domain, ticks:Ticks, fmt='%MM/%DD/%YY') {
+    function addDates(i:number, tickDefs:TickDefs) {
         const createDate = (idx:number) => new Date(
             Math.floor(dateDom[idx].getFullYear()/modYr)*modYr + (idx?incYr:0),
             (incYr > 0)? 0 : Math.floor(dateDom[idx].getMonth()/modMo)*modMo + (idx?incMo:0),
@@ -105,7 +73,7 @@ function dateScaleTickMarks(dom:Domain, ticks:TicksCfg, fmt='%MM/%DD/%YY') {
         const date0  = createDate(0);
         const date1  = createDate(1);
         for (let d = date0; d<=date1; d = new Date(d.getFullYear()+incYr, d.getMonth()+incMo, d.getDate()+incDay)) { 
-            addTickDate(ticks, d, fmt); 
+            addTickDate(tickDefs, d, fmt); 
         } 
 
     }
@@ -126,22 +94,25 @@ function dateScaleTickMarks(dom:Domain, ticks:TicksCfg, fmt='%MM/%DD/%YY') {
     });
 }
 
-/** calculates major tick mark domain values */
-function createTickMarks(type:string, domain:Domain, numTicks:number, fmt:string):TicksCfg {
-    const sort = (a:TickType,b:TickType) => a.pos-b.pos;
+/** calculates major tick label domain values */
+function createTickLabels(type:string, domain:Domain, numTicks:number, fmt:string):Ticks {
+    const sort = (a:TickLabel,b:TickLabel) => a.pos-b.pos;
     function sortTicks() { 
-        ticks.minor.sort(sort); ticks.major.sort(sort); 
+        ticks.minor.labels.sort(sort); ticks.major.labels.sort(sort); 
     };
     const dom:NumRange = [<number>domain[0], <number>domain[1]];
-    const ticks:TicksCfg = {major:[], minor:[]};
+    const ticks:Ticks = {
+        major: {marks:[], labels: <TickLabel[]>[]},
+        minor: {marks:[], labels: <TickLabel[]>[]}
+    };
     switch(type) {
-        case Scale.type.log:     logScaleTickMarks(dom, ticks); sortTicks(); break;
-        case Scale.type.date:    dateScaleTickMarks(dom, ticks, fmt); sortTicks(); break;
-        case Scale.type.percent: percentScaleTickMarks(dom, ticks, numTicks); sortTicks(); break;
-        case Scale.type.index:   break;
-        case Scale.type.ordinal: break; 
-        case Scale.type.nominal: break;
-        case Scale.type.linear:
+        case Axes.type.log:     logScaleTickMarks(dom, ticks); sortTicks(); break;
+        case Axes.type.date:    dateScaleTickMarks(dom, ticks, fmt); sortTicks(); break;
+        case Axes.type.percent: percentScaleTickMarks(dom, ticks, numTicks); sortTicks(); break;
+        case Axes.type.ordinal: break; 
+        case Axes.type.nominal: break;
+        case Axes.type.index:   
+        case Axes.type.linear:
         default:                 linScaleTickMarks(dom, ticks, numTicks); sortTicks(); 
     }  
     return ticks;
@@ -151,29 +122,9 @@ function createTickMarks(type:string, domain:Domain, numTicks:number, fmt:string
 /**
  * translates a domain into a range
  */
-export class Scale {
-    /**
-     * Defines available axis scale types:
-     * - linear
-     * - log
-     * - date
-     * - index
-     * - percent
-     * - ordinal
-     * - nominal
-     */
-    static type = {
-        linear:     'linear axis',
-        log:        'log axis',
-        date:       'date axis',
-        index:      'index axis',
-        percent:    'percent axis',
-        ordinal:    'ordinal axis',
-        nominal:    'nominal axis'
-    };
-    
+export class Scale {    
     /** Defines default values for all configurable parameters */
-    private typeVal:string      = Scale.type.linear;
+    private typeVal:string      = Axes.type.linear;
     private rangeVal:NumRange   = [0,1];
     private domVal:Domain       = [0,1];
     private domMinAuto          = 0; // 0: explicit domain; 1: auto domain loose, 2: auto tight
@@ -183,15 +134,6 @@ export class Scale {
     constructor(private cfg:ScaleCfg) { 
         this.scaleType(cfg.type);
         this.domain(cfg.domain);
-    }
-
-    private checkDomForScale() {
-        switch(this.typeVal) {
-            case Scale.type.log:
-                if (this.domVal[1] <= 0) { this.domVal[1] = 10; }
-                if (this.domVal[0] <= 0) { this.domVal[0] = (<number>this.domVal[1])/1000; }
-                break;
-        }
     }
 
     public setLabelFormat(labelFmt:string) {
@@ -206,7 +148,7 @@ export class Scale {
     }
     public domain(dom?:Domain):Domain { 
         if (dom) {
-            if (this.scaleType() === Scale.type.date) {
+            if (this.scaleType() === Axes.type.date) {
                 if (typeof dom[0] === 'string'|| typeof dom[1] === 'string') {
                     this.domVal[0] = (dom[0] === 'auto')? 0 : Date.parse(<string>dom[0]); 
                     this.domVal[1] = (dom[1] === 'auto')? 1 : Date.parse(<string>dom[1]); 
@@ -226,7 +168,10 @@ export class Scale {
                 default:       this.domMaxAuto = 0;
             }
         }
-        this.checkDomForScale();
+        if (this.typeVal === Axes.type.log) {
+            if (this.domVal[1] <= 0) { this.domVal[1] = 10; }
+            if (this.domVal[0] <= 0) { this.domVal[0] = (<number>this.domVal[1])/1000; }
+        }
         return this.domVal;
     }
     public scaleType(s?:string):string {
@@ -243,13 +188,13 @@ export class Scale {
      * @param dom the `[min,max]` range of the data
      */
     public setAutoDomain(dom:NumRange) {
-        const ticks = createTickMarks(this.scaleType(), dom, 4, this.labelFmt);
+        const ticks:Ticks = createTickLabels(this.scaleType(), dom, 4, this.labelFmt);
         switch (this.domMinAuto) {
-            case 1: this.domVal[0] = ticks.major[0].pos; break; // loose
+            case 1: this.domVal[0] = ticks.major.labels[0].pos; break; // loose
             case 2: this.domVal[0] = dom[0]; break;             // tight
         }
         switch (this.domMaxAuto) {
-            case 1: this.domVal[1] = ticks.major[ticks.major.length-1].pos; break;
+            case 1: this.domVal[1] = ticks.major.labels[ticks.major.labels.length-1].pos; break;
             case 2: this.domVal[1] = dom[1]; break;
         }
     }
@@ -257,13 +202,32 @@ export class Scale {
     /**
      * Calculates major and minor tick marks in domain coordinates
      */
-    public ticks(numTicks:number=4):TicksCfg   { 
+    public ticks(numTicks:number=4):Ticks   { 
+        function marksFromLabels(ticks:Ticks, type:string) {
+            switch(type) {
+                case Axes.type.nominal: 
+                case Axes.type.index:   
+                    const numLabels = ticks.major.labels.length;
+                    ticks.major.marks = Array(numLabels+1).fill(1).map((e:any, i:number) => i-0.5);
+                    ticks.minor.marks = ticks.minor.labels? ticks.minor.labels.map((l:TickLabel) => l.pos) : [];
+                    break;
+                case Axes.type.log: 
+                case Axes.type.date:    
+                case Axes.type.percent: 
+                case Axes.type.ordinal:  
+                case Axes.type.linear:
+                default:
+                    ticks.major.marks = ticks.major.labels? ticks.major.labels.map((l:TickLabel) => l.pos) : [];
+                    ticks.minor.marks = ticks.minor.labels? ticks.minor.labels.map((l:TickLabel) => l.pos) : [];
+            }
+        }
         const dom:NumRange = [<number>this.domain()[0], <number>this.domain()[1]];
-        const inRange = (t:TickType) => t.pos>=dom[0] && t.pos<=dom[1];
-        const ticks:TicksCfg =  createTickMarks(this.scaleType(), this.domain(), numTicks, this.labelFmt);
-        ticks.minor = ticks.minor.filter(inRange);
-        ticks.major = ticks.major.filter(inRange);
-        if (ticks.major.length === 0) { ticks.major = ticks.minor; ticks.minor = []; }
+        const inRange = (t:TickLabel) => t.pos>=dom[0] && t.pos<=dom[1];
+        const ticks:Ticks =  createTickLabels(this.scaleType(), this.domain(), numTicks, this.labelFmt);
+        ticks.minor.labels = ticks.minor.labels.filter(inRange);
+        ticks.major.labels = ticks.major.labels.filter(inRange);
+        if (ticks.major.labels.length === 0) { ticks.major.labels = ticks.minor.labels; ticks.minor.labels = []; }
+        marksFromLabels(ticks, this.scaleType());
         return ticks;
     }
     
@@ -275,15 +239,15 @@ export class Scale {
         const domMax = <number>dom[1];
         let result;
         switch(this.scaleType()) {
-            case Scale.type.log: 
+            case Axes.type.log: 
                 result = Math.log(domVal/domMin) / Math.log(domMax/domMin) * (range[1] - range[0]) + range[0];
                 break;
-            case Scale.type.nominal: break;
-            case Scale.type.date:    
-            case Scale.type.percent: 
-            case Scale.type.index:   
-            case Scale.type.ordinal:  
-            case Scale.type.linear:
+            case Axes.type.nominal: break;
+            case Axes.type.date:    
+            case Axes.type.percent: 
+            case Axes.type.index:   
+            case Axes.type.ordinal:  
+            case Axes.type.linear:
             default:
                 result = (domVal- domMin) / (domMax - domMin) * (range[1] - range[0]) + range[0];
         }

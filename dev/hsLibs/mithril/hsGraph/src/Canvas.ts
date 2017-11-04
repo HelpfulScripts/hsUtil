@@ -36,13 +36,20 @@ export class Canvas extends SVGElem {
      * @param cfg the configuration object, containing default settings for all 
      * previously configured components. 
      */
-    static config(cfg:Config) {
+    static defaultConfig(cfg:Config) {
         cfg.canvas = <CanvasConfig>{
             range:  <Area>{ // graph width and height
                 w: 100, wunit:'%',
                 h: 100, hunit:'%'
             }  
         };
+    }
+
+    /**
+     * Makes adjustments to cfg based on current settings
+     * @param cfg the configuration object, containing default settings for all components
+     */
+    static adjustConfig(cfg:Config) {
     }
     
     view(node?: Vnode): Vnode {

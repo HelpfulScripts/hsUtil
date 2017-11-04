@@ -30,10 +30,19 @@ export class Legend {
      * @param cfg the configuration object, containing default settings for all 
      * previously configured components.
      */
-    static config(cfg:Config) {
+    static defaultConfig(cfg:Config) {
         cfg.legend = <LegendConfig>{
         };
     }
+
+    /**
+     * Makes adjustments to cfg based on current settings
+     * @param cfg the configuration object, containing default settings for all components
+     */
+    static adjustConfig(cfg:Config) {
+        
+    }
+    
     view(node?: Vnode): Vnode {
         return m('svg', { class:'hs-graph-legend', width:'100%', height:'100%'});
     }

@@ -5,6 +5,7 @@
  * ### Configurations and Defaults
  * See {@link Series.Series.config Series.config}
  * 
+ * @module Series
  */
 
 /** */
@@ -15,7 +16,8 @@ import { Data,
          DataSet }      from './Data';
 import { ColSpecifier } from './Data';
 import { SVGElem }      from './SVGElem';
-import { XYScale }      from './Scale';
+import { Axes }         from './Axes';
+import { XYScale }      from './AxesTypes';
 import { Plot }         from './Plot';
 import { PlotLine }     from './Plot';
 import { PlotBar }      from './Plot';
@@ -100,10 +102,26 @@ export class Series extends SVGElem {
      * @param cfg the configuration object, containing default settings for all 
      * previously configured components.
      */
-    static config(cfg:Config) {
+    static defaultConfig(cfg:Config) {
         cfg.series = new SeriesConfig();
     }
 
+    /**
+     * Makes adjustments to cfg based on current settings
+     * @param cfg the configuration object, containing default settings for all components
+     */
+    static adjustConfig(cfg:Config) { 
+        cfg.series.series.forEach((s:SeriesDef) => {
+            s.type = s.type || Series.plot.line;
+            s.style = s.style || <SeriesStyle>{};
+            if (s.cols[0] === undefined) { // no x-value -> use index
+                cfg.axes.primary.x.title.hOffset = 0;
+                cfg.axes.primary.x.scale.type = Axes.type.index;
+                cfg.grid.minor.ver.visible = false;
+            }
+        });
+    }
+    
     drawClipRect(clipID:string, scales:XYScale) {
         return !clipID? m('') : this.clipRect(
             {   x:scales.x.range()[0], y:scales.y.range()[1]}, 
@@ -129,25 +147,32 @@ export class Series extends SVGElem {
     }
 }
 
-export interface LineStyle extends VisibleCfg {
-    color: string;              // the stroke color in hex
-    width: number;              // the stroke width in px
+export interface ColoredCfg extends VisibleCfg {
+    /** the color in hex */
+    color: string;
+}
+export interface LineStyle extends ColoredCfg {
+    /** the stroke width in px */
+    width: number; 
 }
 
-export interface MarkerStyle extends VisibleCfg {
-    color: string;              // the stroke color in hex (#xxx)
-    size:  number;              // the stroke width in px
+export interface MarkerStyle extends ColoredCfg {
+    /** the stroke width in px */
+    size:  number;      
+
+    /** the marker shape, selected from {@link Series.marker Series.marker} */
     shape: Symbol;              
 }
 
-export interface FillStyle extends VisibleCfg {
-    color: string;              // the stroke color in hex (#xxx)
+export interface FillStyle extends ColoredCfg {
 }
 
-export interface BarStyle extends VisibleCfg {
-    color: string;              // the fill color in hex (#xxx)
-    width: number;              // width of bars in range pixels
-    offset:number;              // offset in range pixel between column series
+export interface BarStyle extends ColoredCfg {
+    /** width of bars in % of space between bars */
+    width: number;  
+    
+    /** offset between column series in % between bars */
+    offset:number; 
 }
 
 export interface SeriesStyle {
@@ -181,7 +206,7 @@ export class SeriesConfig {
         line:   { color:'default', visible: true, width: 5},
         marker: { color:'default', visible: false, size: 10, shape: Series.marker.circle},
         fill:   { color:'default', visible: false },
-        bar:    { color:'default', visible: false, width: 30, offset: 10 }
+        bar:    { color:'default', visible: false, width: 50, offset: 30 }
     };       
 
     private seriesDefs:SeriesDef[] = [];

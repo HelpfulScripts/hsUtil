@@ -260,7 +260,7 @@ function log() {
 	    }
 	}
 
-    function config(cfg:{colors?:boolean, logFile?:string, dateFormat?:string, level?:symbol }) {
+    function defaultConfig(cfg:{colors?:boolean, logFile?:string, dateFormat?:string, level?:symbol }) {
         console.log(cfg);        
         let colors = true;
         if (cfg.colors!==undefined)     { gColors = colors = cfg.colors; }     // true / false

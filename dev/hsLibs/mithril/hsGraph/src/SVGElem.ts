@@ -1,5 +1,5 @@
 import { m, Vnode } from 'hslayout';
-import { XYScale }  from './Scale';
+import { XYScale }  from './AxesTypes';
 import { DataRows } from './Data';
 
 /** svg primitive Point, measured in viewbox coordinates.  */

@@ -3,8 +3,9 @@
  */
 
 
-import { Scales }       from './Scale';
-import { SeriesDef, SeriesConfig }    from './Series';
+import { Scales }       from './AxesTypes';
+import { SeriesDef, 
+         SeriesConfig } from './Series';
 
 /** defines a [min-max] range */
 export type NumRange = [number, number];

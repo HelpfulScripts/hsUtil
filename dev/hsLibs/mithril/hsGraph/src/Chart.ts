@@ -44,7 +44,7 @@ export class Chart extends SVGElem {
      * @param cfg the configuration object, containing default settings for all 
      * previously configured components.
      */
-    static config(cfg:Config) {
+    static defaultConfig(cfg:Config) {
         cfg.chart = <ChartConfig>{
             visible: true,          // Chart area is visible
             title:  <LabelCfg>{     // the chart title
@@ -59,6 +59,13 @@ export class Chart extends SVGElem {
     return cfg;
     }
 
+    /**
+     * Makes adjustments to cfg based on current settings
+     * @param cfg the configuration object, containing default settings for all components
+     */
+    static adjustConfig(cfg:Config) {        
+    }
+    
     static clientWidth:number;
     static clientHeight:number;
 
