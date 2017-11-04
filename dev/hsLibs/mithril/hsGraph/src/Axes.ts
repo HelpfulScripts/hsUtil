@@ -30,7 +30,7 @@
  *      cfg.chart.title.xpos          = 'end';
  *      cfg.chart.title.ypos          = 'top';
  *      cfg.chart.title.vOffset       = -1.5;
- *      cfg.grid.minor.hor = true;
+ *      cfg.grid.minor.hor.visible    = true;
  * 
  *      const axes = cfg.axes.primary;
  *      axes.x.title.text = 'time';
@@ -55,57 +55,22 @@
 
  /** */
 import { m, Vnode}  from 'hslayout';
+import { XYScale,
+         ScaleCfg, 
+         MarkCfg,
+         AxisCfg,
+         AxesConfig,
+         TickStruct,
+         TickLabel,
+         TickDefs } from './AxesTypes';
+;
 import { Config, 
-         VisibleCfg, 
          LabelCfg } from './Graph';
-import { Scale, 
-         XYScale, 
-         Scales }   from './Scale';
-import { ScaleCfg, 
-         TickType } from './Scale';
+import { Scale }    from './Scale';
 import { Domain }   from './Data';
 import { SVGElem, 
          Area }     from './SVGElem';
 
-/** Defines configurable settings for tick marks */
-export interface MarkCfg extends VisibleCfg {
-    /** length in viewBox coordinates */
-    length:  number; 
-}
-
-/** Defines configurable settings for tick marks and labels per axis */
-export interface TickStruct {
-    marks:  MarkCfg;
-    labels: LabelCfg;
-    labelFmt: string;
-}
-
-/** Defines configurable settings for major and minor ticks (marks and labels) */
-export interface TicksCfg {
-    major:  TickStruct;
-    minor:  TickStruct;
-}
-
-/** Defines configurable settings. */
-export interface AxesConfig  {
-    primary:   { x: AxisCfg; y: AxisCfg; };
-    secondary: { x: AxisCfg; y: AxisCfg; };
-}
-
-/** Defines configurable settings per axis */
-export interface AxisCfg extends VisibleCfg{
-    /** configures the axis title */  
-    title:      LabelCfg;
-
-    /** axis crossing in domain: 'min', 'max', or domain value */
-    crossesAt:  number|string; 
-
-    /** scale type and domain */
-    scale: ScaleCfg;
-
-    /** configures the major and minor ticks */
-    ticks: TicksCfg;
-}
 
 /** 
  * calculates the range value of axis crossing from a domain value.
@@ -123,7 +88,27 @@ function getCrossAt(cross:string|number, scale:Scale):number {
 }
 
 export class Axes extends SVGElem {
-   /** 
+    /**
+     * Defines available axis types:
+     * - linear
+     * - log
+     * - date
+     * - index
+     * - percent
+     * - ordinal
+     * - nominal
+     */
+    static type = {
+        linear:     'linear axis',
+        log:        'log axis',
+        date:       'date axis',
+        index:      'index axis',
+        percent:    'percent axis',
+        ordinal:    'ordinal axis',
+        nominal:    'nominal axis'
+    };
+
+    /** 
     * Defines default values for display elements in `Axes`
     * sets the default configuration for the primary and secondary axes.
     * See {@link Graph.Graph.makeConfig Graph.makeConfig} for the sequence of initializations. 
@@ -146,7 +131,7 @@ export class Axes extends SVGElem {
     *  cfg.[primary|secondary].[x|y] = {@link Axes.AxisCfg <Axes.AxisCfg>}{
     *     visible:    primary? true : false,   // hide secondary axes
     *     crossesAt:  primary? 'min':'max',    // default axis crossing
-    *     scale:      scaleCfg,                // see {@link Scale.ScaleCfg Scale.ScaleCfg}
+    *     scale:      scaleCfg(),              // scale type and domain
     *     title:      titleCfg(primary, x),
     *     ticks: {                    
     *         major: {                
@@ -165,8 +150,8 @@ export class Axes extends SVGElem {
     * #### scaleCfg():
     * ```
     *  cfg.[primary|secondary].[x|y].scale = {@link Scale.ScaleCfg <Scale.ScaleCfg>}{
-    *      type: Scale.type.linear,   // {@link Scale.Scale.type Scale.type} 
-    *      domain:['auto', 'auto']    // {@link Scale.DomainCfg Scale.DomainCfg}: min/max of domain; 'auto', or a domain value
+    *      type: Axes.type.linear,    // {@link Axes.Axes.type Axes.type} 
+    *      domain:['auto', 'auto']    // {@link Scale.ScaleCfg.domain ScaleCfg.domain}: min/max of domain; 'auto', or a domain value
     *  }
     * ```
     * #### titleCfg(primary:boolean, x:boolean):
@@ -200,10 +185,10 @@ export class Axes extends SVGElem {
     * @param cfg the configuration object, containing default settings for all 
     * previously configured components.
     */
-    static config(cfg:Config) {
+    static defaultConfig(cfg:Config) {
         function scaleCfg():ScaleCfg {
             return {                             // axis scaling information
-                type: Scale.type.linear,         //    scale type
+                type: Axes.type.linear,         //    scale type
                 domain:<Domain>['auto', 'auto']  //    min/max of domain; 'auto', or a domain value
             };
         }
@@ -264,6 +249,13 @@ export class Axes extends SVGElem {
     }
 
     /**
+     * Makes adjustments to cfg based on current settings
+     * @param cfg the configuration object, containing default settings for all components
+     */
+    static adjustConfig(cfg:Config) { 
+    }
+    
+    /**
      * draws the axis line
      */
     drawAxisLine(x:boolean, range:Area, cross:number) {
@@ -284,12 +276,12 @@ export class Axes extends SVGElem {
     /**
      * draws the tick marks. Labels are plotted for major tick marks only.
      */
-    drawTickMarks(dir:string, type:string, crossesAt:number, scale:Scale, ticks:TickType[], cfg:TickStruct):Vnode {
+    drawTickMarks(dir:string, type:string, crossesAt:number, scale:Scale, ticks:TickDefs, cfg:TickStruct):Vnode {
         const x = dir==='x';
         return m('svg', { class:`hs-graph-axis-${type}-tick-marks`}, 
-            !cfg.marks.visible? '' : ticks.map((t:TickType) => { 
-                return x? this.verLine(scale.convert(t.pos), crossesAt, crossesAt+cfg.marks.length) :
-                          this.horLine(crossesAt, crossesAt-cfg.marks.length, scale.convert(t.pos));
+            !cfg.marks.visible? '' : ticks.marks.map((t:number) => { 
+                return x? this.verLine(scale.convert(t), crossesAt, crossesAt+cfg.marks.length) :
+                          this.horLine(crossesAt, crossesAt-cfg.marks.length, scale.convert(t));
             })
         );
     }
@@ -297,13 +289,13 @@ export class Axes extends SVGElem {
     /**
      * draws the tick labels. Labels are plotted for major tick marks only.
      */
-    drawTickLabels(x:boolean, crossesAt:number, scale:Scale, ticks:TickType[], cfg:TickStruct):Vnode {
+    drawTickLabels(x:boolean, crossesAt:number, scale:Scale, ticks:TickDefs, cfg:TickStruct):Vnode {
         scale.setLabelFormat(cfg.labelFmt);
         return m('svg', {class:'hs-graph-axis-tick-label'}, 
-            !cfg.labels.visible? '' : ticks.map((t:TickType) => { 
+            !cfg.labels.visible? '' : ticks.labels.map((t:TickLabel) => { 
                 const v = scale.convert(t.pos);
                 const xy = { transform:`translate(${x?v:crossesAt}, ${x?crossesAt:v})` };
-                return m('g', xy, this.text(cfg.labels, t.label));
+                return m('g', xy, this.text(cfg.labels, t.text));
             })
         );
     }
@@ -332,17 +324,9 @@ export class Axes extends SVGElem {
         ]);
     }
 
-    setScaleTypes(cfg: AxesConfig, scales: Scales) {
-        scales.primary.x.scaleType(cfg.primary.x.scale.type);
-        scales.primary.y.scaleType(cfg.primary.y.scale.type);
-        scales.secondary.x.scaleType(cfg.secondary.x.scale.type);
-        scales.secondary.y.scaleType(cfg.secondary.y.scale.type);
-    }
-
     view(node?: Vnode): Vnode {
         const cfg:AxesConfig    = node.attrs.cfg;
         const scales = node.attrs.scales;
-//        this.setScaleTypes(cfg, scales);
         return m('svg', {class:'hs-graph-axis'}, [
             this.drawAxis('x', scales.primary, 'primary', cfg),
             this.drawAxis('y', scales.primary, 'primary', cfg),
