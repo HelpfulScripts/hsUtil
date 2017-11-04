@@ -4,13 +4,18 @@ ___
 hsDoc.js is a code documentation viewer for [Typescript](https://www.typescriptlang.org) projects.
 It renders JSON documentation files as created by [typedoc](http://typedoc.org).
 
-## Creating the documentation docset
+## Creating the Documentation DocSet
 Follow the instruction for typedoc in commenting the code.
 
 In addition to the documented source files,
 `hsDoc` recognizes a special **`overview.ts`** file that will be displayed as a project overview. 
 For this to work, `typedoc` requires the file to have two separate comment entries.
 If the second comment is missing, `typedoc` will not generate a comment in the docset.
+
+### Modules
+Each source file is considered to be a `module`. Modules are shown in the left-hand overview panel of the main `hsDoc` window.
+Alternatively, a `@module` statement in the summary comment at the top of a file will create, or add to, a module of the specified name.
+This encourages to separate code into files without cluttering the overview.
 
 ### Linking across the docsets
 Links to items across the docsets can be placed via a link directive: 

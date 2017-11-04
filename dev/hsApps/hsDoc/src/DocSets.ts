@@ -109,15 +109,31 @@ function loadDocSet(dir:string, file:string):Promise<void> {
  * @param lib the docset name, used for name validation
  */
 function recursiveIndex(content:any, index:any, lib:string, path='') {
+    function getNewPath(content:any) {
+        content.name = content.name.replace(/["'](.+)["']|(.+)/g, "$1$2");  // remove quotes 
+        const elName  = content.name.match(/([^\/]+)$/)[1];         // name = part after last /
+        content.name = elName;
+        return content.fullPath = (path==='')? elName : `${path}.${elName}`;
+    }
+
+    function markIfModule(content:any) {
+        if (content.comment && content.comment.tags) {
+            content.comment.tags.forEach((tag:any) => {
+                if (tag.tag === 'module') {
+                    content.innerModule = tag.text.trim();
+                }
+            });
+        }
+    }
     content.lib = lib;
     if (typeof content === 'object' && content.name) {
-        content.name = content.name.replace(/["'](.+)["']|(.+)/g, "$1$2");  // remove quotes 
-        const elName  = content.name.match(/([^\/]+)$/)[1];                 // name = part after last /
-        let newPath = (path==='')? elName : `${path}.${elName}`;
-        content.fullPath = newPath;
-        content.name = elName;
+        const newPath = getNewPath(content);
+
+        markIfModule(content);
+
         index[content.id+''] = content;
         if (newPath.length>0) { index[newPath] = content; }
+
         if (content.children) {
             content.children.map((c:any) => recursiveIndex(c, index, lib, newPath));
         }

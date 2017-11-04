@@ -21,19 +21,70 @@ export class LeftNav extends Container {
             lib = node.attrs.route.lib;
             field = node.attrs.route.field;
         }
-        const mdl = DocSets.get(lib, 0) || {name:'unknown', id:0};
-        return m('.hs-left', [m('.hs-left-nav', navList(mdl, field))]);
+        const docSet = DocSets.get(lib, 0) || {name:'unknown', id:0};
+        return m('.hs-left', [m('.hs-left-nav', navList(docSet, field))]);
     } 
 }
 
 /** creates the list if modules (`*.ts` files) */
-function navList(mdl:any, field:string):Vnode[] {
-    if (mdl.kind === 0) { // External DocSets
-        const modules = mdl.children? mdl.children.map((c:any) => externalModule(c, field)) : ['no children'];
+function navList(docSet:any, field:string):Vnode[] {
+    /** */
+    function collectModules(docSet:any) {
+        const modulesByName = {};
+        docSet.modules = [];
+        if (docSet.children) {
+            docSet.children.forEach((c:any) => {
+                // don't show modules from other projects (isExternal flag) or modules on the ignore list
+                if (!(c.flags && c.flags.isExternal) && !ignoreModules[c.name]) {
+                    const name = c.innerModule? c.innerModule : c.name;
+                    let module = modulesByName[name];
+                    if (!module) {  // new module
+                        docSet.modules.push(module = modulesByName[name] = { 
+                            name: name,
+                            lib: docSet.lib,
+                            fullPath: docSet.fullPath + '.'+ name,
+                            groups:[]
+                        });
+                    }
+                    // get existing module groups
+                    const groups = {};
+                    module.groups.forEach((g:any) => groups[g.title] = g); 
+                    // for each group in child:
+                    if (c.groups) { c.groups.forEach((g:any) => {
+                        let group = groups[g.title]; // get existing 
+                        if (!group) {                 //  else create new
+                            group = groups[g.title] = {
+                                children:[],
+                                kind: g.kind,
+                                title: g.title
+                            };
+                        module.groups.push(group);
+                        }
+                        group.children = group.children.concat(g.children);
+                    });}
+                }
+            });
+        }
+    }
+    /**
+     * processes a module, i.e. a `.ts` file.
+     */
+    function externalModule(mdl:any) {
+        const selected = (field===''+mdl.id || field.indexOf(mdl.fullPath) === 0)? 
+            '.hs-left-nav-selected' : '';
+
+        return collapsible(`.hs-left-nav-module`, { isExpanded:selected }, [
+            libLink(`a.hs-left-nav-module-name ${selected}`, mdl.lib, mdl.fullPath, mdl.name),
+            !mdl.groups? undefined : mdl.groups.map((g:any) => entries(g, mdl, field))
+        ]);
+    }
+
+    if (docSet.kind === 0) { // External DocSets
+        collectModules(docSet);
+//        const modules = docSet.children? docSet.children.map(externalModule) : ['no children'];
+        const modules = docSet.modules.map(externalModule);
         modules.unshift(m('.hs-left-nav-header', 'Modules'));
         return [m('.hs-left-nav-content', modules)];
-//    } else {
-//        console.log('error: not a head node');
     }
 }
 
@@ -46,24 +97,6 @@ const ignoreModules = {
 };
 
 //const expanded: {string?:boolean} = {};
-
-/**
- * processes a module, i.e. a `.ts` file.
- */
-function externalModule(mdl:any, field:string) {
-    const selected = (field===''+mdl.id || field.indexOf(mdl.fullPath) === 0)? 
-        '.hs-left-nav-selected' : '';
-
-    // don't show modules from other projects (isExternal flag) or modules on the ignore list
-    if ((mdl.flags && mdl.flags.isExternal) || ignoreModules[mdl.name]) {
-        return m('');
-    } else {
-        return collapsible(`.hs-left-nav-module`, { isExpanded:selected }, [
-            libLink(`a.hs-left-nav-module-name ${selected}`, mdl.lib, mdl.fullPath, mdl.name),
-            !mdl.groups? undefined : mdl.groups.map((g:any) => entries(g, mdl, field))
-        ]);
-    }
-}
 
 /**
  * processes a group of entries, e.g. Variables, Functions, or Classes.
