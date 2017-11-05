@@ -110,6 +110,7 @@ function member(group:any, lib:string, statc:boolean, publc: boolean): Vnode {
         'Object literals':  '.hs-item-object-literal',
         'Properties':       '.hs-item-property',
         'Type aliases':     '.hs-item-alias',          
+        'Accessors':        '.hs-item-accessors'        
     };
     const fn = groupMap[group.title] || '.hs-item-unknown-member';
     const isPublic = (flags:any) => flags.isPublic || (flags.isExported && !flags.isPrivate);
