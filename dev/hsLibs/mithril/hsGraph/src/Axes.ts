@@ -384,6 +384,8 @@ class ExampleLinearAxis {}
 *          cfg.axes.primary.x.scale.domain = ['tight', 'tight'];
 *          cfg.axes.primary.y.scale.type = hsgraph.Axes.type.log;
 *          cfg.axes.primary.y.scale.domain = ['auto', 'auto'];
+*          cfg.grid.minor.hor.visible = true;
+*          cfg.grid.minor.ver.visible = true;
 *      }})
 * });
 *
