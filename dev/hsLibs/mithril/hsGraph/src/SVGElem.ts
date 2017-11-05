@@ -57,13 +57,13 @@ export interface TextElem {
     /** horizontal align: 'start' | 'middle' | 'end'; uses `text-align` attribute */
     xpos:       string;
 
-    /** vertical align: 'top' | 'center' | 'bottom'; uses `baseline-shift` attribute */
+    /** vertical align: 'top' | 'center' | 'bottom'; uses `dy` attribute */
     ypos:       string;
 
-    /** horizontal label offset in 'em' */
+    /** horizontal label offset in 'em'; uses `dx` attribute */
     hOffset:    number;
 
-    /** vertical label offset in 'em' */
+    /** vertical label offset in 'em'; uses `dy` attribute */
     vOffset:    number;
 }
 
@@ -78,7 +78,7 @@ export abstract class SVGElem {
      * @param text the text to plot
      */
     text(cfg:TextElem, text:string):Vnode {
-        let baselineShift = '0em';
+        let yShift = 0;
         let hAlign = cfg.xpos;
         switch(cfg.xpos) {
             case 'start':  break;
@@ -86,18 +86,18 @@ export abstract class SVGElem {
             case 'middle': 
             default:       hAlign = 'middle'; break;
         }
-        switch(cfg.ypos) {
-            case 'top':    baselineShift = -0.7 +'em'; break;
-            case 'center': baselineShift = -0.35+'em'; break;
+        switch(cfg.ypos) { // additional y 'em' shift
+            case 'top':    yShift = 0.7; break;
+            case 'center': yShift = 0.35; break;
             case 'bottom': 
-            default:       baselineShift =  0   +'em'; break;
+            default:       yShift =  0; break;
         }
         const param = { 
-            x: cfg.x? cfg.x : '',
+            x: cfg.x? cfg.x : '', 
             y: cfg.y? cfg.y : '',
             dx:round(cfg.hOffset||0) + 'em',    
-            dy:round(cfg.vOffset||0) + 'em',
-            style: `text-anchor:${hAlign}; baseline-shift: ${baselineShift};`,
+            dy:round((cfg.vOffset||0)+yShift) + 'em',
+            style: `text-anchor:${hAlign};`,
             class: cfg.cssClass,
         };
         return m('text', param, text);

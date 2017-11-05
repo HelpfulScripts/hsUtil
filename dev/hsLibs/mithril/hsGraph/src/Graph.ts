@@ -301,6 +301,8 @@ export class Graph extends SVGElem {
                 margin.b = Math.max(margin.b,  box[0].y+box[0].height+cfgm.bottom-viewBoxHeight);               
                 margin.r = Math.max(margin.r, box[0].x+box[0].width +cfgm.right -viewBoxWidth);               
             }
+console.log(`${css}: `);            
+console.log(margin);            
         }
         const margin = {t:-1e6,l:-1e6,b:-1e6,r:-1e6};
         getBBox('hs-graph-axis');
