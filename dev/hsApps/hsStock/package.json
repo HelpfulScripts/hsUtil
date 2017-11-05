@@ -1,0 +1,20 @@
+{
+  "name": "hsStock",
+  "version": "0.9.5",
+  "keywords": [],
+  "description": "Helpful Scripts equity management utility",
+  "author": {
+    "name": "Hauke Schmidt",
+    "email": "hauke.schmidt@us.bosch.com"
+  },
+  "scripts": {
+    "start": "grunt",
+    "test": "ospec"
+  },
+  "engines": {
+    "node": ">= 0.10.0"
+  },
+  "plugins": [
+    "plugins/markdown"
+  ]
+}

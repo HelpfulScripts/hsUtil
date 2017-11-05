@@ -3,6 +3,7 @@ const path = require('path');
 const basePath = '../';
 const paths = [
     ['hsApps/',             'hsDoc/'],
+    ['hsApps/',             'hsStock/'],
     ['hsLibs/mithril/',     'hsLayout/'],
     ['hsLibs/mithril/',     'hsWidgets/'],
     ['hsLibs/mithril/',     'hsGraph/'],
@@ -18,39 +19,40 @@ module.exports = function(grunt) {
 	// Project configuration.
 	grunt.initConfig({
 		copy: {
-            stage: { files: 
-                // program files
-                [{
+            stageApps: { 
+                files: paths.map(p => (p[0] !== 'hsApps/')? {} : {
                     expand: true, 
-                    cwd: basePath+'hsApps/hsDoc/_dist/', 
+                    cwd: basePath+`hsApps/${p[1]}/_dist/`, 
                     src: ['*.js', '*.css*', '*.html', '!mithril.js'], 
-                    dest: staging+'hsDoc/'
-                },{
+                    dest: staging+p[1]
+                }).concat(paths.map(p => (p[0] !== 'hsApps/')? {} : {
                     expand: true, 
-                    cwd: basePath+'hsApps/hsDoc/_dist/example', 
+                    cwd: basePath+`hsApps/${p[1]}/_dist/example`, 
                     src: ['*.json'], 
-                    dest: staging+'hsDoc/data/' 
-                }]
-                // doc files
-                .concat(paths.map(p => { return {
+                    dest: staging+p[1]+'data/'
+                }))
+            },
+            stageDocs: { files: 
+                paths.map(p => { return {               // documentation files
                     expand: true, 
                     cwd: basePath+p[0]+p[1]+'_dist/docs/', 
                     src: ['*.json'], 
                     dest: staging+'hsDoc/data/' 
-                }}))
-                // example files in docs
-                .concat(paths.map(p => { return { 
+                }}).concat(paths.map(p => { return {    // example files in docs
                     expand: true, 
                     cwd: basePath+p[0]+p[1]+'_dist/example/', 
                     src: ['*.js', '*.css', '*.html', '*.json'], 
                     dest: staging+'hsDoc/example/' 
-                }}))
-                // data files
-                .concat(paths.map(p => { return {
+                }})).concat(paths.map(p => { return {   // data files
                     expand: true, 
                     cwd: basePath+p[0]+p[1]+'_dist/data/', 
                     src: ['*.*'], 
                     dest: staging+'hsDoc/data/' 
+                }})).concat(paths.map(p => { return {   // map files
+                    expand: true, 
+                    cwd: basePath+p[0]+p[1]+'_dist/src/', 
+                    src: ['*.map'], 
+                    dest: staging+'hsDoc/' 
                 }}))
             }
         }, 
@@ -132,6 +134,6 @@ module.exports = function(grunt) {
         });
     });
 
-    grunt.registerTask('stage', ['copy:stage', 'sourceCode']);
+    grunt.registerTask('stage', ['copy:stageApps', 'copy:stageDocs', 'sourceCode']);
     grunt.registerTask('default', ['stage', 'watch']);	
 };
