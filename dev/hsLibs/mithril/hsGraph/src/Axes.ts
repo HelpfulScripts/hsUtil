@@ -35,7 +35,7 @@
  *      const axes = cfg.axes.primary;
  *      axes.x.title.text = 'time';
  *      axes.y.title.text = 'volume';
- *      axes.y.scale.type = hsgraph.Scale.type.log;
+ *      axes.y.scale.type = hsgraph.Axes.type.log;
  * }
  * 
  * m.mount(root, { 
@@ -382,9 +382,9 @@ class ExampleLinearAxis {}
 *          cfg.chart.title.text = 'Log Y Axis';
 *          cfg.series.data   = series;
 *          cfg.series.series = [{ cols: ['time', 'volume'] }];
-*          cfg.axes.primary.x.scale.type = hsgraph.Scale.type.log;
+*          cfg.axes.primary.x.scale.type = hsgraph.Axes.type.log;
 *          cfg.axes.primary.x.scale.domain = ['tight', 'tight'];
-*          cfg.axes.primary.y.scale.type = hsgraph.Scale.type.log;
+*          cfg.axes.primary.y.scale.type = hsgraph.Axes.type.log;
 *          cfg.axes.primary.y.scale.domain = ['auto', 'auto'];
 *      }})
 * });
@@ -408,7 +408,7 @@ class ExampleLogAxis {}
 *          cfg.chart.title.text = 'Date X Axis';
 *          cfg.series.data   = series;
 *          cfg.series.series = [{ cols: ['time', 'volume'] }];
-*          cfg.axes.primary.x.scale.type = hsgraph.Scale.type.date;
+*          cfg.axes.primary.x.scale.type = hsgraph.Axes.type.date;
 *          cfg.axes.primary.x.ticks.major.labelFmt = '%MMM %YY';
 *      }})
 * });

@@ -26,7 +26,6 @@ function linScaleTickMarks(dom:NumRange, ticks:Ticks, numTicks:number) {
     function addTicks(unit:number, ticks:TickDefs):number {
         let exp = Math.pow(10, Math.floor(Math.log10(unit)));
         unit = Math.floor(unit / exp)*exp;
-console.log(unit);        
         const min = Math.floor(dom[0]/unit)*unit;
         const max = Math.ceil(dom[1]/unit)*unit;
         for (let v=min; v<=max; v+=unit) { addTickNumber(ticks, v); }

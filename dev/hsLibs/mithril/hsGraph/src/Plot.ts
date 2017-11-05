@@ -141,6 +141,7 @@ export class PlotLine extends Plot {
  *                  type: hsgraph.Series.plot.bar 
  *              }
  *          ];
+ *          cfg.series.series[0].style.bar.width = 80;
  *          cfg.series.series[1].style.bar.offset = 0;
  *          cfg.series.series[1].style.bar.width = 10;
  *      }})
