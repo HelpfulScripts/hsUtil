@@ -3,7 +3,7 @@
  * renders the one or more series in a variety of styles.
  * 
  * ### Configurations and Defaults
- * See {@link Series.Series.config Series.config}
+ * See {@link Series.Series.defaultConfig Series.defaultConfig}
  * 
  * @module Series
  */

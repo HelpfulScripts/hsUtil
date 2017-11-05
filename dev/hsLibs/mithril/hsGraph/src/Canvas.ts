@@ -3,7 +3,7 @@
  * renders the graph's background.
  * 
  * ### Configurations and Defaults
- * See {@link Canvas.Canvas.config Canvas.config}
+ * See {@link Canvas.Canvas.defaultConfig Canvas.defaultConfig}
  */
 
 /** */

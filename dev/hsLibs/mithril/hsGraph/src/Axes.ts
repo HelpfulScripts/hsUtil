@@ -1,8 +1,9 @@
 /**
  * # Axes
  * renders the x- and y-axis with title, tick marks and labels.
+ *
  * ### Configurations and Defaults
- * See {@link Axes.Axes.config Axes.config}
+ * See {@link Axes.Axes.defaultConfig Axes.defaultConfig}
  * 
  * ### Example
  * <example>
@@ -48,9 +49,6 @@
  * .hs-graph-series { stroke-width: 5; }
  * </file>
  * </example>
- * 
- * ### Configurations and Defaults
- * See {@link Axes.Axes.config Axes.config}
  */
 
  /** */
@@ -115,7 +113,7 @@ export class Axes extends SVGElem {
     * 
     * ### Configurations and Defaults
     * ```
-    * cfg.axes = {@link Axes.AxesConfig <AxesConfig>} {
+    * cfg.axes = {@link AxesTypes.AxesConfig <AxesConfig>} {
     *    primary: {                // Primary axis:
     *       x: axisCfg(true, true),
     *       y: axisCfg(true, false)
@@ -128,18 +126,18 @@ export class Axes extends SVGElem {
     * ```
     * #### axisCfg(primary:boolean, x:boolean):
     * ```
-    *  cfg.[primary|secondary].[x|y] = {@link Axes.AxisCfg <Axes.AxisCfg>}{
+    *  cfg.axes.[primary|secondary].[x|y] = {@link AxesTypes.AxisCfg <AxisCfg>}{
     *     visible:    primary? true : false,   // hide secondary axes
     *     crossesAt:  primary? 'min':'max',    // default axis crossing
-    *     scale:      scaleCfg(),              // scale type and domain
-    *     title:      titleCfg(primary, x),
-    *     ticks: {                    
-    *         major: {                
-    *             marks:  markCfg(primary, true),  
-    *             labels: labelCfg(primary, x, true),     
-    *             labelFmt: undefined 
+    *     scale:     {@link AxesTypes.ScaleCfg <ScaleCfg>}scaleCfg(),     // scale type and domain
+    *     title:     {@link Graph.LabelCfg <LabelCfg>}titleCfg(primary, x),
+    *     ticks:     {@link AxesTypes.TicksCfg <TicksCfg>}{                    
+    *         major: {@link AxesTypes.TickStruct <TickStruct>}{                
+    *             marks:  {@link AxesTypes.MarkCfg <MarkCfg>}markCfg(primary, true),  
+    *             labels: {@link Graph.LabelCfg <LabelCfg>}labelCfg(primary, x, true),     
+    *             labelFmt: <string>undefined 
     *         },
-    *         minor: { 
+    *         minor: {@link AxesTypes.TickStruct <TickStruct>}{ 
     *             marks:  markCfg(primary, false),
     *             labels: labelCfg(primary, x, false),     
     *             labelFmt: undefined 
@@ -149,16 +147,16 @@ export class Axes extends SVGElem {
     * ```
     * #### scaleCfg():
     * ```
-    *  cfg.[primary|secondary].[x|y].scale = {@link Scale.ScaleCfg <Scale.ScaleCfg>}{
-    *      type: Axes.type.linear,    // {@link Axes.Axes.type Axes.type} 
-    *      domain:['auto', 'auto']    // {@link Scale.ScaleCfg.domain ScaleCfg.domain}: min/max of domain; 'auto', or a domain value
+    *  cfg.axes.[primary|secondary].[x|y].scale = {@link AxesTypes.ScaleCfg <ScaleCfg>}{
+    *      type:   {@link Axes.Axes.type <Axes.type>} Axes.type.linear,  
+    *      domain: {@link Data.Domain <Domain>}['auto', 'auto']    // : min/max of domain; 'auto', 'tight', or a domain value
     *  }
     * ```
     * #### titleCfg(primary:boolean, x:boolean):
     * ```
-    *  cfg.[primary|secondary].[x|y].title = {@link SVGElem.TextElem <SVGElem.TextElem>}{
+    *  cfg.axes.[primary|secondary].[x|y].title = {@link SVGElem.TextElem <SVGElem.TextElem>}{
     *     visible: true,  
-    *     text:    (x? 'x' : 'y') + (primary? '' : '2'),    // 'x'/'y' or 'x2'/'y2'
+    *     text:    (x? 'x' : 'y') + (primary? '' : '2'),    // 'x' / 'y' or 'x2' / 'y2'
     *     xpos:    x? 'end' : (primary? 'middle' : 'start'),          
     *     ypos:    x? 'top' : (primary? 'bottom' : 'top'),           
     *     hOffset: x? -2 : (primary? 0 : 0.3),            
@@ -167,14 +165,14 @@ export class Axes extends SVGElem {
     * ```
     * #### markCfg(primary:boolean, major:boolean):
     * ```
-    *  cfg.[primary|secondary].[x|y].ticks.[major|minor].marks = {@link Axes.MarkCfg <Axes.MarkCfg>}{
+    *  cfg.axes.[primary|secondary].[x|y].ticks.[major|minor].marks = {@link AxesTypes.MarkCfg <Axes.MarkCfg>}{
     *     visible: major, 
     *     length: (primary? 1 : -1) * (major? 10 : 5) 
     *  }      
     * ```
     * #### labelCfg(primary:boolean, x:boolean, major:boolean):
     * ```
-    *  cfg.[primary|secondary].[x|y].ticks.[major|minor].labels = {@link SVGElem.TextElem <SVGElem.TextElem>}{
+    *  cfg.axes.[primary|secondary].[x|y].ticks.[major|minor].labels = {@link SVGElem.TextElem <SVGElem.TextElem>}{
     *     visible: major, 
     *     xpos: x? 'middle' : (primary? 'end' : 'start')
     *     ypos: x? (primary? 'top' : 'bottom') : 'center', 

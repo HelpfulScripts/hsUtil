@@ -1,8 +1,9 @@
 /**
  * # Chart
  * renders the chart background and title.
+ * 
  * ### Configurations and Defaults
- * See {@link Chart.Chart.config Chart.config}
+ * See {@link Chart.Chart.defaultConfig Chart.defaultConfig}
  */
 
  /** */

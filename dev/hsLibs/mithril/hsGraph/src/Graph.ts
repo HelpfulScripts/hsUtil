@@ -52,7 +52,7 @@
  * </example>
  * 
  * ### Configurations and Defaults
- * See {@link Graph.Graph.config Graph.config}
+ * See {@link Graph.Graph.defaultConfig Graph.defaultConfig}
  */
 
 /** */
@@ -184,20 +184,7 @@ export class Graph extends SVGElem {
         return cfg;
     }
 
-    /**
-     * Makes adjustments to cfg based on current settings
-     * @param cfg the configuration object, containing default settings for all components
-     */
-    protected static adjustConfig(cfg:Config) {
-        Canvas.adjustConfig(cfg);
-        Axes.adjustConfig(cfg);
-        Series.adjustConfig(cfg);
-        Grid.adjustConfig(cfg);
-        Chart.adjustConfig(cfg);
-        Legend.adjustConfig(cfg);
-    }
-
-/** 
+    /** 
      * Defines default values for all configurable parameters in `Graph`
      * See {@link Graph.Graph.makeConfig Graph.makeConfig} for the sequence of initializations.
      * 
@@ -224,6 +211,19 @@ export class Graph extends SVGElem {
                 right: 10   // viewBox units    
             }
         };
+    }
+
+    /**
+     * Makes adjustments to cfg based on current settings
+     * @param cfg the configuration object, containing default settings for all components
+     */
+    protected static adjustConfig(cfg:Config) {
+        Canvas.adjustConfig(cfg);
+        Axes.adjustConfig(cfg);
+        Series.adjustConfig(cfg);
+        Grid.adjustConfig(cfg);
+        Chart.adjustConfig(cfg);
+        Legend.adjustConfig(cfg);
     }
 
     private marginOffset = {

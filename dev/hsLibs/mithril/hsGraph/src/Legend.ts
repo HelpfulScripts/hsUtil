@@ -3,7 +3,7 @@
  * renders the series' legend .
  * 
  * ### Configurations and Defaults
- * See {@link Legend.Legend.config Legend.config}
+ * See {@link Legend.Legend.defaultConfig Legend.defaultConfig}
  * 
  */
 

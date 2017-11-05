@@ -55,13 +55,13 @@ and should overwrite parameters as needed. See the overview for each component f
 parameters.
 
 Available configurations include:
-- &nbsp; {@link Graph.Graph.config cfg.graph}
-- &nbsp; {@link Canvas.Canvas.config cfg.canvas}
-- &nbsp; {@link Chart.Chart.config cfg.chart}
-- &nbsp; {@link Axes.Axes.config cfg.axes}
-- &nbsp; {@link Grid.Grid.config cfg.grid}
-- &nbsp; {@link Series.Series.config cfg.series}
-- &nbsp; {@link Legend.Legend.config cfg.legend}
+- &nbsp; {@link Graph.Graph.defaultConfig Graph.defaultConfig }
+- &nbsp; {@link Canvas.Canvas.defaultConfig Canvas.defaultConfig}
+- &nbsp; {@link Chart.Chart.defaultConfig Chart.defaultConfig}
+- &nbsp; {@link Axes.Axes.defaultConfig Axes.defaultConfig}
+- &nbsp; {@link Grid.Grid.defaultConfig Grid.defaultConfig}
+- &nbsp; {@link Series.Series.defaultConfig Series.defaultConfig}
+- &nbsp; {@link Legend.Legend.defaultConfig Legend.defaultConfig}
 
 ## Graph Components
 The rendered graph is organized in a layered structure of components:

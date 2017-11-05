@@ -3,7 +3,7 @@
  * renders the major and minor gridlines in each direction.
  * 
  * ### Configurations and Defaults
- * See {@link Grid.Grid.config Grid.config}
+ * See {@link Grid.Grid.defaultConfig Grid.defaultConfig}
  * 
  */
 
