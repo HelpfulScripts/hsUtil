@@ -15,24 +15,33 @@ const paths = [
 /*global module:false*/
 module.exports = function(grunt) {
     const staging = '../../staging/apps/';
+    const apps = paths.filter(p => (p[0] === 'hsApps/'));
+    const libs = paths.filter(p => (p[0] !== 'hsApps/'));
 
 	// Project configuration.
 	grunt.initConfig({
 		copy: {
-            stageApps: { 
-                files: paths.map(p => (p[0] !== 'hsApps/')? {} : {
+            stageApps: {
+                files: apps.map(p => { return {         // application files
                     expand: true, 
-                    cwd: basePath+`hsApps/${p[1]}/_dist/`, 
+                    cwd: basePath+`hsApps/${p[1]}_dist/`, 
                     src: ['*.js', '*.css*', '*.html', '!mithril.js'], 
                     dest: staging+p[1]
-                }).concat(paths.map(p => (p[0] !== 'hsApps/')? {} : {
+                }}).concat(apps.map(p => { return {     // support files
                     expand: true, 
-                    cwd: basePath+`hsApps/${p[1]}/_dist/example`, 
+                    cwd: basePath+`hsApps/${p[1]}_dist/example`, 
                     src: ['*.json'], 
                     dest: staging+p[1]+'data/'
-                }))
+                }})).concat([].concat.apply([], apps.map(p =>  
+                    libs.map(l => { return {            // lib map files
+                        expand: true, 
+                        cwd: basePath+l[0]+l[1]+'_dist/src/', 
+                        src: ['*.map'], 
+                        dest: staging+p[1] 
+                    }})
+                )))
             },
-            stageDocs: { files: 
+            stageDocs: { files:             
                 paths.map(p => { return {               // documentation files
                     expand: true, 
                     cwd: basePath+p[0]+p[1]+'_dist/docs/', 
