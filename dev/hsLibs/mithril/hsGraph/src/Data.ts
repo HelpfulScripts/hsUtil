@@ -44,6 +44,11 @@ interface MetaStruct {
     types:      TypeStruct[];   // data types, sorted by likelihood
 }
 
+export interface DataSet {
+    data:DataRows;
+    names:ColSpecifier[];   
+}
+
 export class Data {
     public static type = {
         number:     'number data',
@@ -76,7 +81,31 @@ export class Data {
         return this.meta.length-1;
     }
 
-     
+    //----------------------------
+    // public part
+    //----------------------------
+    constructor(data?:DataSet) {
+        if (data) { this.import(data); }
+    }
+
+    /**
+     * Imports data from an object literal `data`
+     * @param data the data set to import
+     */
+    public import(data:DataSet) {
+        this.setData(data.data, data.names);
+    }
+
+    /**
+     * Exports to an object literal
+     */
+    public export():DataSet {
+        return {
+            data: this.getData(),
+            names:this.colNames()
+        };
+    }
+
     /**
      * returns the column index of the specified column. 
      * `col` can be either an index or a name.
@@ -103,6 +132,14 @@ export class Data {
         if (!m) { return undefined; }
         m.accessed = true; 
         return m.name; 
+    }
+
+    /**
+     * returns the names for all columns. 
+     * @return an array of strings with the names.
+     */
+    public colNames():string[] {
+        return this.meta.map((m:MetaStruct) => m.name); 
     }
 
     /**
