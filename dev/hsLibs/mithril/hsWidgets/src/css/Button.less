@@ -1,0 +1,27 @@
+@ButtonColor: #48f;
+
+.hs-button {
+    padding: 5px;
+    margin-top:    10px;
+    margin-bottom: 10px;
+    margin-left:    0px;
+    margin-right:   0px;
+//    box-sizing: border-box;
+    text-align: center;
+    font-weight:bold;
+    background-color: @ButtonColor;
+    color: white;
+    border-radius: 6px;
+
+    &:hover {
+        background-color: darken(@ButtonColor, 5%);
+    }
+
+    &:active {
+        background-color: lighten(@ButtonColor, 20%);
+    }
+
+    .hs-button-active {
+        background-color: lighten(@ButtonColor, 20%);
+    }
+}

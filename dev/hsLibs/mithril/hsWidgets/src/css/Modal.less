@@ -1,0 +1,26 @@
+@ModalBgColor:   16;
+@ModalBackground: rgba(@ModalBgColor, @ModalBgColor, @ModalBgColor, 0.6);
+@ModalBorder: 100px;
+
+.hs-modal-frame {
+}
+
+.hs-modal-background {
+    position: fixed;
+    left:0%;
+    right:0%;
+    top: 0%;
+    bottom:0%;
+    background-color: @ModalBackground;
+    z-index: 998;
+}
+
+.hs-modal-foreground {
+    position: fixed;
+    left:   @ModalBorder;
+    right:  @ModalBorder;
+    top:    @ModalBorder;
+    bottom: @ModalBorder;
+    background-color:white;
+    z-index: 999;
+}

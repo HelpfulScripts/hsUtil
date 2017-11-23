@@ -16,9 +16,9 @@ const getKey = () => 'hs'+Math.floor(Math.random()*2000000);
  * @param attrs optional attributes list:
  * - isExpanded: boolean indicates if the collapsible is initially expanded
  * @param components array of two components: 
- * - component[0] is the title of the collapsible. This will remain visible and cabn be clicked 
+ * - `component[0]` is the title of the collapsible. This will remain visible and cabn be clicked 
  *   on to expand or contract the remaining components
- * - component[1] a Vnode or an array of Vnodes that will be collapsed or expanded.
+ * - `component[1]` a Vnode or an array of Vnodes that will be collapsed or expanded.
  */
 export function collapsible(css:string, attrs:any, components:Vnode[]) {
     function toggle() {

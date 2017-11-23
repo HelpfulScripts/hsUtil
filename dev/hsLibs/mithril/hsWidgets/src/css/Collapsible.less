@@ -1,11 +1,21 @@
 
 .hs-collapsible {
-
-}
-
-.hs-collapsed {
-    height:0;
 }
 
 .hs-collapsible-content {
+    transition: height 1s;
+//    animation: 1s grow;
+//    height:auto;
+    &.hs-collapsed {
+//        animation: 1s shrink;
+        height:0;
+    }
+}
+@keyframes grow {
+    from {height:0;}
+    to {height:auto;}
+}
+@keyframes shrink {
+    from {height:auto;}
+    to {height:0;}
 }
