@@ -95,7 +95,7 @@ export class Menu extends Container {
         return desc.items.map((l:string) => {
             _menu.items[l] = _menu.items[l] || { 
                 title: l, 
-                isSelected: l === desc.selectedItem, 
+                isSelected: l.toLowerCase() === desc.selectedItem.toLowerCase(), 
                 clicked:(item:string) => {
                     desc.selectedItem = item;
                     _menu.select(item); // local housekeeping: make sure the item's style shows correct selection
