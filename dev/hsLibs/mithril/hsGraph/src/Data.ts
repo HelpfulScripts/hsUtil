@@ -34,20 +34,6 @@ export type DataRow = DataVal[];
 /** a row-of-column array of data. Values are accessed as `data[row][column]` */
 export type DataRows = DataRow[];
 
-/** 
- * Description of a data set:
- * ```
- * {
- *    names: string[],  // array of names for columns in `rows` 
- *    rows:  DataRows   // row array of columns, accessed as `` 
- * }
- * ```
- */
-export type DataSet = {
-    names: string[];
-    rows:  DataRows;
-};
-
 interface TypeStruct { type: string; count: number;};
 
 interface MetaStruct {

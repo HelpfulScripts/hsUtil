@@ -12,8 +12,7 @@
 import { m, Vnode}      from 'hslayout';
 import { Config,
          VisibleCfg }   from './Graph';
-import { Data, 
-         DataSet }      from './Data';
+import { Data }         from './Data';
 import { ColSpecifier } from './Data';
 import { SVGElem }      from './SVGElem';
 import { Axes }         from './Axes';
@@ -70,7 +69,7 @@ export class Series extends SVGElem {
      * ### Configurations and Defaults
      * ```
      *  cfg.series = {@link Series.SeriesConfig <SeriesConfig>}{
-     *    data: {@link Data.DataSet <DataSet>},  // data to be plotted, initialized as `undefined`
+     *    data: {@link Data.Data <Data>},  // data to be plotted, initialized as `undefined`
      *    clip: true,       // series an markers are clipped to the plot area
      *    series: {@link Series.SeriesDef <SeriesDef>} // array of series descriptors:
      *          [],         // initialized to empty array (no series)
@@ -212,7 +211,7 @@ export class SeriesConfig {
     private seriesDefs:SeriesDef[] = [];
 
     /** the data set to plot, describing the column names and the rows-of-columns data */
-    data: DataSet; 
+    data: Data; 
 
     /** determines if seires plot will be clipped to the chart area */
     clip = true;   
