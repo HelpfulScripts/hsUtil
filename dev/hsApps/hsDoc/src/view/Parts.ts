@@ -110,15 +110,17 @@ export function signature(s:any, lib:string): Vnode {
         return (flags && flags.isOptional)? '.hs-item-optional' : '';
     }
 
-    let sig;
-    if (s && s.parameters) {
-        sig = s.parameters.map((p:any, i:number) => m('span', [
-            comma(i),
-            m('span.hs-item-sig-param', [
-                m(`span.hs-item-name${optional(p.flags)}`, p.name),
-                type(p, lib)
-            ])
-        ]));
+    let sig = [];
+    if (s) {
+        if (s.parameters) {
+            sig = s.parameters.map((p:any, i:number) => m('span', [
+                comma(i),
+                m('span.hs-item-sig-param', [
+                    m(`span.hs-item-name${optional(p.flags)}`, p.name),
+                    type(p, lib)
+                ])
+            ]));
+        }
         sig.unshift(m('span.hs-item-name', '('));
         sig.push(m('span.hs-item-name', ')'));
     }
