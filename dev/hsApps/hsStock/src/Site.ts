@@ -4,48 +4,48 @@
 
 /** */
 import * as hslayout  from 'hslayout';
+import * as hsstocks  from './';
+import { EquityList } from './view/Equity';
 
 const TitleHeight   = '30px'; 
 const FooterHeight  = '10px';  
+const LeftNavWidth  = '200px'; 
+
+export const gEquityList = new EquityList();
 
 const myConfig = {
     Container: { // whole page
         rows:  [TitleHeight, "fill", FooterHeight],
-        css: '.hs-site',
-/*        
-        content: [{
-            Container: {
-                columns: ['50%'],
-                css: '.hs-site',
-                content: 'Header2'
-        }},{
-            Container: {
-                columns: ['50%'],
-                css: '.hs-site',
-                content: 'Main'
-        }},{
-            Container: {
-                columns: ['50%'],
-                css: '.hs-site',
-                content: 'Footer'
-        }}
+        css: '.hs-site',        
+        content: [
+            { Header: {css: '.hs-site-header'} },
+            { Container: {
+                columns: [LeftNavWidth, 'fill'],
+                content: [
+                    { LeftNav: {css: '.hs-left'}}, 
+                    { Main: {css: '.hs-main'}}
+                ]
+            }},
+            { Container: { // footer
+                css: '.hs-site-footer',
+                content: '(c) Helpful Scripts'
+            }}
         ] 
-*/            
-        content: ['Header', 'Main Part', 'Footer']
     },
     route: {
-        default: '/api',
+        default: '/api/',
         paths: [
-            '/api',             // defines `http://localhost/#!/api/
-            '/api/:lib',        // defines `http://localhost/#!/api/:hsLib
-            '/api/:lib/:field'  // defines `http://localhost/#!/api/:hsLib/:id        
+            '/api',                 // defines `http://localhost/#!/api/
+            '/api/:mode/:symbol'    // defines `http://localhost/#!/api/node/symbol
         ]
     }
 }; 
 
 
 export function init() {
-    new hslayout.HsConfig([hslayout]).attachNodeTree(myConfig, document.body);
+    gEquityList.loadEquityList().then(() => {
+        new hslayout.HsConfig([hslayout, hsstocks]).attachNodeTree(myConfig, document.body);
+    });
 }
 
 
