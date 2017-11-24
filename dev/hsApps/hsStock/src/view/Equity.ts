@@ -167,7 +167,10 @@ export class EquityList {
                 return data;
             }))
         .then((data:EquityItem) => {
-            Object.keys(data).forEach((k:string) => item[k] = data[k]);
+            if (!data) { console.log('no data in JSON2EquityList'); }
+            else {
+                Object.keys(data).forEach((k:string) => item[k] = data[k]);
+            }
             return item;
         });
     }
