@@ -25,7 +25,7 @@ module.exports = (grunt, dir, dependencies, type) => {
                    else { grunt.registerTask('stage', ['copy:deployLib']); } 
     grunt.registerTask('build-html', ['copy:build']);
     grunt.registerTask('build-css', ['less']);
-    grunt.registerTask('build-example', ['clean:example', 'copy:example', 'ts:example', 'webpack:exDev']);
+    grunt.registerTask('build-example', ['clean:example', 'copy:example', 'ts:example', 'less:example', 'webpack:exDev']);
     grunt.registerTask('build-app',     ['copy:example', 'webpack:appDev']);
     grunt.registerTask('build-js', ['tslint:src', 'ts:src']);
     grunt.registerTask('build-spec', ['tslint:spec', 'ts:test']);    
