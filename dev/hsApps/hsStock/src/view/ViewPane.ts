@@ -1,6 +1,6 @@
 
 import { m, Vnode}      from 'hslayout';
-import { collapsible,
+import { Collapsible,
          AddButton, 
          Modal,
          Button,
@@ -62,13 +62,13 @@ function categoryEntry(c:Category, list:EquityList, symbol:string) {
     }
 
     const selected = (c.cat === list.getItem(symbol).cat)? '.hs-left-nav-selected' : '';
-    return collapsible(`.hs-left-nav-module`, { isExpanded:selected }, [
+    return m(Collapsible, {css:`.hs-left-nav-module`, isExpanded:selected, components: [
         m('.hs-left-nav-module-name ${selected}', [
             m('a', { href:`/api/View/${list.getFirstByCat(c.cat).symbol}`, oncreate: m.route.link, onupdate: m.route.link }, c.cat),
-            m(AddButton, { add:addItem })
+            m(AddButton, { onclick:addItem })
         ]),
         c.equities.map(equityEntry)
-    ]);
+    ]});
 }
 
 class Form {
