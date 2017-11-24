@@ -1,0 +1,23 @@
+
+.hs-Collapsible {
+}
+
+.hs-Collapsible-content {
+    transition: all 0.3s ease-in-out;
+    overflow: hidden;
+//    animation: 1s grow;
+    max-height:100%;
+    &.hs-collapsed {
+//        animation: 1s shrink;
+        max-height:0;
+        overflow: hidden;
+    }
+}
+@keyframes grow {
+    from {height:0;}
+    to {height:100%;}
+}
+@keyframes shrink {
+    from {height:100%;}
+    to {height:0;}
+}

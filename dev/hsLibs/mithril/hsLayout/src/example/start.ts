@@ -1,2 +1,2 @@
-import { cfg } from './columns.x';
+import { cfg } from './layout.x';
 if (cfg) {}

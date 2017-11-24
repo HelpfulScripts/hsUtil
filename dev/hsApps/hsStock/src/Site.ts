@@ -14,19 +14,19 @@ const LeftNavWidth  = '200px';
 export const gEquityList = new EquityList();
 
 const myConfig = {
-    Container: { // whole page
+    Layout: { // whole page
         rows:  [TitleHeight, "fill", FooterHeight],
         css: '.hs-site',        
         content: [
             { Header: {css: '.hs-site-header'} },
-            { Container: {
+            { Layout: {
                 columns: [LeftNavWidth, 'fill'],
                 content: [
                     { LeftNav: {css: '.hs-left'}}, 
                     { Main: {css: '.hs-main'}}
                 ]
             }},
-            { Container: { // footer
+            { Layout: { // footer
                 css: '.hs-site-footer',
                 content: '(c) Helpful Scripts'
             }}

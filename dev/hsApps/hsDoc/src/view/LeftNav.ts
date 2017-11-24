@@ -4,8 +4,8 @@
 
 /** */
 import { m, Vnode}  from 'hslayout';
-import { Container }from 'hslayout';
-import { collapsible }from 'hswidget';
+import { Layout }from 'hslayout';
+import { Collapsible }from 'hswidget';
 import { DocSets } from '../DocSets'; 
 import { libLink } from './Parts'; 
 
@@ -13,7 +13,7 @@ import { libLink } from './Parts';
 /**
  * Constructs the left-hand navigation pane
  */
-export class LeftNav extends Container {
+export class LeftNav extends Layout {
     getComponents(node: Vnode): Vnode {
         let lib:string;
         let field:string;
@@ -73,10 +73,10 @@ function navList(docSet:any, field:string):Vnode[] {
         const selected = (field===''+mdl.id || field.indexOf(mdl.fullPath) === 0)? 
             '.hs-left-nav-selected' : '';
 
-        return collapsible(`.hs-left-nav-module`, { isExpanded:selected }, [
+        return m(Collapsible, {css: `.hs-left-nav-module`, isExpanded:selected, components:[
             libLink(`a.hs-left-nav-module-name ${selected}`, mdl.lib, mdl.fullPath, mdl.name),
             !mdl.groups? undefined : mdl.groups.map((g:any) => entries(g, mdl, field))
-        ]);
+        ]});
     }
 
     if (docSet.kind === 0) { // External DocSets

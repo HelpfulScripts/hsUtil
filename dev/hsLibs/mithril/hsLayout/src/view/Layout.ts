@@ -1,131 +1,136 @@
 /**
-Layout.ts provides basic mechanisms for laying out a view container. 
-Subclasses of `Layout` should
-- implement the {@link Layout.Layout.getStyles getStyles} method.
-- register the subclass and configuration keyword with the static 
-   {@link Layout.Layout.register register} method.
-*/
+ * # Layout
+ * A `mithril` component class that layouts available space in the window.
+ * 
+ * ### Invocation
+ * invoked as `m(Layoput, {name:<string>, onclick:<function>})`
+ * 
+ * ### Attributes (node.attrs):
+ * - content: the Vnode children to lay out. 
+ * - route: object literal holding parameters passed from `m.route`
+ * - css: the css specifier to use for this `Layout` component.
+ * - href: ???
+ * - onclick: the function to call when clicked
+ */
 
 /** */
-import { Vnode} from '../mithril';
-
-import { LayoutToken }  from './Tokens';
-import { Container }    from './Container';
-import { px, pc, FILL } from './Tokens';
+import { m, Vnode}      from '../mithril';
+import { Layouter }       from './Layouter'; 
 
 /**
-Abstract base class for creating layout style implementations.
-Subclasses should implement `getStyles`. In addition, subclasses need to be registered with the 
-static `Layout.register` method.
-### Example
+Abstract base class for applying layouts. Subclasses should implement a {@link Layout.Layout.getComponents `getComponents`} method that returns
+the components to render. The default implementation returns the conponents passed in `node.attrs.content`.
+Optionally, the subclass can also implement {@link Layout.Layout.getCSS `getCSS`} to provide the CSS class to 
+assign to the component, and override the default implementation, which returns `node.attrs.css`. 
+### Example:
 <code>
+import { Layout, px, FILL }  from 'hslayout';
+const TitleHeight   = px(30); 
+const FooterHeight  = px(10); 
 class MyLayout extends Layout {
-    cssClass = '.my-css-class';
-    constructor(public areaDesc:LayoutToken[]) { 
-        super(areaDesc); 
+    getComponents(node:Vnode):Vnode {
+        return this.layout('.my-layout', { rows:[TitleHeight, FILL, FooterHeight] }, [
+            m(), 
+            m(),
+            m()
+        ]);
     }
-    
-    protected getStyles(components:Array<Vnode|Container>):string {
-        components.map((c:Container|Vnode, i:number) => {
-            c.style = `width:auto; height:auto;
-        });   
-        return this.cssClass;
-   }
-}
-
-Layout.register('MyLayout', MyLayout);
+    getCSS(node:Vnode):string {
+    }
+} 
 </code>
  */
 export abstract class Layout {
     /**
-     * statis list of available styles. The key for each entry is the keyword that triggers the style,
-     * and the value is a constructor for that style
+     * holds structural elements in style form: left, right, top, bottom, width, height
      */
-    static layoutStyles:{string?: Layout} = {};
+    public style:string;
 
-        /**
-     * Translates `string` params to {@link hsLayout:Tokens.LayoutToken LayoutTokens}.
-     * The `params` are expected to either
-     * - end in 'px'
-     * - end in '%'
-     * - be equal to 'fill' (case insensitive)
-     * @param params an Array of strings that will be converted to an array of LayourTokens.
-     * 
+//    oninit(node:Vnode)   { this.report('Layout:init', node); }
+//    oncreate(node:Vnode) { this.report('Layout:create', node); } 
+//    onupdate(node:Vnode) { this.report('Layout:update', node); }
+
+    /**
+     * Called during the lifecycle `view` call to retrieve the subcomponents to render in this container.
+     * The default implementation returns components stored in `node.attrs.content`. This allows for 
+     * creating containers directly via mithril: `m(Layout, {content:[...]})`. 
+     * In case `node.attrs.content` is an array of literals with a `compClass` field describing a Component class, 
+     * the method will create a Mithril node on that class and pass the `node.attrs.route` argument down to it.
+     * Override this method to create containers that return more sophisticated content.
+     * @return a Vnode or an array or Vnodes
      */
-    private static translate(params:Array<string|any>):Array<LayoutToken> {
-        if (params.length === 0) { params.push(''); }   //  [] --> ['']
-        return params.map((param:string|any) => {
-            if (typeof param === 'string') {
-                if (param.endsWith('px')) { return px(parseInt(param)); }
-                if (param.endsWith('%')) { return pc(parseInt(param)); }
-                if (param.toLowerCase()==='fill') { return FILL;}
+    protected getComponents(node:Vnode):Vnode {
+        return !Array.isArray(node.attrs.content)? node.attrs.content :
+            node.attrs.content.map((c:any) => {
+                if (c.compClass) { 
+                    c.attrs.route = node.attrs.route;
+                    return m(c.compClass, c.attrs);
+                } else {
+                    return c;
+                }
+            });
+    }
+
+    /**
+     * Called during the lifecycle `view` call to retrieve the css style class to apply to this container.
+     * The default implementation returns components stored in `node.attrs.css`. This allows for 
+     * creating containers directly via mithril: `m(Layout, {content:[...], css:'.my-class'})`.
+     * Override this method to create containers that return more sophisticated content.
+     */
+    protected getCSS(node:Vnode):string {
+        return node.attrs.css || '';
+    }
+
+
+    private normalizeContent(components:Array<typeof Layout|string>|string): Vnode {
+        if (typeof components === 'string') { 
+            return [m('.hs-leaf', m.trust(components))]; 
+        }
+        if (components.length>0) { // an array:
+            if (components.some((c:any) => (typeof c !== 'object'))) {
+                return components.map((comp:string|typeof Layout):Vnode => 
+                    (comp instanceof Layout)? comp : m(Layout, {content:comp})
+                );
             } else {
-                return param;
+                return components;
             }
-        });
+        }
+        return [components];
     }
 
     /**
-     * Register a new Layout style with corresponding configuration keyword.
-     * Example:```
-     * class ColumnsLayout extends Layout {...}
-     * Layout.register('Column', Columns);
-     * ```
-     * @param keyword the keyword used in the attributes to `this.layout`
-     * @param style the `Layout` implementation to instantiate when encountering `keyword` 
-     */
-    public static register(keyword:string, style:typeof Layout) {
-//        console.log(`registering ${keyword} layout`);
-        Layout.layoutStyles[keyword] = style;
-    }
+    lays out the component in `components` according to the configuration in `attrs`.
+    The method returns a vnode container that has an associated `cssClass` style.
+    `layout` is called during the `render` phase of the `mithril` lifecycle, 
+    which ensures an outside-in calling sequence on containers; 
+    i.e. the outermost containers are called first, and `node` will already have the 
+    `style` field set with required style attributes. 
+    These are added to any `attrs` parameter provided.
 
-    /**
-     * Lays out the `components` according to the configuration in `attrs`.
-     * The method will search for a registered layout key in `attrs`, then construct the `Layout` associated with the key
-     * with the parameters for the key, and call the `getStyles` method on the style with the provided `components`.
-     * @param attrs an object literal, typically provided as middle attribuites objevctin the m(css, {}, '') call.
-     * @param components 
-     * @return returns the css class that the `getStyles` function returns.
-     */
-    public static createLayout(attrs:any, components:Array<Vnode>):string {
-        let css = '';
-        Object.keys(Layout.layoutStyles).some(key => { // executes the first match key in attrs.
-            if (attrs[key]) { 
-
-                css = new Layout.layoutStyles[key](Layout.translate(attrs[key])).getStyles(components); 
-                attrs[key] = undefined;
-                return true;
-            }
-            return false;
-        });
-        return css;
-    }
-
-
-    spacing = 0;   
-    
-    /**
-     * Layout Constructor, will be called by the static `createLayout` method when creating the layout on a {@link hsLayout:Container.Container `Container`}.
-     * The `areaDesc` parameter is expected to be of the form {<keyword>: {@link hsLayout:Tokens.LayoutToken `LayoutToken`}[]}} 
-     * and will be passed through form the `Container` requesting the layout.
-     * @param areaDesc 
-     */
-    constructor(public areaDesc:LayoutToken[]) {};
-
-    /**
-     * Calculates the style attributes required for each component in `Components`.
-     * These attributes are saved in a `style` field on the component itself. 
-     * During rendering these `style` attributes are copied to the `node.attrs.styles` field.
-     * ### Example
-    <code>protected getStyles(components:Array<Vnode|Container>):string {
-        components.map((c:Container|Vnode, i:number) => {
-            c.style = `width:auto; height:auto;
-        });   
-        return this.cssClass;
-    }
+    The format for the layout configuration in `attrs` is <code>
+    {<keyword>: <parameter>}
     </code>
-     * @param components 
+     where `keyword` is the keyword with which the `Layouter` was registered.
+     * @param cssClass a css style designator; same as used in m(cssClass, ...) 
+     * @param layout the attribute object literal that configures the layout
+     * @param components the components to layout within the container. 
+     * This is either a primitive `string`, or an array of `Layout`s or `string`s.
+     * @return a vnode that has an associated `cssClass` style.
      */
-    protected abstract getStyles(components:Array<Vnode|Container>):string;
+    view(node:Vnode): Vnode {
+        const content = this.normalizeContent(this.getComponents(node)); // --> Vnode[]
+        let css = Layouter.createLayout(node.attrs, content);
+        const attrs:any = {
+            style: node.style,
+            route: node.attrs.route,     
+            onclick: node.attrs.onclick
+        };
+        node.attrs.route = undefined;
+        if (node.attrs.href) { 
+            attrs.href = node.attrs.href;
+            attrs.oncreate = m.route.link;
+            attrs.onupdate = m.route.link;
+        }
+        return m(`.hs-layout ${css} ${this.getCSS(node)}`, attrs, content.map((c:any) => c));
+    }
 }
-

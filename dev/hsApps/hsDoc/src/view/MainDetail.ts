@@ -1,5 +1,5 @@
 import { m, Vnode}      from 'hslayout';
-import { Container }    from 'hslayout';
+import { Layout }    from 'hslayout';
 import { DocSets }      from '../DocSets'; 
 import { comment, commentLong }  from './MainComment';
 import { flags, sourceLink, signature, type, 
@@ -11,7 +11,7 @@ import { flags, sourceLink, signature, type,
 /**
  * Creates Documentation on the main panel 
  */
-export class MainDetail extends Container { 
+export class MainDetail extends Layout { 
     getComponents(node:Vnode): Vnode {
         let lib, field;
         if (node.attrs.route) {

@@ -1,6 +1,13 @@
 /**
  * # Button Widget
+ * A simple button widget
+ * 
+ * ### Invocation
  * invoked as `m(Button, {name:<string>, onclick:<function>})`
+ * 
+ * ### Attributes (node.attrs):
+ * - onclick: function to execute when button is clicked
+ * - name: name to show as button text
  */
 
 /** */

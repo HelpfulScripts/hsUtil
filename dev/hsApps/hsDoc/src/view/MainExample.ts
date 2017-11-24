@@ -7,7 +7,7 @@
  *     &lt;example&gt; 
  *     <file name='script.js'>
  *     m.mount(root, { 
- *         view:() => m(hslayout.Container, { columns:[], 
+ *         view:() => m(hslayout.Layout, { columns:[], 
  *             content:['first line','second line')]
  *         })
  *     });
@@ -44,7 +44,7 @@
  * <example>
  * <file name='script.js'>
  * m.mount(root, { 
- *     view:() => m(hslayout.Container, {
+ *     view:() => m(hslayout.Layout, {
  *         css:'.myExample', 
  *         columns:[], 
  *         content:[
@@ -72,7 +72,7 @@
 /** */
 import { m }                from 'hslayout';
 import { Menu, MenuDesc }   from 'hswidget';
-import { Container }        from 'hslayout';
+import { Layout }        from 'hslayout';
 import { shortCheckSum }    from 'hsutil'; 
 import { delay }            from 'hsutil'; 
 import * as hslayout        from 'hslayout';
@@ -181,17 +181,17 @@ function addExampleStructure(IDs:CommentDescriptor):CommentDescriptor {
     const source = m.trust(`<code><pre>${IDs.pages[item]}</pre></code>`);
     const root = document.getElementById(IDs.exampleID);
 
-    m.mount(root, {view: () => m(Container, { 
+    m.mount(root, {view: () => m(Layout, { 
         columns: ["50%"],
         content: [
-            m(Container, {
+            m(Layout, {
                 content: m('.hs-layout .hs-execution', {id:IDs.menuID}, 'placeholder')
             }),
-            m(Container, {
+            m(Layout, {
                 rows:["30px", "fill"],
                 content:[
                     m(Menu, {desc: IDs.desc}),
-                    m(Container, { content: m('.hs-layout .hs-source', source)})
+                    m(Layout, { content: m('.hs-layout .hs-source', source)})
                 ]
             })
         ]})

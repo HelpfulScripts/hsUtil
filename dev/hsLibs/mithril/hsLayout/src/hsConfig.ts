@@ -17,7 +17,7 @@
     }]
  }
  </code>
-`<Class>` is either {@link hsGraph:Container.Container Container} or a subclass thereof.
+`<Class>` is either {@link hsLayout:Layout.Layout Layout} or a subclass thereof.
 `<Configuration>` is an object literal `{ <Attr>:<Value>[, ...] }`
 
 Arrays and Object Literals in `<Configuration>` define a layout tree that will be traversed,
@@ -25,16 +25,16 @@ After which the tree will be instantiated by calling `m(<Class>, <Configuration>
 Mithril will then recursively create the Classes in the tree and call their `view` methods,
 where `Configuration`settings will be available via the `node.attrs` parameter.
 
-The default `Container` implementation recognizes the following special `<Attr>` keys:
+The default `Layout` implementation recognizes the following special `<Attr>` keys:
 
-* - `content`: the subcomponents to render in `Container`, allowing for following `<Value>` types:
+* - `content`: the subcomponents to render in `Layout`, allowing for following `<Value>` types:
 *     - `[{<Class>: <Configuration>}, ...]`
 *     - `['string literal', ...]`
 *     - `'string literal'`
-* - `css`: the CSS class to set on `Container`
-* - `href`: a href attribute to set on `Container`. This makes `Container` clickable and sends the 
+* - `css`: the CSS class to set on `Layout`
+* - `href`: a href attribute to set on `Layout`. This makes `Layout` clickable and sends the 
      respective attribute value to the Mithril router.
-* - `onclick`: a function to call when `Container` is clicked.
+* - `onclick`: a function to call when `Layout` is clicked.
 */
 
 /** */
@@ -108,7 +108,7 @@ function recurse(config:any, context:any[]) {
 import * as mylib from './mylib';
 
 const myConfig = { 
-    Container: {
+    Layout: {
         rows:  ['50px', 'fill'],
         css: '.hs-site',
         content: [{MyClass: {}}, 'bottom row']
@@ -124,7 +124,7 @@ const myConfig = {
 }
 
 const myExample = {
-    MyClass: class extends Container {
+    MyClass: class extends Layout {
         view(node:Vnode) { return m('', 'myExample'); }
     }
 }

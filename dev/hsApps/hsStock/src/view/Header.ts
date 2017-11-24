@@ -1,8 +1,8 @@
 import { m, Vnode}          from 'hslayout';
-import { Container }        from 'hslayout';
+import { Layout }        from 'hslayout';
 import { Menu, MenuDesc }   from 'hswidget';
 
-export class Header extends Container {
+export class Header extends Layout {
     private getDesc(attrs:any):MenuDesc { 
         const items = ['View', 'Trade', 'Import']; 
         return {

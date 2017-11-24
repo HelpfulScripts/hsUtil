@@ -40,8 +40,8 @@ The following options are supported for the Attributes array:
  */
 
 /** */
-import { Container }    from './Container';
-import { Layout }       from './Layout';
+import { Layout }    from './Layout';
+import { Layouter }       from './Layouter';
 import { LayoutToken, DefinedToken, PixelToken }    from './Tokens';
 import { Vnode}         from '../mithril';
 
@@ -79,9 +79,9 @@ const cParams = {
 type descriptor = {size:number, code:string, fields:{}};
 
 /**
- * Abstract base Layout for creating Pillars (rows, colums)
+ * Abstract base Layouter for creating PillarLayouter (rows, colums)
  */
-abstract class Pillars extends Layout{
+abstract class PillarLayouter extends Layouter{
     firstFixed: number; // number of DefinedToken entries at the beginning
     lastFixed:  number; // number of DefinedToken entries at the end
     unit:(num:number)=>descriptor[];
@@ -103,13 +103,16 @@ abstract class Pillars extends Layout{
         let first = 0;
         let last  = 0;        
         // if any of the dimensions are in px, use the pixel method; else use the percent method
-        this.unit = areaDesc.some((area:LayoutToken) => (area instanceof PixelToken))? this.unitPixel : this.unitPercent;   
+        this.unit = areaDesc.some((area:LayoutToken) => (area instanceof PixelToken))? 
+            this.unitPixel : this.unitPercent;   
         
         // determine first = number of consecutive fixed fields at start
-        areaDesc.some((area:LayoutToken, i:number) => ((areaDesc[i]   instanceof DefinedToken)? ++first<0 : true));         
+        areaDesc.some((area:LayoutToken, i:number) => 
+            ((areaDesc[i]   instanceof DefinedToken)? ++first<0 : true));         
 
         // determine last  = number of consecutive fixed fields at end
-        areaDesc.some((area:LayoutToken, i:number) => ((areaDesc[n-i] instanceof DefinedToken)? ++last<0  : true));         
+        areaDesc.some((area:LayoutToken, i:number) => 
+            ((areaDesc[n-i] instanceof DefinedToken)? ++last<0  : true));         
 
         this.firstFixed = first;
         this.lastFixed  = Math.min(last, areaDesc.length-first);
@@ -212,10 +215,10 @@ abstract class Pillars extends Layout{
      * During rendering these `styles` attributes are copied to the `node.attrs.styles` field.
      * @param components 
      */
-    protected getStyles(components:Array<Vnode|Container>):string  { 
+    protected getStyles(components:Array<Vnode|Layout>):string  { 
         let f = this.fields;
         let styles:descriptor[] = this.unit(components.length);
-        components.map((c:Container|Vnode, i:number) => {
+        components.map((c:Layout|Vnode, i:number) => {
             c.style = `${f[0]}:0%; ${f[1]}:0%; `;
             Object.keys(styles[i].fields).forEach((st:string) => { c.style += `${st}: ${styles[i].fields[st]};`; });
         });   
@@ -247,9 +250,9 @@ abstract class Pillars extends Layout{
  * }
  * 
  * m.mount(root, { 
- *     view:() => m(hslayout.Container, {
+ *     view:() => m(hslayout.Layout, {
  *         rows:[],  // each row a style
- *         content: styles.map(i => m(hslayout.Container, {
+ *         content: styles.map(i => m(hslayout.Layout, {
  *             css: '.myExample', 
  *             content: c.map(c=>(''+i)),
  *             columns: i    // a style from styles
@@ -276,7 +279,7 @@ abstract class Pillars extends Layout{
  * </file>
  * </example>
  */
-class Columns extends Pillars {
+class Columns extends PillarLayouter {
     constructor(public areaDesc:LayoutToken[]) { super(cParams[PillarLayouts[0]], areaDesc);  };
 };
 
@@ -304,9 +307,9 @@ class Columns extends Pillars {
  * }
  * 
  * m.mount(root, { 
- *     view:() => m(hslayout.Container, {
+ *     view:() => m(hslayout.Layout, {
  *         columns:[],  // each column a style
- *         content: styles.map(i => m(hslayout.Container, {
+ *         content: styles.map(i => m(hslayout.Layout, {
  *             css: '.myExample', 
  *             content: c.map(c=>(''+i)),
  *             rows: i   // a style from styles
@@ -333,9 +336,9 @@ class Columns extends Pillars {
  * </file>
  * </example>
  */
-class Rows extends Pillars {
+class Rows extends PillarLayouter {
     constructor(public areaDesc:LayoutToken[]) { super(cParams[PillarLayouts[1]], areaDesc);  };
 };
 
-Layout.register(PillarLayouts[0], Columns);
-Layout.register(PillarLayouts[1],    Rows);
+Layouter.register(PillarLayouts[0], Columns);
+Layouter.register(PillarLayouts[1],    Rows);

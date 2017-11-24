@@ -5,7 +5,7 @@ const paths = [
     ['hsApps/',             'hsDoc/'],
     ['hsApps/',             'hsStock/'],
     ['hsLibs/mithril/',     'hsLayout/'],
-    ['hsLibs/mithril/',     'hsWidgets/'],
+    ['hsLibs/mithril/',     'hsWidget/'],
     ['hsLibs/mithril/',     'hsGraph/'],
     ['hsLibs/mithril/',     'hsConfig/'],
     ['hsLibs/node/',        'hsNode/'],
@@ -50,7 +50,7 @@ module.exports = function(grunt) {
                 }}).concat(paths.map(p => { return {    // example files in docs
                     expand: true, 
                     cwd: basePath+p[0]+p[1]+'_dist/example/', 
-                    src: ['*.js', '*.css', '*.html', '*.json'], 
+                    src: ['*.js', '*.css', '*.html', '*.json', '*.map'], 
                     dest: staging+'hsDoc/example/' 
                 }})).concat(paths.map(p => { return {   // data files
                     expand: true, 

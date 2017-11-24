@@ -1,4 +1,4 @@
-import { m, Vnode, Container }  from 'hslayout';
+import { m, Vnode, Layout }  from 'hslayout';
 import { DocSets }              from '../DocSets'; 
 import { Menu, MenuDesc }       from 'hswidget';
 
@@ -16,7 +16,7 @@ import { Menu, MenuDesc }       from 'hswidget';
  * - DocsMenu creates a `MenuDesc` structure with a {@link hsGraph:hsMenu.MenuDesc.select `select`} callback that initiates a route change 
  *   to the selected docSet
  */
-export class DocsMenu extends Container {
+export class DocsMenu extends Layout {
     docSet = '';
 
     private getDesc(attrs:any):MenuDesc { 

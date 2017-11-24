@@ -3,25 +3,25 @@ import * as hslayout from '../';
 //import * as widgets from '../../hsWidgets/src/';
 
 const myConfig = {
-    Container: {
+    Layout: {
         rows:  ["30px", "fill", "10px"],
         css: '.my-example',
         content: [{
-            Container:{
+            Layout:{
                 columns: ["200px", "fill"],
                 content: [
                     { LeftHead:    { lib:"route.lib", field:"route.field"}},
                     { MainHead:    { lib:"route.lib", field:"route.field"}}
                 ]
             }},{
-            Container:{
+            Layout:{
                 columns: ["200px", "fill"], 
                 content: [
                     { LeftNav:    { lib:"route.lib", field:"route.field"}},
                     { MainNav:    { lib:"route.lib", field:"route.field"}}
                 ]
             }},
-            { Container: {
+            { Layout: {
                 css: '.hs-site-footer',
                 content: ['(c) Helpful ; Scripts']
             }}
@@ -38,21 +38,21 @@ const myConfig = {
 }; 
 
 const example = {
-    LeftHead: class extends hslayout.Container{ 
+    LeftHead: class extends hslayout.Layout{ 
         getComponents(node:Vnode) { 
             return 'The Left Head'; 
         } 
     },
-    MainHead: class extends hslayout.Container{ 
+    MainHead: class extends hslayout.Layout{ 
         getComponents(node:Vnode) { return m('', 'The Main Head'); } 
     },
-    LeftNav: class extends hslayout.Container{ 
+    LeftNav: class extends hslayout.Layout{ 
         getComponents(node:Vnode) { return m('', 'The Left Nav'); } 
     },
-    MainNav: class extends hslayout.Container{ 
+    MainNav: class extends hslayout.Layout{ 
         getComponents(node:Vnode) { return m('', 'The Main Nav'); } 
     },
-    Footer: class extends hslayout.Container{ 
+    Footer: class extends hslayout.Layout{ 
         getComponents(node:Vnode) { return m('.hs-site-footer', '(c) Helpful ; Scripts'); } 
     }
 };

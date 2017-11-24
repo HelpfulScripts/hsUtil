@@ -10,5 +10,5 @@ export { Menu,
 export { Button }       from './Button'; 
 export { AddButton, 
          RemoveButton } from './AddRemove'; 
-export { collapsible }  from './Collapsible'; 
+export { Collapsible }  from './Collapsible'; 
 export { Modal }        from './Modal'; 

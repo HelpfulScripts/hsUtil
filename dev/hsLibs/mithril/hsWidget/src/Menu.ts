@@ -1,15 +1,16 @@
 /**
- * # hsMenu
+ * # Menu Widget
  * Creates a simple menu with several items.
- * The `Menu` object is passed into `Mithril`'s m function with a `MenuDesc` object:
- * ```
- * interface MenuDesc {
- *    items: string[];                // the items on the menu
- *    select: (item:string) => void;  // called when item clicked
- *    selectedItem?: string;          // the currently selected item
- *    size?:string[];                 // size to layout menu items
- * }
- * ```
+ * 
+ * ### Invocation
+ * invoked as `m(Menu, { desc:<MenuDesc> })`
+ * 
+ * ### Attributes (node.attrs):
+ * - desc: {@link Menu.MenuDesc MenuDesc}
+ *     - items: string[];                // the items on the menu
+ *     - select: (item:string) => void;  // called when item clicked
+ *     - selectedItem?: string;          // the currently selected item
+ *     - size?:string[];                 // size to layout menu items
  * 
  * ## Example
  * <example>
@@ -18,16 +19,16 @@
  * const content   = ['1st', '2nd', '3rd'];
  * let  theContent = content[1];
  * 
- * m.mount(root, {view: () => m(hslayout.Container, {
+ * m.mount(root, {view: () => m(hslayout.Layout, {
  *     rows:["30px", "fill"],
  *     content:[
- *         m(widget.Menu, {desc: {
+ *         m(hswidget.Menu, {desc: {
  *             items: items,
  *             selectedItem: 'Two',
  *             select: item => 
  *                theContent = content[items.indexOf(item)]
  *         }}),
- *         m(hslayout.Container, { css:'myMain', content: theContent })
+ *         m(hslayout.Layout, { css:'myMain', content: theContent })
  *     ]
  * })});
  *
@@ -46,7 +47,7 @@
  */
 
  /** */
-import { Container, m, Vnode } from 'hslayout';
+import { Layout, m, Vnode } from 'hslayout';
 
 /** passed into Menu from the calling application */
 export interface MenuDesc {
@@ -73,7 +74,7 @@ export interface MenuItemDesc {
 /**
  * Creates a simple menu with several items, as configured by the desc:MenuDesc object passed as a parameter. 
  */
-export class Menu extends Container {
+export class Menu extends Layout {
     /** instance variable, keeping a list of menu items and a `select` function for tracking which item is selected. */
     menu = { 
         items:<{string:MenuItemDesc}> {},
@@ -112,7 +113,7 @@ export class Menu extends Container {
 /**
  * Creates a menu item as part of the menu, as configured by the desc:MenuItemDesc object passed as a parameter.
  */
-class MenuItem extends Container {
+class MenuItem extends Layout {
     getComponents(node: Vnode): Vnode {
         const desc:MenuItemDesc = node.attrs.desc;
         node.attrs.desc = undefined;

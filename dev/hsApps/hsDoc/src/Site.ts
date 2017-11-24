@@ -15,15 +15,15 @@ const LeftNavWidth  = '200px';
 const SiteName      = 'HSDocs'; 
  
 const myConfig = {
-    Container: { // whole page
+    Layout: { // whole page
         rows:  [TitleHeight, "fill", FooterHeight],
         css: '.hs-site',
         content: [{
-            Container:{ // top row
+            Layout:{ // top row
                 columns: [LeftNavWidth, "fill"],
                 css: '.hs-site-header',
                 content: [
-                    { Container:    { 
+                    { Layout:    { 
                         css: '.hs-site-title',
                         content: SiteName, 
                         href:'/api/' 
@@ -31,14 +31,14 @@ const myConfig = {
                     { DocsMenu:    { docSet:"./data/index.json"}}
                 ]                
             }},{
-            Container:{ // main part
+            Layout:{ // main part
                 columns: [LeftNavWidth, "fill"], 
                 content: [
                     { LeftNav:    {}},
                     { MainDetail: {}}
                 ]                
             }},
-            { Container: { // footer
+            { Layout: { // footer
                 css: '.hs-site-footer',
                 content: '(c) Helpful Scripts'
             }}

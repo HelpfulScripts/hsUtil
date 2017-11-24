@@ -7,14 +7,14 @@ to invoke this layout.
 
 ### Example
 <code>
-    {tiles: ["20%]}   // --> tiles will all have 20% of available height and width 
+    {tiles: ["20%"]}   // --> tiles will all have 20% of available height and width 
 </code>
  * <example>
  * <file name='script.js'>
  * let c = [1,2,3,4,5];
  * 
  * m.mount(root, { 
- *     view:() => m(hslayout.Container, {
+ *     view:() => m(hslayout.Layout, {
  *         tiles:[], 
  *         content: c.map((c,i)=>(''+i)),
  *         css: '.myExample'
@@ -43,7 +43,7 @@ to invoke this layout.
 The following values **v** are valid entries in The Attributes array:
 - **px(n)** or **"_n_ px"** -- a fixed number of pixels 
 - **pc(n)** or **"_n_ %"**  -- a fixed percentage of available space
-- **FILL** or **"fill"**   -- a special constant to indicate - may appear only once per array.
+- **FILL** or **"fill"**   -- a special constant indicate to fill remaining space - may appear only once per array.
 
 The following options are supported for the Attributes array:
 - **[ ]**: An empty array; The available tiles will cover the entire width and height. 
@@ -58,8 +58,8 @@ The following options are supported for the Attributes array:
 - **[w, h, FILL]**: like [w, h], except that the last tile will fill the remaining available width. 
  */
 /** */
-import { Container }    from './Container';
-import { Layout }       from './Layout';
+import { Layout }    from './Layout';
+import { Layouter }       from './Layouter';
 import { LayoutToken, FillToken, DefinedToken, PixelToken }    from './Tokens';
 import { Vnode}         from '../mithril';
 
@@ -67,7 +67,7 @@ type descriptor = {top:string, left:string, right:string, bottom:string, width:s
 
 /**
  */
-class Tiles extends Layout {
+class TileLayouter extends Layouter {
     cssClass:string;
     unit: any;
 
@@ -99,10 +99,9 @@ class Tiles extends Layout {
         let left = 0;
         let top  = 0;
 
-
         let styles = [...Array(num).keys()].map(i => { 
             let r = 'auto';    let w = width+'%'; 
-            let b = 'auot';    let h = height+'%';
+            let b = 'auto';    let h = height+'%';
             if ((left + 2*width) > 100 && fill) { r = '0%'; w = 'auto'; }
             if ((top + 2*height) > 100 && fill) { b = '0%'; h = 'auto'; }
             const style = `
@@ -113,10 +112,36 @@ class Tiles extends Layout {
             if (Math.round(left += width) > 100-Math.floor(width)) { left = 0; top += height; }
             return style;
          });
-        return styles;    // reverse a second time for original sequence.
+        return styles;    
     };
 
     private unitPixel(num:number) { // pattern: [px, px, FILL]
+        const desc = this.areaDesc;
+//        const fill = this.areaDesc.some(a => (a instanceof FillToken));
+        const root = Math.sqrt(num);
+        const rows = Math.round(root);
+        let   cols = Math.floor(root);
+        if (root > cols) { cols++; }
+        let width  = (desc[0] instanceof DefinedToken)? desc[0].getSize() : undefined;
+        let height = (desc[1] instanceof DefinedToken)? desc[1].getSize() : width;
+
+        width  = width  || 100/cols;
+        height = height || 100/rows;
+        let left = 0;
+        let top  = 0;
+
+        let styles = [...Array(num).keys()].map(i => { 
+            let r = 'auto';    let w = width+'px'; 
+            let b = 'auto';    let h = height+'px';
+            const style = `
+                top: ${Math.floor(top)}%; bottom:${b};
+                left: ${left}%;           right:${r};
+                width: ${w};              height: ${h};
+            `;
+            if (Math.round(left += width) > 100-Math.floor(width)) { left = 0; top += height; }
+            return style;
+         });
+        return styles;    
     };
     
     /**
@@ -125,9 +150,9 @@ class Tiles extends Layout {
      * During rendering these `styles` attributes are copied to the `node.attrs.styles` field.
      * @param components 
      */
-    protected getStyles(components:Array<Vnode|Container>):string  { 
+    protected getStyles(components:Array<Vnode|Layout>):string  { 
         let styles = this.unit(components.length);
-        components.map((c:Container|Vnode, i:number) => {
+        components.map((c:Layout|Vnode, i:number) => {
             c.style = styles[i];
         });   
         return '.hs-tile-layout';
@@ -135,4 +160,4 @@ class Tiles extends Layout {
 };
 
 
-Layout.register('tiles', Tiles);
+Layouter.register('tiles', TileLayouter);
