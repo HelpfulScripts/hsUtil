@@ -1,11 +1,11 @@
 import { m, Vnode}      from 'hslayout';
-import { Container }    from 'hslayout';
+import { Layout }    from 'hslayout';
 import { tabView }      from './ViewPane';
 import { tabTrade }     from './TradePane';
 import { tabImport }    from './ImportPane';
 import { gEquityList }  from '../Site';
 
-export class LeftNav extends Container { 
+export class LeftNav extends Layout { 
     getComponents(node: Vnode): Vnode {
         let mode:string = 'View';
         let symbol:string;
