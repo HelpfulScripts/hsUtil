@@ -239,8 +239,8 @@ export class Graph extends SVGElem {
 
     private createPlotArea(cfgm:{top:number, left:number, bottom:number, right:number}):Rect {
         const tl = {
-            x: cfgm.top + this.marginOffset.top, 
-            y: cfgm.left + this.marginOffset.left
+            x: cfgm.left + this.marginOffset.left,
+            y: cfgm.top + this.marginOffset.top
         };
         const br = {
             x: viewBoxWidth  - cfgm.right  - this.marginOffset.right,
@@ -309,6 +309,9 @@ export class Graph extends SVGElem {
         this.marginOffset.left   += Math.max(margin.l);
         this.marginOffset.bottom += Math.max(margin.b);
         this.marginOffset.right  += Math.max(margin.r);
+console.log('------');       
+console.log(margin);        
+console.log(this.marginOffset); 
     }
 
     onupdate(node?: Vnode) { 
