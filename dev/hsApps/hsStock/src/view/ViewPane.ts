@@ -30,19 +30,6 @@ function navList(list:EquityList, symbol:string):Vnode[] {
 /** returns a Vnoide structure representing an investment category. */
 function categoryEntry(c:Category, list:EquityList, symbol:string) {
 
-    function addItem() {   
-/*                 
-        const num = Math.floor(Math.random()*1000);
-        list.addItem({
-            symbol: 's'+num,
-            cat: c.cat,
-            name: c.cat+num
-        });           
-        m.route.set('/api/:mode/:symbol', {mode:'View', symbol:list.getFirstByCat(c.cat).symbol});
-*/
-        Modal.show();
-    }
-
     /** returns a Vnode for an ivestment item, e.g. "Google" */
     function equityEntry(item:EquityItem) {
         function removeItem() { list.removeItem(item); }
@@ -56,7 +43,7 @@ function categoryEntry(c:Category, list:EquityList, symbol:string) {
             list.loadQuotes(item);
         }
         return m(`.hs-left-nav-entry ${selected}`, [
-            m('a', { href:`/api/View/${item.symbol}`, oncreate: m.route.link, onupdate: m.route.link }, item.name),
+            m('a', { href:`/api/View/${item.symbol}`, oncreate:m.route.link, onupdate:m.route.link }, item.name),
             m(RemoveButton, { remove:removeItem })
         ]);
     }
@@ -64,8 +51,8 @@ function categoryEntry(c:Category, list:EquityList, symbol:string) {
     const selected = (c.cat === list.getItem(symbol).cat)? '.hs-left-nav-selected' : '';
     return m(Collapsible, {css:`.hs-left-nav-module`, isExpanded:selected, components: [
         m('.hs-left-nav-module-name ${selected}', [
-            m('a', { href:`/api/View/${list.getFirstByCat(c.cat).symbol}`, oncreate: m.route.link, onupdate: m.route.link }, c.cat),
-            m(AddButton, { onclick:addItem })
+            m('a', { href:`/api/View/${list.getFirstByCat(c.cat).symbol}`, oncreate:m.route.link, onupdate:m.route.link }, c.cat),
+            m(AddButton, { onclick:Modal.show })
         ]),
         c.equities.map(equityEntry)
     ]});
