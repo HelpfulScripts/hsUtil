@@ -21,6 +21,7 @@ function addTickDate(t:TickDefs, v:Date, fmt:string) {
     t.labels.push({ pos: v.getTime(), text:hsDate(fmt, v) }); 
 }
 
+
 /** calculate major and minor ticks on a lionear scale. The first and last tick will be smaller and larger than the provided domain. */
 function linScaleTickMarks(dom:NumRange, ticks:Ticks, numTicks:number) {
     function addTicks(unit:number, ticks:TickDefs):number {
@@ -40,12 +41,15 @@ function percentScaleTickMarks(dom:NumRange, ticks:Ticks, numTicks:number) {
     linScaleTickMarks(dom, ticks, numTicks);
     ticks.major.labels.forEach(formatPercent);
     ticks.minor.labels.forEach(formatPercent);
+//    addMinMaxTicks(dom, ticks);
 }
 
 function logScaleTickMarks(dom:NumRange, ticks:Ticks) {
+    dom[0] = Math.max(dom[0], 1e-20);
+    dom[1] = Math.max(dom[1], 1e-20);
     let min = Math.pow(10, Math.floor(Math.log10(dom[0])));
     let max = Math.pow(10, Math.ceil(Math.log10(dom[1])));
-    for (let i=1; i<10; i++) {
+    for (let i=1; i<20; i++) {
         for (let v = min; v*i<=max; v*=10) {
             addTickNumber((i===1)? ticks.major : ticks.minor, v*i);
         }
@@ -112,7 +116,7 @@ function createTickLabels(type:string, domain:Domain, numTicks:number, fmt:strin
         case Axes.type.nominal: break;
         case Axes.type.index:   
         case Axes.type.linear:
-        default:                 linScaleTickMarks(dom, ticks, numTicks); sortTicks(); 
+        default:                linScaleTickMarks(dom, ticks, numTicks); sortTicks(); 
     }  
     return ticks;
 }
