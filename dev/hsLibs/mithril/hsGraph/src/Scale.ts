@@ -51,7 +51,9 @@ function logScaleTickMarks(dom:NumRange, ticks:Ticks) {
     let max = Math.pow(10, Math.ceil(Math.log10(dom[1])));
     for (let i=1; i<20; i++) {
         for (let v = min; v*i<=max; v*=10) {
-            addTickNumber((i===1)? ticks.major : ticks.minor, v*i);
+            if (i===1) { addTickNumber(ticks.major, v*i); }
+            else if (i===10) {}
+            else { addTickNumber(ticks.minor, v*i); }
         }
     }
 }
