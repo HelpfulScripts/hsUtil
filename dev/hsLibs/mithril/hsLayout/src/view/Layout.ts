@@ -86,14 +86,10 @@ export abstract class Layout {
         if (typeof components === 'string') { 
             return [m('.hs-leaf', m.trust(components))]; 
         }
-        if (components.length>0) { // an array:
-            if (components.some((c:any) => (typeof c !== 'object'))) {
-                return components.map((comp:string|typeof Layout):Vnode => 
+        if (components.length>0) { // an array: ensure elements are Layout components
+            return components.map((comp:string|typeof Layout):Vnode => 
                     (comp instanceof Layout)? comp : m(Layout, {content:comp})
-                );
-            } else {
-                return components;
-            }
+            );
         }
         return [components];
     }
