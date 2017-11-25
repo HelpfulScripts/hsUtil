@@ -43,14 +43,16 @@
 import { m, Vnode } from 'hslayout';
 
 export class Collapsible {
-    expanded = true;
+    expanded = false;
     toggle() {
         this.expanded = !this.expanded;
     }
     view(node:Vnode) {
         const css        = node.attrs.css;
         const components = node.attrs.components;
-//        this.expanded = (node.attrs.isExpanded===undefined)? true : node.attrs.isExpanded;
+        if (node.attrs.isExpanded!==undefined) {
+            this.expanded = node.attrs.isExpanded;
+        }
         return m(`.hs-Collapsible ${css}`, { onclick:()=>this.expanded = !this.expanded}, [
             components[0],
             components[1]? m('.hs-Collapsible-content', 
