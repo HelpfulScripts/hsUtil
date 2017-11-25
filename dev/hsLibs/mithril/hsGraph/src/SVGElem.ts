@@ -1,6 +1,6 @@
 import { m, Vnode } from 'hslayout';
 import { XYScale }  from './AxesTypes';
-import { DataRows } from './Data';
+import { DataRow }  from './Data';
 
 /** svg primitive Point, measured in viewbox coordinates.  */
 export interface Point {
@@ -213,7 +213,7 @@ export abstract class SVGElem {
      * @param id the unique clip-path id to use, or undefined
      * @param style an optional `style` attribute, e.g. to set the stroke and stroke-width.
      */
-    polyline(data:DataRows, x:number, y:number, scales:XYScale, id:string, style?:string):Vnode {
+    polyline(data:DataRow[], x:number, y:number, scales:XYScale, id:string, style?:string):Vnode {
         return m('polyline', { 
             'clip-path': id? `url(#${id})` : undefined,
             style: style,
@@ -233,7 +233,7 @@ export abstract class SVGElem {
      * @param id the unique clip-path id to use, or undefined
      * @param style an optional `style` attribute, e.g. to set the stroke and stroke-width.
      */
-    polygon(points:DataRows, id:string, style?:string):Vnode {
+    polygon(points:DataRow[], id:string, style?:string):Vnode {
         return m('polyline', { 
             'clip-path': id? `url(#${id})` : undefined,
             style: style,
