@@ -35,10 +35,6 @@ export function kindString(mdl:any) {
 }
 
 export function itemName(mdl:any, sub:any) {
-    return m('span.hs-item-name', libLink('a', mdl.lib, sub.fullPath, sub.name));
-}
-
-export function itemLongName(mdl:any, sub:any) {
     return m('span.hs-item-name', !mdl.fullPath? sub.name : libLink('a', mdl.lib, mdl.fullPath, sub.name));
 }
 
@@ -104,7 +100,7 @@ export function libLink(css:string, lib:string, id:string, name:string) {
 /**
  * creates a function or method signature
  */
-export function signature(s:any, lib:string): Vnode {
+export function signature(s:any, mdl:any): Vnode {
     const comma = (i:number) => (i>0)? ', ': '';
     function optional(flags: any) {
         return (flags && flags.isOptional)? '.hs-item-optional' : '';
@@ -117,12 +113,18 @@ export function signature(s:any, lib:string): Vnode {
                 comma(i),
                 m('span.hs-item-sig-param', [
                     m(`span.hs-item-name${optional(p.flags)}`, p.name),
-                    type(p, lib)
+                    type(p, mdl.lib)
                 ])
             ]));
         }
-        sig.unshift(m('span.hs-item-name', '('));
-        sig.push(m('span.hs-item-name', ')'));
+        switch (mdl.kindString) {
+            case 'Method':
+            case 'Function': 
+                sig.unshift(m('span.hs-item-name', '('));
+                sig.push(m('span.hs-item-name', ')'));
+                break;
+            default:
+        }
     }
     return m('span.hs-item-signature', sig);
 }
