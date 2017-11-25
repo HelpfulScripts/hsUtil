@@ -1,0 +1,9 @@
+11/25/17    hsDoc
+Left navigation pane: rounded rects are sometimes interrupted with white corners
+
+11/25/17    hsWidget / hsDoc
+Left navigation pane: selecting subitems in module will unexpectedly copllapse the module
+
+11/25/17    hsDoc
+main panel: improve style of grouping public, static, ...members; 
+improve border between members
