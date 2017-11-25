@@ -6,6 +6,7 @@
 import { init } from './Site';
 init();
 
-export { Header }   from './view/Header';
-export { LeftNav }  from './view/LeftNav';
-export { Main }     from './view/Main';
+export { Header }       from './view/Header';
+export { LeftNav }      from './view/LeftNav';
+export { MainDetails,
+         MainGraph }    from './view/Main';

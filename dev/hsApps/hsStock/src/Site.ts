@@ -23,7 +23,11 @@ const myConfig = {
                 columns: [LeftNavWidth, 'fill'],
                 content: [
                     { LeftNav: {css: '.hs-left'}}, 
-                    { Main: {css: '.hs-main'}}
+                    { Layout: {
+                        css: '.hs-main', 
+                        rows:['100px','fill'], 
+                        content:[{MainDetails:{}}, {MainGraph:{}}]
+                    }}
                 ]
             }},
             { Layout: { // footer
