@@ -14,22 +14,27 @@
     .hs-graph-axis-title {
         text-anchor: end;
     }
-    .hs-graph-axis-tick-label text {
-    }
 }
 
 .hs-graph-axis-y {
     .hs-graph-axis-title {
         text-anchor: middle;
     }
-    .hs-graph-axis-tick-label text {
-    }
 }
 
 .hs-graph-axis-major-tick-marks {}
 .hs-graph-axis-minor-tick-marks {}
 
-.hs-graph-axis-tick-label text {
-    font-size: 90%;
+.hs-graph-axis-tick-label {
+//    overflow-x: visible;
+    text { font-size: 90%; }
+}
+
+.hs-graph-axis-major-tick-label {
+    .hs-graph-axis-tick-label;
+}
+.hs-graph-axis-minor-tick-label {
+    .hs-graph-axis-tick-label;
+    text { font-size: 80%; }
 }
 
