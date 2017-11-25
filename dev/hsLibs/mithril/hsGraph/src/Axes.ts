@@ -274,8 +274,7 @@ export class Axes extends SVGElem {
     /**
      * draws the tick marks. Labels are plotted for major tick marks only.
      */
-    drawTickMarks(dir:string, type:string, crossesAt:number, scale:Scale, ticks:TickDefs, cfg:TickStruct):Vnode {
-        const x = dir==='x';
+    drawTickMarks(x:boolean, type:string, crossesAt:number, scale:Scale, ticks:TickDefs, cfg:TickStruct):Vnode {
         return m('svg', { class:`hs-graph-axis-${type}-tick-marks`}, 
             !cfg.marks.visible? '' : ticks.marks.map((t:number) => { 
                 return x? this.verLine(scale.convert(t), crossesAt, crossesAt+cfg.marks.length) :
@@ -287,9 +286,9 @@ export class Axes extends SVGElem {
     /**
      * draws the tick labels. Labels are plotted for major tick marks only.
      */
-    drawTickLabels(x:boolean, crossesAt:number, scale:Scale, ticks:TickDefs, cfg:TickStruct):Vnode {
+    drawTickLabels(x:boolean, type:string, crossesAt:number, scale:Scale, ticks:TickDefs, cfg:TickStruct):Vnode {
         scale.setLabelFormat(cfg.labelFmt);
-        return m('svg', {class:'hs-graph-axis-tick-label'}, 
+        return m('svg', {class:`hs-graph-axis-${type}-tick-label`}, 
             !cfg.labels.visible? '' : ticks.labels.map((t:TickLabel) => { 
                 const v = scale.convert(t.pos);
                 const xy = { transform:`translate(${x?v:crossesAt}, ${x?crossesAt:v})` };
@@ -316,9 +315,10 @@ export class Axes extends SVGElem {
         return !cfg.visible? undefined : m('svg', { class:`hs-graph-axis-${dir} hs-graph-axis-${type}`}, [
             this.drawAxisLine(x, range, crossesAt),
             this.drawTitle(x, cfg.title, type, range, crossesAt),
-            this.drawTickMarks(dir, 'minor', crossesAt, scales[dir], ticks.minor, cfg.ticks.minor),
-            this.drawTickMarks(dir, 'major', crossesAt, scales[dir], ticks.major, cfg.ticks.major),
-            this.drawTickLabels(x, crossesAt, scales[dir], ticks.major, cfg.ticks.major)
+            this.drawTickMarks(x, 'minor', crossesAt, scales[dir], ticks.minor, cfg.ticks.minor),
+            this.drawTickMarks(x, 'major', crossesAt, scales[dir], ticks.major, cfg.ticks.major),
+            this.drawTickLabels(x, 'minor', crossesAt, scales[dir], ticks.minor, cfg.ticks.minor),
+            this.drawTickLabels(x, 'major', crossesAt, scales[dir], ticks.major, cfg.ticks.major)
         ]);
     }
 
