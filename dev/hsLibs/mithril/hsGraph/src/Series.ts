@@ -18,8 +18,8 @@ import { SVGElem }      from './SVGElem';
 import { Axes }         from './Axes';
 import { XYScale }      from './AxesTypes';
 import { Plot }         from './Plot';
-import { PlotLine }     from './Plot';
-import { PlotBar }      from './Plot';
+import { PlotLine }     from './PlotLine';
+import { PlotBar }      from './PlotBar';
 
 
 function copyDefault(target:any, source:any, defaults:any) {
@@ -69,34 +69,39 @@ export class Series extends SVGElem {
      * ### Configurations and Defaults
      * ```
      *  cfg.series = {@link Series.SeriesConfig <SeriesConfig>}{
-     *    data: {@link Data.Data <Data>},  // data to be plotted, initialized as `undefined`
-     *    clip: true,       // series an markers are clipped to the plot area
-     *    series: {@link Series.SeriesDef <SeriesDef>} // array of series descriptors:
-     *          [],         // initialized to empty array (no series)
-     *    styles: {@link Series.SeriesStyle <SeriesStyle[]>} [ // array of predefined styles. styles[i] will be assigned to series[i].
-     *       { line:   { 
-     *            color: <color>,// the line color to use
-     *            width: 5,      // the line width in viewbox units
-     *            visible: true  // whether line is draw or not
-     *       },
-     *         marker: { 
-     *            color: <color>,// the marker color to use
-     *            size: 10,      // the marker size in viewbox coordinates
-     *            shape: Series.marker.circle, // the marker shaper, See {@link Series.Series.marker Series.marker}
-     *            visible: true 
-     *       },
-     *         fill: { 
-     *            color: <color>,// the fill color to use
-     *            visible: true 
-     *       },
-     *         bar: { 
-     *            color: <color>,// the bar color to use
-     *            width: 10,
-     *            visible: true 
-     *       }}
-     *    ]
+     *          // data to be plotted, initialized as `undefined`
+     *      data: {@link Data.Data <Data>},     
+     *          // series an markers are clipped to the plot area
+     *      clip: true,       
+     *          // array of series descriptors, initialized to empty array (no series)
+     *      series: {@link Series.SeriesDef <SeriesDef>}[],
+     *          // sets the default colors that will be assigend to series by index
+     *      defaultColors:
+     *          ['#f00', '#0f0', '#00f', '#ff0', '#0ff', '#f0f', '#000', '#444', '#888', '#ccc'],
+     *          // sets the default style to be applied to series
+     *      defaultStyle: {@link Series.SeriesStyle <SeriesStyle>} {
+     *          line:   { 
+     *              color: <color>, // the line color to use, preset from defaultColors
+     *              width: 5,       // the line width in viewbox units
+     *              visible: true   // whether line is draw or not
+     *          },
+     *          marker: { 
+     *              color: <color>, // the marker color to use, preset from defaultColors
+     *              size: 10,       // the marker size in viewbox coordinates
+     *              shape: Series.marker.circle, // the marker shaper, See {@link Series.Series.marker Series.marker}
+     *              visible: true 
+     *          },
+     *          fill: { 
+     *              color: <color>, // the fill color to use, preset from defaultColors
+     *              visible: true 
+     *          },
+     *          bar: { 
+     *              color: <color>, // the bar color to use, preset from defaultColors
+     *              width: 10,
+     *              visible: true 
+     *          }
+     *      }
      *  } 
-     * with <color> in sequence ['#f00', '#0f0', '#00f', '#ff0', '#0ff', '#f0f', '#000', '#444', '#888', '#ccc']
      * ``` 
      * @param cfg the configuration object, containing default settings for all 
      * previously configured components.
@@ -200,26 +205,35 @@ export interface SeriesDef {
 
 /** Defines configurable settings. */
 export class SeriesConfig {
-    static defaultColors = ['#f00', '#0f0', '#00f', '#ff0', '#0ff', '#f0f', '#000', '#444', '#888', '#ccc'];
-    static defaultStyle = {
+    private seriesDefs:SeriesDef[] = [];
+
+    /** the data set to plot, describing the column names and the rows-of-columns data */
+    public data: Data; 
+
+    /** determines if seires plot will be clipped to the chart area */
+    public clip = true;   
+
+    /** 
+     * determines the default style applied to each series.
+     * Colors will be chosen by series index from `defaultColors`.
+     */
+    public defaultStyle = {
         line:   { color:'default', visible: true, width: 5},
         marker: { color:'default', visible: false, size: 10, shape: Series.marker.circle},
         fill:   { color:'default', visible: false },
         bar:    { color:'default', visible: false, width: 50, offset: 30 }
     };       
-
-    private seriesDefs:SeriesDef[] = [];
-
-    /** the data set to plot, describing the column names and the rows-of-columns data */
-    data: Data; 
-
-    /** determines if seires plot will be clipped to the chart area */
-    clip = true;   
            
-    /** array of series to plot.*/
-    set series(cfg: SeriesDef[]) {    // array of series descriptions
-        const defStyle = SeriesConfig.defaultStyle;
-        const defColors = SeriesConfig.defaultColors;
+    /** determines the default color for the first couple of series */
+    public defaultColors = ['#f00', '#0f0', '#00f', '#ff0', '#0ff', '#f0f', '#000', '#444', '#888', '#ccc'];
+
+    /** 
+     * `series` accessor method: array of series definitions to define plots. 
+     * 
+     */
+    public set series(cfg: SeriesDef[]) {    // array of series descriptions
+        const defStyle = this.defaultStyle;
+        const defColors = this.defaultColors;
         cfg.forEach((s:SeriesDef) => {
             s.type = s.type || Series.plot.line;
             s.style = s.style || <SeriesStyle>{};
@@ -230,6 +244,6 @@ export class SeriesConfig {
             this.seriesDefs.push(s);
         });
     }
-    get series() { return this.seriesDefs; }
+    public get series():SeriesDef[] { return this.seriesDefs; }
 }
 
