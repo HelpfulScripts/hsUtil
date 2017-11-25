@@ -1,4 +1,4 @@
-import { m, Vnode}      from 'hslayout';
+import { Vnode}      from 'hslayout';
 import { Layout }    from 'hslayout';
 import { tabView }      from './ViewPane';
 import { tabTrade }     from './TradePane';
@@ -21,7 +21,7 @@ export class LeftNav extends Layout {
             case 'View':
             default:        content = tabView(list, symbol);
         }
-        return m('.hs-left', [content]);
+        return content;
     }     
 } 
 
