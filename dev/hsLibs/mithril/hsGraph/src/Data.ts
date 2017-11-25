@@ -31,9 +31,6 @@ export type DataVal = number|string|Date;
 /** a single row of column values */
 export type DataRow = DataVal[];
 
-/** a row-of-column array of data. Values are accessed as `data[row][column]` */
-export type DataRows = DataRow[];
-
 interface TypeStruct { type: string; count: number;};
 
 interface MetaStruct {
@@ -45,7 +42,7 @@ interface MetaStruct {
 }
 
 export interface DataSet {
-    data:DataRows;
+    rows:DataRow[];
     names:ColSpecifier[];   
 }
 
@@ -58,7 +55,7 @@ export class Data {
         percent:    'percent data',
         nominal:    'nominal data'
     };
-    private data: DataRows;
+    private data: DataRow[];
     private meta: MetaStruct[] = [];
 
     private getMeta(col:ColSpecifier):MetaStruct { 
@@ -93,7 +90,7 @@ export class Data {
      * @param data the data set to import
      */
     public import(data:DataSet) {
-        this.setData(data.data, data.names);
+        this.setData(data.rows, data.names);
     }
 
     /**
@@ -101,7 +98,7 @@ export class Data {
      */
     public export():DataSet {
         return {
-            data: this.getData(),
+            rows: this.getData(),
             names:this.colNames()
         };
     }
@@ -149,7 +146,8 @@ export class Data {
      * @return the column type.
      */
     public colType(col:ColSpecifier) { 
-        return this.getMeta(col).types[0].type;
+        const meta = this.getMeta(col);
+        return meta? meta.types[0].type : Data.type.name;
     }
 
 
@@ -274,7 +272,7 @@ export class Data {
      * @param autoType unless set to false, the method will attempt to determine the 
      * type of data and automatically cast data points to their correct value
      */
-    public setData(data:DataRows, names:ColSpecifier[], autoType=true):void {
+    public setData(data:DataRow[], names:ColSpecifier[], autoType=true):void {
         this.meta = undefined;
         this.data = data;
         names.forEach((col:string) => this.addColumn(col));
@@ -289,7 +287,7 @@ export class Data {
         }
     }
 
-    public getData():DataRows {
+    public getData():DataRow[] {
         return this.data;
     }
 
