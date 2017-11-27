@@ -7,14 +7,35 @@
 .hs-equity-detail {
     .hs-equity-name {
         .hs-indent;
-        font-size: 150%;
+        font-size: 120%;
     }
     .hs-equity-symbol {
         .hs-indent;
-        display: inline-block;
+        font-size: 120%;
     }
     .hs-equity-cat {
         .hs-indent;
-        display: inline-block;
+        font-size: 80%;
+    }
+    .hs-equity-close {
+        .hs-indent;
+        color: #060;
+        font-size: 120%;
     }
 }
+
+.hs-stock-setting-overlay {
+    padding: 3px;
+    position: absolute;
+    top: 0em;
+    left: 100px;
+    background-color: #ffe;
+    border: solid 1px #ccc;
+    border-radius: 6px;
+}
+
+.hs-equity-detail-column {
+    &>div { border-left: 2px solid #ccc; }
+    &>div:first-child { border-left: none; }
+}
+

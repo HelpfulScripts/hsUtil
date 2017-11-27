@@ -1,8 +1,9 @@
 import { m }            from 'hslayout';
-import { EquityList }   from './Equity';
+import { EquityList,
+         EquityItem }   from '../controller/Equity';
 import { Trader,
-         TraderReferences,
-         TraderMeta }   from './Trader';
+         TraderReferences
+        }               from '../controller/Trader';
 import { Button }       from 'hswidget';
 
 
@@ -20,7 +21,7 @@ function buttons(list:EquityList) {
         .then((sList:string[]) => {
             function next(i:number) {
                 trader.getMeta(sList[i])
-                .then((data:TraderMeta) => {
+                .then((data:EquityItem) => {
                     list.save(data, `stocks/sym${sList[i]}.json`);
                     return i;
                 })
