@@ -32,32 +32,34 @@ function formatNumber(number:number, digits:number):string {
 /**
  * ## Example:
  * <pre>
- * hsDate('%MM/%DD/%YY');           // -> 08/17/16 (using current date)
+ * date('%MM/%DD/%YY');           // -> 08/17/16 (using current date)
  * let d = new Date('7/4/2010');
- * hsDate('%DDDD, %MM/%DD/%YY', d); // -> Sunday, 07/04/10
+ * date('%DDDD, %MM/%DD/%YY', d); // -> Sunday, 07/04/10
  * </pre>
  * @param formatString the format string to use.
  * @param [date=new Date()] the date to format.
  * @returns a copy of `formatString` where all supported patterns are replaced by the respective values from `date`.
  */
-export function hsDate(formatString:string, date=new Date()):string {
-    return formatString
-        .replace(/%YYYY/g,	''+date.getFullYear())
-        .replace(/%YY/g,  	''+(date.getFullYear()%100))
-        .replace(/%MMMM/g,  monthStr[date.getMonth()][1])
-        .replace(/%MMM/g,  	monthStr[date.getMonth()][0])
-        .replace(/%MM/g,  	formatNumber(date.getMonth()+1,2))
-        .replace(/%M/g,  	''+(date.getMonth()+1))
-        .replace(/%DDDD/g, 	dayStr[date.getDay()][1])
-        .replace(/%DDD/g,  	dayStr[date.getDay()][0])
-        .replace(/%DD/g,  	formatNumber(date.getDate(),2))
-        .replace(/%D/g,  	''+date.getDate())
-        .replace(/%hh/g,  	formatNumber(date.getHours(),2))
-        .replace(/%h/g, 	''+date.getHours())
-        .replace(/%mm/g,  	formatNumber(date.getMinutes(),2))
-        .replace(/%m/g,  	''+date.getMinutes())
-        .replace(/%ss/g,  	formatNumber(date.getSeconds(),2))
-        .replace(/%jjj/g,  	formatNumber(date.getMilliseconds(),3))
-        .replace(/%jj/g,  	formatNumber(date.getMilliseconds()/10,2))
-        .replace(/%j/g,		formatNumber(date.getMilliseconds()/100,1));
+export function date(formatString:string, date=new Date()):string {
+    return isNaN( date.getTime() )?
+        'invalid':
+        formatString
+            .replace(/%YYYY/g,	''+date.getFullYear())
+            .replace(/%YY/g,  	''+(date.getFullYear()%100))
+            .replace(/%MMMM/g,  monthStr[date.getMonth()][1])
+            .replace(/%MMM/g,  	monthStr[date.getMonth()][0])
+            .replace(/%MM/g,  	formatNumber(date.getMonth()+1,2))
+            .replace(/%M/g,  	''+(date.getMonth()+1))
+            .replace(/%DDDD/g, 	dayStr[date.getDay()][1])
+            .replace(/%DDD/g,  	dayStr[date.getDay()][0])
+            .replace(/%DD/g,  	formatNumber(date.getDate(),2))
+            .replace(/%D/g,  	''+date.getDate())
+            .replace(/%hh/g,  	formatNumber(date.getHours(),2))
+            .replace(/%h/g, 	''+date.getHours())
+            .replace(/%mm/g,  	formatNumber(date.getMinutes(),2))
+            .replace(/%m/g,  	''+date.getMinutes())
+            .replace(/%ss/g,  	formatNumber(date.getSeconds(),2))
+            .replace(/%jjj/g,  	formatNumber(date.getMilliseconds(),3))
+            .replace(/%jj/g,  	formatNumber(date.getMilliseconds()/10,2))
+            .replace(/%j/g,		formatNumber(date.getMilliseconds()/100,1));
 }

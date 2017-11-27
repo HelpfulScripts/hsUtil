@@ -1,4 +1,5 @@
 export { timeout, delay } from './TimedPromise';
 export { markDown }       from './showdown';
 export { shortCheckSum }  from './Checksum';
-export { hsDate }         from './Date';
+export { date }           from './Date';
+export { round }          from './Number';

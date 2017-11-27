@@ -6,7 +6,7 @@
 import { Domain, 
          NumRange }     from './Data';
 import { Axes }         from './Axes';
-import { hsDate }       from 'hsutil';
+import { date }       from 'hsutil';
 import { Ticks,
          TickDefs,
          TickLabel,
@@ -18,7 +18,7 @@ function addTickNumber(t:TickDefs, v:number) {
 }
 
 function addTickDate(t:TickDefs, v:Date, fmt:string) { 
-    t.labels.push({ pos: v.getTime(), text:hsDate(fmt, v) }); 
+    t.labels.push({ pos: v.getTime(), text:date(fmt, v) }); 
 }
 
 
