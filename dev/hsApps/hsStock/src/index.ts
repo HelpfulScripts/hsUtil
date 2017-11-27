@@ -8,5 +8,5 @@ init();
 
 export { Header }       from './view/Header';
 export { LeftNav }      from './view/LeftNav';
-export { MainDetails,
-         MainGraph }    from './view/Main';
+export { MainDetails }  from './view/MainDetails';
+export { MainGraph }    from './view/MainGraph';
