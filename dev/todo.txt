@@ -7,3 +7,6 @@ Left navigation pane: selecting subitems in module will unexpectedly copllapse t
 11/25/17    hsDoc
 main panel: improve style of grouping public, static, ...members; 
 improve border between members
+
+11/25/17    hsWidget
+Modal form appears on left edge instead of center
