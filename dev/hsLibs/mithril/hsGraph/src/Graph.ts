@@ -309,9 +309,6 @@ export class Graph extends SVGElem {
         this.marginOffset.left   += Math.max(margin.l);
         this.marginOffset.bottom += Math.max(margin.b);
         this.marginOffset.right  += Math.max(margin.r);
-console.log('------');       
-console.log(margin);        
-console.log(this.marginOffset); 
     }
 
     onupdate(node?: Vnode) { 
