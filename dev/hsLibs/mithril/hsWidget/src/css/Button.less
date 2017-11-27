@@ -1,4 +1,6 @@
-@ButtonColor: #48f;
+@ButtonColor:    #48f;
+@ButtonIdleColor: #dde;
+@ButtonRadius:      6px;
 
 .hs-button {
     padding: 5px;
@@ -11,7 +13,7 @@
     font-weight:bold;
     background-color: @ButtonColor;
     color: white;
-    border-radius: 6px;
+    border-radius: @ButtonRadius;
 
     &:hover {
         background-color: darken(@ButtonColor, 5%);
@@ -23,5 +25,25 @@
 
     .hs-button-active {
         background-color: lighten(@ButtonColor, 20%);
+    }
+}
+
+.hs-toggle-button {
+    .hs-button;
+    background-color: @ButtonIdleColor;
+    .hs-button-selected {
+        background-color: @ButtonColor;    
+    }
+}
+
+.hs-button-group {
+    overflow: hidden;
+    border-radius: @ButtonRadius;
+    .hs-toggle-button {
+        border-radius: 0;
+        border-left: 1px solid #ccc;
+        border-right: 1px solid #ccc;
+        :first-child { border-left: none;  }
+        :last-child  { border-right: none; }
     }
 }
