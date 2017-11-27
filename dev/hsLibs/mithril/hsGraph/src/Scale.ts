@@ -6,7 +6,7 @@
 import { Domain, 
          NumRange }     from './Data';
 import { Axes }         from './Axes';
-import { date }       from 'hsutil';
+import { date }         from 'hsutil';
 import { Ticks,
          TickDefs,
          TickLabel,
