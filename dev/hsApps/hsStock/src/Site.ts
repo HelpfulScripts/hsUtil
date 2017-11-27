@@ -5,11 +5,12 @@
 /** */
 import * as hslayout  from 'hslayout';
 import * as hsstocks  from './';
-import { EquityList } from './view/Equity';
+import { EquityList } from './controller/Equity';
 
-const TitleHeight   = '30px'; 
-const FooterHeight  = '10px';  
-const LeftNavWidth  = '200px'; 
+const TitleHeight        = '30px'; 
+const FooterHeight       = '10px';  
+const LeftNavWidth       = '200px'; 
+const StocksDetailHeight = '110px'; 
 
 export const gEquityList = new EquityList();
 
@@ -25,7 +26,7 @@ const myConfig = {
                     { LeftNav: {css: '.hs-left'}}, 
                     { Layout: {
                         css: '.hs-main', 
-                        rows:['100px','fill'], 
+                        rows:[StocksDetailHeight,'fill'], 
                         content:[{MainDetails:{}}, {MainGraph:{}}]
                     }}
                 ]
