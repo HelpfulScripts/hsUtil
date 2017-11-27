@@ -1,4 +1,4 @@
-import { fsUtil, log, hsDate }   from './';
+import { fsUtil, log, date }   from './';
 
 describe("log", () => {
     describe("message", () => {
@@ -105,7 +105,7 @@ describe("log", () => {
                 log.logFile().then(file => {
                     expect(file).toMatch(/log-%YYYY-%MM-%DD.txt/);
                     expect(gMsg).toMatch(/test INFO.*now logging to file/);
-                    if (file) { fsUtil.remove(hsDate(file)).catch(console.log); }
+                    if (file) { fsUtil.remove(date(file)).catch(console.log); }
                     done();
                 });
             });

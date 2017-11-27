@@ -7,9 +7,9 @@
  * ### Example:
  * <pre>
  * import date  from './date';
- * hsDate('%MM/%DD/%YY');           // -> 08/17/16 (using current date)
+ * date('%MM/%DD/%YY');           // -> 08/17/16 (using current date)
  * let d = new Date('7/4/2010');
- * hsDate('%DDDD, %MM/%DD/%YY', d); // -> Sunday, 07/04/10
+ * date('%DDDD, %MM/%DD/%YY', d); // -> Sunday, 07/04/10
  * </pre>
  * ### Supported Formats
 - `%YY, %YYYY`           : two- or four-digit year, as '73', '1973'

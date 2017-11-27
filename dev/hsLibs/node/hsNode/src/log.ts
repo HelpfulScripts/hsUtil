@@ -53,7 +53,7 @@
  */
 
 /** importing nodejs file system function; needed to create logfiles */
-import { hsDate, hsNode, fsUtil } from "./";
+import { date, hsNode, fsUtil } from "./";
 
 /**
  * @ngdoc property
@@ -189,7 +189,7 @@ function log() {
 	 * @return {String} the currently set format string
 	 * @description sets the format string to use for logging. If no parameter is specified,
 	 * the function returns the currently set format string. The preset is '%YYYY%MM%DD %hh:%mm:%ss.%jjj'
-     * For supported formats see {@link hsDate hsDate}.
+     * For supported formats see {@link date date}.
 	 */
 	function dateFormat(fmtStr?:string):string { 
 	    if (fmtStr) { gDateFormat = fmtStr; }
@@ -232,11 +232,11 @@ function log() {
                             gLogFile = undefined; 
                             warn(`path ${dir} doesn't exists; logfile disabled`); 
                         }
-                        else { info(gLogFile? "now logging to file " + hsDate(gLogFile) : "disabling logfile"); }
+                        else { info(gLogFile? "now logging to file " + date(gLogFile) : "disabling logfile"); }
                         return gLogFile;
                     });
                 }
-                info("now logging to file " + hsDate(gLogFile));
+                info("now logging to file " + date(gLogFile));
                 return gLogFile;
             });
 	}
@@ -245,14 +245,14 @@ function log() {
         const color = { ERROR: '\x1b[31m\x1b[1m', WARN: '\x1b[33m', DEBUG: '\x1b[36m', INFO: '\x1b[32m' };
 		let desc = gLevels[sym];
 	    if (desc.importance >= gLevel.importance) {
-	        const dateStr = hsDate(gDateFormat);
+	        const dateStr = date(gDateFormat);
 	        let line = (typeof msg === 'string')? msg : hsNode.inspect(msg, null, gColors);
 	        line = gColors? ((color[sym]||"") + dateStr + ' ' + gPrefix + desc.desc + '\x1b[0m ' + line) :
                             (dateStr + ' ' + gPrefix + desc.desc + ' ' + line);
 	        console.log(line);
 	        if (msg.stack) { console.log(msg.stack); }
 	        if (gLogFile) {
-	        	const filename = hsDate(gLogFile);
+	        	const filename = date(gLogFile);
 	        	fsUtil.appendFile(filename, line+'\n').catch(e => { 
                     console.log(`error appending to file ${gLogFile}: ${e}`); 
                     throw new Error(e); });
@@ -282,7 +282,7 @@ function log() {
 		dateFormat: dateFormat,
 		prefix:	    prefix,
 		logFile:    logFile,
-        config:     config
+        config:     defaultConfig
 	};
 }
     

@@ -1,5 +1,5 @@
 export { default as log }   from "./log";
-export { default as hsDate }from "./date";
+export { default as date }  from "./date";
 
 import * as hsNode          from "./node";
 import * as hsExcel         from "./excel";

@@ -9,7 +9,7 @@
  * - desc: {@link Menu.MenuDesc MenuDesc}
  *     - items: string[];                // the items on the menu
  *     - select: (item:string) => void;  // called when item clicked
- *     - selectedItem?: string;          // the currently selected item
+ *     - selectedItem?: number|string;   // the currently selected item, by index or name
  *     - size?:string[];                 // size to layout menu items
  * 
  * ## Example
@@ -90,7 +90,11 @@ export class Menu extends Layout {
         const desc = node.attrs.desc;
         node.attrs.desc = undefined;
 
-        desc.selectedItem = desc.selectedItem || desc.items[0];
+        if (typeof desc.selectedItem === 'number') { 
+            desc.selectedItem = desc.items[desc.selectedItem % desc.items.length];
+        } else if (desc.selectedItem === undefined) {
+            desc.selectedItem = desc.items[0];
+        }
         node.attrs.columns = desc.size || [];
         node.attrs.css = '.hs-menu';
         return desc.items.map((l:string) => {
