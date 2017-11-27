@@ -20,9 +20,9 @@ to be layed out in a `Layout`.
 * <file name='script.js'>
 * m.mount(root, {view: () => m(hslayout.Layout, {
 *     css: 'myColumn',
-*     columns: ["150px", "fill"], 
-*     content:['Left Column: 150px', 
-*              'Right Column: remainder']
+*     rows: ["150px", "fill"], 
+*     content:['Top row: 150px', 
+*              'Bottom row: remainder']
 *     })
 * });
 * </file>
