@@ -1,0 +1,22 @@
+{
+  "name": "hsData",
+  "version": "2.0.0",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "keywords": [],
+  "description": "Helpful Scripts cross-framework data handling utilities ",
+  "author": {
+    "name": "Hauke Schmidt",
+    "email": "hauke.schmidt@us.bosch.com"
+  },
+  "scripts": {
+    "start": "grunt",
+    "test": "ospec"
+  },
+  "engines": {
+    "node": ">= 0.10.0"
+  },
+  "plugins": [
+    "plugins/markdown"
+  ]
+}

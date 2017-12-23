@@ -57,7 +57,9 @@
 
 /** */
 import { m, Vnode}      from 'hslayout';
-import { Data }         from './Data';
+import { Data, 
+         ColSpecifier,
+         NumDomain }    from 'hsdata';
 import { Axes }         from './Axes';
 import { AxesConfig,
          Scales }       from './AxesTypes';
@@ -65,6 +67,7 @@ import { Scale }        from './Scale';
 import { Canvas, 
          CanvasConfig } from './Canvas';
 import { Series, 
+         SeriesDef,
          SeriesConfig } from './Series';
 import { Chart, 
          ChartConfig }  from './Chart';
@@ -251,7 +254,7 @@ export class Graph extends SVGElem {
 
     private createData(cfg:any) {
         if (!cfg.series.data || !cfg.series.data.rows || !cfg.series.data.names) {
-            throw new Error('cfg.series.data not set');
+            console.log('cfg.series.data not set');
         }
         this.data = new Data();
         this.data.setData(cfg.series.data.rows, cfg.series.data.names);
@@ -301,6 +304,8 @@ export class Graph extends SVGElem {
                 margin.b = Math.max(margin.b,  box[0].y+box[0].height+cfgm.bottom-viewBoxHeight);               
                 margin.r = Math.max(margin.r, box[0].x+box[0].width +cfgm.right -viewBoxWidth);               
             }
+            margin.t = Math.min(margin.t, 40);  // limit to max 20px
+            margin.b = Math.min(margin.b, 40);  // limit to max 20px
         }
         const margin = {t:-1e6,l:-1e6,b:-1e6,r:-1e6};
         getBBox('hs-graph-axis');
@@ -324,6 +329,27 @@ export class Graph extends SVGElem {
                .then(m.redraw);
     }
 
+    /** 
+     * determines the max ranges each coordinate of each series and auto-sets the domains on the respective scales. 
+     */
+    adjustDomains(cfg:SeriesConfig, scales:Scales) {
+        let domainDims = 0;
+        cfg.series.forEach((s:SeriesDef) => 
+            domainDims = Math.max(domainDims,s.cols.length)
+        );
+
+        const domains:NumDomain[] = Array(domainDims).fill(1).map(() => <NumDomain>[1e20, -1e20]);
+    
+        cfg.series.map((s:SeriesDef) => { // for each series:
+            s.cols.forEach((colIdx:ColSpecifier, i:number) => {
+                this.data.findDomain(colIdx, domains[i]);
+            });
+        });
+        scales.primary.x.setAutoDomain(domains[0]);
+        scales.primary.y.setAutoDomain(domains[1]);
+    }
+
+
     view(node?: Vnode): Vnode {
         const cfgFn = node.attrs.cfgFn;
         const cfg:Config = Graph.makeConfig(cfgFn);
@@ -331,7 +357,7 @@ export class Graph extends SVGElem {
         const scales:Scales = this.createScales(cfg.axes);
         this.adjustRange(plotArea, scales);
         this.createData(cfg);
-        this.data.adjustDomains(cfg.series, scales);
+        this.adjustDomains(cfg.series, scales);
 
         Graph.adjustConfig(cfg);
         node.attrs.cfg = cfg;

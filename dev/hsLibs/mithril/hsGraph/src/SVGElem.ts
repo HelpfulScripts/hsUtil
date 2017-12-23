@@ -1,6 +1,6 @@
 import { m, Vnode } from 'hslayout';
 import { XYScale }  from './AxesTypes';
-import { DataRow }  from './Data';
+import { DataRow }  from 'hsdata';
 
 /** svg primitive Point, measured in viewbox coordinates.  */
 export interface Point {
@@ -68,7 +68,11 @@ export interface TextElem {
 }
 
 export function round (num:number):string { 
-    return num.toFixed(1);
+    const result = num.toFixed(1);
+    if (result === 'Infinity') {
+        return '1e20';
+    } 
+    return result;
 }
 
 export abstract class SVGElem {
@@ -217,7 +221,7 @@ export abstract class SVGElem {
         return m('polyline', { 
             'clip-path': id? `url(#${id})` : undefined,
             style: style,
-            points: data.map((row:number[]) =>
+            points: data.map((row:number[]) => 
                 `${round(scales.x.convert(row[x]))},${round(scales.y.convert(row[y]))}`).join(' ')}); 
     }
 

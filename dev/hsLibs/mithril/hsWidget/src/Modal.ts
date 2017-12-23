@@ -39,7 +39,7 @@ export class Modal {
     public static dismiss() { Modal.modal = false; }
     view(node:Vnode) {
         const b = node.attrs.border || '20%';
-        const attrs = { style: `left:${b}, right:${b}, top:${b}, bottom:${b}`};
+        const attrs = { style: `left:${b}; right:${b}; top:${b}; bottom:${b};`};
         return m('.hs-modal-frame', !Modal.modal? '': [
             m('.hs-modal-background', { onclick: Modal.dismiss}, ''),
             m('.hs-modal-foreground', attrs, node.attrs.content || 'modal pane')

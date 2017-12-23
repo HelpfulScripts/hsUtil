@@ -9,7 +9,8 @@ const paths = [
     ['hsLibs/mithril/',     'hsGraph/'],
     ['hsLibs/mithril/',     'hsConfig/'],
     ['hsLibs/node/',        'hsNode/'],
-    ['hsLibs/standalone/',  'hsUtil/']
+    ['hsLibs/standalone/',  'hsUtil/'],
+    ['hsLibs/standalone/',  'hsData/']
 ];
 
 /*global module:false*/

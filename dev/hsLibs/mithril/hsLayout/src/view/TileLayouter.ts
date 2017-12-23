@@ -67,13 +67,12 @@ type descriptor = {top:string, left:string, right:string, bottom:string, width:s
 
 /**
  */
-class TileLayouter extends Layouter {
+class Tiles extends Layouter {
     cssClass:string;
     unit: any;
 
     /**
-     * Constructs a Pillared layout (rows or columns)
-     * @param params Style params for either rows or columns layout
+     * Constructs a Tileds layout
      * @param areaDesc Description of the requested layout 
      */
     constructor(public areaDesc:LayoutToken[]) { 
@@ -160,4 +159,4 @@ class TileLayouter extends Layouter {
 };
 
 
-Layouter.register('tiles', TileLayouter);
+Layouter.register('tiles', Tiles);

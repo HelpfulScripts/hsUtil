@@ -1,6 +1,8 @@
-import { m }            from 'hslayout';
-import { EquityList }   from '../controller/Equity';
+import { m, Vnode }     from 'hslayout';
+import { Layout }       from 'hslayout';
 
-export function tabTrade(list:EquityList, symbol:string) {
-    return m('.hs-left-nav', 'Trade...');
+export class TradePane extends Layout {
+    getComponents(node: Vnode): Vnode {
+        return m('Trade...');
+    }
 }

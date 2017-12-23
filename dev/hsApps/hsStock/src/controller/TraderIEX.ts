@@ -93,7 +93,7 @@ export class IexTrading implements TraderProfile {
     logoUrl       = (sym:string) => `${this.base}/stock/${encodeURIComponent(sym)}/logo`;
     
     normalizeStats = (data:any, item:EquityItem):EquityItem => {
-console.log(`receiving stock '${data.symbol}' stats`);   
+//console.log(`receiving stock '${data.symbol}' stats`);   
         item.name                 = data.companyName;
         item.symbol               = data.symbol;
         item.cat                  = 'Stocks';
@@ -102,36 +102,40 @@ console.log(`receiving stock '${data.symbol}' stats`);
         item.stats.week52high     = data.week52high;
         item.stats.week52low      = data.week52low;
         item.stats.latestEPS      = data.latestEPS;
-        item.stats.latestEPSDate  = data.latestEPSDate;
+        item.stats.latestEPSDate  = new Date(data.latestEPSDate).toJSON();
         item.stats.marketCap      = data.marketcap;
         item.stats.cash           = data.cash;
         item.stats.revenue        = data.revenue;
         item.stats.EBITDA         = data.EBITDA;
-        item.stats.exDividendDate = data.exDividendDate;
+        item.stats.exDividendDate = new Date(data.exDividendDate).toJSON();
         item.stats.dividendRate   = data.dividendRate;
         item.stats.dividendYield  = data.dividendYield;
         item.otherStats = item.otherStats || {};
-        Object.keys(data).forEach((k:string) => item.otherStats[k] = data[k]);
+        Object.keys(data).forEach((k:string) => ((item.stats[k]===undefined)? item.otherStats[k] = data[k] : ''));
         return item;
     }
 
     normalizeMeta = (data:any, item:EquityItem):EquityItem => {
-console.log(`receiving stock '${data.symbol}' meta`);   
+//console.log(`receiving stock '${data.symbol}' meta`);   
         item.name                    = data.companyName;
         item.symbol                  = data.symbol;
         item.cat                     = 'Stocks';
-        item.company = item.company || {};
+        item.stats.latestDate        = new Date(data.latestTime).toJSON();
+        item.stats.latestPrice       = data.latestPrice;
+        item.stats.change            = data.change;
+        item.stats.latestVolume      = data.latestVolume;
+        item.company                 = item.company || {};
         item.company.sector          = data.sector;
         item.company.primaryExchange = data.primaryExchange;
         item.stats = item.stats || {};
         item.otherStats = item.otherStats || {};
-        Object.keys(data).forEach((k:string) => item.otherStats[k] = data[k]);
+        Object.keys(data).forEach((k:string) => ((item.stats[k]===undefined)? item.otherStats[k] = data[k] : ''));
         return item;
     }
 
     normalizeQuotes = (data:any[]):TraderQuote[] => {
         data.sort((a:TraderQuote, b:TraderQuote) => Date.parse(a.date) - Date.parse(b.date));
-console.log(`receiving stock quote for`);   
+//console.log(`receiving stock quote for`);   
         return <IEXQuote[]>data;
     }
 

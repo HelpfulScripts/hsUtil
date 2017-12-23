@@ -12,8 +12,8 @@
 import { m, Vnode}      from 'hslayout';
 import { Config,
          VisibleCfg }   from './Graph';
-import { Data }         from './Data';
-import { ColSpecifier } from './Data';
+import { Data }         from 'hsdata';
+import { ColSpecifier } from 'hsdata';
 import { SVGElem }      from './SVGElem';
 import { Axes }         from './Axes';
 import { XYScale }      from './AxesTypes';

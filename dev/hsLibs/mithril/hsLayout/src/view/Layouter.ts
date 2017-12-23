@@ -83,7 +83,7 @@ export abstract class Layouter {
      * Lays out the `components` according to the configuration in `attrs`.
      * The method will search for a registered layout key in `attrs`, then construct the `Layouter` associated with the key
      * with the parameters for the key, and call the `getStyles` method on the style with the provided `components`.
-     * @param attrs an object literal, typically provided as middle attribuites objevctin the m(css, {}, '') call.
+     * @param attrs an object literal, typically provided as middle attributes object in the m(css, {}, '') call.
      * @param components 
      * @return returns the css class that the `getStyles` function returns.
      */
@@ -91,7 +91,6 @@ export abstract class Layouter {
         let css = '';
         Object.keys(Layouter.layoutStyles).some(key => { // executes the first match key in attrs.
             if (attrs[key]) { 
-
                 css = new Layouter.layoutStyles[key](Layouter.translate(attrs[key])).getStyles(components); 
                 attrs[key] = undefined;
                 return true;

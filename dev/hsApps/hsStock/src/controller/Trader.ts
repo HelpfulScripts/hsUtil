@@ -1,8 +1,8 @@
 import { m }                from 'hslayout';
-import { TraderReferences }    from './Trader';
+import { TraderReferences } from './Trader';
 import { IexTrading }       from './TraderIEX';
 import { EquityItem }       from './Equity';
-
+import { PacingQueue }       from 'hsutil';
 
 
 export interface TraderQuote {
@@ -38,8 +38,11 @@ export interface TraderReferences {
     equities:   {string:TraderSymbol};
 }
 
+
+
 export class Trader {
     private trader: TraderProfile;
+    private queue = new PacingQueue(200);
     constructor(trader='iexTrading') { 
         switch (trader) {
             case 'iexTrading':
@@ -49,6 +52,7 @@ export class Trader {
 
     getQuotes(item:EquityItem, date:string):Promise<TraderQuote[]> {
         const url = this.trader.quoteUrl(item.symbol)+'/'+ date;
+console.log(`getting ${url}`);        
         return m.request({ method: 'GET', url: url })
         .then(this.trader.normalizeQuotes)
         .catch((err:any) => {
@@ -58,29 +62,32 @@ export class Trader {
         });
     }
 
-    getMeta(sym:string):Promise<EquityItem> {
-        let item:EquityItem = <EquityItem>{};
-        return m.request({ method: 'GET', url: this.trader.statsUrl(sym) })
-        .then((data:any) => this.trader.normalizeStats(data, item))
-        .then((meta:EquityItem) => item = meta)
-        .catch((err:any) => {
-            console.log(`error requesting ${this.trader.metaUrl(sym)}`);
-            console.log(err);
-            console.log(err.stack);
-        })
-        .then(() => m.request({ method: 'GET', url: this.trader.metaUrl(sym) }))
-        .then((data:any) => this.trader.normalizeMeta(data, item))
-        .then((meta:EquityItem) => item.company = meta.company)
-        .catch((err:any) => {
-            console.log(`error requesting ${this.trader.metaUrl(sym)}`);
-            console.log(err);
-            console.log(err.stack);
-        })
+    getMeta(item:EquityItem):Promise<EquityItem> {
+        const stats = this.trader.statsUrl(item.symbol);
+        const meta  = this.trader.metaUrl(item.symbol);
+console.log(`getting ${stats} and ${meta}`);        
+        return Promise.all([
+            this.queue.add((msDelay:number) => m.request({ method: 'GET', url: stats}))
+                .then((data:any) => this.trader.normalizeStats(data, item))
+                .catch((err:any) => {
+                    console.log(`error requesting ${this.trader.metaUrl(item.symbol)}`);
+                    console.log(err);
+                    console.log(err.stack);
+                }),
+            this.queue.add((msDelay:number) => m.request({ method: 'GET', url: meta}))
+                .then((data:any) => this.trader.normalizeMeta(data, item))
+                .catch((err:any) => {
+                    console.log(`error requesting ${this.trader.metaUrl(item.symbol)}`);
+                    console.log(err);
+                    console.log(err.stack);
+                })
+        ])
         .then(() => item);
     }
 
     getSymbols():Promise<TraderReferences> {
         const url = this.trader.symbolsUrl();
+console.log(`getting ${url}`);        
         return m.request({ method: 'GET', url: url })
         .then(this.trader.normalizeSymbols)
         .catch((err:any) => {

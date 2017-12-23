@@ -65,7 +65,7 @@ import { XYScale,
 import { Config, 
          LabelCfg } from './Graph';
 import { Scale }    from './Scale';
-import { Domain }   from './Data';
+import { Domain }   from 'hsdata';
 import { SVGElem, 
          Area }     from './SVGElem';
 

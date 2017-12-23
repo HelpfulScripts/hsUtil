@@ -3,14 +3,15 @@
  * A `mithril` component class that layouts available space in the window.
  * 
  * ### Invocation
- * invoked as `m(Layoput, {name:<string>, onclick:<function>})`
+ * invoked as `m(Layout, {name:<string>, content:Array<Vnode>})`
  * 
  * ### Attributes (node.attrs):
- * - content: the Vnode children to lay out. 
+ * - <key>:Array<String>, required. <key> matches a registered {@link Layouter Layouter}
+ * - content: Array<Vnode>, required. The Vnode children to lay out. 
+ * - css:String, optional. The css specifier to use for this `Layout` component.
  * - route: object literal holding parameters passed from `m.route`
- * - css: the css specifier to use for this `Layout` component.
- * - href: ???
- * - onclick: the function to call when clicked
+ * - href: String, optional. If present, makes the component clickable
+ * - onclick:(), optional. The function to call when clicked
  */
 
 /** */
@@ -56,8 +57,9 @@ export abstract class Layout {
      * creating containers directly via mithril: `m(Layout, {content:[...]})`. 
      * In case `node.attrs.content` is an array of literals with a `compClass` field describing a Component class, 
      * the method will create a Mithril node on that class and pass the `node.attrs.route` argument down to it.
+     * 
      * Override this method to create containers that return more sophisticated content.
-     * @return a Vnode or an array or Vnodes
+     * @return a String, a Vnode, or an array of Strings or Vnodes
      */
     protected getComponents(node:Vnode):Vnode {
         return !Array.isArray(node.attrs.content)? node.attrs.content :
@@ -91,6 +93,7 @@ export abstract class Layout {
                     (comp instanceof Layout)? comp : m(Layout, {content:comp})
             );
         }
+        // else: assume components is a mithril node: return node as an array
         return [components];
     }
 

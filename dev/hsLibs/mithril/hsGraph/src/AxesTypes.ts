@@ -6,7 +6,7 @@
 import { VisibleCfg, 
          LabelCfg } from './Graph';
 import { Scale }    from './Scale';
-import { Domain }   from './Data';
+import { Domain }   from 'hsdata';
 
 /** Set of `Scales` for x- and y-axis*/
 export interface XYScale { x: Scale; y:Scale; }

@@ -52,8 +52,8 @@
 
 /** */
 import { m, Vnode}      from 'hslayout';
-import { Data }         from './Data';
-import { NumDomain }    from './Data';
+import { Data }         from 'hsdata';
+import { NumDomain }    from 'hsdata';
 import { XYScale }      from './AxesTypes';
 import { Plot }         from './Plot';
 import { SeriesDef,

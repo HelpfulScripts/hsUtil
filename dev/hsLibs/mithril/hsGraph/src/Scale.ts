@@ -4,7 +4,7 @@
 
 /** */ 
 import { Domain, 
-         NumRange }     from './Data';
+         NumRange }     from 'hsdata';
 import { Axes }         from './Axes';
 import { date }         from 'hsutil';
 import { Ticks,
@@ -175,7 +175,7 @@ export class Scale {
         }
         if (this.typeVal === Axes.type.log) {
             if (this.domVal[1] <= 0) { this.domVal[1] = 10; }
-            if (this.domVal[0] <= 0) { this.domVal[0] = (<number>this.domVal[1])/1000; }
+            if (this.domVal[0] <= 0) { this.domVal[0] = (<number>this.domVal[1])/10; }
         }
         return this.domVal;
     }
@@ -195,7 +195,7 @@ export class Scale {
     public setAutoDomain(dom:NumRange) {
         const ticks:Ticks = createTickLabels(this.scaleType(), dom, 4, this.labelFmt);
         switch (this.domMinAuto) {
-            case 1: this.domVal[0] = ticks.major.labels[0].pos; break; // loose
+            case 1: this.domVal[0] = ticks.major.labels[0]? ticks.major.labels[0].pos : dom[0]; break; // loose
             case 2: this.domVal[0] = dom[0]; break;             // tight
         }
         switch (this.domMaxAuto) {

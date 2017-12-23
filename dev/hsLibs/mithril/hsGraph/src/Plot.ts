@@ -6,7 +6,7 @@
 import { m, Vnode}      from 'hslayout';
 import { SVGElem }      from './SVGElem';
 import { Data, 
-         DataRow }      from './Data';
+         DataRow }      from 'hsdata';
 import { XYScale }      from './AxesTypes';
 import { Series, 
          SeriesStyle,

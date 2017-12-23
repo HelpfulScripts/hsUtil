@@ -12,7 +12,7 @@ import { m, Vnode}      from 'hslayout';
 import { Config, 
          VisibleCfg }   from './Graph';
 import { SVGElem }      from './SVGElem';
-import { NumRange }     from './Data';
+import { NumRange }     from 'hsdata';
 import { Scale }        from './Scale';
 import { TickDefs }     from './AxesTypes';
 

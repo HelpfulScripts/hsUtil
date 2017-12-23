@@ -267,8 +267,7 @@ abstract class PillarLayouter extends Layouter{
  *     border-bottom: 1px solid white;
  * }
  * .myExample>.hs-layout {
- *     border-left:  1px solid white;
- *     border-right: 1px solid white;
+ *     border:    1px solid white;
  *     background-color: #ccc;
  * }
  * .myExample { 
@@ -320,12 +319,11 @@ class Columns extends PillarLayouter {
  * </file>
  * <file name='style.css'>
  * .hs-column-layout>.myExample {
- *     border-left:    1px solid white;
+ *     border-left:  1px solid white;
  *     border-right: 1px solid white;
  * }
  * .myExample>.hs-layout {
- *     border-top:  1px solid white;
- *     border-bottom: 1px solid white;
+ *     border:    1px solid white;
  *     background-color: #ccc;
  * }
  * .myExample { 

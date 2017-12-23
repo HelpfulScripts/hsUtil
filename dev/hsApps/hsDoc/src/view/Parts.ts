@@ -120,6 +120,7 @@ export function signature(s:any, mdl:any): Vnode {
         switch (mdl.kindString) {
             case 'Method':
             case 'Function': 
+            case 'Constructor': 
                 sig.unshift(m('span.hs-item-name', '('));
                 sig.push(m('span.hs-item-name', ')'));
                 break;

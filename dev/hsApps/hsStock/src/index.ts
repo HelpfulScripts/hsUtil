@@ -3,10 +3,6 @@
  */
 
 /** */
-import { init } from './Site';
-init();
 
-export { Header }       from './view/Header';
-export { LeftNav }      from './view/LeftNav';
-export { MainDetails }  from './view/MainDetails';
-export { MainGraph }    from './view/MainGraph';
+import * as Router from './Router';
+if (Router) {}

@@ -63,3 +63,10 @@ export function date(formatString:string, date=new Date()):string {
             .replace(/%jj/g,  	formatNumber(date.getMilliseconds()/10,2))
             .replace(/%j/g,		formatNumber(date.getMilliseconds()/100,1));
 }
+
+export const ms = {
+    minutes:    (n:number) => 1000*60*n,
+    hours:      (n:number) => 1000*60*60*n,
+    days:       (n:number) => 1000*60*60*24*n,
+    weeks:      (n:number) => 1000*60*60*24*7*n
+};
