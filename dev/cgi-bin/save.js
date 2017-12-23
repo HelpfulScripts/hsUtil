@@ -1,6 +1,8 @@
 #!/usr/local/bin/node
 
 const fs = require('fs');
+const report  = require('./report').reporter('save_log');
+
 let result = '0';
 
 /** HTTP_REFERER: "http://localhost/~sth1pal/staging/apps/hsStock/" */
@@ -18,20 +20,22 @@ function getFile(path) {
     return (i>=0)? path.slice(i+5) : undefined;
 }
 
-function reportError(error) {
-    let envContent = process.argv.map((c,i) => `${i}: ${decodeURI(c)}`).join('\n') + '\n\n';
-    date = new Date()
-    const logName = `${__dirname}/../apps/hsStock/data/log/test${date.getTime()%100000000}.txt`;
-    fs.appendFileSync(logName, `${date.toString()}: error: ${error}`);
-}
+//report(Object.keys(process.env).map(k => `${k}: ${process.env[k]}`).join('\n'));
 
 try {
     if (process.env.REQUEST_METHOD === 'PUT' || process.env.REQUEST_METHOD === 'POST') {
         const app = getApp(process.env.HTTP_REFERER);
         const file = getFile(process.env.QUERY_STRING);
-        const fname = `${__dirname}/../apps/${app}/data/${file}`;
+        const fname = `${__dirname}/../apps/${file}`;
         const out = fs.createWriteStream(fname);
-        process.stdin.on('data', (chunk) => out.write(chunk));
+        let len = 0;
+        let chunks = 0;
+        process.stdin.on('data', (chunk) => {
+            len += chunk.length;
+            chunks++;
+            out.write(chunk);
+            report(`POST: ${chunks}-${len} ${file}`);
+        });
     }
-} catch(e) { reportError(e.toString())
+} catch(e) { report('error: '+ e.toString())}
 console.log(`Content-type: text/html\n\n${result}\n`);
