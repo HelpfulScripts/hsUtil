@@ -4,23 +4,47 @@
     .hs-indent;
 }
 
+.hs-equity {
+    white-space: nowrap;
+    background-color:transparent; 
+    overflow:visible;
+}
+
 .hs-equity-detail {
     .hs-equity-name {
         .hs-indent;
+        .hs-equity;
         font-size: 120%;
     }
     .hs-equity-symbol {
         .hs-indent;
+        .hs-equity;
         font-size: 120%;
     }
     .hs-equity-cat {
         .hs-indent;
+        .hs-equity;
         font-size: 80%;
     }
     .hs-equity-close {
         .hs-indent;
+        .hs-equity;
         color: #060;
         font-size: 120%;
+    }
+    .hs-equity-change {
+        .hs-indent;
+        .hs-equity;
+        color: #060;
+        font-size: 80%;
+        &.hs-negative {
+            color: #800;
+            &::before { content: '-'; }
+        }
+        &.hs-positive {
+            color: #080;
+            &::before { content: '+'; }
+        }
     }
 }
 
@@ -39,3 +63,6 @@
     &>div:first-child { border-left: none; }
 }
 
+.hs-equity-right-column {
+    padding-right: 5px;
+}
