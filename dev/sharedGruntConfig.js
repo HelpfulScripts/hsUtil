@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require("webpack");
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = (grunt, dir, dependencies, type) => {
     const pkg = grunt.file.readJSON(dir+'/package.json');
@@ -17,18 +18,14 @@ module.exports = (grunt, dir, dependencies, type) => {
     grunt.loadNpmTasks('grunt-ts');
     grunt.loadNpmTasks('grunt-webpack');
 
-    grunt.registerTask('ospec', () => {
-        require('child_process').spawnSync('npm', ['test'], {stdio: 'inherit'}); 
-    });
+    //------ Add Doc Tasks
     grunt.registerTask('doc', ['clean:docs', 'typedoc', 'copy:docs']);
-    if (type === 'app') { grunt.registerTask('stage', ['copy:stageApp']); }
-                   else { grunt.registerTask('stage', ['copy:deployLib']); } 
-    grunt.registerTask('build-html', ['copy:build']);
-    grunt.registerTask('build-css', ['less']);
-    grunt.registerTask('build-example', ['clean:example', 'copy:example', 'ts:example', 'less:example', 'webpack:exDev']);
-    grunt.registerTask('build-app',     ['copy:example', 'webpack:appDev']);
-    grunt.registerTask('build-js', ['tslint:src', 'ts:src']);
-    grunt.registerTask('build-spec', ['tslint:spec', 'ts:test']);    
+
+    //------ Add Staging Tasks
+    grunt.registerTask('stage', [`${(type === 'app')? 'copy:stageApp': 'copy:deployLib'}`]);
+    
+    //------ Add Test Tasks
+    grunt.registerTask('ospec', () => { require('child_process').spawnSync('npm', ['test'], {stdio: 'inherit'}); });
     if (type === 'node') { 
         grunt.loadNpmTasks('grunt-jasmine-node-coverage');
         grunt.registerTask('test', ['clean:test', 'copy:test', 'build-spec', /*'jasmine_node'*/ ]); }
@@ -36,14 +33,33 @@ module.exports = (grunt, dir, dependencies, type) => {
         grunt.registerTask('test', ['clean:test', 'copy:test', 'build-spec', /*'ospec'*/ ]); 
     }
     
-    if (type === 'lib') { grunt.registerTask('build', ['clean:src', 'build-html', 'build-css', 'build-js', 'build-example']); }
-    if (type === 'app') { grunt.registerTask('build', ['clean:src', 'build-html', 'build-css', 'build-js', 'build-app']); }
-    if (type === 'util') { grunt.registerTask('build', ['clean:src', 'build-html', 'build-css', 'build-js']); }
-    if (type === 'node') { grunt.registerTask('build', ['clean:src', 'build-html', 'build-css', 'build-js', 'copy:example']); }
-	grunt.registerTask('make', ['build', 'test', 'doc', 'stage']);
-    grunt.registerTask('once', ['make']);	
+    //------ Add Build Tasks
+    grunt.registerTask('build-html',    ['copy:build']);
+    grunt.registerTask('build-css',     ['less']);
+    grunt.registerTask('build-example', ['clean:example', 'copy:example', 'ts:example', 'less:example', 'webpack:exDev']);
+    grunt.registerTask('build-app',     ['copy:example', 'webpack:appDev']);
+    grunt.registerTask('build-js',      ['tslint:src', 'ts:src']);
+    grunt.registerTask('build-jsMin',   ['ts:srcMin']);
+    grunt.registerTask('build-spec',    ['tslint:spec', 'ts:test']);    
+
+    let buildTasks = ['clean:src', 'build-html', 'build-css'];
+    switch (type) {
+        case 'node': buildTasks = buildTasks.concat(['build-js', 'copy:example']); break;
+        case 'util': buildTasks = buildTasks.concat(['build-js']); break;
+        case 'app':  buildTasks = buildTasks.concat(['build-js', 'build-app']); break;
+        case 'lib': 
+        default:     buildTasks = buildTasks.concat(['build-js', 'build-example']); break;
+    }
+    grunt.registerTask('build', buildTasks);
+    grunt.registerTask('buildMin', ['build-jsMin']);
+   
+    //------ Add other MultiTasks
+    grunt.registerTask('make',    ['build', 'test', 'doc', 'stage']);
+    grunt.registerTask('once',    ['make']);	
     grunt.registerTask('default', ['make', 'watch']);	
-    
+    grunt.registerTask('product', ['buildMin', 'webpack:appProd', 'stage']);	
+       
+    //------ Add Task Configurations
     return {
         pkg: grunt.file.readJSON(dir+'/package.json'),
         libPath: grunt.config.process(lib).toLowerCase(),
@@ -121,6 +137,11 @@ module.exports = (grunt, dir, dependencies, type) => {
                 src: ["src/**/*.ts", "!src/**/*.spec.ts", "!src/example/*.ts"],
                 tsconfig:   __dirname+'/tsconfigGrunt.json'
             },
+            srcMin : {
+                outDir:     "_dist/src",
+                src: ["src/**/*.ts", "!src/**/*.spec.ts", "!src/example/*.ts"],
+                tsconfig:   __dirname+'/tsconfigProduct.json'
+            },
             example : {
                 outDir:     "_example",
                 src: ["src/example/*.ts"],
@@ -176,7 +197,12 @@ module.exports = (grunt, dir, dependencies, type) => {
                     path: path.resolve(dir, './_dist')
                 },
                 plugins: [
-					new webpack.optimize.UglifyJsPlugin()
+                    new UglifyJsPlugin({
+                        uglifyOptions: {
+                            ecma: 6,
+                            mangle:false
+                        }
+                    })
                 ]
             },
             appDev: {
