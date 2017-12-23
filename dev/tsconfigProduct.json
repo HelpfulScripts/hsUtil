@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "es6",
+    "moduleResolution": "node",
+    "inlineSourceMap": false,
+    "removeComments": true,
+    "noImplicitAny": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "declaration": true
+  },
+  "compileOnSave": true,
+  "include": [],  
+  "exclude": ["**/node_modules"]
+}

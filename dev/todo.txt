@@ -10,3 +10,6 @@ improve border between members
 
 11/25/17    hsWidget
 Modal form appears on left edge instead of center
+
+11/26/17    hsStock
+change loading: local server first, then remote for update
