@@ -54,23 +54,23 @@ describe("hsExcel", function() {
 			});
 		}); 
 		
-		describe('getRowsForColumns', function() {
+		describe('getRowsForTable', function() {
 			it('should fail for illegal collumns', function() {
 				function noSheet() {
-					file.getRowsForColumns({});
+					file.getRowsForTable({});
 				}
-				expect(noSheet).toThrowError('illegal columns parameter in getRowsForColumns');
+				expect(noSheet).toThrowError('illegal table parameter in getRowsForTable');
 			});
 			
 			it('should return maxRows', function() {
 				let columns = file.getTableColumns(SHEET, 'A', 1);
-				let rows = file.getRowsForColumns(columns, 1);
+				let rows = file.getRowsForTable(columns, 1);
 				expect(rows.length).toBe(1);
 			});
 			
 			it('should return less than maxRows=10', function() {
 				let columns = file.getTableColumns(SHEET, 'A', 1);
-				let rows = file.getRowsForColumns(columns, 10);
+				let rows = file.getRowsForTable(columns, 10);
 				expect(rows.length).toBe(4);
 			});
 		});
@@ -81,7 +81,7 @@ describe("hsExcel", function() {
 			
 			beforeEach(function() { 
 				columns = file.getTableColumns(SHEET, 'A', 1);
-				rows = file.getRowsForColumns(columns);
+				rows = file.getRowsForTable(columns);
 			});
 			
 			it('should have 4 rows', function() {
@@ -109,7 +109,7 @@ describe("hsExcel", function() {
 		
 		describe('nextExcelColIndex', function() {
 			function nextIndex(startCol:string) { 
-				const gen = hsExcel.nextExcelColIndex(startCol);
+				const gen = file.nextExcelColIndex(startCol);
 				gen.next(); // reproduces startCol;
 				return gen.next().value;
 			}
