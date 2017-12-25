@@ -1,19 +1,18 @@
 @BorderColor: #ccc;
-@BackgroundColor: #f8f8ff; 
+@ViewBG:   #f8f8ff; 
+@TradeBG:  #f8fff8; 
+@ImportBG: #fffff8; 
 
 @import "./siteMenu";
-@import "./leftNav";
-@import "./main";
+@import "./viewPane";
+@import "./tradePane";
+@import "./importPane";
 @import "./footer";
 
 
 body {
     font-family: Arial, sans-serif;  
     font-size: 16px;
-}
-
-.hs-site {     // the center main part of the page, incl. leftNav and mainDetail
-    background-color: @BackgroundColor;
 }
 
 .hs-indent {
@@ -23,3 +22,20 @@ body {
     padding-bottom: 2px;
 }
 
+
+.hs-form {
+    padding: 10px;
+    & input {
+        width: 100%;
+    }
+    & button {
+        
+    }
+}
+
+.hs-link {
+    &:hover {
+        color: #00f;
+        font-weight: bold;
+    }
+}
