@@ -10,7 +10,8 @@
  *     - items: string[];                // the items on the menu
  *     - select: (item:string) => void;  // called when item clicked
  *     - selectedItem?: number|string;   // the currently selected item, by index or name
- *     - size?:string[];                 // size to layout menu items
+ *     - size?:string[];                 // size to layout menu items; 
+ *     - css?:string[];                  // css to apply to items;
  * 
  * ## Example
  * <example>
@@ -67,6 +68,8 @@ export interface MenuItemDesc {
     title: string;
     /** the item's select status */
     isSelected: boolean;
+    /** optional css class to use */
+    css?: string;
     /** the function to call if this item is selected */
     clicked: (item:string) => void;
 }
@@ -95,11 +98,13 @@ export class Menu extends Layout {
         } else if (desc.selectedItem === undefined) {
             desc.selectedItem = desc.items[0];
         }
-        node.attrs.columns = desc.size || [];
+        node.attrs.columns = desc.size || [];   // item widths as specified, or equidistant per default
         node.attrs.css = '.hs-menu';
-        return desc.items.map((l:string) => {
+        const itemCss = desc.css || [];
+        return desc.items.map((l:string, i:number) => {
             _menu.items[l] = _menu.items[l] || { 
                 title: l, 
+                css: itemCss[i],        // possibly undefined
                 isSelected: l.toLowerCase() === desc.selectedItem.toLowerCase(), 
                 clicked:(item:string) => {
                     desc.selectedItem = item;
@@ -121,7 +126,7 @@ class MenuItem extends Layout {
     getComponents(node: Vnode): Vnode {
         const desc:MenuItemDesc = node.attrs.desc;
         node.attrs.desc = undefined;
-        node.attrs.css = `.hs-menu-item ${desc.isSelected?'hs-menu-item-selected': ''}`;
+        node.attrs.css = `.hs-menu-item ${desc.css} ${desc.isSelected?'hs-menu-item-selected': ''}`;
         node.attrs.onclick = () => { desc.clicked(desc.title); };
         return desc.title;
     }
