@@ -28,7 +28,7 @@ module.exports = (grunt, dir, dependencies, type) => {
     grunt.registerTask('ospec', () => { require('child_process').spawnSync('npm', ['test'], {stdio: 'inherit'}); });
     if (type === 'node') { 
         grunt.loadNpmTasks('grunt-jasmine-node-coverage');
-        grunt.registerTask('test', ['clean:test', 'copy:test', 'build-spec', /*'jasmine_node'*/ ]); }
+        grunt.registerTask('test', ['clean:test', 'copy:test', 'build-specES5', 'jasmine_node' ]); }
     else { 
         grunt.registerTask('test', ['clean:test', 'copy:test', 'build-spec', /*'ospec'*/ ]); 
     }
@@ -39,12 +39,14 @@ module.exports = (grunt, dir, dependencies, type) => {
     grunt.registerTask('build-example', ['clean:example', 'copy:example', 'ts:example', 'less:example', 'webpack:exDev']);
     grunt.registerTask('build-app',     ['copy:example', 'webpack:appDev']);
     grunt.registerTask('build-js',      ['tslint:src', 'ts:src']);
+    grunt.registerTask('build-es5',     ['tslint:src', 'ts:srcES5']);
     grunt.registerTask('build-jsMin',   ['ts:srcMin']);
     grunt.registerTask('build-spec',    ['tslint:spec', 'ts:test']);    
+    grunt.registerTask('build-specES5', ['tslint:spec', 'ts:testES5']);    
 
     let buildTasks = ['clean:src', 'build-html', 'build-css'];
     switch (type) {
-        case 'node': buildTasks = buildTasks.concat(['build-js', 'copy:example']); break;
+        case 'node': buildTasks = buildTasks.concat(['build-es5', 'copy:example']); break;
         case 'util': buildTasks = buildTasks.concat(['build-js']); break;
         case 'app':  buildTasks = buildTasks.concat(['build-js', 'build-app']); break;
         case 'lib': 
@@ -137,6 +139,11 @@ module.exports = (grunt, dir, dependencies, type) => {
                 src: ["src/**/*.ts", "!src/**/*.spec.ts", "!src/example/*.ts"],
                 tsconfig:   __dirname+'/tsconfigGrunt.json'
             },
+            srcES5 : {
+                outDir:     "_dist/src",
+                src: ["src/**/*.ts", "!src/**/*.spec.ts", "!src/example/*.ts"],
+                tsconfig:   __dirname+'/tsconfigGruntES5.json'
+            },
             srcMin : {
                 outDir:     "_dist/src",
                 src: ["src/**/*.ts", "!src/**/*.spec.ts", "!src/example/*.ts"],
@@ -151,6 +158,11 @@ module.exports = (grunt, dir, dependencies, type) => {
                 outDir:     "_dist/tests",
                 src: ["src/**/*.spec.ts"],
                 tsconfig:   __dirname+'/tsconfigGrunt.json'
+            },
+            testES5 : {
+                outDir:     "_dist/tests",
+                src: ["src/**/*.spec.ts"],
+                tsconfig:   __dirname+'/tsconfigGruntES5.json'
             }
         },
         typedoc: {
