@@ -12,7 +12,7 @@ describe("node", () => {
         });
         it('should report first level only', () => {
             expect(hsNode.inspect({a:"yes", b:[1,2,3]}, null, false)).toEqual("{ a: 'yes', b: [ 1, 2, 3 ] }");
-            expect(hsNode.inspect({a:"yes", b:[1,2,3]}, 0, false)).toEqual("{ a: 'yes', b: [Object] }");
+            expect(hsNode.inspect({a:"yes", b:[1,2,3]}, 0, false)).toEqual("{ a: 'yes', b: [Array] }");
             expect(hsNode.inspect({a:"yes", b:[1,2,3]}, 1, false)).toEqual("{ a: 'yes', b: [ 1, 2, 3 ] }");
         });
     });
