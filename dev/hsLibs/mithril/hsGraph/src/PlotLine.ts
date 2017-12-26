@@ -41,10 +41,10 @@ export class PlotLine extends Plot {
         const x = data.colNumber(series.cols[0]);
         const y = data.colNumber(series.cols[1]);
         if (x===undefined) { 
-            console.log(`${series.cols[0]} not found in data`); 
+//            console.log(`${series.cols[0]} not found in data`); 
             return m('.error','');
         } else if (y===undefined) { 
-            console.log(`${series.cols[1]} not found in data`); 
+//            console.log(`${series.cols[1]} not found in data`); 
             return m('.error','');
         } else { return [
             this.drawLine(clipID, data.getData(), x, y, scales, series.style),

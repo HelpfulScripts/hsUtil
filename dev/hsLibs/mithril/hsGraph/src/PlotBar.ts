@@ -94,7 +94,7 @@ export class PlotBar extends Plot {
         const y = data.colNumber(series.cols[1]);
         const y0 = series.cols.length < 3? -1 : data.colNumber(series.cols[2]);
         if (y===undefined) { 
-            console.log(`${series.cols[1]} not found in data`); 
+//            console.log(`${series.cols[1]} not found in data`); 
             return m('.error','');
         } else { return [
             this.drawBar(clipID, data, x, y, y0, scales, series.style, i),
