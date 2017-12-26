@@ -66,14 +66,14 @@ function navList(docSet:any, field:string):Vnode[] {
             });
         }
     }
-    /**
+    /** 
      * processes a module, i.e. a `.ts` file.
      */
     function externalModule(mdl:any) {
         let selected;
         if (field===''+mdl.id || field.indexOf(mdl.fullPath) === 0) { selected=true; }
 
-        return m(Collapsible, {css:`.hs-left-nav-module`, isExpanded:undefined, components:[
+        return m(Collapsible, {css:`.hs-left-nav-module`, isExpanded:selected, components:[
             libLink(`a.hs-left-nav-module-name ${selected?'.hs-left-nav-selected':''}`, mdl.lib, mdl.fullPath, mdl.name),
             !mdl.groups? undefined : mdl.groups.map((g:any) => entries(g, mdl, field))
         ]});
