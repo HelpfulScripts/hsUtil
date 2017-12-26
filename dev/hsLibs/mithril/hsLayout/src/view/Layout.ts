@@ -19,7 +19,7 @@ import { m, Vnode}      from '../mithril';
 import { Layouter }       from './Layouter'; 
 
 /**
-Abstract base class for applying layouts. Subclasses should implement a {@link Layout.Layout.getComponents `getComponents`} method that returns
+Base class for applying layouts. Subclasses should implement a {@link Layout.Layout.getComponents `getComponents`} method that returns
 the components to render. The default implementation returns the conponents passed in `node.attrs.content`.
 Optionally, the subclass can also implement {@link Layout.Layout.getCSS `getCSS`} to provide the CSS class to 
 assign to the component, and override the default implementation, which returns `node.attrs.css`. 
@@ -41,7 +41,7 @@ class MyLayout extends Layout {
 } 
 </code>
  */
-export abstract class Layout {
+export class Layout {
     /**
      * holds structural elements in style form: left, right, top, bottom, width, height
      */
