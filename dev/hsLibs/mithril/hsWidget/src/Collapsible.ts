@@ -12,8 +12,8 @@
  * ```
  * 
  * ### Attributes (node.attrs):
- * - `css`: the css class to assign to the entire Collapsible div
- * - `isExpanded`: boolean indicates if the Collapsible is initially expanded
+ * - `css`: optional; the css class to assign to the entire Collapsible div
+ * - `isExpanded`: optional; boolean indicating if the Collapsible is initially expanded
  * - `components`: array of two components: 
  *     - `component[0]` is the title of the Collapsible. This will remain visible and can be clicked 
  *       on to expand or contract the remaining components
