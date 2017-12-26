@@ -81,6 +81,7 @@ interface IEXQuote extends TraderQuote {
  * https://iextrading.com/developer/docs/
  */
 export class IexTrading implements TraderProfile {
+    id = 'IEXTrading';
     base = 'https://api.iextrading.com/1.0';
     symbolsUrl    = ()           => `${this.base}/ref-data/symbols`;
     statsUrl      = (sym:string) => `${this.base}/stock/${encodeURIComponent(sym)}/stats`;

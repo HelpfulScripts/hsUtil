@@ -4,10 +4,11 @@ import { Data,
 import { Trader,
          TraderQuote }  from './Trader';
 import { ms }           from 'hsutil'; 
+import { save }         from '../saveToFile';
+import { Transaction }  from './Assets';
 
 const DEF_EQUITY_LIST   = 'defEquityList.json';
 const EQUITY_LIST       = 'equityList.json';
-const SAVE_URL          = '/cgi/save.js';
 const SAVE_PATH         = 'hsStock/data';   // relative to 'apps/', defines in save.js cgi
 const LOAD_PATH         = 'data';           // relative to 'hsStock/', root of webapp location
 
@@ -23,6 +24,14 @@ export interface EquityItem {
     name:   string;
     /** investment category, e.g. 'Stocks' */
     cat:    string;
+
+    /** set of traders that do not know this symbol */
+    invalid?: {};
+
+    /** number of shares owned */
+    shares?: number;
+    /** transaction history */
+    trades?:Transaction[];
 
     company?: {
         /** industry sector */
@@ -109,41 +118,28 @@ export class EquityList {
             });
         });
         return data;
-    }
+    } 
 
     private add(item:EquityItem) {
+        item.invalid = item.invalid || {};
         const sym = item.symbol.toUpperCase();
         if (!this.bySymbol[sym]) {
             this.bySymbol[sym] = item;
             this.getCategories()[item.cat].equities.push(item);
+            this.loadMeta(item);
         }
-        this.loadMeta(item);
     };
 
     private remove(itemOrSymbol:EquityItem|string) {
         const item = (typeof itemOrSymbol === 'string')? 
             this.bySymbol[itemOrSymbol.toUpperCase()] : this.bySymbol[(<EquityItem>itemOrSymbol).symbol];
-        this.bySymbol[item.symbol.toUpperCase()] = undefined;
+        delete this.bySymbol[item.symbol.toUpperCase()];
     }
 
     private load(fname:string):Promise<any> {
         return m.request({
             method: 'GET',
             url: fname                          // relative to 'apps/<APP>/
-        });
-    }
-    private save(data:any, fname:string):Promise<any> {
-        return m.request({
-            method: 'PUT',
-            url: `${SAVE_URL}?name=${fname}`,   // relative to 'apps/<APP>/data/
-            data: data
-        })
-        .then(() => data)                       // send `data` into next `then`
-        .catch((err:any) => {
-            console.log(`error saving to ${fname}`);
-            console.log(err);
-            console.log(err.stack);
-            return data;
         });
     }
 
@@ -178,7 +174,7 @@ export class EquityList {
     }
 
     private saveQuotes(item:EquityItem):Promise<EquityItem> {
-        return this.save(item.quotes.export(), `${SAVE_PATH}/stock/quotes${item.symbol}.json`);
+        return save(item.quotes.export(), `${SAVE_PATH}/stock/quotes${item.symbol}.json`);
     }
 
     private loadMeta(item:EquityItem):Promise<EquityItem> {
@@ -188,29 +184,33 @@ export class EquityList {
             return this.trader.getMeta(item);
         };
         return this.load(`${LOAD_PATH}/stock/sym${item.symbol}.json`)
-        .then((data:EquityItem) => { Object.keys(data).forEach((k:string) => item[k] = data[k]); return item; })
-        .then((data:EquityItem) => outOfDate(data)? getDataFromTrader(data) : data)
-        .catch(() => getDataFromTrader(item))
-        .then((data:EquityItem) => this.loadQuotes(data))
-        .then((data:EquityItem) => {
-            if (data.company && data.company.sector) { 
-                data.cat = data.company.sector;
-            }
-            const quotes = data.quotes;
-            data.quotes = undefined;
-            this.saveMeta(data, item.symbol);
-            data.quotes = quotes;
-            return data;
-        });
+            // if nothing on local server: revert to trader
+            .catch(() => getDataFromTrader(item))
+            .then((data:EquityItem) => { // copy properties of loaded object into `item`
+                Object.keys(data).forEach((k:string) => item[k] = data[k]); 
+                return item;             // continue working with original item
+            })
+            .then((data:EquityItem) => outOfDate(data)? getDataFromTrader(data) : data)
+            .then((data:EquityItem) => this.loadQuotes(data))
+            .then((data:EquityItem) => {
+                if (data.company && data.company.sector) { 
+                    data.cat = data.company.sector;
+                }
+                const quotes = data.quotes;
+                data.quotes = undefined;
+                this.saveMeta(data, item.symbol);
+                data.quotes = quotes;
+                return data;
+            });
     }
 
     private  saveEquityList():Promise<any> {
-        return this.save(this.EquityList2JSON.call(this), `${SAVE_PATH}/${EQUITY_LIST}`);
+        return save(this.EquityList2JSON.call(this), `${SAVE_PATH}/${EQUITY_LIST}`);
     }
 
     private saveMeta(data:EquityItem, sym:string):EquityItem {
         console.log(`saving stock/sym${sym}.json`);
-        this.save(data, `${SAVE_PATH}/stock/sym${sym}.json`);
+        save(data, `${SAVE_PATH}/stock/sym${sym}.json`);
         return data;
     }
 
@@ -219,6 +219,8 @@ export class EquityList {
     constructor() {
         this.trader = new Trader();
     }
+
+    getTrader() { return this.trader; }
 
     getItem(symbol:string):EquityItem { 
         if (this.bySymbol[symbol]) { 

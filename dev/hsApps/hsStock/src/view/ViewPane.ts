@@ -16,7 +16,7 @@ export const ViewPane = {
             content: [
                 m(ViewLeft), 
                 m(Layout, {
-                    css: '.hs-main', 
+                    css: '.hs-view-center', 
                     rows:[StocksDetailHeight,'fill'], 
                     content:[m(MainDetails), m(MainGraph)]
                 })

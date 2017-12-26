@@ -7,35 +7,40 @@ import { TradePane }     from './view/TradePane';
 import { ImportPane }    from './view/ImportPane';
 
 const TitleHeight        = '30px'; 
-const FooterHeight       = '10px';  
+
+const modes = [
+    {name: 'View',   css: '.hs-menu-view'},
+    {name: 'Trade',  css: '.hs-menu-trade'},
+    {name: 'Import', css: '.hs-menu-import'}
+];
 
 export const Home = {
-    view: function() {
-        let siteContent;
-        switch(m.route.param('mode')) {
-            case 'Import':  siteContent = ImportPane; break;
-            case 'Trade':   siteContent = TradePane; break;
-            case 'View':
-            default:        siteContent = ViewPane; break;
-        }
-        return m(Layout, {rows: [TitleHeight, "fill", FooterHeight], css: '.hs-site', content: [
-            m(SiteMenu, {css: 'hs-site-menu'}),
-            m(siteContent),
-            m(SiteFooter)
-        ]});
+    view: () =>  m('', [Site(), SiteFooter()])
+};
+
+const Site = () => {
+    let siteContent;
+    switch(m.route.param('mode')) {
+        case modes[2].name:  siteContent = ImportPane; break;
+        case modes[1].name:   siteContent = TradePane; break;
+        case modes[0].name:
+        default:        siteContent = ViewPane; break;
     }
+    return m(Layout, {rows: [TitleHeight, "fill"], css: '.hs-site', content: [
+        m(SiteMenu, {css: 'hs-site-menu'}),
+        m(siteContent),
+    ]});
 };
 
 const SiteMenu = { 
-    view: (node: Vnode):Vnode => m(Menu, {desc: { 
-        items: ['View', 'Trade', 'Import'].map((c:any) => c),
-        selectedItem: (node.attrs.route && node.attrs.route.mode)? node.attrs.route.mode : 0,
-        select: (item:string) => m.route.set('/site/:mode/:symbol', {mode:item, symbol:0}) 
-    }})
+    view: (node: Vnode):Vnode => {
+        return m(Menu, {desc: { 
+            items: modes.map((c:any) => c.name),
+            css: modes.map((c:any) => c.css),
+            selectedItem: modes.find((md:any) => md.name === m.route.param('mode')).name,
+            select: (item:string) => m.route.set('/site/:mode/:symbol', {mode:item, symbol:0}) 
+        }});
+    }
 };
 
-class SiteFooter extends Layout { 
-    getComponents(node: Vnode): Vnode {
-        return m('.hs-site-footer', '(c) Helpful Scripts');
-    }
-}
+const SiteFooter = () => m('.hs-site-footer', '(c) Helpful Scripts');

@@ -7,6 +7,9 @@ import { Home } from './Home';
 
 m.route.prefix("?");
 
+let authMode   = 'View';
+let authSymbol = 'GOOG';
+
 const Auth = {
     username: "",
     password: "",
@@ -21,28 +24,15 @@ const Auth = {
         }).then(() => {
             console.log(`logged in as ${Auth.username}`);
             localStorage.setItem("auth-token", Auth.username);
-            m.route.set("/site/view");
+            m.route.set(`/site/${authMode}/${authSymbol}`);
         }).catch((err:any) => {
             if (err.status === 401) {
                 console.log('Authorization Error (401)');
             } else {
                 console.log(err);
             }
-        })
-        ;
-/*    },
-    register: function() {
-        return m.request({
-            method: 'PUT',
-            url: `${REGISTER_URL}`,  
-            data: {username: Auth.username, password: Auth.password}
-        })
-        .then(() => Auth.login())
-        .catch((err:any) => {
-            console.log(`error registering`);
-            console.log(err);
-        }); 
-*/    }
+        });
+    }
 };
 
 const Login = {
@@ -51,19 +41,24 @@ const Login = {
             m("input[type=text]",     {oninput: m.withAttr("value", Auth.setUsername), value: Auth.username}),
             m("input[type=password]", {oninput: m.withAttr("value", Auth.setPassword), value: Auth.password}),
             m("button[type=button]",  {onclick: Auth.login}, "Login"),
-//            m('span', ' - or - '),
-//            m("button[type=button]",  {onclick: Auth.register}, "Register")
         ]);
     }
 };
 
-const match = () => {
-    if (!localStorage.getItem("auth-token")) { m.route.set("/login"); }
-    else { return Home; }
-};
 
-m.route(document.body, "/site/view", {
-    "/site/:mode":           { onmatch: match },
-    "/site/:mode/:symbol":   { onmatch: match },
+m.route(document.body, "/site/View", {
+    "/site/:mode":           Home,
+    "/site/:mode/:symbol":   Home,
     "/login": Login
 });
+
+export function authenticated():boolean {
+    if (!localStorage.getItem("auth-token")) { 
+        authMode   = m.route.param('mode');
+        authSymbol = m.route.param('symbol');
+        m.route.set("/login"); 
+        return false;
+    } else {
+        return true;
+    }
+}
