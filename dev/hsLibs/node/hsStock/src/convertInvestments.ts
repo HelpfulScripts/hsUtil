@@ -5,14 +5,20 @@ const destDir = '../../../../staging/apps/hsStock/private/';    // password prot
 const wb = hsExcel.readFile(srcDir+'investments.xlsx');
 const table = wb.getTable(wb.getSheetNames()[0], 'F', 9);
 
-const symbols = table.columns.names;
+const updateSymbols = {
+    ERTS: 'EA',
+    BGEN: 'BIIB'
+};
+
+const symbols = table.columns.names.map((sym:string) => updateSymbols[sym] || sym);
 symbols.shift();    // to remove the first 'Date' column
+
 
 const transactions = {};
 let numTrans = 0;
 
 for (let c=0; c<symbols.length; c++) {
-    const sym = symbols[c];
+    let sym = symbols[c];
     transactions[sym] = [];
     let previous = 0;
     for (let r=0; r<table.table.length; r++) {
