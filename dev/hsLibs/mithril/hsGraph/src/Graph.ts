@@ -13,7 +13,7 @@
  * ### Example
  * <example>
  * <file name='script.js'>
- * let series = [{
+ * let series = {
  *    names:['time', 'volume', 'price'],
  *    rows:[
  *          [-1,   0.2, 0.8],
@@ -23,7 +23,7 @@
  *          [0.8,  0.5, 0.6],
  *          [1,    0.7, 0.75]
  *    ]
- * }];
+ * };
  * 
  * function myConfig(cfg) {
  *      cfg.series.data   = [series];
@@ -248,8 +248,6 @@ export class Graph extends SVGElem {
 
 
     private scales: Scales;
-    /** pool of `Data` sets to draw from */
-    private data:   Data[];
 
     private createPlotArea(cfgm:{top:number, left:number, bottom:number, right:number}):Rect {
         const tl = {
@@ -263,14 +261,14 @@ export class Graph extends SVGElem {
         return { tl: tl, br: br };
     }
 
-    private createData(cfg:any) {
+    private createData(cfg:any):Data[] {
         if (!cfg.series.data) {
             console.log('cfg.series.data not set');
         }
         if (!(cfg.series.data.length > 0)) {
             console.log('cfg.series.data not initialised with array of DataSets');
         }
-        this.data = cfg.series.data.map((d:DataSet) => new Data(d));
+        return cfg.series.data.map((d:DataSet) => new Data(d));
     }
 
     private createScales(axes:any):Scales {
@@ -345,7 +343,7 @@ export class Graph extends SVGElem {
     /** 
      * determines the max ranges each coordinate of each series and auto-sets the domains on the respective scales. 
      */
-    adjustDomains(cfg:SeriesConfig, scales:Scales) {
+    adjustDomains(cfg:SeriesConfig, scales:Scales, data:Data[]) {
         let domainDims = 0;
         cfg.series.forEach((s:SeriesDef) => 
             domainDims = Math.max(domainDims,s.cols.length)
@@ -355,7 +353,7 @@ export class Graph extends SVGElem {
     
         cfg.series.map((s:SeriesDef) => { // for each series:
             s.cols.forEach((colIdx:ColSpecifier, i:number) => {
-                this.data[s.dataIndex].findDomain(colIdx, domains[i]);
+                data[s.dataIndex].findDomain(colIdx, domains[i]);
             });
         });
         scales.primary.x.setAutoDomain(domains[0]);
@@ -369,8 +367,8 @@ export class Graph extends SVGElem {
         const plotArea:Rect = this.createPlotArea(cfg.graph.margin);
         const scales:Scales = this.createScales(cfg.axes);
         this.adjustRange(plotArea, scales);
-        this.createData(cfg);
-        this.adjustDomains(cfg.series, scales);
+        const data = this.createData(cfg);
+        this.adjustDomains(cfg.series, scales, data);
 
         Graph.adjustConfig(cfg);
         node.attrs.cfg = cfg;
@@ -380,7 +378,7 @@ export class Graph extends SVGElem {
             m(Chart, { cfg:cfg.chart, plotArea:plotArea }),
             m(Grid, { cfg:cfg.grid, scales:scales }),
             m(Axes, { cfg:cfg.axes, scales:scales }),
-            m(Series, { cfg:cfg.series, scales:scales, data:this.data }),
+            m(Series, { cfg:cfg.series, scales:scales, data:data }),
             m(Legend, { cfg:cfg.legend })
         ]);
         return result;
