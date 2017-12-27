@@ -20,7 +20,7 @@
  * m.mount(root, { 
  *      view:() => m(hsgraph.Graph, {cfgFn: cfg => {
  *          cfg.chart.title.text          = 'Simple Example';
- *          cfg.series.data   = series;
+ *          cfg.series.data   = [series];
  *          cfg.series.series = [{ cols: ['time', 'volume'] }];
  *      }})
  * });

@@ -2,6 +2,12 @@
  * # Canvas
  * renders the graph's background.
  * 
+ * ### Attributes
+ * The `Canvas` class is called by {@link Graph.Graph `Graph`} as 
+ * `m(Canvas, { cfg:cfg.canvas}))`
+ * with the following attributes:
+ * - cfg: a {@link Canvas.CanvasConfig `CanvasConfig`} configuration object
+ * 
  * ### Configurations and Defaults
  * See {@link Canvas.Canvas.defaultConfig Canvas.defaultConfig}
  */

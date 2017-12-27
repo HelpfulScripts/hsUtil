@@ -2,6 +2,13 @@
  * # Chart
  * renders the chart background and title.
  * 
+ * ### Attributes
+ * The `Chart` class is called by {@link Graph.Graph `Graph`} as 
+ * `m(Chart, { cfg:cfg.chart, plotArea:plotArea })`
+ * with the following attributes:
+ * - cfg: a {@link Chart.ChartConfig ChartConfig} object
+ * - plotArea: a {@link SVGElem.Rect Rect } object for plotting the chart background
+ * 
  * ### Configurations and Defaults
  * See {@link Chart.Chart.defaultConfig Chart.defaultConfig}
  */

@@ -1,6 +1,13 @@
 /**
  * # Axes
  * renders the x- and y-axis with title, tick marks and labels.
+ * 
+ * ### Attributes
+ * The `Axes` class is called by {@link Graph.Graph `Graph`} as 
+ * `m(Axes, { cfg:cfg.axes, scales:scales })`
+ * with the following attributes:
+ * - cfg: a {@link Axes.AxesConfig AxesConfig} object
+ * - scales: a {@link Axes.Scales Scales } object
  *
  * ### Configurations and Defaults
  * See {@link Axes.Axes.defaultConfig Axes.defaultConfig}
@@ -19,7 +26,7 @@
  * ]};
  * 
  * function myConfig(cfg) {
- *      cfg.series.data   = series;
+ *      cfg.series.data   = [series];
  *      cfg.series.series = [
  *          { cols: ['time','volume']},
  *          { cols: ['time', 'price']}
@@ -55,6 +62,7 @@
 import { m, Vnode}  from 'hslayout';
 import { XYScale,
          ScaleCfg, 
+         Scales,
          MarkCfg,
          AxisCfg,
          AxesConfig,
@@ -323,8 +331,8 @@ export class Axes extends SVGElem {
     }
 
     view(node?: Vnode): Vnode {
-        const cfg:AxesConfig    = node.attrs.cfg;
-        const scales = node.attrs.scales;
+        const cfg:AxesConfig = node.attrs.cfg;
+        const scales:Scales  = node.attrs.scales;
         return m('svg', {class:'hs-graph-axis'}, [
             this.drawAxis('x', scales.primary, 'primary', cfg),
             this.drawAxis('y', scales.primary, 'primary', cfg),
@@ -352,7 +360,7 @@ export class Axes extends SVGElem {
  * m.mount(root, { 
  *      view:() => m(hsgraph.Graph, {cfgFn: cfg => {
  *          cfg.chart.title.text          = 'Simple Example';
- *          cfg.series.data   = series;
+ *          cfg.series.data   = [series];
  *          cfg.series.series = [{ cols: ['time', 'volume'] }];
  *      }})
  * });
@@ -378,7 +386,7 @@ class ExampleLinearAxis {}
 * m.mount(root, { 
 *      view:() => m(hsgraph.Graph, {cfgFn: cfg => {
 *          cfg.chart.title.text = 'Log Y Axis';
-*          cfg.series.data   = series;
+*          cfg.series.data   = [series];
 *          cfg.series.series = [{ cols: ['time', 'volume'] }];
 *          cfg.axes.primary.x.scale.type = hsgraph.Axes.type.log;
 *          cfg.axes.primary.x.scale.domain = ['tight', 'tight'];
@@ -406,7 +414,7 @@ class ExampleLogAxis {}
 * m.mount(root, { 
 *      view:() => m(hsgraph.Graph, {cfgFn: cfg => {
 *          cfg.chart.title.text = 'Date X Axis';
-*          cfg.series.data   = series;
+*          cfg.series.data   = [series];
 *          cfg.series.series = [{ cols: ['time', 'volume'] }];
 *          cfg.axes.primary.x.scale.type = hsgraph.Axes.type.date;
 *          cfg.axes.primary.x.ticks.major.labelFmt = '%MMM %YY';

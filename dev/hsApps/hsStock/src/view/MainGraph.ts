@@ -23,7 +23,7 @@ export class MainGraph extends Layout {
             cfg.axes.primary.y.title.visible = false;
             cfg.axes.primary.y.ticks.minor.labels.visible = true;
             cfg.grid.minor.hor.visible = true;
-            cfg.series.data   = data;
+            cfg.series.data   = [data];
             cfg.series.defaultStyle.line.width = 1;
             cfg.series.series = [
                 { cols: ['Date', 'Close'], type: Series.plot.line },

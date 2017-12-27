@@ -1,3 +1,10 @@
+12/27/17:   hsDoc
+left panel groups won't collapse; instead the first item is unintentionally chosen for display
+
+12/27/17    hsGraph:
+add 'cfg' option to Graph so configurations can be passed as {'cfg.chart.title.visible': false}
+typew objects instead of a function call, hence allowing to be better shared.
+
 11/26/17    hsStock
 change loading: local server first, then remote for update
 

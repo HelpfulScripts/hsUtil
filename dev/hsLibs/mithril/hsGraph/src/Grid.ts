@@ -2,6 +2,13 @@
  * # Grid
  * renders the major and minor gridlines in each direction.
  * 
+ * ### Attributes
+ * The `Chart` class is called by {@link Graph.Graph `Graph`} as 
+ * `m(Grid, { cfg:cfg.grid, scales:scales })`
+ * with the following attributes:
+ * - cfg: a {@link Grid.GridsConfig GridsConfig} object
+ * - scales: a {@link Axes.Scales Scales } object
+ * 
  * ### Configurations and Defaults
  * See {@link Grid.Grid.defaultConfig Grid.defaultConfig}
  * 
@@ -14,7 +21,8 @@ import { Config,
 import { SVGElem }      from './SVGElem';
 import { NumRange }     from 'hsdata';
 import { Scale }        from './Scale';
-import { TickDefs }     from './AxesTypes';
+import { TickDefs,
+         Scales }       from './AxesTypes';
 
 /** defines configurable parameters for a grid */
 export interface GridCfg extends VisibleCfg{
@@ -96,16 +104,17 @@ export class Grid extends SVGElem{
 
 
     view(node?: Vnode): Vnode {
-        const cfg = node.attrs.cfg;
-        const scales = node.attrs.scales.primary;
+        const cfg:GridsConfig = node.attrs.cfg;
+        const scales:Scales = node.attrs.scales;
+        const ps = scales.primary;
         return m('svg', { class:'hs-graph-grid'}, [
             m('svg', { class:'hs-graph-grid-minor' }, [
-                this.drawHorGrid(cfg.minor.hor, scales.y, scales.x.range(), scales.y.ticks().minor),
-                this.drawVerGrid(cfg.minor.ver, scales.x, scales.y.range(), scales.x.ticks().minor)
+                this.drawHorGrid(cfg.minor.hor, ps.y, ps.x.range(), ps.y.ticks().minor),
+                this.drawVerGrid(cfg.minor.ver, ps.x, ps.y.range(), ps.x.ticks().minor)
             ]),
             m('svg', { class:'hs-graph-grid-major' }, [
-                this.drawHorGrid(cfg.major.hor, scales.y, scales.x.range(), scales.y.ticks().major),
-                this.drawVerGrid(cfg.major.ver, scales.x, scales.y.range(), scales.x.ticks().major)
+                this.drawHorGrid(cfg.major.hor, ps.y, ps.x.range(), ps.y.ticks().major),
+                this.drawVerGrid(cfg.major.ver, ps.x, ps.y.range(), ps.x.ticks().major)
             ])
         ]);
     }

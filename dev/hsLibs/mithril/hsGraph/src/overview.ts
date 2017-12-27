@@ -24,7 +24,7 @@ attribute with the graph's configuration.
  * m.mount(root, { 
  *      view:() => m(hsgraph.Graph, {cfgFn: cfg => {
  *          cfg.chart.title.text          = 'Simple Example';
- *          cfg.series.data   = data;
+ *          cfg.series.data   = [data];
  *          cfg.series.series = [{ cols: ['time', 'volume'] }];
  *      }})
  * });

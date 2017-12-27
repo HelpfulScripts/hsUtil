@@ -31,7 +31,7 @@
  * m.mount(root, { 
  *      view:() => m(hsgraph.Graph, {cfgFn: cfg => {
  *          cfg.chart.title.text = 'Bar Chart';
- *          cfg.series.data   = series;
+ *          cfg.series.data   = [series];
  *          cfg.series.series = [{
  *                  cols: [undefined, 'volume'], 
  *                  type: hsgraph.Series.plot.bar 

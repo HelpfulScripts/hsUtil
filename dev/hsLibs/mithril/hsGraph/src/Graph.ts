@@ -3,11 +3,17 @@
  * The main `Graph` object that contains all graph components and sets up the controlling logic.
  * `Graph` sets up a viewBox that is always 1000 units wide. the height automatically adjusts to fill available space while 
  * preserving a uniform scaling (i.e. preserveAspectRatio = default (xMidYMid)).
+ * 
+ * ### Attributes
+ * The main entry point for applications using this library is the `Graph` class,
+ * typically called as `m(Graph, {cfgFn: (cfg:any) => {...});` 
+ * Accepted attributes are:
+ * - cfgFn: a {@link Graph.CfgFn CfgFn} function that allows setting graph parameters.
  *
  * ### Example
  * <example>
  * <file name='script.js'>
- * let series = {
+ * let series = [{
  *    names:['time', 'volume', 'price'],
  *    rows:[
  *          [-1,   0.2, 0.8],
@@ -16,10 +22,11 @@
  *          [0.6,    0, 0.7],
  *          [0.8,  0.5, 0.6],
  *          [1,    0.7, 0.75]
- *    ]};
+ *    ]
+ * }];
  * 
  * function myConfig(cfg) {
- *      cfg.series.data   = series;
+ *      cfg.series.data   = [series];
  *      cfg.series.series = [
  *          { cols: ['time', 'volume']},
  *          { cols: ['time', 'price']}
@@ -58,6 +65,7 @@
 /** */
 import { m, Vnode}      from 'hslayout';
 import { Data, 
+         DataSet,
          ColSpecifier,
          NumDomain }    from 'hsdata';
 import { Axes }         from './Axes';
@@ -147,6 +155,8 @@ function copy(def:any):any {
  * @param cfg the fully initialized configuration object. `CfgFn` should overwrite selected values as needed.
  */
 export interface CfgFn { (cfg:Config):void; }
+
+
 
 /** The main `Graph` object, responsible for setting up the grpahing components and logic. */
 export class Graph extends SVGElem {
@@ -238,7 +248,8 @@ export class Graph extends SVGElem {
 
 
     private scales: Scales;
-    private data:   Data;
+    /** pool of `Data` sets to draw from */
+    private data:   Data[];
 
     private createPlotArea(cfgm:{top:number, left:number, bottom:number, right:number}):Rect {
         const tl = {
@@ -253,11 +264,13 @@ export class Graph extends SVGElem {
     }
 
     private createData(cfg:any) {
-        if (!cfg.series.data || !cfg.series.data.rows || !cfg.series.data.names) {
+        if (!cfg.series.data) {
             console.log('cfg.series.data not set');
         }
-        this.data = new Data();
-        this.data.setData(cfg.series.data.rows, cfg.series.data.names);
+        if (!(cfg.series.data.length > 0)) {
+            console.log('cfg.series.data not initialised with array of DataSets');
+        }
+        this.data = cfg.series.data.map((d:DataSet) => new Data(d));
     }
 
     private createScales(axes:any):Scales {
@@ -342,7 +355,7 @@ export class Graph extends SVGElem {
     
         cfg.series.map((s:SeriesDef) => { // for each series:
             s.cols.forEach((colIdx:ColSpecifier, i:number) => {
-                this.data.findDomain(colIdx, domains[i]);
+                this.data[s.dataIndex].findDomain(colIdx, domains[i]);
             });
         });
         scales.primary.x.setAutoDomain(domains[0]);
@@ -351,9 +364,9 @@ export class Graph extends SVGElem {
 
 
     view(node?: Vnode): Vnode {
-        const cfgFn = node.attrs.cfgFn;
+        const cfgFn:CfgFn = node.attrs.cfgFn;
         const cfg:Config = Graph.makeConfig(cfgFn);
-        const plotArea = this.createPlotArea(cfg.graph.margin);
+        const plotArea:Rect = this.createPlotArea(cfg.graph.margin);
         const scales:Scales = this.createScales(cfg.axes);
         this.adjustRange(plotArea, scales);
         this.createData(cfg);

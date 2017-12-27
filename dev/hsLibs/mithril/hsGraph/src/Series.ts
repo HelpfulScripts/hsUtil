@@ -5,6 +5,14 @@
  * ### Configurations and Defaults
  * See {@link Series.Series.defaultConfig Series.defaultConfig}
  * 
+ * ### Attributes
+ * The `Series` class is called by {@link Graph.Graph `Graph`} as 
+ * `m(Series, { cfg:cfg.series, scales:scales, data:this.data })`
+ * with the following attributes:
+ * - cfg: {@link Series.SeriesConfig `SeriesConfig`} configuration parameters for series
+ * - scales: {@link Axes.XYScale `XYScale`} the scales to use
+ * - data: {@link hsData:Data.Data `Data`} array of `Data` sets to use, indexed by cfg[].dataIndex
+ * 
  * @module Series
  */
 
@@ -12,7 +20,7 @@
 import { m, Vnode}      from 'hslayout';
 import { Config,
          VisibleCfg }   from './Graph';
-import { Data }         from 'hsdata';
+import { Data, DataSet }from 'hsdata';
 import { ColSpecifier } from 'hsdata';
 import { SVGElem }      from './SVGElem';
 import { Axes }         from './Axes';
@@ -34,7 +42,9 @@ function copyDefault(target:any, source:any, defaults:any) {
     });
 }
 
-
+/**
+ * 
+ */
 export class Series extends SVGElem { 
     /**
      * Defines available styles for series marker:
@@ -69,8 +79,8 @@ export class Series extends SVGElem {
      * ### Configurations and Defaults
      * ```
      *  cfg.series = {@link Series.SeriesConfig <SeriesConfig>}{
-     *          // data to be plotted, initialized as `undefined`
-     *      data: {@link Data.Data <Data>},     
+     *          // pool of `Data` sets to be plotted, initialized as `[]`
+     *      data: {@link Data.DataTypes.DataSet <DataSet[]>},     
      *          // series an markers are clipped to the plot area
      *      clip: true,       
      *          // array of series descriptors, initialized to empty array (no series)
@@ -116,9 +126,9 @@ export class Series extends SVGElem {
      */
     static adjustConfig(cfg:Config) { 
         cfg.series.series.forEach((s:SeriesDef) => {
-            s.type = s.type || Series.plot.line;
-            s.style = s.style || <SeriesStyle>{};
-            if (s.cols[0] === undefined) { // no x-value -> use index
+//            s.type = s.type || Series.plot.line;
+//            s.style = s.style || <SeriesStyle>{};
+            if (s.cols[0] === undefined) { // undefined x-value -> use index as x-value
                 cfg.axes.primary.x.title.hOffset = 0;
                 cfg.axes.primary.x.scale.type = Axes.type.index;
                 cfg.grid.minor.ver.visible = false;
@@ -139,13 +149,13 @@ export class Series extends SVGElem {
     view(node?: Vnode): Vnode {
         const cfg:SeriesConfig  = node.attrs.cfg;
         const scales:XYScale = node.attrs.scales.primary;
-        const data:Data      = node.attrs.data;
+        const data:Data[]    = node.attrs.data;
         const clipID = cfg.clip? 'hs'+Math.floor(Math.random()*10000) : undefined;
-        cfg.series.map((series:SeriesDef) => series.type.setDefaults(data, series, scales));
+        cfg.series.map((s:SeriesDef) => s.type.setDefaults(data[s.dataIndex], s, scales));
         return m('svg', { class:'hs-graph-series'}, [
             this.drawClipRect(clipID, scales),
-            m('svg', cfg.series.map((series:SeriesDef, i:number) => { 
-                return m('svg', {class:`hs-graph-series-${i}`}, series.type.plot(data, series, scales, i, clipID));
+            m('svg', cfg.series.map((s:SeriesDef, i:number) => { 
+                return m('svg', {class:`hs-graph-series-${i}`}, s.type.plot(data[s.dataIndex], s, scales, i, clipID));
             }))
         ]);
     }
@@ -196,6 +206,8 @@ export interface SeriesDef {
      * Further elements are dependent on the {@link Series.type plot} type. 
      */
     cols:ColSpecifier[];  
+    /** An index into the `Data[]` pool, identifying the `Data` set to use. defaults to `0` */
+    dataIndex?: number;
     /** optional plot type, selected from {@link Series.Series.plot Series.plot}; defaults to  `Series.plot.line` */
     type?:Plot;   
     /** style information to use for plotting; if ommitted, a `type`-dependent default is used */
@@ -203,12 +215,28 @@ export interface SeriesDef {
 }
 
 
-/** Defines configurable settings. */
+/** 
+ * Defines configurable settings. 
+ * Implemented as a class rather than interface to allow for a getter/setter implementation
+ * of `series`. This allows for postprocessing user configurations while maintaining 
+ * convenient notation, e.g.
+ * ```
+ *  cfg.series.series = [                               // invoke the setter
+ *      { cols: ['time', 'volume']},                    // behind the scenes, adds 
+ *      { cols: ['time', 'price']}                      // missing fields such as .style
+ *  ];
+ *  fg.series.series[0].style.marker.visible = true;    // invoke the getter
+ * ```
+ */
 export class SeriesConfig {
     private seriesDefs:SeriesDef[] = [];
 
-    /** the data set to plot, describing the column names and the rows-of-columns data */
-    public data: Data; 
+    /** 
+     * the `DataSet`s to be used for plots.
+     * Each set describes the column names and the rows-of-columns data.
+     * The `SeriesDef.dataIndex` determines which set to use.
+     */
+    public data: DataSet[]; 
 
     /** determines if seires plot will be clipped to the chart area */
     public clip = true;   
@@ -237,6 +265,7 @@ export class SeriesConfig {
         cfg.forEach((s:SeriesDef) => {
             s.type = s.type || Series.plot.line;
             s.style = s.style || <SeriesStyle>{};
+            s.dataIndex = s.dataIndex || 0;
             const defaults = {
                 color:defColors[this.seriesDefs.length]
             };

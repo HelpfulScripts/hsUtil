@@ -2,6 +2,12 @@
  * # Legend
  * renders the series' legend .
  * 
+ * ### Attributes
+ * The `Legend` class is called by {@link Graph.Graph `Graph`} as 
+ * `m(Legend, { cfg:cfg.legend })`
+ * with the following attributes:
+ * - cfg: a {@link Legend.LegendConfig LegendConfig} object
+ * 
  * ### Configurations and Defaults
  * See {@link Legend.Legend.defaultConfig Legend.defaultConfig}
  * 
