@@ -52,7 +52,7 @@ function categoryEntry(c:Category, list:EquityList, symbol:string) {
             list.removeItem(item); }
 
         const selected = (item.symbol === symbol)? '.hs-left-nav-selected' : '';
-        const unknown = item.company.sector? '' : '.hs-unkown-equity';
+        const unknown = item.company.primaryExchange? '' : '.hs-unkown-equity';
         return m(`.hs-left-nav-entry ${selected} ${unknown} ${item.shares>0?'.hs-owns-shares':''}`, [
             m('a', { href:`/site/View/${item.symbol}`, oncreate:m.route.link, onupdate:m.route.link }, [
                 item.shares?item.shares+' ':'', item.name
