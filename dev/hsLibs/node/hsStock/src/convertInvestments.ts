@@ -1,9 +1,11 @@
 import { hsExcel, fsUtil }  from 'hsnode';
 
-const srcDir = 'data/';
+//const srcDir = 'data/';
+const srcDir = '/Volumes/DataHD/private/Privat/privat/stuff/Konten/';
 const destDir = '../../../../staging/apps/hsStock/private/';    // password protected area
-const wb = hsExcel.readFile(srcDir+'investments.xlsx');
-const table = wb.getTable(wb.getSheetNames()[0], 'F', 9);
+const wb = hsExcel.readFile(srcDir+'Investments.xlsb');
+//const table = wb.getTable(wb.getSheetNames()[0], 'F', 9);
+const table = wb.getTable('WF US Amount', 'F', 9);
 
 const updateSymbols = {
     ERTS: 'EA',
