@@ -70,7 +70,7 @@ function navList(docSet:any, field:string):Vnode[] {
      * processes a module, i.e. a `.ts` file.
      */
     function externalModule(mdl:any) {
-        let selected;
+        let selected = false;
         if (field===''+mdl.id || field.indexOf(mdl.fullPath) === 0) { selected=true; }
 
         return m(Collapsible, {css:`.hs-left-nav-module`, isExpanded:selected, components:[
