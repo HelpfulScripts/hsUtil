@@ -41,7 +41,7 @@ log.prefix('XL');
  * @param name the name of the Excel file to read
  * @returns an object of functions providing access to the contents of the excel file.
  */
-export function readFile(name:string):ExcelFile { 
+export function readFile(name:string, options?:any):ExcelFile { 
     //----------- private methods ------------------
 	let workbook:WorkBook;
 	
@@ -223,7 +223,7 @@ export function readFile(name:string):ExcelFile {
         }
     }
 	log.debug('reading file ' + name);
-	workbook = XLSX.readFile(name);
+	workbook = XLSX.readFile(name, options);
 	return {
 		getSheetNames:		getSheetNames,
 		getTableColumns:	getTableColumns,
