@@ -242,6 +242,15 @@ export class EquityList {
             };
             cat.equities.push(item);
         });
+        categories.forEach((c:Category) => {
+            c.equities.sort((a:EquityItem, b:EquityItem) => {
+                if (a.shares > 0 || b.shares > 0) {
+                    const diff = (b.shares || 0) - (a.shares || 0);
+                    if (diff !== 0) { return diff; }
+                }
+                return (a.name < b.name) ? -1 : ((a.name > b.name) ? 1 : 0);
+            });
+        });
         return categories; 
     }
 
