@@ -17,3 +17,11 @@ export function save(data:any, fname:string):Promise<any> {
         return data;
     });
 }
+
+export function load(fname:string):Promise<any> {
+    return m.request({
+        method: 'GET',
+        url: fname                          // relative to 'apps/<APP>/
+    });
+}
+
