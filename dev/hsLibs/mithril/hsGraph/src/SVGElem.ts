@@ -237,7 +237,30 @@ export abstract class SVGElem {
      * @param id the unique clip-path id to use, or undefined
      * @param style an optional `style` attribute, e.g. to set the stroke and stroke-width.
      */
-    polygon(points:DataRow[], id:string, style?:string):Vnode {
+    polygon(dataFore:DataRow[], dataBack:DataRow[], x:number, yFore:number, yBack:number, scales:XYScale, id:string, style?:string):Vnode {
+        const sx = (x:number) => round(scales.x.convert(x));
+        const sy = (y:number) => round(scales.y.convert(y));
+        const clip = id? `url(#${id})` : undefined;
+        let points = dataFore.map((row:number[]) => `${sx(row[x])},${sy(row[yFore])}`).join(' ') + ' ';
+        points += yBack? 
+            dataBack.map((row:number[]) => `${sx(row[x])},${sy(row[yBack])}`).join(' ') :
+            `${sx((<number[]>dataBack[dataBack.length-1])[x])},${0} ${sx((<number[]>dataBack[0])[x])},${0}`;
+        return m('polygon', { 'clip-path': clip, style: style, points: points });
+    }
+
+    /**
+     * plots a shape from points in `data`. `x` and `y` are the indices to reference 
+     * the data for the x-axis, respectively the y-axis in each row in `data`. That is,
+     * plot `data[row][x] / data[row][y]` for all rows. 
+     * @param data an array of rows; each row is an array of data. The first row contains the 
+     * series names and will be skipped.
+     * @param x the index in each row to use as x coordinate
+     * @param y the index in each row to use as y coordinate
+     * @param scales the scales to use to convert coordinates into range values
+     * @param id the unique clip-path id to use, or undefined
+     * @param style an optional `style` attribute, e.g. to set the stroke and stroke-width.
+     */
+    shape(points:DataRow[], id:string, style?:string):Vnode {
         return m('polyline', { 
             'clip-path': id? `url(#${id})` : undefined,
             style: style,

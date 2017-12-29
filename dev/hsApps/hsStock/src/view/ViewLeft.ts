@@ -27,7 +27,7 @@ export const ViewLeft = {
 function navList(list:EquityList, symbol:string):Vnode[] {    
     /** process a category, e.g. `Stocks`. */
 
-    if (authenticated()) { getAssets(); }
+    if (authenticated()) { getAssets(list); }
     
     const cats = list.getCategories().map((c:Category) => categoryEntry(c,list,symbol));
     return m('.hs-left-nav-content', cats);
@@ -52,7 +52,7 @@ function categoryEntry(c:Category, list:EquityList, symbol:string) {
             list.removeItem(item); }
 
         const selected = (item.symbol === symbol)? '.hs-left-nav-selected' : '';
-        const unknown = item.company.primaryExchange? '' : '.hs-unkown-equity';
+        const unknown = (item.name !== item.symbol)? '' : '.hs-unkown-equity';
         return m(`.hs-left-nav-entry ${selected} ${unknown} ${item.shares>0?'.hs-owns-shares':''}`, [
             m('a', { href:`/site/View/${item.symbol}`, oncreate:m.route.link, onupdate:m.route.link }, [
                 item.shares?item.shares+' ':'', item.name
@@ -69,18 +69,19 @@ function categoryEntry(c:Category, list:EquityList, symbol:string) {
     ]});
 }
 
-function getAssets() {
+function getAssets(list:EquityList) {
     if (!gAssets) {
-        readAssets('private/transactions.json')
-        .then((list:TransactionList) => {
-            gAssets = list;
-            Object.keys(list).forEach((sym:string) => gEquityList.addItem({
-                symbol: sym,
-                cat: 'new',
-                name: sym,
-                shares: list[sym].latestShares,
-                trades: list[sym].trades
-            }));
+        readAssets()
+        .then((tlist:TransactionList) => {
+            gAssets = tlist;
+            Object.keys(tlist).forEach((sym:string) => {
+                let item:EquityItem = list.getItem(sym);
+                if (item.symbol === '????') {
+                    item = list.addItem({ symbol: sym, cat: 'new', name: sym });
+                }
+                item.shares = tlist[sym].latestShares;
+                item.trades = tlist[sym].trades;
+            });
         });
     }
 }

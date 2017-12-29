@@ -1,5 +1,5 @@
-12/27/17:   hsDoc
-left panel groups won't collapse; instead the first item is unintentionally chosen for display
+12/27/17    hsStock
+ViewLeft equity names wrap instead of showing ellipses 
 
 12/27/17    hsGraph:
 add 'cfg' option to Graph so configurations can be passed as {'cfg.chart.title.visible': false}
@@ -18,6 +18,9 @@ Modal form appears on left edge instead of center
 
 
 ==================================== fixed =====================================================
+
+12/27/17:   hsDoc
+left panel groups won't collapse; instead the first item is unintentionally chosen for display
 
 11/25/17    hsDoc
 Left navigation pane: rounded rects are sometimes interrupted with white corners

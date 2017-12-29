@@ -1,10 +1,42 @@
 /**
- * 
+ * # Data
  */
 
-import { DataRow, DataVal, Domain, DataSet,
-         ColSpecifier
-        } from './DataTypes'; 
+ /** */
+import { Condition, filter } from './DataFilters';
+
+/** defines a [min-max] range */
+export type NumRange = [number, number];
+
+/** defines a numeric domain that includes all values of a column */
+export type NumDomain = [number, number];
+
+/** defines a Date domain that includes all values of a column */
+export type DateDomain = [Date, Date];
+
+/** defines a categorical domain that includes all values of a column */
+export type NameDomain = string[];
+
+/** defines a generic domain that can be any of the typed domains. */
+export type Domain = NumDomain | DateDomain | NameDomain;
+
+/** defines a Column Specifier, either as column name or index in the {@link Data.DataRow `DataRow`} array */
+export type ColSpecifier = number|string;
+
+/** a generic data value type, used in the {@link Data.DataRow `DataRow`} array */
+export type DataVal = number|string|Date;
+
+/** a single row of column values */
+export type DataRow = DataVal[];
+
+/** a JSON format data set, using arrays of names and rows */
+export interface DataSet {
+    rows:DataRow[];
+    names:ColSpecifier[];   
+}
+
+/** a JSON format data set, using an array of {name:value, ...} literals*/
+export type DataLiteralSet = Array<any>;
 
 interface TypeStruct { type: string; count: number;};
 
@@ -16,7 +48,11 @@ interface MetaStruct {
     types:      TypeStruct[];   // data types, sorted by likelihood
 }
 
+
 export class Data {
+    //----------------------------
+    // public part
+    //----------------------------
     public static type = {
         number:     'number data',
         name:       'name data',
@@ -25,34 +61,17 @@ export class Data {
         percent:    'percent data',
         nominal:    'nominal data'
     };
-    private data: DataRow[]    = [];
-    private meta: MetaStruct[] = [];
 
-    private getMeta(col:ColSpecifier):MetaStruct { 
-        if (!this.meta) { this.meta = []; }
-        if (!this.meta[col]) { return undefined; }
-       	this.meta[col].accessed = true;
-        return this.meta[col]; 
+    public static toDataSet(data:DataLiteralSet):DataSet {
+        data = data || [{}];
+        const names = Object.keys(data[0]);
+        const rows = data.map((r:any) => 
+            names.map((n:string) => r[n]));
+        return { rows:rows, names:names };
     }
 
-    private addColumn(newCol:string):number {
-        var m = this.getMeta(newCol);
-        if (m === undefined) { 
-            m = this.meta[newCol] = <MetaStruct>{};
-            m.name   = newCol; 
-            m.column = this.meta.length;
-            this.meta.push(m);      // access name by both column name and index
-        }
-        m.cast 	   = false;         // has not been cast yet
-        m.accessed = false;         // has not been accessed yet
-        return this.meta.length-1;
-    }
-
-    //----------------------------
-    // public part
-    //----------------------------
     constructor(data?:DataSet) {
-        if (data) { this.import(data); }
+        this.import(data);
     }
 
     /**
@@ -119,72 +138,6 @@ export class Data {
         const meta = this.getMeta(col);
         return meta? meta.types[0].type : Data.type.name;
     }
-
-
-    /**
-     * Determines the type of data in `col`. An array of counts is created for all
-     * encountered types, sorted by descending frequency. THe most likely type in position 0
-     * of the array is returned.
-     * @param col the index of the column to be typed. 
-     * @return the most likely type of data in `col`.
-     */
-    private findTypes(col:ColSpecifier):string {
-        const m = this.getMeta(col);
-        const types:TypeStruct[] = [];
-        Object.keys(Data.type).forEach((t:string) => {
-            const ts = { type: Data.type[t], count: 0 }; 
-            types.push(ts);
-            types[Data.type[t]] = ts;
-        });
-        for (let v of this.allRows(col)) {
-            const t = this.findType(v);
-            if (t !== null) { types[t].count++; }
-        }
-        types.sort(function(a:TypeStruct, b:TypeStruct) { 
-            if (a.type==='currency'&&a.count>0) { return -1; }
-            if (b.type==='currency'&&b.count>0) { return 1; }
-            return b.count - a.count;
-        });
-        m.types = types;
-        return types[0].type;
-    }
-
-    /**
-     * @description determines the data type. Supported types are 
-     * ```
-     * 'date':    sample represents a Date, either as a Date object or a String 
-     * 'number':  sample represents a number
-     * 'percent': sample represents a percentage (special case of a real number)
-     * 'nominal': sample represents a nominal (ordinal or categorical) value
-     * ```
-     * @param val the value to bve typed.
-     * @returns the type ('number', 'date', 'percent', 'nominal', 'currency') corresponding to the sample
-     */
-    private findType(val:DataVal) {
-        if (val && val!=='') {
-            if (val instanceof Date) { return Data.type.date; }         // if val is already a date
-            if (typeof val === 'number') { return Data.type.number; }   // if val is already a number
-
-            // else: val is a string:
-            const strVal = ''+val;
-            if (strVal.startsWith('$') && !isNaN(parseFloat(strVal.slice(1)))) { return Data.type.currency; }
-            if (!isNaN(this.toDate(val).getTime()))	                           { return Data.type.date; }
-            if (val.endsWith('%') && !isNaN(parseFloat(val)))                  { return Data.type.percent; }
-
-            // european large number currency representation: '$dd,ddd[,ddd]'
-            if ((/^\$\d{0,2}((,\d\d\d)*)/g).test(val)) { 
-                if (!isNaN(parseFloat(val.trim().replace(/[^eE\+\-\.\d]/g, '').replace(/,/g, '')))) { 
-                    return Data.type.currency; 
-                }
-            }
-            switch (strVal.toLowerCase()) {
-                case "null": break;
-                case "#ref!": break;
-                default: if (val.length>0) { return Data.type.nominal; }
-            }
-        }
-        return null;
-    }    
 
     /**
      * modifies `domain` to include all values in column `col`.
@@ -255,6 +208,107 @@ export class Data {
             c.cast = true;
         });
     }
+
+    /**
+     * filters this data set and returns a new data set with a 
+     * shallow copy of rows that pass the `condition`.
+     * See @{link DataFilters DataFilters} for rules and examples on how to construct conditions.
+     * @param condition filters 
+     */
+    public filter(condition:Condition):Data {
+        return filter(this, condition);
+    }
+
+    //----------------------------
+    // private part
+    //----------------------------
+    private data: DataRow[]    = [];
+    private meta: MetaStruct[] = [];
+
+    private getMeta(col:ColSpecifier):MetaStruct { 
+        if (!this.meta) { this.meta = []; }
+        if (!this.meta[col]) { return undefined; }
+       	this.meta[col].accessed = true;
+        return this.meta[col]; 
+    }
+
+    private addColumn(newCol:string):number {
+        var m = this.getMeta(newCol);
+        if (m === undefined) { 
+            m = this.meta[newCol] = <MetaStruct>{};
+            m.name   = newCol; 
+            m.column = this.meta.length;
+            this.meta.push(m);      // access name by both column name and index
+        }
+        m.cast 	   = false;         // has not been cast yet
+        m.accessed = false;         // has not been accessed yet
+        return this.meta.length-1;
+    }
+
+    /**
+     * Determines the type of data in `col`. An array of counts is created for all
+     * encountered types, sorted by descending frequency. THe most likely type in position 0
+     * of the array is returned.
+     * @param col the index of the column to be typed. 
+     * @return the most likely type of data in `col`.
+     */
+    private findTypes(col:ColSpecifier):string {
+        const m = this.getMeta(col);
+        const types:TypeStruct[] = [];
+        Object.keys(Data.type).forEach((t:string) => {
+            const ts = { type: Data.type[t], count: 0 }; 
+            types.push(ts);
+            types[Data.type[t]] = ts;
+        });
+        for (let v of this.allRows(col)) {
+            const t = this.findType(v);
+            if (t !== null) { types[t].count++; }
+        }
+        types.sort(function(a:TypeStruct, b:TypeStruct) { 
+            if (a.type==='currency'&&a.count>0) { return -1; }
+            if (b.type==='currency'&&b.count>0) { return 1; }
+            return b.count - a.count;
+        });
+        m.types = types;
+        return types[0].type;
+    }
+
+    /**
+     * @description determines the data type. Supported types are 
+     * ```
+     * 'date':    sample represents a Date, either as a Date object or a String 
+     * 'number':  sample represents a number
+     * 'percent': sample represents a percentage (special case of a real number)
+     * 'nominal': sample represents a nominal (ordinal or categorical) value
+     * ```
+     * @param val the value to bve typed.
+     * @returns the type ('number', 'date', 'percent', 'nominal', 'currency') corresponding to the sample
+     */
+    private findType(val:DataVal) {
+        if (val && val!=='') {
+            if (val instanceof Date) { return Data.type.date; }         // if val is already a date
+            if (typeof val === 'number') { return Data.type.number; }   // if val is already a number
+
+            // else: val is a string:
+            const strVal = ''+val;
+            if (strVal.startsWith('$') && !isNaN(parseFloat(strVal.slice(1)))) { return Data.type.currency; }
+            if (!isNaN(this.toDate(val).getTime()))	                           { return Data.type.date; }
+            if (val.endsWith('%') && !isNaN(parseFloat(val)))                  { return Data.type.percent; }
+
+            // european large number currency representation: '$dd,ddd[,ddd]'
+            if ((/^\$\d{0,2}((,\d\d\d)*)/g).test(val)) { 
+                if (!isNaN(parseFloat(val.trim().replace(/[^eE\+\-\.\d]/g, '').replace(/,/g, '')))) { 
+                    return Data.type.currency; 
+                }
+            }
+            switch (strVal.toLowerCase()) {
+                case "null": break;
+                case "#ref!": break;
+                default: if (val.length>0) { return Data.type.nominal; }
+            }
+        }
+        return null;
+    }    
 
     /**
      * @param str the string to convert to a data

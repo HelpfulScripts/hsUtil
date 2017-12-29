@@ -41,11 +41,11 @@ export class CycleThrough {
 }
 
 
-export class MainDetails extends Layout {
+export class MainDetails extends Layout { 
     getComponents(node: Vnode): Vnode {
         const symbol  = m.route.param('symbol');
         const item:EquityItem = gEquityList.getItem(symbol);
-        const numQuotes = (item.quotes && item.quotes.getData())?item.quotes.getData().length:0;
+        const numQuotes = (item.quotes)?item.quotes.rows.length:0;
         const s = item.stats || {};
         const c =item.company || {};
         const divDate = (s.dividendRate && s.exDividendDate)? date('%MM/%D/%YY', new Date(s.exDividendDate.replace(' ','T'))) : '';

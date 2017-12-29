@@ -22,12 +22,15 @@ import { Config,
          VisibleCfg }   from './Graph';
 import { Data, DataSet }from 'hsdata';
 import { ColSpecifier } from 'hsdata';
+import { Condition }    from 'hsdata';
 import { SVGElem }      from './SVGElem';
 import { Axes }         from './Axes';
 import { XYScale }      from './AxesTypes';
 import { Plot }         from './Plot';
 import { PlotLine }     from './PlotLine';
+import { PlotMarkers }  from './PlotMarkers';
 import { PlotBar }      from './PlotBar';
+import { PlotArea }     from './PlotArea';
 
 
 function copyDefault(target:any, source:any, defaults:any) {
@@ -68,8 +71,10 @@ export class Series extends SVGElem {
      * - bar
      */
     static plot = {
-        line:   new PlotLine(),
-        bar:    new PlotBar()
+        line:    new PlotLine(),
+        marker:  new PlotMarkers(),
+        bar:     new PlotBar(),
+        area:    new PlotArea()
     };
 
     /** 
@@ -80,7 +85,7 @@ export class Series extends SVGElem {
      * ```
      *  cfg.series = {@link Series.SeriesConfig <SeriesConfig>}{
      *          // pool of `Data` sets to be plotted, initialized as `[]`
-     *      data: {@link Data.DataTypes.DataSet <DataSet[]>},     
+     *      data: {@link hsData:Data.DataSet <DataSet[]>},     
      *          // series an markers are clipped to the plot area
      *      clip: true,       
      *          // array of series descriptors, initialized to empty array (no series)
@@ -155,7 +160,8 @@ export class Series extends SVGElem {
         return m('svg', { class:'hs-graph-series'}, [
             this.drawClipRect(clipID, scales),
             m('svg', cfg.series.map((s:SeriesDef, i:number) => { 
-                return m('svg', {class:`hs-graph-series-${i}`}, s.type.plot(data[s.dataIndex], s, scales, i, clipID));
+                const d = s.cond? data[s.dataIndex].filter(s.cond) : data[s.dataIndex];
+                return m('svg', {class:`hs-graph-series-${i}`}, s.type.plot(d, s, scales, i, clipID));
             }))
         ]);
     }
@@ -174,7 +180,7 @@ export interface MarkerStyle extends ColoredCfg {
     /** the stroke width in px */
     size:  number;      
 
-    /** the marker shape, selected from {@link Series.marker Series.marker} */
+    /** the marker shape, selected from {@link Series.Series.marker Series.marker} */
     shape: Symbol;              
 }
 
@@ -212,6 +218,8 @@ export interface SeriesDef {
     type?:Plot;   
     /** style information to use for plotting; if ommitted, a `type`-dependent default is used */
     style?:SeriesStyle;
+    /** optinal filter condition on the data prior to drawing */
+    cond?: Condition;
 }
 
 
@@ -271,6 +279,20 @@ export class SeriesConfig {
             };
             copyDefault(s.style, defStyle, defaults);
             this.seriesDefs.push(s);
+            switch (s.type) {
+                case Series.plot.line: 
+                    s.style.line.visible = true; 
+                    break;
+                case Series.plot.marker: 
+                    s.style.marker.visible = true; 
+                    break;
+                case Series.plot.area: 
+                    s.style.fill.visible = true; 
+                    break;
+                case Series.plot.bar: 
+                    s.style.fill.visible = true; 
+                    break;
+            }
         });
     }
     public get series():SeriesDef[] { return this.seriesDefs; }

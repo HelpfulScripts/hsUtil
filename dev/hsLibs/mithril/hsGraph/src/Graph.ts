@@ -227,7 +227,8 @@ export class Graph extends SVGElem {
     }
 
     /**
-     * Makes adjustments to cfg based on current settings
+     * Makes adjustments to cfg based on current settings.
+     * Called just prior to drawing.
      * @param cfg the configuration object, containing default settings for all components
      */
     protected static adjustConfig(cfg:Config) {

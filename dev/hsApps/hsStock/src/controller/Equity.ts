@@ -1,6 +1,5 @@
 import { m }            from 'hslayout';
-import { Data,
-         DataSet }      from 'hsdata';
+import { DataSet }      from 'hsdata';
 import { Trader,
          TraderQuote }  from './Trader';
 import { ms }           from 'hsutil'; 
@@ -72,7 +71,7 @@ export interface EquityItem {
         /** date of dividend */
         exDividendDate?:    string;
     };
-    quotes?: Data;
+    quotes?: DataSet;
     otherStats?:  any;
 }
 
@@ -120,14 +119,14 @@ export class EquityList {
         return data;
     } 
 
-    private add(item:EquityItem) {
+    private add(item:EquityItem):EquityItem {
         item.invalid = item.invalid || {};
         const sym = item.symbol.toUpperCase();
         if (!this.bySymbol[sym]) {
             this.bySymbol[sym] = item;
-            this.getCategories()[item.cat].equities.push(item);
             this.loadMeta(item);
         }
+        return this.bySymbol[sym];
     };
 
     private remove(itemOrSymbol:EquityItem|string) {
@@ -144,20 +143,25 @@ export class EquityList {
     }
 
     private loadQuotes(item:EquityItem):Promise<EquityItem> {
-        const traderQuote2Dataset = (dataIn:TraderQuote[]) => {
-            const dataOut:Data = new Data();
-            dataOut.setData(
-                dataIn.map((e: TraderQuote) => [e.date.split('T')[0], e.open, e.close, e.high, e.low, e.volume]), 
-                ['Date', 'Open', 'Close', 'High', 'Low', 'Volume']);
-            return dataOut;
+        const traderQuote2Dataset = (dataIn:TraderQuote[]):DataSet => {
+            const names = ['Date', 'Open', 'Close', 'High', 'Low', 'Volume'];
+            const rows  = dataIn
+            .map((e: TraderQuote) => {
+                if (!e.open) { e.open = e.close; }
+                if (!e.high) { e.high = e.close; }
+                if (!e.low)  { e.low = e.close; }
+                return e;
+            })
+            .map((e: TraderQuote) => [e.date.split('T')[0], e.open, e.close, e.high, e.low, e.volume]);
+
+            return { names:names, rows:rows};
         };
-        if (item.quotes && item.quotes.getData && item.quotes.getData().length>0) {
+        if (item.quotes && item.quotes.rows.length>0) {
             return Promise.resolve(item);
         } 
-        item.quotes = new Data();
         return this.load(`${LOAD_PATH}/stock/quotes${item.symbol}.json`)
             .then((data:DataSet) => {
-                item.quotes.import(data);
+                item.quotes = data;
                 if (!isCurrentDate(<Date>data.rows[data.rows.length-1][0])) {
 
                 }
@@ -165,16 +169,29 @@ export class EquityList {
             })
             .catch(() => this.trader.getQuotes(item, '5y')
                         .then(traderQuote2Dataset)
-                        .then((data:Data) => {
+                        .then((data:DataSet) => {
                             item.quotes = data;
                             this.saveQuotes(item);
                             return item;
                         })
-            );
+            )
+            .then((item:EquityItem) => {
+                if (item.trades) {
+                    item.trades.forEach((trade:Transaction) => { 
+                        const row:any = item.quotes.rows.find((t:any) => {
+                            if (!(t[0] instanceof Date)) { t[0] = new Date(t[0]); }
+                            if (!(trade.date instanceof Date)) { trade.date = new Date(trade.date); }        
+                            return t[0]>trade.date;
+                        });
+                        trade.price = row? row[2] : item.quotes.rows[0][2];
+                    });
+                }    
+                return item;            
+            });
     }
 
     private saveQuotes(item:EquityItem):Promise<EquityItem> {
-        return save(item.quotes.export(), `${SAVE_PATH}/stock/quotes${item.symbol}.json`);
+        return save(item.quotes, `${SAVE_PATH}/stock/quotes${item.symbol}.json`);
     }
 
     private loadMeta(item:EquityItem):Promise<EquityItem> {
@@ -228,6 +245,16 @@ export class EquityList {
         }
         return this.unkownEquity();
     }
+    addItem(item:EquityItem):EquityItem {
+        item = this.add(item);
+        this.saveEquityList();
+        return item;
+    }
+    removeItem(itemOrSymbol:EquityItem|string) {
+        this.remove(itemOrSymbol);
+        this.saveEquityList();
+    }
+
     getCategories():Category[] { 
         const categories:Category[] = [];
         Object.keys(this.bySymbol).forEach((sym:string) => {
@@ -260,14 +287,6 @@ export class EquityList {
         else { return this.unkownEquity(); }
     }
 
-    addItem(item:EquityItem) {
-        this.add(item);
-        this.saveEquityList();
-    }
-    removeItem(itemOrSymbol:EquityItem|string) {
-        this.remove(itemOrSymbol);
-        this.saveEquityList();
-    }
     loadEquityList():Promise<any> {
         return this.load(`${LOAD_PATH}/${EQUITY_LIST}`)
         .catch(() => this.load(`${LOAD_PATH}/${DEF_EQUITY_LIST}`))

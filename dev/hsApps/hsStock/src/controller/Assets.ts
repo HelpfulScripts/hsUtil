@@ -1,5 +1,7 @@
 import { m } from 'hslayout';
 
+const assetFile = 'private/transactions.json';
+
 export interface Transaction {
     /** the equity symbol being traded */
     symbol: string;
@@ -7,6 +9,7 @@ export interface Transaction {
     date: Date;
     /** the numbermof shares being bought (positive) or sold (negative) */
     shares: number;
+    price?: number;
 }
 
 export interface TransactionList {
@@ -36,8 +39,8 @@ function fileToList(data:any):TransactionList {
     return list;
 }
 
-export function readAssets(file: string):Promise<TransactionList> {
-    return m.request({url: file})
+export function readAssets(): Promise<TransactionList> {
+    return m.request({url: assetFile})
     .then(fileToList)
     .catch(console.log);
 }
