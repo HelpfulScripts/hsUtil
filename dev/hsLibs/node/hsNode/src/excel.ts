@@ -254,10 +254,10 @@ export interface Table {
 }
 
 export interface ExcelFile {
-		getSheetNames:		() =>string[];
-		getTableColumns:	(sheetName:string, startCol?:string, row?:number) => TableStruct;
-		getRowsForTable:	(table:TableStruct, maxRows?:number) => DataRow[];
-		getTable:			(sheetName:string, startCol?:string, startRow?:number) => Table;
-		nextExcelColIndex:	(startCol?:string) => IterableIterator<string>;
-		getCellValue:		(sheet:string|WorkSheet, col:string, row:number) => string;		
+    getSheetNames:		() =>string[];
+    getTableColumns:	(sheetName:string, startCol?:string, row?:number) => TableStruct;
+    getRowsForTable:	(table:TableStruct, maxRows?:number) => DataRow[];
+    getTable:			(sheetName:string, startCol?:string, startRow?:number) => Table;
+    nextExcelColIndex:	(startCol?:string) => IterableIterator<string>;
+    getCellValue:		(sheet:string|WorkSheet, col:string, row:number) => string;		
 }
