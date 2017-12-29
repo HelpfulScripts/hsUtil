@@ -1,6 +1,7 @@
 import { TraderQuote,
          TraderReferences,
          TraderSymbol,
+         TraderSplit,
          TraderProfile } from './Trader';
 import { EquityItem }    from './Equity';
 
@@ -149,6 +150,14 @@ export class IexTrading implements TraderProfile {
         });
         return result;
     }
+
+    normalizeSplits = (data:IEXSplit[]): TraderSplit[] => {
+        if (data.length>0) {
+            data.forEach((t:IEXSplit) => t.date = new Date(t.exDate));
+            return data;
+        }
+        return undefined;
+    }
 };
 
 
@@ -253,13 +262,11 @@ interface IEXDividends {
                             // null = N/A or unknown
 }
 
-interface IEXSplits {
+export interface IEXSplit extends TraderSplit {
     exDate:         string;	// refers to the split ex-date
     declaredDate:   string;	// refers to the split declaration date
     recordDate:     string;	// refers to the split record date
     paymentDate:    string;	// refers to the split payment date
-    ratio:          number;	// refers to the split ratio. The split ratio is an inverse of the number of shares that a holder of the stock would have after the split divided by the number of shares that the holder had before. 
-                            // For example: Split ratio of .5 = 2 for 1 split.
     toFactor:       string;	// To factor of the split. Used to calculate the split ratio forfactor/tofactor = ratio (eg ½ = 0.5)
     forFactor:      string;	// For factor of the split. Used to calculate the split ratio forfactor/tofactor = ratio (eg ½ = 0.5)
 }

@@ -21,10 +21,12 @@ export interface TraderProfile {
     statsUrl:         (sym:string) => string;
     metaUrl:          (sym:string) => string;
     quoteUrl:         (sym:string) => string;
+    splitsUrl:        (sym:string) => string;
     normalizeStats:     (data:any, item:EquityItem) => EquityItem;
     normalizeMeta:      (data:any, item:EquityItem) => EquityItem;
     normalizeQuotes:  (data:any[]) => TraderQuote[];
     normalizeSymbols: (data:any[]) => TraderReferences;
+    normalizeSplits:  (data:TraderSplit[]) => TraderSplit[];
 }
 
 export interface TraderSymbol {
@@ -37,6 +39,12 @@ export interface TraderReferences {
     symbols:    string[];
     names:      string[];
     equities:   {string:TraderSymbol};
+}
+
+export interface TraderSplit {
+    date:           Date;
+    ratio:          number;	// refers to the split ratio. The split ratio is an inverse of the number of shares that a holder of the stock would have after the split divided by the number of shares that the holder had before. 
+                            // For example: Split ratio of .5 = 2 for 1 split.
 }
 
 
@@ -55,7 +63,7 @@ export class Trader {
         const url = this.trader.quoteUrl(item.symbol)+'/'+ date;
         if (item.invalid[this.trader.id]) { return Promise.resolve([]); }
         else {
-console.log(`getting ${url}`);        
+console.log(`getting Trader quotes ${url}`);        
             return m.request({ method: 'GET', url: url })
                 .then(this.trader.normalizeQuotes)
                 .catch((err:any):TraderQuote[] => {
@@ -63,6 +71,22 @@ console.log(`getting ${url}`);
                     console.log(err);
                     console.log(err.stack);
                     return [];
+                });
+        }
+    }
+
+    getSplits(item:EquityItem):Promise<TraderSplit[]> {
+        const url = this.trader.splitsUrl(item.symbol);
+        if (item.invalid[this.trader.id]) { return Promise.resolve(undefined); }
+        else {
+console.log(`getting Trader splits ${url}`);        
+            return m.request({ method: 'GET', url: url })
+                .then(this.trader.normalizeSplits)
+                .catch((err:any):TraderQuote[] => {
+                    console.log(`error requesting ${url}`);
+                    console.log(err);
+                    console.log(err.stack);
+                    return undefined;
                 });
         }
     }
@@ -75,36 +99,32 @@ console.log(`getting ${url}`);
 //            console.log(err.stack);
             return item;
         }
+
+        function getFromTrader(url:string, type:string, normalize:(data:any, item:EquityItem)=>EquityItem) {
+console.log(`getting ${type} from ${url}`);        
+            return queue.add((msDelay:number) => m.request({ method: 'GET', url: url}))
+            .catch((err:any) => metaError(type, stats, err, trader.id))
+            .then((data:any) => data? 
+                normalize(data, item) :
+                metaError(`${type}.then`, url, null, trader.id)
+            );
+        }
+
+        const trader = this.trader;
+        const queue = this.queue;
         const stats = this.trader.statsUrl(item.symbol);
         const meta  = this.trader.metaUrl(item.symbol);
-        if (item.invalid[this.trader.id]) { return Promise.resolve(item); }
-        else {
-console.log(`getting ${stats}\n   and ${meta}`);        
-            return Promise.all([
-                this.queue.add((msDelay:number) => m.request({ method: 'GET', url: stats}))
-                    .catch((err:any) => metaError('stats', stats, err, this.trader.id))
-                    .then((data:any) => data? 
-                        this.trader.normalizeStats(data, item) :
-                        metaError('stats.then', stats, null, this.trader.id)
-                    )
-                ,
-                this.queue.add((msDelay:number) => m.request({ method: 'GET', url: meta}))
-                    .catch((err:any) => metaError('meta', meta, err, this.trader.id))
-                    .then((data:any) => data?
-                        this.trader.normalizeMeta(data, item) :
-                        metaError('meta.then', stats, null, this.trader.id)
-                    )
+        return (item.invalid[trader.id])? Promise.resolve(item) :
+            Promise.all([
+                getFromTrader(stats, 'stats', trader.normalizeStats), 
+                getFromTrader(meta, 'meta', trader.normalizeMeta)
             ])
-            .then((data:any) => { 
-                console.log(data); 
-                return item;
-            });
-        }
+            .then(() => item);  // after all promises resolved, return item.
     }
 
     getSymbols():Promise<TraderReferences> {
         const url = this.trader.symbolsUrl();
-console.log(`getting ${url}`);        
+console.log(`getting Trader symbols ${url}`);        
         return m.request({ method: 'GET', url: url })
         .then(this.trader.normalizeSymbols)
         .catch((err:any) => {

@@ -4,7 +4,7 @@ import { gEquityList,
          EquityList }       from '../controller/Equity';
 import { Button }           from 'hswidget';
 import { TraderReferences } from '../controller/Trader';
-import { save }             from '../saveToFile';
+import { save }             from '../fileIO';
 
 
 let Symbols:string[] = []; 
@@ -23,13 +23,18 @@ export const ImportPane = {
 function buttons(list:EquityList) {
     return [
         m(Button, {name:'get IEX Symbols', onclick:readSymbols}),
+        m(Button, {name:'get Stock Splits', onclick:readSplits}),
         m(Button, {name:'Stock Import'}),
         m('', `${Symbols.length} records loaded`)
     ];
 }
 
+function readSplits() {
+    gEquityList.readSplits(); 
+}
+
 function readSymbols() {
-    gEquityList.getTrader().getSymbols()
+    EquityList.getTrader().getSymbols()
     .then((ref:TraderReferences) => {
         save(ref.equities, `hsStock/data/traderSymbols.json`);
     });
