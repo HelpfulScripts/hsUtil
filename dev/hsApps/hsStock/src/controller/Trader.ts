@@ -76,13 +76,15 @@ console.log(`getting Trader quotes ${url}`);
     }
 
     getSplits(item:EquityItem):Promise<TraderSplit[]> {
+        const trader = this.trader;
         const url = this.trader.splitsUrl(item.symbol);
         if (item.invalid[this.trader.id]) { return Promise.resolve(undefined); }
         else {
 console.log(`getting Trader splits ${url}`);        
             return m.request({ method: 'GET', url: url })
-                .then(this.trader.normalizeSplits)
+                .then(trader.normalizeSplits)
                 .catch((err:any):TraderQuote[] => {
+                    item.invalid[trader.id] = 'unknown';
                     console.log(`error requesting ${url}`);
                     console.log(err);
                     console.log(err.stack);

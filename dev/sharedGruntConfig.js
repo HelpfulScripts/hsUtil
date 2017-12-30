@@ -99,10 +99,10 @@ module.exports = (grunt, dir, dependencies, type) => {
                 src:['**/*'], dest:`node_modules/${libPath}/docs`
             },
 		    test: { files: [
-//                { expand:true, cwd:'_dist/',    
-//                    src:['*.js', '*.css', '*.html'], dest:'test/'
-//                },
-//                { cwd:'example/', expand:true, src:['*.json'], dest:'test/'}
+                { expand:true, cwd:'_dist/',    
+                    src:['*.js', '*.css', '*.html'], dest:'test/'
+                },
+                { cwd:'example/', expand:true, src:['*.json'], dest:'test/'}
             ]}
         },
         less: {

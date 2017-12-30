@@ -18,7 +18,7 @@ export interface Category {
 
 export interface ItemStats {
     /** date of stats */
-    latestDate?:        string;
+    latestDate?:        Date;
     latestPrice? :      number;
     /** number of shares traded */
     latestVolume?:      number;
@@ -40,13 +40,13 @@ export interface ItemStats {
     /** latest Earnings per Share */
     latestEPS?:         number;
     /** date of latest Earnings per Share */
-    latestEPSDate?:     string;
+    latestEPSDate?:     Date;
     /** dividend rate */
     dividendRate?:      number;
     /** dividend rate */
     dividendYield?:     number; 
     /** date of dividend */
-    exDividendDate?:    string;
+    exDividendDate?:    Date;
 }
 
 export interface EquityItem {
@@ -76,6 +76,7 @@ export interface EquityItem {
     quotes?: DataSet;
     otherStats?:  any;
     splits?: TraderSplit[];
+    changed?: boolean;
 }
 
 function isCurrentDate(date:string|Date):boolean {    
@@ -96,26 +97,40 @@ function saveQuotes(item:EquityItem):Promise<EquityItem> {
 
 /** saves equity inof to symXXX.json file, skipping the quotes */
 function saveMeta(item:EquityItem):EquityItem {
-    console.log(`saving stock/sym${item.symbol}.json`);
-    const quotes = item.quotes;
-    item.quotes = undefined;
-    save(item, `${SAVE_PATH}/stock/sym${item.symbol}.json`);
-    item.quotes = quotes;
+    if (item.changed) {
+        item.changed = undefined;
+        console.log(`saving stock/sym${item.symbol}.json`);
+        const quotes = item.quotes;
+        item.quotes = undefined;
+        save(item, `${SAVE_PATH}/stock/sym${item.symbol}.json`);
+        item.quotes = quotes;
+    }
     return item;
 }
 
 function getDataFromTrader(item:EquityItem) {
     console.log(`${item.symbol} id out of date`);
+    item.changed = true;
     return EquityList.getTrader().getMeta(item);
 };
 
 function outOfDate(data:EquityItem):boolean {
-    return (!data || !data.stats || !isCurrentDate(data.stats.latestDate));
+    if (data && data.stats) {
+        if (data.stats.latestDate === null) { 
+            data.stats.latestDate = new Date();
+            return false;
+        }
+        return isCurrentDate(data.stats.latestDate);
+    }
+    return true;
 }
 
 function setEquitySectorToCategory(item:EquityItem):EquityItem {
     if (item.company && item.company.sector) { 
-        item.cat = item.company.sector;
+        if (item.cat !== item.company.sector) {
+            item.cat = item.company.sector;
+            item.changed = true;
+        }
     }
     return item;
 }
@@ -176,8 +191,10 @@ function imputeTradesWithSharePrice(item:EquityItem):EquityItem {
             if (trade.price) {
                 if (typeof trade.price === 'string') {
                     trade.price = parseFloat(<string>trade.price);
+                    item.changed = true;
                 }
             } else {
+                item.changed = true;
                 const row:any = item.quotes.rows.find((t:any) => {
                     if (!(t[0] instanceof Date)) { t[0] = new Date(t[0]); }
                     return t[0]>trade.date;
@@ -289,7 +306,9 @@ export class EquityList {
     public readSplits() {
         Object.keys(this.bySymbol).forEach((sym:string) => {
             loadSplits(this.getItem(sym))
-            .then(saveMeta);
+            .then(saveMeta)
+            .then(applySplitsToTrades)  // new splits are only loaded upon specific request
+            ;
         });
     }
 

@@ -45,10 +45,10 @@ export class MainDetails extends Layout {
     getComponents(node: Vnode): Vnode {
         const symbol  = m.route.param('symbol');
         const item:EquityItem = gEquityList.getItem(symbol);
-        const numQuotes = (item.quotes)?item.quotes.rows.length:0;
+//        const numQuotes = (item.quotes)?item.quotes.rows.length:0;
         const s = item.stats || {};
         const c =item.company || {};
-        const divDate = (s.dividendRate && s.exDividendDate)? date('%MM/%D/%YY', new Date(s.exDividendDate.replace(' ','T'))) : '';
+        const divDate = (s.dividendRate && s.exDividendDate)? date('%MM/%D/%YY', new Date(s.exDividendDate)) : '';
         const pe = s.peRatio || round((s.latestPrice || 0) / s.latestEPS, 3);
         const latestDate = date('%MM/%DD/%YY: ', new Date(s.latestDate));
         const latestEPSDate = date('%MM/%D/%YY', new Date(s.latestEPSDate||0));
@@ -63,7 +63,7 @@ export class MainDetails extends Layout {
             fields: [
                 [`${item.cat}:`,                        c.sector],
                 ['Exchange:',                           c.primaryExchange],
-                ['# Quotes:',                           numQuotes]
+                ['Current Shares:',                     item.shares, `$${format(item.shares*(s.latestPrice || 0))}`]
         ]},{ 
             css:'', 
             fields: [
