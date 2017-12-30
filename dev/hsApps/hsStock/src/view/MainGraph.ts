@@ -9,6 +9,7 @@ import { Graph,
 import { gEquityList,
          EquityItem }   from '../controller/Equity';
 
+
 export class MainGraph extends Layout {
     getComponents(node: Vnode): Vnode { 
         const symbol = m.route.param('symbol');
@@ -18,7 +19,10 @@ export class MainGraph extends Layout {
 //        const cond:Condition = { Date: (d:Date) => d.getFullYear()>1900};
         const buyCond:Condition = { change: (c:number) => c>0};
         const sellCond:Condition = { change: (c:number) => c<0};
+        let limitDate = new Date('1/1/2015');
+        const timeCond:Condition = { Date: (d:Date) => d>limitDate};
         return [m(Graph, {cfgFn: (cfg:any) => {
+            cfg.graph.timeCond = timeCond;
             cfg.chart.title.visible = false;
             cfg.axes.primary.x.scale.type = Axes.type.date;
             cfg.axes.primary.x.title.visible = false;

@@ -132,6 +132,7 @@ export interface GraphConfig extends GraphBaseCfg {
         bottom: number;   
         right:  number;   
     };
+    timeCond: any;
 }
 
 /**
@@ -222,7 +223,8 @@ export class Graph extends SVGElem {
                 left: 10,   // viewBox units    
                 bottom: 10, // viewBox units    
                 right: 10   // viewBox units    
-            }
+            },
+            timeCond: {}
         };
     }
 
@@ -269,7 +271,8 @@ export class Graph extends SVGElem {
         if (!(cfg.series.data.length > 0)) {
             console.log('cfg.series.data not initialised with array of DataSets');
         }
-        return cfg.series.data.map((d:DataSet) => new Data(d));
+        const timeCond = cfg.graph.timeCond;
+        return cfg.series.data.map((d:DataSet) => new Data(d).filter(timeCond));
     }
 
     private createScales(axes:any):Scales {

@@ -100,9 +100,9 @@ module.exports = (grunt, dir, dependencies, type) => {
             },
 		    test: { files: [
                 { expand:true, cwd:'_dist/',    
-                    src:['*.js', '*.css', '*.html'], dest:'test/'
+                    src:['*.js', '*.css', '*.html'], dest:'_dist/test/'
                 },
-                { cwd:'example/', expand:true, src:['*.json'], dest:'test/'}
+                { cwd:'example/', expand:true, src:['*.json'], dest:'_dist/test/'}
             ]}
         },
         less: {

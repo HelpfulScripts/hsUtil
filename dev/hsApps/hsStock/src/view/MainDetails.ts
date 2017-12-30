@@ -40,6 +40,10 @@ export class CycleThrough {
     public get val() { return this.args[CycleThrough.state[this.key] || 0]; }
 }
 
+function ellipses(str:string, limit:number):string { 
+    return !str? str :
+        str.length<limit? str : str.slice(0, limit/2-2).trim() + '...' + str.slice(-limit/2+2).trim();
+}
 
 export class MainDetails extends Layout { 
     getComponents(node: Vnode): Vnode {
@@ -62,7 +66,7 @@ export class MainDetails extends Layout {
             css:'', 
             fields: [
                 [`${item.cat}:`,                        c.sector],
-                ['Exchange:',                           c.primaryExchange],
+                ['Exchange:',                           ellipses(c.primaryExchange, 18)],
                 ['Current Shares:',                     item.shares, `$${format(item.shares*(s.latestPrice || 0))}`]
         ]},{ 
             css:'', 
