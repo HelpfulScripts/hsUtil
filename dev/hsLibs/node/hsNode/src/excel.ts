@@ -131,12 +131,13 @@ export function readFile(name:string, options?:any):ExcelFile {
 	 * gets a table of values, starting at the startCol and startRow.
 	 * The table includes all consecutive columns with valid names, and all consecutive
 	 * rows with at least one valid cell value.
-	 * @param sheetName the sheet name from which to get the table
+	 * @param sheetID the sheet name or index from which to get the table
 	 * @param startCol determines the left edge of the table; defaults to 'A'
 	 * @param startRow determines the top edge of the table; defaults to 1
 	 * @returns a tuple of {columns, table} 
 	 */
-	function getTable(sheetName:string, startCol='A', startRow=1) {
+	function getTable(sheetID:string|number, startCol='A', startRow=1) {
+        const sheetName = (typeof sheetID === 'string')? sheetID : getSheetNames()[sheetID];
 		const columns:TableStruct = getTableColumns(sheetName, startCol, startRow);
 		const table:DataRow[]     = getRowsForTable(columns);
 		return {columns, table};
@@ -257,7 +258,7 @@ export interface ExcelFile {
     getSheetNames:		() =>string[];
     getTableColumns:	(sheetName:string, startCol?:string, row?:number) => TableStruct;
     getRowsForTable:	(table:TableStruct, maxRows?:number) => DataRow[];
-    getTable:			(sheetName:string, startCol?:string, startRow?:number) => Table;
+    getTable:			(sheetID:string|number, startCol?:string, startRow?:number) => Table;
     nextExcelColIndex:	(startCol?:string) => IterableIterator<string>;
     getCellValue:		(sheet:string|WorkSheet, col:string, row:number) => string;		
 }

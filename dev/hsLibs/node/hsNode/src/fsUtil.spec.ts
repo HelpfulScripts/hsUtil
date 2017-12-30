@@ -273,7 +273,7 @@ describe("hsFSutil", function() {
 			it('should reject', function(done) {
 				expect(called.resolved).not.toHaveBeenCalled();
 				expect(called.rejected).toHaveBeenCalled();
-				expect((called.getError()+'').startsWith('Error: ENOENT: no such file or directory')).toBe(true);
+				expect(called.getError()+'').toMatch(/Error: ENOENT: no such file or directory/);
 				done();
 			});
 		});

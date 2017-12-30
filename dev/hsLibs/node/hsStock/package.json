@@ -12,7 +12,8 @@
   "scripts": {
     "start": "grunt",
     "test": "ospec",
-    "convert": "node _dist/src/convertInvestments"
+    "convert": "node _dist/src/convertInvestments",
+    "import":  "node _dist/src/importQuotes"
   },
   "engines": {
     "node": ">= 0.10.0"
