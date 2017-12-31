@@ -16,7 +16,7 @@ const updateSymbols = {
 console.log(price.columns.names);
 
 function findSymCol(sym:string) {
-    return price.columns.names.findIndex(col => col === sym); 
+    return price.columns.names.indexOf(sym); 
 }
 
 function findPriceRow(date:Date, symCol:number) {

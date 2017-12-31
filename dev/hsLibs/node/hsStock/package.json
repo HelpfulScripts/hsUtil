@@ -13,7 +13,8 @@
     "start": "grunt",
     "test": "ospec",
     "convert": "node _dist/src/convertInvestments",
-    "import":  "node _dist/src/importQuotes"
+    "import":  "node _dist/src/importQuotes",
+    "debug": "node --inspect _dist/src/importQuotes"
   },
   "engines": {
     "node": ">= 0.10.0"

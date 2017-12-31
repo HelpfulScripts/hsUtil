@@ -224,9 +224,9 @@ function loadQuotes(item:EquityItem):Promise<EquityItem> {
 function applySplitsToTrades(item:EquityItem):EquityItem {    
     if (item.splits  && item.trades) {
         item.splits.forEach((split:TraderSplit) => {
-            if (typeof split.Date === 'string') { split.Date = new Date(split.Date); }
+            if (typeof split.date === 'string') { split.date = new Date(split.date); }
             item.trades.forEach((trade:Transaction) => {
-                if (trade.Date < split.Date) {
+                if (trade.Date < split.date) {
                     trade.price *= split.ratio;
                 }
             });

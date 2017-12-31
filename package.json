@@ -1,6 +1,6 @@
 {
   "Title": "generic modules",
-  "name": "hsGeneric",
+  "name": "hsgeneric",
   "version": "1.0.0",
   "author": {
     "name": "Hauke Schmidt",
@@ -8,8 +8,9 @@
   },
   "scripts": {
     "links": "./dev/createDevLinks.sh",
-    "server": "./srv/node/http"
-  },
+    "server": "./srv/node/http",
+    "debug": "node --debug _dist/src/importQuotes.js"
+},
   "engines": {
     "node": ">= 5.3.0"
   },

@@ -9,10 +9,12 @@
     margin:  0px;
 //    box-sizing: border-box;
     text-align: center;
+    vertical-align: middle;
 }
 
 .hs-button {
     .hs-abstract-button;
+    position: relative;
     padding: 5px;
     margin-left:    5px;
     margin-right:   5px;
@@ -39,7 +41,7 @@
         line-height: @ButtonHeight;
         background: linear-gradient(to bottom, #eee, #dde);
 //        background-color: @DeselectColor;
-        vertical-align: middle;
+//        vertical-align: middle;
         border-left: 0.5px solid #ccc;
         border-right: 0.5px solid #ccc;
 //        color: black;
@@ -64,7 +66,16 @@
     }
 }
 
-.hs-toggle-button {
+.hs-radio-buttons {
     .hs-button-group;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
+.hs-toggle-button {
+    .hs-button;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    span { 
+        vertical-align: middle; 
+        line-height: @ButtonHeight;
+    }
+}

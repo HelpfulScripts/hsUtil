@@ -8,7 +8,8 @@
 export { Menu }         from './Menu'; 
 export { SelectorDesc } from './Selector'; 
 export { Button,
-         RadioButtons } from './Button'; 
+         RadioButtons,
+         ToggleButton } from './Button'; 
 export { AddButton, 
          RemoveButton } from './AddRemove'; 
 export { Collapsible }  from './Collapsible'; 

@@ -1,18 +1,20 @@
 import { hsExcel, fsUtil }  from 'hsnode';
 import { DataRow }          from 'hsdata';
 
-const destDir = '../../../../staging/apps/hsStock/data/stock/';    // password protected area
-const srcDir  = '../../../../staging/apps/hsStock/import/';    // password protected area
+const destDir = '../../../../staging/apps/hsStock/data/stock/';    
+const srcDir  = '../../../../staging/apps/hsStock/import/';    
 
 function importYahooFile(files:string[]) {
     files
-    .filter((file:string) => file.match(/.xls/g))
+    .filter((file:string) => file.match(/.csv/g))
     .forEach((file:string) => {
         console.log(`reading '${srcDir+file}'`);
         const wb = hsExcel.readFile(srcDir+file);
-        const src = wb.getTable('AAPL'); // get first sheet in file
-        const sym = src.columns.sheetName+'.json';
-        const destFile = destDir+'quotes'+sym;
+        const src = wb.getTable('Sheet1'); // get first sheet in file
+//        const sym = src.columns.sheetName;
+        const sym = file.split('.')[0];
+console.log(sym);        
+        const destFile = destDir+'quotes'+sym+'.json';
         console.log(`augmenting '${destFile}'`);
         fsUtil.readJsonFile(destFile)
         .then((dest:any) => {
@@ -32,7 +34,8 @@ function importYahooFile(files:string[]) {
                 }
             });
             dest.rows.sort((a:string[], b:string[]) => a[0] < b[0]?-1 : (a[0] > b[0]? 1 : 0));
-console.log(`minDate: ${minDate}`);   
+console.log(`minDate: ${minDate}, writing ${destFile}`);   
+
             return fsUtil.writeJsonFile(destFile, dest);             
         });
 /*            

@@ -42,7 +42,7 @@ export interface TraderReferences {
 }
 
 export interface TraderSplit {
-    Date:           Date;
+    date:           Date;
     ratio:          number;	// refers to the split ratio. The split ratio is an inverse of the number of shares that a holder of the stock would have after the split divided by the number of shares that the holder had before. 
                             // For example: Split ratio of .5 = 2 for 1 split.
 }

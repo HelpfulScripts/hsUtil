@@ -34,12 +34,31 @@ export class RadioButtons extends Selector {
         desc.items = desc.items || [];
         desc.changed = desc.changed || ((item:string) => console.log(`missing changed() function for Button item ${item}`));
 
-        return m(`.hs-button-group ${css}`, m(Layout, {
+        return m(`.hs-radio-buttons ${css}`, m(Layout, {
             columns: [],
             content: desc.items.map((l:string, i:number) => this.renderItem(desc, i))
         }));
-
-//        return m('.hs-button-group', desc.items.map((l:string, i:number) => this.renderItem(desc, i)));        
     }
 }
 
+let toggleIndex = -1;
+
+export class ToggleButton extends Selector {
+    view(node: Vnode): Vnode {
+        this.updateSelected = oneOfItems;
+        const desc = node.attrs.desc;
+        node.attrs.desc = undefined;
+        const css = node.attrs.css || '';
+
+        desc.items = desc.items || [];
+        desc.changed = desc.changed || ((item:string) => console.log(`missing changed() function for Button item ${item}`));
+
+        if (toggleIndex<0) { toggleIndex = desc.items.indexOf(desc.selectedItem); }
+        const parentChanged = desc.changed;
+        desc.changed = ((item:string) => {
+            toggleIndex = (toggleIndex+1) % desc.items.length;
+            parentChanged(item);
+        });
+        return m(`.hs-toggle-button ${css}`, {desc:desc}, m('span', this.renderItem(desc, toggleIndex)));
+    }
+}

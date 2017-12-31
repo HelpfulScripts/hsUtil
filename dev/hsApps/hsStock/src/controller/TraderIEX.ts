@@ -153,7 +153,7 @@ export class IexTrading implements TraderProfile {
 
     normalizeSplits = (data:IEXSplit[]): TraderSplit[] => {
         if (data.length>0) {
-            data.forEach((t:IEXSplit) => t.Date = new Date(t.exDate));
+            data.forEach((t:IEXSplit) => t.date = new Date(t.exDate));
             return data;
         }
         return undefined;

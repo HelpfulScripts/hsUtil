@@ -54,11 +54,12 @@ export function readFile(name:string, options?:any):ExcelFile {
 	 */
 	function getCellValue(sheet:string|WorkSheet, col:string, row:number):string {
 		if (typeof sheet === 'string') { sheet = workbook.Sheets[sheet]; } 
-	    let c:CellObject;
+        let c:CellObject;
 		if (sheet[col+row] && sheet[col+row].v!=='') { 
-			c = sheet[col+row];
+            c = sheet[col+row];
+            let val = c.w!==undefined? c.w : c.v;
 			if (c) { switch(c.t) {
-				case 's': return c.w.replace(/,/g,';').replace(/[\n\r]+/g,' ').trim();
+				case 's': return (<string>val).replace(/,/g,';').replace(/[\n\r]+/g,' ').trim();
 				case 'n': /* falls through */ 
 				default: return c.w.replace(/,/g,'');
 			}}
@@ -165,7 +166,7 @@ export function readFile(name:string, options?:any):ExcelFile {
 	 * @returns an excel tabkle description
 	 */
 	function getTableColumns(sheetName:string, startCol='A', row=1):TableStruct {
-		let sheet:WorkSheet = workbook.Sheets[sheetName];
+        let sheet:WorkSheet = workbook.Sheets[sheetName];
 		return constructCol(sheetName, row, getConsecutiveColumnNames(sheet, row, startCol));
 	}
 	

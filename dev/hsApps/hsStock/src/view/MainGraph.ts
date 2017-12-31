@@ -3,22 +3,24 @@ import { Layout }       from 'hslayout';
 import { Data,
          DataSet }      from 'hsdata';
 import { Condition }    from 'hsdata';
-import { RadioButtons } from 'hswidget';
+//import { RadioButtons } from 'hswidget';
+import { ToggleButton } from 'hswidget';
 import { Graph,
          Series,
          Axes }         from 'hsgraph';
 import { gEquityList,
          EquityItem }   from '../controller/Equity';
 
-let limitDate = new Date('1/1/2015');
+let limitDate:Date;
 
 export class MainGraph extends Layout { 
     getComponents(node: Vnode): Vnode { 
-        const timeWindows = ['max', '5yr', '1yr', '1mo', '10d', '1d'];
+        const timeWindows = ['max', '10yr', '5yr', '1yr', '1mo', '10d', '1d'];
         const limitDates = [
-            new Date('1/1/1970'), new Date('1/1/2013'), new Date('1/1/2017'), new Date('12/1/2017'),
+            new Date('1/1/1990'), new Date('1/1/2007'), new Date('1/1/2013'), new Date('1/1/2017'), new Date('12/1/2017'),
             new Date('12/20/2017'),  new Date('12/29/2017')
         ];
+        if (!limitDate) { limitDate = limitDates[1]; }
         const symbol = m.route.param('symbol');
         const item:EquityItem = gEquityList.getItem(symbol);
         const data:DataSet = item.quotes? item.quotes : {names:['Date', 'Close'], rows:[['1/1/17',0], ['12/31/17', 1]]};
@@ -44,8 +46,8 @@ export class MainGraph extends Layout {
             cfg.series.series = [
                 { cols: ['Date', 'High', 'Low'], type: Series.plot.area },
                 { cols: ['Date', 'Close'], type: Series.plot.line },
-                { cols: ['date', 'price'], type: Series.plot.marker, dataIndex:1, cond:buyCond },
-                { cols: ['date', 'price'], type: Series.plot.marker, dataIndex:1, cond:sellCond }
+                { cols: ['Date', 'price'], type: Series.plot.marker, dataIndex:1, cond:buyCond },
+                { cols: ['Date', 'price'], type: Series.plot.marker, dataIndex:1, cond:sellCond }
             ];
             cfg.series.series[0].style.fill.color = '#ccf';
             cfg.series.series[1].style.line.color = '#008';
@@ -58,12 +60,14 @@ export class MainGraph extends Layout {
             cfg.series.series[3].style.marker.color = '#a00';
             cfg.series.series[3].style.marker.size = 8;
         }}),
-        m(RadioButtons, { 
+//        m(RadioButtons, { 
+        m(ToggleButton, { 
             css:'.hs-time-button', 
             desc: {
                 items:timeWindows, 
+                selectedItem: timeWindows[1],
                 changed: (item:string) => {
-                    const i = timeWindows.findIndex((t:string) => t===item);
+                    const i = (timeWindows.indexOf(item) + 1) % timeWindows.length;
                     limitDate = limitDates[i];
                 }
             }
