@@ -15,7 +15,7 @@
 import { m, Vnode }     from 'hslayout';
 import { Layout }       from 'hslayout';
 import { Selector }     from './Selector';
-import { anyItems }     from './Selector';
+import { oneOfItems }   from './Selector';
 
 export class Button {
     view(node: Vnode) {
@@ -24,9 +24,9 @@ export class Button {
     }
 }
 
-export class ToggleButton extends Selector {
+export class RadioButtons extends Selector {
     view(node: Vnode): Vnode {
-        this.updateSelected = anyItems;
+        this.updateSelected = oneOfItems;
         const desc = node.attrs.desc;
         node.attrs.desc = undefined;
         const css = node.attrs.css || '';

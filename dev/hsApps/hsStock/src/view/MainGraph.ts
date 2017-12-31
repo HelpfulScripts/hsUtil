@@ -3,16 +3,22 @@ import { Layout }       from 'hslayout';
 import { Data,
          DataSet }      from 'hsdata';
 import { Condition }    from 'hsdata';
-import { ToggleButton } from 'hswidget';
+import { RadioButtons } from 'hswidget';
 import { Graph,
          Series,
          Axes }         from 'hsgraph';
 import { gEquityList,
          EquityItem }   from '../controller/Equity';
 
+let limitDate = new Date('1/1/2015');
 
 export class MainGraph extends Layout { 
     getComponents(node: Vnode): Vnode { 
+        const timeWindows = ['max', '5yr', '1yr', '1mo', '10d', '1d'];
+        const limitDates = [
+            new Date('1/1/1970'), new Date('1/1/2013'), new Date('1/1/2017'), new Date('12/1/2017'),
+            new Date('12/20/2017'),  new Date('12/29/2017')
+        ];
         const symbol = m.route.param('symbol');
         const item:EquityItem = gEquityList.getItem(symbol);
         const data:DataSet = item.quotes? item.quotes : {names:['Date', 'Close'], rows:[['1/1/17',0], ['12/31/17', 1]]};
@@ -20,7 +26,7 @@ export class MainGraph extends Layout {
 //        const cond:Condition = { Date: (d:Date) => d.getFullYear()>1900};
         const buyCond:Condition = { change: (c:number) => c>0};
         const sellCond:Condition = { change: (c:number) => c<0};
-        let limitDate = new Date('1/1/2015');
+        
         const timeCond:Condition = { Date: (d:Date) => d>limitDate};
         return [m(Graph, {cfgFn: (cfg:any) => {
             cfg.graph.timeCond = timeCond;
@@ -52,11 +58,14 @@ export class MainGraph extends Layout {
             cfg.series.series[3].style.marker.color = '#a00';
             cfg.series.series[3].style.marker.size = 8;
         }}),
-        m(ToggleButton, { 
+        m(RadioButtons, { 
             css:'.hs-time-button', 
             desc: {
-                items:['yoyo', 'nana'], 
-                changed: (item:string) => {}
+                items:timeWindows, 
+                changed: (item:string) => {
+                    const i = timeWindows.findIndex((t:string) => t===item);
+                    limitDate = limitDates[i];
+                }
             }
         })];
     }     
