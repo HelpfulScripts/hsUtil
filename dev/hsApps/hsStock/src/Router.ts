@@ -1,6 +1,7 @@
 
-import { m }    from 'hslayout';
-import { Home } from './Home';
+import { m }        from 'hslayout';
+import { Home }     from './Home';
+import { Button }   from 'hswidget';
 
 //const SAVE_URL      = '/cgi/save.js';
 //const REGISTER_URL      = '/cgi/register.js';
@@ -37,10 +38,10 @@ const Auth = {
 
 const Login = {
     view: function() {
-        return m("form", [
-            m("input[type=text]",     {oninput: m.withAttr("value", Auth.setUsername), value: Auth.username}),
-            m("input[type=password]", {oninput: m.withAttr("value", Auth.setPassword), value: Auth.password}),
-            m("button[type=button]",  {onclick: Auth.login}, "Login"),
+        return m(".hs-form", [
+            m("input[type=text][placeholder='Name']",         {oninput: m.withAttr("value", Auth.setUsername), value: Auth.username}),
+            m("input[type=password][placeholder='Password']", {oninput: m.withAttr("value", Auth.setPassword), value: Auth.password}),
+            m(Button, {name:'Login', onclick:Auth.login})
         ]);
     }
 };

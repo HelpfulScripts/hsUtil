@@ -15,7 +15,7 @@ o.spec('hsMenu', () => {
     o.before(() => {
         const md = { 
             items: title,
-            select: (item:string) => { console.log('selected'); }
+            changed: (item:string) => { console.log('selected'); }
         };
         m.mount(o.root, {view: () => m(Menu, { desc: md }) }); 
         menu = o.root.childNodes[0];
@@ -31,9 +31,9 @@ o.spec('hsMenu', () => {
         const cn = menu.childNodes;
         o(cn.length).equals(4)("has 4 menu items");
         cn.forEach((c:any, i:any) => {
-            o(c.className.indexOf('hs-menu-item')).notEquals(-1)(`item ${i+1} menu-item class`);
+            o(c.className.indexOf('hs-selectable')).notEquals(-1)(`item ${i+1} menu-item class`);
             o(c.className.indexOf('hs-layout')).notEquals(-1)(`item ${i+1} layout class`);
-            o(c.className.includes('hs-menu-item-selected')).equals((i===0)?true:false)(`item ${i+1} selected class`);
+            o(c.className.includes('hs-selected')).equals((i===0)?true:false)(`item ${i+1} selected class`);
             o(c.style.left).equals(left[i])(`item ${i+1} left`);
             o(c.style.right).equals(right[i])(`item ${i+1} right`);
             o(c.style.top).equals('0%')(`item ${i+1} top`);

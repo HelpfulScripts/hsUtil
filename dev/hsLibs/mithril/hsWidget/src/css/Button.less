@@ -1,49 +1,70 @@
 @ButtonColor:    #48f;
 @ButtonIdleColor: #dde;
 @ButtonRadius:      6px;
+@SelectedColor: lighten(@ButtonColor, 20%);
+@ButtonHeight: 30px;
+@DeselectColor: #dde;
 
-.hs-button {
-    padding: 5px;
-    margin-top:    10px;
-    margin-bottom: 10px;
-    margin-left:    0px;
-    margin-right:   0px;
+.hs-abstract-button {
+    margin:  0px;
 //    box-sizing: border-box;
     text-align: center;
-    font-weight:bold;
-    background-color: @ButtonColor;
-    color: white;
-    border-radius: @ButtonRadius;
-
-    &:hover {
-        background-color: darken(@ButtonColor, 5%);
-    }
-
-    &:active {
-        background-color: lighten(@ButtonColor, 20%);
-    }
-
-    .hs-button-active {
-        background-color: lighten(@ButtonColor, 20%);
-    }
 }
 
-.hs-toggle-button {
-    .hs-button;
-    background-color: @ButtonIdleColor;
-    .hs-button-selected {
-        background-color: @ButtonColor;    
+.hs-button {
+    .hs-abstract-button;
+    padding: 5px;
+    margin-left:    5px;
+    margin-right:   5px;
+    height: @ButtonHeight;
+    border-radius: @ButtonRadius;
+    color: white;
+    font-weight:bold;
+    background-color: @ButtonColor;
+    &:hover {
+        background-color: darken(@ButtonColor, 5%);
     }
 }
 
 .hs-button-group {
-    overflow: hidden;
+//    overflow: hidden;
     border-radius: @ButtonRadius;
-    .hs-toggle-button {
-        border-radius: 0;
-        border-left: 1px solid #ccc;
-        border-right: 1px solid #ccc;
-        :first-child { border-left: none;  }
-        :last-child  { border-right: none; }
+    background-color: transparent;
+    position: relative;
+    height: @ButtonHeight;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    .hs-selectable {
+        .hs-abstract-button;
+        height:100%;
+        line-height: @ButtonHeight;
+        background: linear-gradient(to bottom, #eee, #dde);
+//        background-color: @DeselectColor;
+        vertical-align: middle;
+        border-left: 0.5px solid #ccc;
+        border-right: 0.5px solid #ccc;
+//        color: black;
+        &.hs-selected {
+            background: initial;
+            background-color: @ButtonColor;    
+            font-weight:bold;
+            color: white;
+        }
+    }
+    &>.hs-layout {
+        &>:first-child>.hs-selectable { 
+            border-left: none;  
+            border-top-left-radius: @ButtonRadius;
+            border-bottom-left-radius: @ButtonRadius;
+        }
+        &>:last-child>.hs-selectable  { 
+            border-right: none; 
+            border-top-right-radius: @ButtonRadius;
+            border-bottom-right-radius: @ButtonRadius;
+        }
     }
 }
+
+.hs-toggle-button {
+    .hs-button-group;
+}
+

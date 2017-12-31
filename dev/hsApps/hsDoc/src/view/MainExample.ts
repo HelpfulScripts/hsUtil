@@ -71,7 +71,7 @@
 
 /** */
 import { m }                from 'hslayout';
-import { Menu, MenuDesc }   from 'hswidget';
+import { Menu, SelectorDesc }   from 'hswidget';
 import { Layout }        from 'hslayout';
 import { shortCheckSum }    from 'hsutil'; 
 import { delay }            from 'hsutil'; 
@@ -86,7 +86,7 @@ import * as hsgraph         from 'hsgraph';
 interface CommentDescriptor { 
     exampleID: string;                  // example tag ID
     menuID:    string;                  // menu tag ID
-    desc:   MenuDesc;                   // menu items
+    desc:   SelectorDesc;                   // menu items
     pages:  {string?:string};           // page content for each menu item
     executeScript?: (root:any) => void; // the example code to execute
 }
@@ -151,10 +151,10 @@ function initDesc(fn:any):CommentDescriptor {
     return {
         exampleID:  getNewID(),    // example tag ID
         menuID:     getNewID(),    // main execution area tag ID
-        desc:<MenuDesc>{ 
+        desc:<SelectorDesc>{ 
             items:<string[]>[],
             selectedItem: 'js',
-            select: fn,
+            changed: fn,
             size: ["50px"]
         },
         pages:{}

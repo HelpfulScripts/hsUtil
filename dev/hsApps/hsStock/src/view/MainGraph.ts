@@ -3,6 +3,7 @@ import { Layout }       from 'hslayout';
 import { Data,
          DataSet }      from 'hsdata';
 import { Condition }    from 'hsdata';
+import { ToggleButton } from 'hswidget';
 import { Graph,
          Series,
          Axes }         from 'hsgraph';
@@ -10,7 +11,7 @@ import { gEquityList,
          EquityItem }   from '../controller/Equity';
 
 
-export class MainGraph extends Layout {
+export class MainGraph extends Layout { 
     getComponents(node: Vnode): Vnode { 
         const symbol = m.route.param('symbol');
         const item:EquityItem = gEquityList.getItem(symbol);
@@ -51,10 +52,12 @@ export class MainGraph extends Layout {
             cfg.series.series[3].style.marker.color = '#a00';
             cfg.series.series[3].style.marker.size = 8;
         }}),
-//            m(Collapsible, {css:'hs-stock-setting-overlay', components: [
-//                m('', 'Options:'),
-//                [m(Button, { name: 'option 1'}), m('', 'option 2')]
-//            ]})
-        ];
+        m(ToggleButton, { 
+            css:'.hs-time-button', 
+            desc: {
+                items:['yoyo', 'nana'], 
+                changed: (item:string) => {}
+            }
+        })];
     }     
 } 
