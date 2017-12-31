@@ -3,10 +3,10 @@ import { m } from 'hslayout';
 const assetFile = 'private/transactions.json';
 
 export interface Transaction {
+    /** the date of trade */
+    Date: Date;
     /** the equity symbol being traded */
     symbol: string;
-    /** the date of trade */
-    date: Date;
     /** the numbermof shares being bought (positive) or sold (negative) */
     shares: number;
     price?: number;
@@ -26,11 +26,15 @@ function fileToList(data:any):TransactionList {
     const list: TransactionList = {};
     Object.keys(data).forEach((sym:string) => {
         data[sym]
-        .map((entry:any) => { entry.date = new Date(entry.date); return entry; })
-        .sort((a:any, b:any)=> a.date < b.date);
+        .map((entry:any) => { 
+            entry.Date = new Date(entry.date); 
+            delete entry.date;
+            return entry; 
+        })
+        .sort((a:any, b:any)=> a.Date < b.Date);
         const latestTrade = data[sym][data[sym].length-1];
         list[sym] = {
-            latestDate:latestTrade.date,
+            latestDate:latestTrade.DAte,
             latestShares: latestTrade.total,
             trades:<Transaction[]>[]
         };

@@ -6,8 +6,8 @@ import { PacingQueue }       from 'hsutil';
 
 
 export interface TraderQuote {
+    Date:           string;
     close:          number;
-    date:           string;
     high:           number;
     low:            number;
     open:           number;
@@ -42,7 +42,7 @@ export interface TraderReferences {
 }
 
 export interface TraderSplit {
-    date:           Date;
+    Date:           Date;
     ratio:          number;	// refers to the split ratio. The split ratio is an inverse of the number of shares that a holder of the stock would have after the split divided by the number of shares that the holder had before. 
                             // For example: Split ratio of .5 = 2 for 1 split.
 }

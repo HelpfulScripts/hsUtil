@@ -136,7 +136,7 @@ export class IexTrading implements TraderProfile {
     }
 
     normalizeQuotes = (data:any[]):TraderQuote[] => {
-        data.sort((a:TraderQuote, b:TraderQuote) => Date.parse(a.date) - Date.parse(b.date));
+        data.sort((a:TraderQuote, b:TraderQuote) => Date.parse(a.Date) - Date.parse(b.Date));
 //console.log(`receiving stock quote for`);   
         return <IEXQuote[]>data;
     }
@@ -153,7 +153,7 @@ export class IexTrading implements TraderProfile {
 
     normalizeSplits = (data:IEXSplit[]): TraderSplit[] => {
         if (data.length>0) {
-            data.forEach((t:IEXSplit) => t.date = new Date(t.exDate));
+            data.forEach((t:IEXSplit) => t.Date = new Date(t.exDate));
             return data;
         }
         return undefined;

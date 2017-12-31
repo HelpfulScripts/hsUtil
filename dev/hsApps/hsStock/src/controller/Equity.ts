@@ -163,7 +163,7 @@ function traderQuote2Dataset(dataIn:TraderQuote[]):DataSet  {
         if (!e.low)  { e.low = e.close; }
         return e;
     })
-    .map((e: TraderQuote) => [e.date.split('T')[0], e.open, e.close, e.high, e.low, e.volume]);
+    .map((e: TraderQuote) => [e.Date.split('T')[0], e.open, e.close, e.high, e.low, e.volume]);
 
     return { names:names, rows:rows};
 };
@@ -187,7 +187,7 @@ function get5yrQuotesFromTrader(item:EquityItem) {
 function imputeTradesWithSharePrice(item:EquityItem):EquityItem {
     if (item.trades) {
         item.trades.forEach((trade:Transaction) => { 
-            if (!(trade.date instanceof Date)) { trade.date = new Date(trade.date); }        
+            if (!(trade.Date instanceof Date)) { trade.Date = new Date(trade.Date); }        
             if (trade.price) {
                 if (typeof trade.price === 'string') {
                     trade.price = parseFloat(<string>trade.price);
@@ -197,7 +197,7 @@ function imputeTradesWithSharePrice(item:EquityItem):EquityItem {
                 item.changed = true;
                 const row:any = item.quotes.rows.find((t:any) => {
                     if (!(t[0] instanceof Date)) { t[0] = new Date(t[0]); }
-                    return t[0]>trade.date;
+                    return t[0]>trade.Date;
                 });
                 trade.price = row? row[2] : 20;
             }
@@ -224,9 +224,9 @@ function loadQuotes(item:EquityItem):Promise<EquityItem> {
 function applySplitsToTrades(item:EquityItem):EquityItem {    
     if (item.splits  && item.trades) {
         item.splits.forEach((split:TraderSplit) => {
-            if (typeof split.date === 'string') { split.date = new Date(split.date); }
+            if (typeof split.Date === 'string') { split.Date = new Date(split.Date); }
             item.trades.forEach((trade:Transaction) => {
-                if (trade.date < split.date) {
+                if (trade.Date < split.Date) {
                     trade.price *= split.ratio;
                 }
             });
