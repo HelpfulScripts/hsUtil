@@ -28,8 +28,8 @@
  * function myConfig(cfg) {
  *      cfg.series.data   = [series];
  *      cfg.series.series = [
- *          { cols: ['time', 'volume']},
- *          { cols: ['time', 'price']}
+ *          { x:'time', y:'volume']},
+ *          { x:'time', y:'price']}
  *      ];
  *      cfg.series.series[0].style.marker.visible = true;
  *      cfg.series.series[1].style.marker.visible = true;
@@ -66,7 +66,6 @@
 import { m, Vnode}      from 'hslayout';
 import { Data, 
          DataSet,
-         ColSpecifier,
          NumDomain }    from 'hsdata';
 import { Axes }         from './Axes';
 import { AxesConfig,
@@ -348,17 +347,13 @@ export class Graph extends SVGElem {
      * determines the max ranges each coordinate of each series and auto-sets the domains on the respective scales. 
      */
     adjustDomains(cfg:SeriesConfig, scales:Scales, data:Data[]) {
-        let domainDims = 0;
-        cfg.series.forEach((s:SeriesDef) => 
-            domainDims = Math.max(domainDims,s.cols.length)
-        );
-
-        const domains:NumDomain[] = Array(domainDims).fill(1).map(() => <NumDomain>[1e20, -1e20]);
+        const domains = <NumDomain[]>[[1e20, -1e20], [1e20, -1e20]];
     
         cfg.series.map((s:SeriesDef) => { // for each series:
-            s.cols.forEach((colIdx:ColSpecifier, i:number) => {
-                data[s.dataIndex].findDomain(colIdx, domains[i]);
-            });
+            if (s.x)  { data[s.dataIndex].findDomain(s.x, domains[0]); }
+            if (s.y)  { data[s.dataIndex].findDomain(s.y, domains[1]); }
+            if (s.yh) { data[s.dataIndex].findDomain(s.yh, domains[1]); }
+            if (s.yl) { data[s.dataIndex].findDomain(s.yh, domains[1]); }
         });
         scales.primary.x.setAutoDomain(domains[0]);
         scales.primary.y.setAutoDomain(domains[1]);

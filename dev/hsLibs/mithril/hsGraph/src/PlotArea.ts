@@ -21,7 +21,7 @@
  *      view:() => m(hsgraph.Graph, {cfgFn: cfg => {
  *          cfg.chart.title.text          = 'Simple Example';
  *          cfg.series.data   = [series];
- *          cfg.series.series = [{ cols: ['time', 'volume'] }];
+ *          cfg.series.series = [{ x:'time', y:'volume' }];
  *      }})
  * });
  *
@@ -48,15 +48,13 @@ export class PlotArea extends Plot {
     }
 
     plot(data:Data, series:SeriesDef, scales:XYScale, i:number, clipID:string): Vnode[] {
-        const x = data.colNumber(series.cols[0]);
-        const y0 = data.colNumber(series.cols[1]);
-        const y1 = data.colNumber(series.cols[2]);  // or undefined
-        if (x===undefined) { 
-            return m('.error','');
-        } else if (y0===undefined) { 
-            return m('.error','');
-        } else { return [
-            this.drawArea(clipID, data.getData(), x, y0, y1, scales, series.style),
-        ];}
+        const x = data.colNumber(series.x);
+        const yh = data.colNumber(series.yh);
+        const yl = data.colNumber(series.yl);  // or undefined
+        if (x===undefined) { return m('.error',''); }
+        if (yh===undefined) { return m('.error',''); }
+        return [
+            this.drawArea(clipID, data.getData(), x, yh, yl, scales, series.style),
+        ];
     }
 }

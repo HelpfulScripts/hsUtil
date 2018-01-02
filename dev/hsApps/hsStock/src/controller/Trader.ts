@@ -1,12 +1,15 @@
-import { m }                from 'hslayout';
-import { TraderReferences } from './Trader';
-import { IexTrading }       from './TraderIEX';
-import { EquityItem }       from './Equity';
-import { PacingQueue }       from 'hsutil';
-
+import { IexVenue }         from './VenueIEX';
+import { EquityItem }       from './Equities';
+import { EquitySplit }      from './Equities';
+import { Venues,
+         VenueSignature,
+         VenueSummary }     from './Venue';
+import { ms }               from 'hsutil';
+import { DataSet }          from 'hsdata';
+import { load, save }       from '../fileIO';
 
 export interface TraderQuote {
-    Date:           string;
+    Date:           Date;
     close:          number;
     high:           number;
     low:            number;
@@ -14,125 +17,216 @@ export interface TraderQuote {
     volume:         number;
 }
 
-export interface TraderProfile {
-    id:     string;
-    base:   string;
-    symbolsUrl:                 () => string;
-    statsUrl:         (sym:string) => string;
-    metaUrl:          (sym:string) => string;
-    quoteUrl:         (sym:string) => string;
-    splitsUrl:        (sym:string) => string;
-    normalizeStats:     (data:any, item:EquityItem) => EquityItem;
-    normalizeMeta:      (data:any, item:EquityItem) => EquityItem;
-    normalizeQuotes:  (data:any[]) => TraderQuote[];
-    normalizeSymbols: (data:any[]) => TraderReferences;
-    normalizeSplits:  (data:TraderSplit[]) => TraderSplit[];
+export interface TraderIntraday {
+    Date:           Date;
+    high:           number;
+    low:            number;
 }
 
 export interface TraderSymbol {
     symbol: string;
-    name:   string;
+    name:   string;  
+}
+
+
+/** converts and imputates trader quotes to a DataSet */
+export function traderQuote2Dataset(dataIn:any[]):DataSet  {
+    const names = ['Date', 'Open', 'Close', 'High', 'Low', 'Volume'];
+    if (dataIn.length === 0) {
+        console.log(`received no quotes ${(<any>dataIn).url}`);
+        return { names:names, rows:[]};
+    } else {
+        const rows  = dataIn
+        .filter((e:any) => e.date)
+        .map((e: any) => {
+            if (e.minute) {
+                const date = e.date? new Date(e.date + ' ' + e.minute) : undefined;
+                return [
+                    date, 
+                    e.marketHigh,
+                    e.marketLow
+                ];
+            } else {
+                return [
+                    e.date? new Date(e.date) : undefined,
+                    e.close,
+                    e.high || e.close,
+                    e.low  || e.close,
+                    e.open || e.close,
+                    e.volume
+                ];
+            }
+        });
+        return { names:names, rows:rows};
+    }
+};
+
+
+export class Trader { 
+    //------  static  parts -----
+    /** accessible by index, or by Venues.***  */
+    private static venues:VenueSignature[] = Trader.createVenues();
     
-}
-
-export interface TraderReferences {
-    symbols:    string[];
-    names:      string[];
-    equities:   {string:TraderSymbol};
-}
-
-export interface TraderSplit {
-    date:           Date;
-    ratio:          number;	// refers to the split ratio. The split ratio is an inverse of the number of shares that a holder of the stock would have after the split divided by the number of shares that the holder had before. 
-                            // For example: Split ratio of .5 = 2 for 1 split.
-}
-
-
-
-export class Trader {
-    private trader: TraderProfile;
-    private queue = new PacingQueue(50);
-    constructor(trader='iexTrading') { 
-        switch (trader) {
-            case 'iexTrading':
-            default: this.trader = new IexTrading(); 
-        }
+    private static createVenues():VenueSignature[] {
+        const vns:VenueSignature[] = [];
+        vns.push(vns[Venues.IEX] = new IexVenue());
+        return vns;
     }
 
-    getQuotes(item:EquityItem, date:string):Promise<TraderQuote[]> {
-        const url = this.trader.quoteUrl(item.symbol)+'/'+ date;
-        if (item.invalid[this.trader.id]) { return Promise.resolve([]); }
-        else {
-console.log(`getting Trader quotes ${url}`);        
-            return m.request({ method: 'GET', url: url })
-                .then(this.trader.normalizeQuotes)
-                .catch((err:any):TraderQuote[] => {
-                    console.log(`error requesting ${url}`);
-                    console.log(err);
-                    console.log(err.stack);
-                    return [];
+    /**
+     * load local venbue desciptor and update venue fields
+     * data: { venueName:[TraderSymbol] }
+     */
+    private static updateLocalVenues(data:{string:TraderSymbol[]}) {
+        Object.keys(data).map((ven:string) => {
+            if (Trader.venues[ven]) {
+                const v:VenueSummary = Trader.venues[ven].summary;
+                data[ven].map((e:TraderSymbol) => {
+                    v.symbols.push(e.symbol);
+                    v.names.push(e.name);
+                    v.equities[e.symbol] = e;
                 });
-        }
+            } else {
+                console.log(`unknown venue ${ven}`);
+            }
+        });
     }
 
-    getSplits(item:EquityItem):Promise<TraderSplit[]> {
-        const trader = this.trader;
-        const url = this.trader.splitsUrl(item.symbol);
-        if (item.invalid[this.trader.id]) { return Promise.resolve(undefined); }
-        else {
-console.log(`getting Trader splits ${url}`);        
-            return m.request({ method: 'GET', url: url })
-                .then(trader.normalizeSplits)
-                .catch((err:any):TraderQuote[] => {
-                    item.invalid[trader.id] = 'unknown';
-                    console.log(`error requesting ${url}`);
-                    console.log(err);
-                    console.log(err.stack);
-                    return undefined;
-                });
+    private static saveLocalVenues(savePath:string) {
+        const venues = {};
+        Trader.venues.map((v:VenueSignature) => {
+            Trader.venues[v.summary.venue.id] = Object.keys(v.summary.equities).map((sym:string) => v.summary.equities[sym]);
+        });
+        return save(venues, savePath)
+        .catch(console.log);
+    }
+    
+/*
+    private static isInvalidTrader(item:EquityItem) {
+        return item.invalid && item.invalid[Trader.venues[0].summary.venue.id];
+    }
+
+*/
+
+    /**
+     * adds quotes to item.intraday; overwriting item.intraday. 
+     * @param quotes 
+     * @param item 
+     */
+    private static addIntraday(quotes:TraderIntraday[], item:EquityItem):EquityItem {
+        const names = ['Date', 'High', 'Low'];
+        const rows  = quotes.map((t:TraderIntraday) => [t.Date, t.high, t.low]);
+        item.intraday = {names:names, rows:rows};
+        return item;
+    }
+
+    /**
+     * adds quotes to item.quotes; creating item.quotes if undefined. 
+     * @param quotes 
+     * @param item 
+     */
+    private static addQuotes(quotes:TraderQuote[], item:EquityItem):EquityItem {
+        let lastItemDate = new Date('1/1/1980');
+        if (!item.quotes) {
+            item.quotes = {
+                names: ['Date','Open','Close','High','Low','Volume'],
+                rows: []
+            };
         }
+        const dCol = item.quotes.names.indexOf('Date');
+        if (item.quotes.rows.length > 0) {
+            const latestRow = item.quotes.rows[item.quotes.rows.length-1];
+            lastItemDate = (typeof latestRow[dCol] === 'string')? new Date(latestRow[dCol]) : lastItemDate;
+        }
+        quotes
+            .sort((a:TraderQuote, b:TraderQuote) => a.Date.getTime() - b.Date.getTime())
+            .map((q:TraderQuote) => {               // copy rows to item.quotes
+                if (q.Date > lastItemDate) { 
+                    item.quotes.rows.push([q.Date, q.open, q.close, q.high, q.low, q.volume]);
+                }
+            });
+        if (item.quotes.rows.length > 0) {  // update item.stats
+            const vCol = item.quotes.names.indexOf('Volume');
+            const latestRow = item.quotes.rows[item.quotes.rows.length-1];
+            item.stats.closeVolume = <number>latestRow[vCol];
+            item.stats.closeDate   = <Date>latestRow[dCol];
+        }
+        return item;
+    }
+ 
+    //------  private  parts -----
+
+
+    //------  public  parts -----
+
+    static invalidateTrader(item:EquityItem, venue:Venues) {
+        if (item.venues[venue]) { 
+            delete item.venues[venue]; 
+            item.changed = true;
+        }
+    }
+    constructor(loadPath:string, savePath:string, file:string) {
+        load(loadPath+file)
+        .then(Trader.updateLocalVenues)
+        .catch(() => {
+            Promise.all(Trader.venues.map((v:VenueSignature) => v.requestVenueSymbols()))
+            .catch(console.log)
+            .then(()=> savePath+file)
+            .then(Trader.saveLocalVenues);
+        });      
+    }
+
+    lastMarketUpdate(): Promise<Date> {
+        return Trader.venues[0].requestMarketUpdate();
+    }
+
+    /** 
+     * initiates remote requests to the venues and updates `item` accordingly.
+     * If `missingDays` is 1, intraday quotes will be requested.
+     * Otherwise, appropriate daily quotes are requested to fill `item.quotes` as needed,
+     * with a maximum of `missingDays`, if specified,
+     * and intraday quoates will not be requested.
+     * 
+     * @return fully updated `item` as requested.
+     */
+    getQuotes(item:EquityItem, missingDays?:number):Promise<EquityItem> {
+        function adjustMissingDays(item:EquityItem):number {
+            if (item.quotes.rows.length === 0) {
+                return 10000;
+            } else {
+                const dCol      = item.quotes.names.indexOf('Date');
+                const latestRow = item.quotes.rows[item.quotes.rows.length-1];
+                return ms.toDays(new Date().getTime() - new Date(latestRow[dCol]).getTime());
+            }
+        }
+        if (!item.venues) { item.venues = [Venues.IEX]; };
+
+        if (missingDays <= 1) { 
+            return Trader.venues[item.venues[0]].requestIntraday(item)
+                .then((q:TraderIntraday[]) => Trader.addIntraday(q, item));
+        } else {
+            missingDays = adjustMissingDays(item);
+            return Trader.venues[item.venues[0]].requestQuotes(item, missingDays)
+                .then((q:TraderQuote[]) => Trader.addQuotes(q, item));
+        }
+
+    }
+
+    getSplits(item:EquityItem):Promise<EquitySplit[]> {
+        return Trader.venues[item.venues[0]].requestSplits(item);
     }
 
     getMeta(item:EquityItem):Promise<EquityItem> {
-        function metaError(type:string, url:string, err:any, id:string) {
-            item.invalid[id] = 'unknown';
-            console.log(`getMeta error in ${type} requesting ${url}`);
-            console.log(err);
-//            console.log(err.stack);
-            return item;
-        }
-
-        function getFromTrader(url:string, type:string, normalize:(data:any, item:EquityItem)=>EquityItem) {
-console.log(`getting ${type} from ${url}`);        
-            return queue.add((msDelay:number) => m.request({ method: 'GET', url: url}))
-            .catch((err:any) => metaError(type, stats, err, trader.id))
-            .then((data:any) => data? 
-                normalize(data, item) :
-                metaError(`${type}.then`, url, null, trader.id)
-            );
-        }
-
-        const trader = this.trader;
-        const queue = this.queue;
-        const stats = this.trader.statsUrl(item.symbol);
-        const meta  = this.trader.metaUrl(item.symbol);
-        return (item.invalid[trader.id])? Promise.resolve(item) :
-            Promise.all([
-                getFromTrader(stats, 'stats', trader.normalizeStats), 
-                getFromTrader(meta, 'meta', trader.normalizeMeta)
-            ])
-            .then(() => item);  // after all promises resolved, return item.
+        return Trader.venues[item.venues[0]].requestMeta(item);
     }
 
-    getSymbols():Promise<TraderReferences> {
-        const url = this.trader.symbolsUrl();
-console.log(`getting Trader symbols ${url}`);        
-        return m.request({ method: 'GET', url: url })
-        .then(this.trader.normalizeSymbols)
-        .catch((err:any) => {
-            console.log(`error requesting ${url}`);
-            console.log(err);
-            console.log(err.stack);
-        });
+    getSymbols():Promise<VenueSummary> {
+        return Trader.venues[0].requestSymbols();
     }
+
+    /*
+
+
+
+*/
 }

@@ -25,7 +25,7 @@ attribute with the graph's configuration.
  *      view:() => m(hsgraph.Graph, {cfgFn: cfg => {
  *          cfg.chart.title.text          = 'Simple Example';
  *          cfg.series.data   = [data];
- *          cfg.series.series = [{ cols: ['time', 'volume'] }];
+ *          cfg.series.series = [{ x:'time', y:'volume' }];
  *      }})
  * });
  *

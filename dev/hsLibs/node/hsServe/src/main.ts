@@ -1,5 +1,6 @@
 const os      	= require("os");
 import { log }      from "hsnode";
+import { ms }       from "hsutil";
 import { server }   from "./server";
 
 log.prefix('main');
@@ -10,7 +11,7 @@ const LOG_NAME_CHECK = 1; // hours between logfile name checks
 
 function setLogFile() {
 	log.logFile(__dirname+'/serverlogs/' + os.hostname() + '-%YYYY-%MM-%DD.txt'); // local to the script source
-	setTimeout(setLogFile, LOG_NAME_CHECK*60*60*1000);
+	setTimeout(setLogFile, ms.fromHours(LOG_NAME_CHECK));
 }
 
 export function start() {

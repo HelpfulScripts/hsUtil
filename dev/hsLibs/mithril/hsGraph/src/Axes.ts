@@ -28,8 +28,8 @@
  * function myConfig(cfg) {
  *      cfg.series.data   = [series];
  *      cfg.series.series = [
- *          { cols: ['time','volume']},
- *          { cols: ['time', 'price']}
+ *          { x:'time', y:'volume'},
+ *          { x:'time', y:'price'}
  *      ];
  *      cfg.series.series[0].style.marker.visible = true;
  *      cfg.series.series[1].style.marker.visible = true;
@@ -75,6 +75,8 @@ import { Config,
 import { Scale }    from './Scale';
 import { Domain }   from 'hsdata';
 import { SVGElem, 
+         TextHAlign,
+         TextVAlign,
          Area }     from './SVGElem';
 
 
@@ -201,8 +203,8 @@ export class Axes extends SVGElem {
         function labelCfg(primary:boolean, x:boolean, major:boolean):LabelCfg {
             return { 
                 visible: major, text: '',
-                xpos: x? 'middle' : (primary? 'end' : 'start'),
-                ypos: x? (primary? 'top' : 'bottom') : 'center', 
+                xpos: x? TextHAlign.middle : (primary? TextHAlign.end : TextHAlign.start),
+                ypos: x? (primary? TextVAlign.top : TextVAlign.bottom) : TextVAlign.center, 
                 hOffset: x? 0 : (primary? -0.7 : 0.7), 
                 vOffset: x? (primary? 0.7 : -0.7) : 0
             }; 
@@ -216,8 +218,8 @@ export class Axes extends SVGElem {
         function titleCfg(primary:boolean, x:boolean):LabelCfg {
             return {
                 visible: true,  text: (x? 'x' : 'y') + (primary? '' : '2'),    
-                xpos:  x? 'end' : (primary? 'middle' : 'start'),          
-                ypos:  x? 'top' : (primary? 'bottom' : 'top'),           
+                xpos:  x? TextHAlign.end : (primary? TextHAlign.middle : TextHAlign.start),          
+                ypos:  x? TextVAlign.top : (primary? TextVAlign.bottom : TextVAlign.top),           
                 hOffset: x? -2 : (primary? 0 : 0.3),            
                 vOffset: x? (primary? 0.4 : -1.2) : (primary? -0.5 : 0.7)       
             };
@@ -361,7 +363,7 @@ export class Axes extends SVGElem {
  *      view:() => m(hsgraph.Graph, {cfgFn: cfg => {
  *          cfg.chart.title.text          = 'Simple Example';
  *          cfg.series.data   = [series];
- *          cfg.series.series = [{ cols: ['time', 'volume'] }];
+ *          cfg.series.series = [{ x:'time', y:'volume' }];
  *      }})
  * });
  *
@@ -387,7 +389,7 @@ class ExampleLinearAxis {}
 *      view:() => m(hsgraph.Graph, {cfgFn: cfg => {
 *          cfg.chart.title.text = 'Log Y Axis';
 *          cfg.series.data   = [series];
-*          cfg.series.series = [{ cols: ['time', 'volume'] }];
+*          cfg.series.series = [{ x'time', y:'volume' }];
 *          cfg.axes.primary.x.scale.type = hsgraph.Axes.type.log;
 *          cfg.axes.primary.x.scale.domain = ['tight', 'tight'];
 *          cfg.axes.primary.y.scale.type = hsgraph.Axes.type.log;
@@ -415,7 +417,7 @@ class ExampleLogAxis {}
 *      view:() => m(hsgraph.Graph, {cfgFn: cfg => {
 *          cfg.chart.title.text = 'Date X Axis';
 *          cfg.series.data   = [series];
-*          cfg.series.series = [{ cols: ['time', 'volume'] }];
+*          cfg.series.series = [{ x:'time', y:'volume' }];
 *          cfg.axes.primary.x.scale.type = hsgraph.Axes.type.date;
 *          cfg.axes.primary.x.ticks.major.labelFmt = '%MMM %YY';
 *      }})

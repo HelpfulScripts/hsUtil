@@ -4,7 +4,10 @@
 
 /** */
 import { m, Vnode}      from 'hslayout';
-import { SVGElem }      from './SVGElem';
+import { SVGElem,
+         TextElem,
+         TextHAlign,
+         TextVAlign }   from './SVGElem';
 import { Data, 
          DataRow }      from 'hsdata';
 import { XYScale }      from './AxesTypes';
@@ -39,6 +42,25 @@ export abstract class Plot extends SVGElem {
                         return this.shape([[cx-r, cy-r], [cx+r, cy-r], [cx, cy+r]], undefined, style);
                 }
                 return m(`.unkown-marker-${sStyle.marker.shape}`,'');
+            })
+        );
+    }
+
+    drawLabel(clipID:string, data:DataRow[], x:number, y:number, lbl:number, scales:XYScale, sStyle:SeriesStyle) {
+        const cfg:TextElem = {
+            text:       '', 
+            cssClass:   ``,
+            style:      `fill:${sStyle.label.color}`,
+            xpos:       TextHAlign.middle,
+            ypos:       TextVAlign.center,
+            hOffset:    0,
+            vOffset:    0
+        };
+        return !sStyle.marker.visible? m('.invisible-marker','') : m('svg', {class:'hs-graph-series-labels'},
+            data.map((p:DataRow) => {
+                cfg.x = ''+scales.x.convert(<number>p[x]);
+                cfg.y = ''+scales.y.convert(<number>p[y]);
+                return this.text(cfg, <string>p[lbl]);
             })
         );
     }

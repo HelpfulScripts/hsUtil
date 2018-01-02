@@ -21,7 +21,6 @@ import { m, Vnode}      from 'hslayout';
 import { Config,
          VisibleCfg }   from './Graph';
 import { Data, DataSet }from 'hsdata';
-import { ColSpecifier } from 'hsdata';
 import { Condition }    from 'hsdata';
 import { SVGElem }      from './SVGElem';
 import { Axes }         from './Axes';
@@ -133,7 +132,7 @@ export class Series extends SVGElem {
         cfg.series.series.forEach((s:SeriesDef) => {
 //            s.type = s.type || Series.plot.line;
 //            s.style = s.style || <SeriesStyle>{};
-            if (s.cols[0] === undefined) { // undefined x-value -> use index as x-value
+            if (s.x === undefined) { // undefined x-value -> use index as x-value
                 cfg.axes.primary.x.title.hOffset = 0;
                 cfg.axes.primary.x.scale.type = Axes.type.index;
                 cfg.grid.minor.ver.visible = false;
@@ -187,6 +186,9 @@ export interface MarkerStyle extends ColoredCfg {
 export interface FillStyle extends ColoredCfg {
 }
 
+export interface TextStyle extends ColoredCfg {
+}
+
 export interface BarStyle extends ColoredCfg {
     /** width of bars in % of space between bars */
     width: number;  
@@ -200,6 +202,7 @@ export interface SeriesStyle {
     marker: MarkerStyle;
     fill:   FillStyle;
     bar:    BarStyle;
+    label:  TextStyle;
 }
 
 /** 
@@ -211,7 +214,11 @@ export interface SeriesDef {
      * [0] is reserved for the x direction. 
      * Further elements are dependent on the {@link Series.type plot} type. 
      */
-    cols:ColSpecifier[];  
+    x:string;   // x values
+    y?:string;  // y values
+    yh?:string; // high-y values
+    yl?:string; // low-y-values
+    l?:string;  // labels
     /** An index into the `Data[]` pool, identifying the `Data` set to use. defaults to `0` */
     dataIndex?: number;
     /** optional plot type, selected from {@link Series.Series.plot Series.plot}; defaults to  `Series.plot.line` */
@@ -229,9 +236,9 @@ export interface SeriesDef {
  * of `series`. This allows for postprocessing user configurations while maintaining 
  * convenient notation, e.g.
  * ```
- *  cfg.series.series = [                               // invoke the setter
- *      { cols: ['time', 'volume']},                    // behind the scenes, adds 
- *      { cols: ['time', 'price']}                      // missing fields such as .style
+ *  cfg.series.series = [           // invoke the setter
+ *      { x:'time', y:'volume'},    // behind the scenes, adds 
+ *      { x:'time', y:'price']}     // missing fields such as .style
  *  ];
  *  fg.series.series[0].style.marker.visible = true;    // invoke the getter
  * ```
@@ -253,9 +260,10 @@ export class SeriesConfig {
      * determines the default style applied to each series.
      * Colors will be chosen by series index from `defaultColors`.
      */
-    public defaultStyle = {
+    public defaultStyle:SeriesStyle = {
         line:   { color:'default', visible: true, width: 5},
         marker: { color:'default', visible: false, size: 10, shape: Series.marker.circle},
+        label:  { color:'default', visible: false },
         fill:   { color:'default', visible: false },
         bar:    { color:'default', visible: false, width: 50, offset: 30 }
     };       

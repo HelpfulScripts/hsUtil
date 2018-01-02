@@ -6,7 +6,7 @@
 import { Domain, 
          NumRange }     from 'hsdata';
 import { Axes }         from './Axes';
-import { date }         from 'hsutil';
+import { date, ms }     from 'hsutil';
 import { Ticks,
          TickDefs,
          TickLabel,
@@ -58,7 +58,6 @@ function logScaleTickMarks(dom:NumRange, ticks:Ticks) {
     }
 }
 
-const DAY = 1000*60*60*24;
 const tickCategories = [
     [10,0,0], [1,0,0], [0,3,0], [0,1,0], [0,0,7], [0,0,1]
 ];
@@ -88,7 +87,7 @@ function dateScaleTickMarks(dom:Domain, ticks:Ticks, fmt='%MM/%DD/%YY') {
     ];
     const d = dateDom[1].getTime() - dateDom[0].getTime();
     tickCategories.some((cat:number[], i:number) => {
-        const dMin = (cat[0]*365 + cat[1]*30 + cat[2]) * 1.5 * DAY;
+        const dMin = ms.fromDays((cat[0]*365 + cat[1]*30 + cat[2]) * 1.5);
         if (d>dMin) {
             addDates(i, ticks.major);
             addDates(Math.min(i+1, tickCategories.length-1), ticks.minor);

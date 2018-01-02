@@ -64,9 +64,14 @@ export function date(formatString:string, date=new Date()):string {
             .replace(/%j/g,		formatNumber(date.getMilliseconds()/100,1));
 }
 
+/** converts minutes, hours, days, weeks ... into milliseconds and back */ 
 export const ms = {
-    minutes:    (n:number) => 1000*60*n,
-    hours:      (n:number) => 1000*60*60*n,
-    days:       (n:number) => 1000*60*60*24*n,
-    weeks:      (n:number) => 1000*60*60*24*7*n
+    fromMinutes:    (min:number) => 1000*60*min,
+    fromHours:      (h:number)   => 1000*60*60*h,
+    fromDays:       (d:number)   => 1000*60*60*24*d,
+    fromWeeks:      (w:number)   => 1000*60*60*24*7*w,
+    toMinutes:      (ms:number)  => ms/(1000*60),
+    toHours:        (ms:number)  => ms/(1000*60*60),
+    toDays:         (ms:number)  => ms/(1000*60*60*24),
+    toWeeks:        (ms:number)  => ms/(1000*60*60*24*7)
 };

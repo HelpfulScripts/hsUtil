@@ -41,6 +41,8 @@ export interface SelectableDesc {
     isSelected: boolean;
     /** optional css class to use */
     css?: string;
+    /** optional style string to apply */
+    style?: string;
     /** the function to call if this item is clicked */
     clicked?: (item:string) => void;
     /** the function to call if this item receives a mouseDown event */
@@ -134,7 +136,7 @@ export const Selectable = {
         const onmousedown   = desc.mouseDown? () => { desc.mouseDown(desc.title); } : undefined;
         const onmouseup     = desc.mouseUp? ()   => { desc.mouseUp(desc.title); }   : undefined;
         return m(`.hs-selectable ${css} ${cssSelected}`, 
-            { onclick:onclick, onmousedown:onmousedown, onmouseup:onmouseup },
+            { style: desc.style, onclick:onclick, onmousedown:onmousedown, onmouseup:onmouseup },
             desc.title
         );
     }

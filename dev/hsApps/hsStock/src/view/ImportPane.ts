@@ -1,9 +1,9 @@
 import { m, Vnode }         from 'hslayout';
 import { Layout }           from 'hslayout';
-import { gEquityList,
-         EquityList }       from '../controller/Equity';
+import { gEquities,
+         Equities }         from '../controller/Equities';
 import { Button }           from 'hswidget';
-import { TraderReferences } from '../controller/Trader';
+import { VenueSummary }     from '../controller/Venue';
 import { save }             from '../fileIO';
 
 
@@ -14,28 +14,29 @@ export const ImportPane = {
         return m(Layout, {
             rows: ['50px'],
             css: '.hs-import-pane',
-            content: buttons(gEquityList)
+            content: buttons(gEquities)
         });
     }    
 };
 
 
-function buttons(list:EquityList) {
+function buttons(list:Equities) {
     return [
         m(Button, {name:'get IEX Symbols', onclick:readSymbols}),
         m(Button, {name:'get Stock Splits', onclick:readSplits}),
+//        m(Button, {name:'clear invalid venues', onclick:gEquities.clearInvalids.bind(gEquities)}),
         m(Button, {name:'Stock Import'}),
         m('', `${Symbols.length} records loaded`)
     ];
 }
 
 function readSplits() {
-    gEquityList.readSplits(); 
+    gEquities.readSplits(); 
 }
 
 function readSymbols() {
-    EquityList.getTrader().getSymbols()
-    .then((ref:TraderReferences) => {
+    gEquities.getVenueSymbols()
+    .then((ref:VenueSummary) => {
         save(ref.equities, `hsStock/data/traderSymbols.json`);
     });
 }

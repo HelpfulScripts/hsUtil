@@ -4,10 +4,10 @@ import { Collapsible,
          Modal,
          Button,
          RemoveButton }  from 'hswidget';
-import { gEquityList,
-         EquityList,
+import { gEquities,
+         Equities,
          Category,
-         EquityItem }   from '../controller/Equity';
+         EquityItem }   from '../controller/Equities';
 import { authenticated } from '../Router';
 import { readAssets,TransactionList }   from '../controller/Assets';
 
@@ -17,14 +17,14 @@ export const ViewLeft = {
     view: (node: Vnode):Vnode => {
         const symbol  = m.route.param('symbol');
         return m('.hs-left-nav', [
-            gEquityList? navList(gEquityList, symbol) : 'left',
-            m(Modal, { content: m(AddItemForm, {list:gEquityList}) })
+            gEquities? navList(gEquities, symbol) : 'left',
+            m(Modal, { content: m(AddItemForm, {list:gEquities}) })
         ]);
     }
 };
 
 /** creates the list if modules (`*.ts` files) */
-function navList(list:EquityList, symbol:string):Vnode[] {    
+function navList(list:Equities, symbol:string):Vnode[] {    
     /** process a category, e.g. `Stocks`. */
 
     if (authenticated()) { getAssets(list); }
@@ -34,7 +34,7 @@ function navList(list:EquityList, symbol:string):Vnode[] {
 }
 
 /** returns a Vnoide structure representing an investment category. */
-function categoryEntry(c:Category, list:EquityList, symbol:string) {
+function categoryEntry(c:Category, list:Equities, symbol:string) {
     /** returns a Vnode for the category header */
     function catHeader():Vnode {
         return m('.hs-left-nav-module-name ${selected}', [
@@ -69,7 +69,7 @@ function categoryEntry(c:Category, list:EquityList, symbol:string) {
     ]});
 }
 
-function getAssets(list:EquityList) {
+function getAssets(list:Equities) {
     if (!gAssets) {
         readAssets()
         .then((tlist:TransactionList) => {
@@ -87,7 +87,7 @@ function getAssets(list:EquityList) {
 }
 
 class AddItemForm {
-    list:EquityList;
+    list:Equities;
     symbol = '';
 
     submit() {

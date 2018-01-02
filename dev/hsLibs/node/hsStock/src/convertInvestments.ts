@@ -11,6 +11,7 @@ const price = wb.getTable('WF US Quotes', 'E', 10);
 const updateSymbols = {
     ERTS: 'EA',
     BGEN: 'BIIB'
+    CASH: '_cash'
 };
 
 console.log(price.columns.names);

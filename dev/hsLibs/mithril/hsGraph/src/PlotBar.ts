@@ -7,12 +7,12 @@
  * #### Mode 1 - Classic Bars
  * Specify a single name for y-values to generate bars that reach up from the
  * x-axis to the value in each data row. Negative heights are allowed.
- * Example: `cols: [undefined, 'volume']`
+ * Example: `y:'volume'`
  * 
  * #### Mode 2 - High-Low Bars
- * Specify two names for y values to create high-low bars that reach from the 
- * first y-value to the second y-value for each data row. Negative heights are allowed.
- * Example: `cols: [undefined, 'open', 'close']`
+ * Specify names for y and yl values to create high-low bars that reach from the 
+ * y-value to the yl-value for each data row. Negative heights are allowed.
+ * Example: `y:'open', yl:'close'`
  * 
  * #### Example
  * <example>
@@ -33,10 +33,10 @@
  *          cfg.chart.title.text = 'Bar Chart';
  *          cfg.series.data   = [series];
  *          cfg.series.series = [{
- *                  cols: [undefined, 'volume'], 
+ *                  y:'volume', 
  *                  type: hsgraph.Series.plot.bar 
  *              },{ 
- *                  cols: [undefined, 'open', 'close'], 
+ *                  y:'open', yl:'close', 
  *                  type: hsgraph.Series.plot.bar 
  *              }
  *          ];
@@ -70,7 +70,7 @@ export class PlotBar extends Plot {
             (p:number[], i:number) => {
                 const rx0 = scales.x.convert((index? i : p[x]) + offset - width/2);
                 const rx1 = scales.x.convert((index? i : p[x]) + offset + width/2);
-                const ry0 = scales.y.convert(y0<0? 0 : p[y0]);
+                const ry0 = scales.y.convert(y0===undefined? 0 : p[y0]);
                 const ry = scales.y.convert(p[y]);
                 return this.rect({x:rx0, y:ry0}, {h:ry-ry0, w:rx1-rx0}, style);
             })
@@ -84,20 +84,18 @@ export class PlotBar extends Plot {
             dom[0] = 0; 
             scales.y.domain(dom);
         }
-        if (series.cols[0] === undefined) {
+        if (series.x === undefined) {
             scales.x.domain([-0.5, data.getData().length-0.5]);
         }
     }
 
     plot(data:Data, series:SeriesDef, scales:XYScale, i:number, clipID:string): Vnode[] {
-        const x = data.colNumber(series.cols[0]);
-        const y = data.colNumber(series.cols[1]);
-        const y0 = series.cols.length < 3? -1 : data.colNumber(series.cols[2]);
-        if (y===undefined) { 
-//            console.log(`${series.cols[1]} not found in data`); 
-            return m('.error','');
-        } else { return [
-            this.drawBar(clipID, data, x, y, y0, scales, series.style, i),
-        ];}
+        const x = data.colNumber(series.x);
+        const y = data.colNumber(series.y);
+        const yl = series.yl? data.colNumber(series.yl) : undefined;
+        if (y===undefined) { return m('.error',''); }
+        return [
+            this.drawBar(clipID, data, x, y, yl, scales, series.style, i),
+        ];
     }
 }

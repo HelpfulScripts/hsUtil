@@ -45,8 +45,11 @@ export interface TextElem {
     /** the text to show */
     text: string; 
 
-    /** the css class to set */
+    /** a css class to set */
     cssClass?:  string;   
+
+    /** a style to set */
+    style?:  string;   
 
     /** optional absolute x positioning on the canvas, e.g. '50%' */
     x?:         string;
@@ -55,10 +58,10 @@ export interface TextElem {
     y?:         string;
     
     /** horizontal align: 'start' | 'middle' | 'end'; uses `text-align` attribute */
-    xpos:       string;
+    xpos:       TextHAlign;
 
     /** vertical align: 'top' | 'center' | 'bottom'; uses `dy` attribute */
-    ypos:       string;
+    ypos:       TextVAlign;
 
     /** horizontal label offset in 'em'; uses `dx` attribute */
     hOffset:    number;
@@ -75,6 +78,18 @@ export function round (num:number):string {
     return result;
 }
 
+export enum TextHAlign {
+    start   = 'start',
+    middle  = 'middle',
+    end     = 'end'
+}
+
+export enum TextVAlign {
+    top     = 'top',
+    center  = 'center',
+    bottom  = 'bottom'
+}
+
 export abstract class SVGElem {
     /**
      * plot some text 
@@ -83,25 +98,25 @@ export abstract class SVGElem {
      */
     text(cfg:TextElem, text:string):Vnode {
         let yShift = 0;
-        let hAlign = cfg.xpos;
+        let hAlign:TextHAlign = cfg.xpos;
         switch(cfg.xpos) {
-            case 'start':  break;
-            case 'end':    break;
-            case 'middle': 
-            default:       hAlign = 'middle'; break;
+            case TextHAlign.start:  break;
+            case TextHAlign.end:    break;
+            case TextHAlign.middle: 
+            default:       hAlign = TextHAlign.middle; break;
         }
         switch(cfg.ypos) { // additional y 'em' shift
-            case 'top':    yShift = 0.7; break;
-            case 'center': yShift = 0.35; break;
-            case 'bottom': 
-            default:       yShift =  0; break;
+            case TextVAlign.top:    yShift = 0.7; break;
+            case TextVAlign.center: yShift = 0.35; break;
+            case TextVAlign.bottom: 
+            default:                yShift =  0; break;
         }
         const param = { 
-            x: cfg.x? cfg.x : '', 
-            y: cfg.y? cfg.y : '',
+            x: cfg.x || '', 
+            y: cfg.y || '',
             dx:round(cfg.hOffset||0) + 'em',    
             dy:round((cfg.vOffset||0)+yShift) + 'em',
-            style: `text-anchor:${hAlign};`,
+            style: `text-anchor:${hAlign}; ${cfg.style||''}`,
             class: cfg.cssClass,
         };
         return m('text', param, text);

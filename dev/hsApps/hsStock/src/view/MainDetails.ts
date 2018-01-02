@@ -1,7 +1,7 @@
 import { m, Vnode}      from 'hslayout';
 import { Layout }       from 'hslayout';
-import { gEquityList,
-         EquityItem }   from '../controller/Equity';
+import { gEquities,
+         EquityItem }   from '../controller/Equities';
 import { date, round }  from 'hsutil'; 
 
 const format = (n:number):string => {
@@ -48,10 +48,10 @@ function ellipses(str:string, limit:number):string {
 export class MainDetails extends Layout { 
     getComponents(node: Vnode): Vnode {
         const symbol  = m.route.param('symbol');
-        const item:EquityItem = gEquityList.getItem(symbol);
+        const item:EquityItem = gEquities.getItem(symbol);
 //        const numQuotes = (item.quotes)?item.quotes.rows.length:0;
         const s = item.stats || {};
-        const c =item.company || {};
+        const c = item.company || {};
         const divDate = (s.dividendRate && s.exDividendDate)? date('%MM/%D/%YY', new Date(s.exDividendDate)) : '';
         const pe = s.peRatio || round((s.latestPrice || 0) / s.latestEPS, 3);
         const latestDate = date('%MM/%DD/%YY: ', new Date(s.latestDate));
@@ -65,9 +65,9 @@ export class MainDetails extends Layout {
         const cols = [{ 
             css:'', 
             fields: [
-                [`${item.cat}:`,                        c.sector],
+                [`${item.cat}:`,                        ellipses(c.sector, 18)],
                 ['Exchange:',                           ellipses(c.primaryExchange, 18)],
-                ['Current Shares:',                     item.shares, `$${format(item.shares*(s.latestPrice || 0))}`]
+                ['Invested:',                           `${item.shares} shares`, `$${format(item.shares*(s.latestPrice || 0))}`]
         ]},{ 
             css:'', 
             fields: [
@@ -81,7 +81,7 @@ export class MainDetails extends Layout {
                 ['PE:',                                 `${pe || '--'}`],
                 ['52 wk high:',                         week52high, week52hgRatio],
                 ['52 wk low:',                          week52low,  week52lwRatio],
-                ['Volume (shares):',                    `${format(s.latestVolume) || '--'}`]
+                ['Volume (shares):',                    `${format(s.closeVolume) || '--'}`]
         ]},{ 
             css:'.hs-equity-right-column', 
             fields: [

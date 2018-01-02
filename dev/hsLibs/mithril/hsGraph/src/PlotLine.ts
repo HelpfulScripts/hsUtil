@@ -21,7 +21,7 @@
  *      view:() => m(hsgraph.Graph, {cfgFn: cfg => {
  *          cfg.chart.title.text          = 'Simple Example';
  *          cfg.series.data   = [series];
- *          cfg.series.series = [{ cols: ['time', 'volume'] }];
+ *          cfg.series.series = [{ x:'time', y:'volume' }];
  *      }})
  * });
  *
@@ -38,17 +38,13 @@ import { SeriesDef }from './Series';
 
 export class PlotLine extends Plot { 
     plot(data:Data, series:SeriesDef, scales:XYScale, i:number, clipID:string): Vnode[] {
-        const x = data.colNumber(series.cols[0]);
-        const y = data.colNumber(series.cols[1]);
-        if (x===undefined) { 
-//            console.log(`${series.cols[0]} not found in data`); 
-            return m('.error','');
-        } else if (y===undefined) { 
-//            console.log(`${series.cols[1]} not found in data`); 
-            return m('.error','');
-        } else { return [
+        const x = data.colNumber(series.x);
+        const y = data.colNumber(series.y);
+        if (x===undefined) { return m('.error',''); }
+        if (y===undefined) { return m('.error',''); }
+        return [
             this.drawLine(clipID, data.getData(), x, y, scales, series.style),
             this.drawMarker(clipID, data.getData(), x, y, scales, series.style)
-        ];}
+        ];
     }
 }
