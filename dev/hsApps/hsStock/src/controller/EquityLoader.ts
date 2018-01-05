@@ -21,13 +21,17 @@ function copyProperties(from:EquityItem, to:EquityItem):EquityItem {
 
 /** saves equity inof to symXXX.json file, skipping the quotes */
 function saveMeta(item:EquityItem):EquityItem {
+    if (item.invalid) {
+        delete item.invalid;
+        item.changed = true;
+    }
     if (item.changed) {
         item.changed = undefined;
-        console.log(`saving stock/sym${item.symbol}.json`);
         const copy = copyProperties(item, <EquityItem>{});
 //        delete copy.intraday;
         delete copy.quotes;
 //        delete copy.trades;
+        console.log(`${new Date().getTime() %10000}: saveSym ${item.symbol} to local`);
         save(copy, `${SAVE_PATH}/stock/sym${item.symbol}.json`);
     }
     return item;
@@ -35,10 +39,8 @@ function saveMeta(item:EquityItem):EquityItem {
 
 
 
-
-
 function updateStats(item: EquityItem):EquityItem {
-    if (item.quotes.rows.length > 0) {
+    if (item && item.quotes && item.quotes.rows && item.quotes.rows.length > 0) {
         const date = item.stats.closeDate;
         const dCol = item.quotes.names.indexOf('Date');
         const vCol = item.quotes.names.indexOf('Volume');
@@ -65,30 +67,17 @@ function JsonToSymArray(data:any):string[] {
     }
 }
 
-function applySplitsToTrades(item:EquityItem):EquityItem {    
-    if (item.splits && item.trades) {
-        item.splits.forEach((split:EquitySplit) => {
-            if (typeof split.date === 'string') { split.date = new Date(split.date); }
-            item.trades.forEach((trade:Transaction) => {
-                if (trade.Date < split.date) {
-                    trade.price *= split.ratio;
-                }
-            });
-        });
-    }
-    return item;
-}
 
+let trader:Trader;
 
 export class EquityLoader {
     //------  Static  parts -----
-    private static trader = new Trader(LOAD_PATH, SAVE_PATH, '/venues.json');
     private static lastUpdate:Date;
-    public static getTrader() { return EquityLoader.trader; }
+    public static getTrader() { return trader; }
     
     public static shouldUpdate(since:Date): Promise<boolean> {
         const closingHour = 16;     // venue closes at 4pm PT;
-        return EquityLoader.trader.lastMarketUpdate()
+        return trader.lastMarketUpdate()
         .then((lastUpdated:Date) => {
             const today = new Date();
             EquityLoader.lastUpdate = today;
@@ -112,13 +101,35 @@ export class EquityLoader {
         });
     }
 
+    public static applySplitsToTrades(item:EquityItem):EquityItem {   
+        if (item.splits && item.trades) {
+            item.splits.forEach((split:EquitySplit) => {
+                if (typeof split.date === 'string') { split.date = new Date(split.date); }
+                item.trades.forEach((trade:Transaction) => {
+                    if (!trade.appliedSplits) { trade.appliedSplits = {}; }
+                    if (!trade.appliedSplits[split.date.getTime()] && trade.Date < split.date) {
+                        trade.price *= split.ratio;
+                        trade.appliedSplits[split.date.getTime()] = split.ratio;
+                        item.changed = true;
+                    }
+                });
+            });
+        }
+        return item;
+    }
     public static saveQuotes(item:EquityItem):Promise<EquityItem> {
+        console.log(`${new Date().getTime() %10000}: save ${item.quotes.rows.length} Quotes ${item.symbol} to local`);
         return save(item.quotes, `${SAVE_PATH}/stock/quotes${item.symbol}.json`)
+        .catch((err:any) => {
+            console.log(`error for in saveQuotes: ${err}`);
+            console.log(item);
+            return item;
+        })
         .then(() => item);
     }
 
-    private static getIntradayQuotes(item:EquityItem):Promise<EquityItem> {
-        return EquityLoader.trader.getQuotes(item, 1)
+    private static requestIntradayQuotes(item:EquityItem):Promise<EquityItem> {
+        return trader.requestQuotes(item, 1)
         .catch((err:any) => {
             console.error(`error in getIntradayQuotes: ${err}`);
             return item;
@@ -132,12 +143,12 @@ export class EquityLoader {
             return item; 
         };
 
-        if (item.splits && item.splits.length===0) { item.splits = undefined; }
+//        if (item.splits && item.splits.length===0) { item.splits = undefined; }
         
         return (item.splits)? Promise.resolve(item) :
-            EquityLoader.trader.getSplits(item)
+            trader.requestSplits(item)
             .then(addSplitsToItem)
-            .then(applySplitsToTrades)  // new splits are only loaded upon specific request
+            .then(EquityLoader.applySplitsToTrades)  // new splits are only loaded upon specific request
             .catch((err) => {
                 console.log(`error in readSymSplit: ${err}`);
                 return item;
@@ -145,6 +156,7 @@ export class EquityLoader {
     }
 
     public static saveEquityList(symbols:string[]):Promise<any> {
+        console.log(`${new Date().getTime() %10000}: saveEquityList to local`);
         return save(symbols, `${SAVE_PATH}/${EQUITY_LIST}`);
     }
 
@@ -152,11 +164,13 @@ export class EquityLoader {
     private list:EquityList;
 
     private loadAllItemsLocal(items: EquityItem[]):Promise<void> {
-        return Promise.all(items.map(item =>
-            this.loadLocal(item)
-            .then((item:EquityItem) => this.list.addItem(item))
-            .catch(console.log)
-        ))
+        return Promise.all(items
+//            .filter(item => item.symbol==='AAPL')
+            .map(item =>
+                this.loadLocal(item)
+                .then((item:EquityItem) => this.list.addItem(item))
+                .catch(console.log)
+            ))
         .then(()=>{});
     }
 
@@ -165,12 +179,17 @@ export class EquityLoader {
 
     constructor(list:EquityList) {
         this.list = list;
+        if (!trader) { 
+            trader = new Trader(); 
+            Trader.loadLocalVenues(LOAD_PATH, SAVE_PATH, '/venues.json');
+        }
     }
 
     /**
      * load the equity list, then load all equities 
      */
     public loadEquityList():Promise<any> {
+        console.log(`${new Date().getTime() %10000}: loadEquityList from local`);
         return load(`${LOAD_PATH}/${EQUITY_LIST}`)
         .catch(() => load(`${LOAD_PATH}/${DEF_EQUITY_LIST}`))
         .then(JsonToSymArray)
@@ -191,8 +210,9 @@ export class EquityLoader {
 
     public marketUpdate():Promise<boolean> {
         return Promise.all(
-            this.list.getAllSymbols().map((sym:string) => 
-                this.loadRemote(this.list.getItem(sym))
+            this.list.getAllSymbols()
+            .filter((s:string) => s==='AAPL')
+            .map((sym:string) => this.loadRemote(this.list.getItem(sym))
             )
         )
         .then(()=>true)
@@ -204,15 +224,22 @@ export class EquityLoader {
 
     public loadLocal(item:EquityItem):Promise<EquityItem> {
         /** adds a quotes DataSet to an item  */
-        const addQuotesToItem = (quotes:DataSet):EquityItem => { 
+        function addQuotesToItem(quotes:DataSet):EquityItem { 
             item.quotes = quotes;
+            Trader.getVenue(item); // to initialize the venues in item
             return item;
-        };
+        }
+        function copyParts(data:EquityItem) {
+            if (item.trades) { data.trades = item.trades; }
+            copyProperties(data, item); 
+            EquityLoader.applySplitsToTrades(item);
+            return item;         
+        }
         if (item.symbol === '????') {
             return Promise.resolve(item);
         } else {
             return load(`${LOAD_PATH}/stock/sym${item.symbol}.json`)
-                .then((data:any) => copyProperties(data, item))
+                .then(copyParts)
                 .then(() => load(`${LOAD_PATH}/stock/quotes${item.symbol}.json`))
                 .then(addQuotesToItem)        
                 .catch(() => item); // if nothing on local server: ignore
@@ -220,21 +247,22 @@ export class EquityLoader {
     }
 
     public loadRemote(item:EquityItem):Promise<EquityItem> {
+        const list = this.list;
         const copyPropertiesToItem = (data:EquityItem):EquityItem => {
             Object.keys(data).forEach((k:string) => item[k] = data[k]); 
             return item;             // continue working with original item
         };
 
-        return EquityLoader.trader.getMeta(item)
+        return Promise.resolve(item)
+            .then(trader.requestMeta)
             .then(copyPropertiesToItem)
-            .then(this.list.checkProperties)
-            .then(EquityLoader.trader.getQuotes)
+            .then(list.checkProperties)
+            .then(EquityLoader.getTrader().requestQuotes)
             .then(EquityLoader.saveQuotes)
-            .then(EquityLoader.getIntradayQuotes)
+            .then(EquityLoader.requestIntradayQuotes)
             .then(updateStats)
             .then(EquityList.imputeTradesWithSharePrice)
             .then(EquityLoader.requestSymSplitIfMissing)
-            .then(applySplitsToTrades)  // new splits are only loaded upon specific request
             .then(saveMeta)
             .catch((err:any) => {
                 console.error(`error in loadRemote: ${err}`);

@@ -1,3 +1,6 @@
+/**
+ * Converts trades from investment.xls to transactions.json
+ */
 import { hsExcel, fsUtil }  from 'hsnode';
 
 //const srcDir = 'data/';
@@ -10,7 +13,7 @@ const price = wb.getTable('WF US Quotes', 'E', 10);
 
 const updateSymbols = {
     ERTS: 'EA',
-    BGEN: 'BIIB'
+    BGEN: 'BIIB',
     CASH: '_cash'
 };
 

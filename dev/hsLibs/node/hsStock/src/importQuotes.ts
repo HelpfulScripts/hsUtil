@@ -1,3 +1,7 @@
+/**
+ * import quates from Yahoo historical downloads into quotes*.json:
+ * https://finance.yahoo.com/quote/AAPL/history?period1=345456000&period2=151
+ */
 import { hsExcel, fsUtil }  from 'hsnode';
 import { DataRow }          from 'hsdata';
 

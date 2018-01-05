@@ -1,9 +1,9 @@
-import { IexVenue }         from './VenueIEX';
-import { EquityItem }       from './Equities';
-import { EquitySplit }      from './Equities';
-import { Venues,
-         VenueSignature,
+import { EquityItem,
+         EquitySplit }      from './Equities';
+import { VenueIDs,
+         Venue,
          VenueSummary }     from './Venue';
+import { IexVenue }         from './VenueIex';
 import { ms }               from 'hsutil';
 import { DataSet }          from 'hsdata';
 import { load, save }       from '../fileIO';
@@ -27,6 +27,21 @@ export interface TraderSymbol {
     symbol: string;
     name:   string;  
 }
+
+function createVenues():Venue[] {
+    const vns:Venue[] = [];
+    vns.push(vns[VenueIDs.IEX] = new IexVenue());
+    return vns;
+}
+
+    /** accessible by index, or by Venues.***  */
+const venues:Venue[] = createVenues();
+    
+export const getVenue = (name: VenueIDs|number):Venue => venues[name];
+
+export const allVenueIDs = ():VenueIDs[] => venues.map(
+    (venue:Venue) => <VenueIDs>venue.summary.venueID
+);
 
 
 /** converts and imputates trader quotes to a DataSet */
@@ -64,23 +79,15 @@ export function traderQuote2Dataset(dataIn:any[]):DataSet  {
 
 export class Trader { 
     //------  static  parts -----
-    /** accessible by index, or by Venues.***  */
-    private static venues:VenueSignature[] = Trader.createVenues();
-    
-    private static createVenues():VenueSignature[] {
-        const vns:VenueSignature[] = [];
-        vns.push(vns[Venues.IEX] = new IexVenue());
-        return vns;
-    }
 
     /**
-     * load local venbue desciptor and update venue fields
+     * load local venue desciptor and update venue fields
      * data: { venueName:[TraderSymbol] }
      */
-    private static updateLocalVenues(data:{string:TraderSymbol[]}) {
-        Object.keys(data).map((ven:string) => {
-            if (Trader.venues[ven]) {
-                const v:VenueSummary = Trader.venues[ven].summary;
+    private static updateLocalVenues(data:{[venueName:string]:TraderSymbol[]}) {
+        Object.keys(data).map((ven:VenueIDs) => {
+            if (getVenue(ven)) {
+                const v:VenueSummary = getVenue(ven).summary;
                 data[ven].map((e:TraderSymbol) => {
                     v.symbols.push(e.symbol);
                     v.names.push(e.name);
@@ -92,21 +99,27 @@ export class Trader {
         });
     }
 
+    public static loadLocalVenues(loadPath:string, savePath:string, file:string) {
+        load(loadPath+file)
+        .then(Trader.updateLocalVenues)
+        .catch(() => {
+            Promise.all(allVenueIDs().map((n:VenueIDs) => getVenue(n).requestSymbolsForVenue()))
+            .catch(console.log)
+            .then(()=> savePath+file)
+            .then(Trader.saveLocalVenues);
+        });                      
+    }
+
     private static saveLocalVenues(savePath:string) {
         const venues = {};
-        Trader.venues.map((v:VenueSignature) => {
-            Trader.venues[v.summary.venue.id] = Object.keys(v.summary.equities).map((sym:string) => v.summary.equities[sym]);
+        allVenueIDs().map((n:VenueIDs) => {
+            const summary:VenueSummary = getVenue(n).summary;
+            venues[n] = Object.keys(summary.equities);
         });
         return save(venues, savePath)
         .catch(console.log);
     }
     
-/*
-    private static isInvalidTrader(item:EquityItem) {
-        return item.invalid && item.invalid[Trader.venues[0].summary.venue.id];
-    }
-
-*/
 
     /**
      * adds quotes to item.intraday; overwriting item.intraday. 
@@ -153,31 +166,61 @@ export class Trader {
         }
         return item;
     }
- 
+
+    private static adjustMissingDays(item:EquityItem):number {
+        if (!item.quotes || item.quotes.rows.length === 0) {
+            return 10000;
+        } else {
+            const dCol      = item.quotes.names.indexOf('Date');
+            const latestRow = item.quotes.rows[item.quotes.rows.length-1];
+            return ms.toDays(new Date().getTime() - new Date(latestRow[dCol]).getTime());
+        }
+    }
+
+
     //------  private  parts -----
 
 
     //------  public  parts -----
 
-    static invalidateTrader(item:EquityItem, venue:Venues) {
+    private static getVenueID(item:EquityItem):VenueIDs {
+        if (!item.venues || item.venues.length===0) { 
+            item.venues = [VenueIDs.IEX]; 
+            item.changed = true;
+        }
+        return item.venues[0];
+    }
+
+    public static getVenue(item:EquityItem):Venue {
+        const venueID = Trader.getVenueID(item);
+        return venueID? venues[venueID] : undefined;
+    }
+
+    public static invalidateVenueID(item:EquityItem, venue:VenueIDs) {
         if (item.venues[venue]) { 
+            console.log(`invalidating ${venue} for ${item.symbol}`);
             delete item.venues[venue]; 
             item.changed = true;
         }
     }
-    constructor(loadPath:string, savePath:string, file:string) {
-        load(loadPath+file)
-        .then(Trader.updateLocalVenues)
-        .catch(() => {
-            Promise.all(Trader.venues.map((v:VenueSignature) => v.requestVenueSymbols()))
-            .catch(console.log)
-            .then(()=> savePath+file)
-            .then(Trader.saveLocalVenues);
-        });      
+
+    /**
+     * constructs a Trader and loads the local 
+     * @param loadPath 
+     * @param savePath 
+     * @param file 
+     */
+    constructor() {        
     }
 
-    lastMarketUpdate(): Promise<Date> {
-        return Trader.venues[0].requestMarketUpdate();
+
+
+    public lastMarketUpdate(): Promise<Date> {
+        return getVenue(0).requestMarketUpdate()
+        .catch((err:any) => {
+            console.log(err);
+            return new Date();
+        });
     }
 
     /** 
@@ -189,39 +232,65 @@ export class Trader {
      * 
      * @return fully updated `item` as requested.
      */
-    getQuotes(item:EquityItem, missingDays?:number):Promise<EquityItem> {
-        function adjustMissingDays(item:EquityItem):number {
-            if (item.quotes.rows.length === 0) {
-                return 10000;
+    public requestQuotes(item:EquityItem, missingDays?:number):Promise<EquityItem> {
+
+        const venue = Trader.getVenue(item);
+        if (venue) {
+            if (missingDays <= 1) { 
+                return Promise.resolve(item)
+                    .then(venue.requestIntradayVenue)
+                    .then((q:TraderIntraday[]) => Trader.addIntraday(q, item))
+                    .catch((err:any) => {
+                        Trader.invalidateVenueID(item, venue.summary.venueID);
+                        console.log(`error in requestIntraday ${item.symbol} for venue ${venue}: ${err}`);
+                        return item;
+                    });
             } else {
-                const dCol      = item.quotes.names.indexOf('Date');
-                const latestRow = item.quotes.rows[item.quotes.rows.length-1];
-                return ms.toDays(new Date().getTime() - new Date(latestRow[dCol]).getTime());
+                missingDays = Trader.adjustMissingDays(item);
+                return Promise.resolve()
+                    .then(() => venue.requestQuotesVenue(item, missingDays))
+                    .then((q:TraderQuote[]) => Trader.addQuotes(q, item))
+                    .catch((err:any) => {
+                        Trader.invalidateVenueID(item, venue.summary.venueID);
+                        console.log(`error in requestQuotes ${item.symbol} for venue ${venue}: ${err}`);
+                        return item;
+                    });
             }
-        }
-        if (!item.venues) { item.venues = [Venues.IEX]; };
-
-        if (missingDays <= 1) { 
-            return Trader.venues[item.venues[0]].requestIntraday(item)
-                .then((q:TraderIntraday[]) => Trader.addIntraday(q, item));
         } else {
-            missingDays = adjustMissingDays(item);
-            return Trader.venues[item.venues[0]].requestQuotes(item, missingDays)
-                .then((q:TraderQuote[]) => Trader.addQuotes(q, item));
+            return Promise.resolve(item);
         }
-
     }
 
-    getSplits(item:EquityItem):Promise<EquitySplit[]> {
-        return Trader.venues[item.venues[0]].requestSplits(item);
+    public requestSplits(item:EquityItem):Promise<EquitySplit[]> {
+        const venue = Trader.getVenue(item);
+        if (venue) { return venue.requestSplitsVenue(item)
+            .catch((err:any) => {
+                Trader.invalidateVenueID(item, venue.summary.venueID);
+                console.log(`error in requestSplits ${item.symbol} for venue ${venue}: ${err}`);
+                return <EquitySplit[]>[];
+            });
+        }
     }
 
-    getMeta(item:EquityItem):Promise<EquityItem> {
-        return Trader.venues[item.venues[0]].requestMeta(item);
+    public requestMeta(item:EquityItem):Promise<EquityItem> {
+        const venue = Trader.getVenue(item);
+        if (venue) { return venue.requestMetaVenue(item)
+            .catch((err:any) => {
+                Trader.invalidateVenueID(item, venue.summary.venueID);
+                console.log(`error in requestMeta ${item.symbol} for venue ${venue}: ${err}`);
+                throw `error getting meta info for ${item.symbol}`;    
+            });
+        } else {
+            throw `no venue defined for ${item.symbol}`;
+        }
     }
 
-    getSymbols():Promise<VenueSummary> {
-        return Trader.venues[0].requestSymbols();
+    public requestSymbols():Promise<VenueSummary> {
+        return getVenue(0).requestSymbolsForVenue()
+            .catch((err:any) => {
+                console.log(`error in requestSymbols for venue ${getVenue(0)}: ${err}`);
+                return getVenue(0).summary;
+            });
     }
 
     /*

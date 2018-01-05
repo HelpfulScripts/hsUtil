@@ -64,8 +64,7 @@ export class MainGraph extends Layout {
             cfg.series.series[3].style.marker.size = 8;
         }}),
         m(ToggleButton, { 
-            css:'.hs-time-button', 
-            style: 'left:100px; width:30px;',
+            style: 'left:100px; width:35px;',
             desc: {
                 items:timeWindows, 
                 selectedItem: timeWindows[1],
@@ -76,8 +75,7 @@ export class MainGraph extends Layout {
             }
         }),
         m(Button, { 
-//            css:'.hs-time-button', 
-            style: 'left:150px; width:30px;',
+            style: 'left:150px; width:70px;',
             name: 'Update',
             onclick: () => gEquities.getMarketUpdate()
         })

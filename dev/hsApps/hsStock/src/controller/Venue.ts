@@ -1,45 +1,51 @@
 import { m }            from 'hslayout';
 import { PacingQueue }  from 'hsutil';
-import { Trader,
-         TraderQuote,
+import { TraderQuote,
          TraderIntraday,
          TraderSymbol } from './Trader';
 import { EquityItem }   from './Equities';
 import { EquitySplit }  from './Equities';
 
 
-
-export enum Venues {
+export enum VenueIDs {
     IEX = 'IEX'
 }
 
 /** provides details on available equities for a venue */
 export interface VenueSummary {
-    venue:      {id: string; name:string; };
+    venueID:    VenueIDs; 
+    venueName:  string;
     symbols:    string[];
     names:      string[];
     equities:   {string:TraderSymbol};  // sym -> TraderSymbol
 }
 
-export abstract class VenueSignature {
-    protected static queue = new PacingQueue(50);
-    protected static addPacedGet = (url:string): Promise<any> =>
-        VenueSignature.queue.add((ms:number) => m.request({url:url}));
 
-    protected static metaError(item:EquityItem, type:string, url:string, err:any, id:Venues) {
-        Trader.invalidateTrader(item, id);
-        item.changed = true;
-        console.log(`getMeta error in ${type} requesting ${url}: ${err}`);
-        return item;
+export abstract class Venue {
+    protected static queue = new PacingQueue(10);
+    protected static addPacedGet(url:string): Promise<any> {
+//console.log(`${new Date().getTime()%10000}: addPacedGet requesting ${url}`);
+        return Venue.queue.add((ms:number) => {
+//            console.log(`${new Date().getTime()%10000}: pacedGet(after ${ms} ms) requesting ${url}`);
+            return m.request({url:url})
+                .then((data:any) => {
+                    console.log(`     ${new Date().getTime()%10000}: pacedGet received data from ${url}`);
+                    return data;
+                })
+                .catch((err:any) => {
+                    console.log(`*** ${new Date().getTime()%10000}: pacedGet error ${err} from ${url}`);
+                });
+        });
     }
+
+    constructor() {}
 
     summary:        VenueSummary;
 
     abstract requestMarketUpdate(): Promise<Date>;
-    abstract requestVenueSymbols(): Promise<void>;
-    abstract requestMeta(item:EquityItem):Promise<EquityItem>;
-    abstract requestQuotes(item:EquityItem, missingDays:number):Promise<TraderQuote[]>;
-    abstract requestIntraday(item:EquityItem):Promise<TraderIntraday[]>;
-    abstract requestSplits(item:EquityItem):Promise<EquitySplit[]>;
-    abstract requestSymbols():Promise<VenueSummary>;
+    abstract requestMetaVenue(item:EquityItem):Promise<EquityItem>;
+    abstract requestQuotesVenue(item:EquityItem, missingDays:number):Promise<TraderQuote[]>;
+    abstract requestIntradayVenue(item:EquityItem):Promise<TraderIntraday[]>;
+    abstract requestSplitsVenue(item:EquityItem):Promise<EquitySplit[]>;
+    abstract requestSymbolsForVenue():Promise<VenueSummary>;
 }

@@ -243,7 +243,9 @@ function satisfies(condition:Condition, r:number, row:DataRow, colNumber:(name:s
                     const valIsFunction = (typeof val === 'function');
                     const valIsArray = ((typeof val === 'object') && (val.length!==undefined));
                     if (isNaN(col)) { 
-                        console.log(`column name '${name}' cannot be resolved in query ${JSON.stringify(condition)}`);
+                        if (Object.keys(condition).length === 0) {
+                            console.log(`column name '${name}' cannot be resolved in query ${JSON.stringify(condition)}`);
+                        }
                         conditionMet = false;
                     } else if (valIsFunction) { 
                         // query true if function evaluates to true

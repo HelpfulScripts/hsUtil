@@ -16,7 +16,7 @@ export class EquityList {
                         trade.price = parseFloat(<string>trade.price);
                         item.changed = true;
                     }
-                } else {
+                } else if (item.quotes && item.quotes.rows) {
                     item.changed = true;
                     const row:any = item.quotes.rows.find((t:any) => {
                         if (!(t[0] instanceof Date)) { t[0] = new Date(t[0]); }
@@ -47,7 +47,12 @@ export class EquityList {
     }
 
     public newItem(sym:string):EquityItem { 
-        const item = {cat:'unknown Cat', symbol:sym, name:'unknown'}; 
+        const item = {
+            symbol:sym, 
+            cat:'unknown Cat', 
+            name:'unknown',
+            changed: true
+        }; 
         return this.addItem(item);
     }
 

@@ -71,17 +71,24 @@ function categoryEntry(c:Category, list:Equities, symbol:string) {
 
 function getAssets(list:Equities) {
     if (!gAssets) {
+        gAssets = {};
         readAssets()
         .then((tlist:TransactionList) => {
             gAssets = tlist;
+            let numSyms = 0;
+            let numTrades = 0;
             Object.keys(tlist).forEach((sym:string) => {
+                numSyms++;
+                numTrades += tlist[sym].trades.length;
                 let item:EquityItem = list.getItem(sym);
                 if (item.symbol === '????') {
                     item = list.addItem({ symbol: sym, cat: 'new', name: sym });
                 }
                 item.shares = tlist[sym].latestShares;
                 item.trades = tlist[sym].trades;
+                list.applySplitsToTrades(item);
             });
+            console.log(`received assets list: ${numTrades} trades for ${numSyms} symbols`);
         });
     }
 }

@@ -2,8 +2,8 @@ import { EquityList }       from './EquityList';
 import { EquityLoader }     from './EquityLoader'; 
 import { Transaction }      from './Assets';
 import { DataSet }          from 'hsdata';
-import { Venues }           from './Venue';
-import { VenueSummary }     from './Venue';
+import { VenueIDs, 
+         VenueSummary }     from './Venue';
 
 export interface Category {
     cat:      string;         // the category name
@@ -67,7 +67,7 @@ export interface EquityItem {
 
     /** set of traders that do not know this symbol */
     invalid?: {};
-    venues?:  Venues[];
+    venues?:  VenueIDs[];
 
     /** number of shares owned */
     shares?: number;
@@ -117,44 +117,47 @@ export class Equities {
     }
 
     //------  private parts -----
-    private equityList = new EquityList();
-    private equityLoader = new EquityLoader(this.equityList);
-
+    private static equityList: EquityList;
+    private static equityLoader: EquityLoader;
 
 
     //------  public parts -----
     constructor() { 
-        this.equityLoader.loadEquityList();
+        if (!Equities.equityList)    { Equities.equityList     = new EquityList(); }
+        if (!Equities.equityLoader)  { 
+            Equities.equityLoader  = new EquityLoader(Equities.equityList); 
+            Equities.equityLoader.loadEquityList();
+        }
     }
 
     public addItem(item:EquityItem):EquityItem {
-        item = this.equityList.addItem(item);
-        this.equityLoader.loadLocal(item);
-        EquityLoader.saveEquityList(this.equityList.getAllSymbols());
+        item = Equities.equityList.addItem(item);
+        Equities.equityLoader.loadLocal(item);
+        EquityLoader.saveEquityList(Equities.equityList.getAllSymbols());
         return item;
     }
 
     public removeItem(itemOrSymbol:EquityItem|string) {
-        this.equityList.removeItem(itemOrSymbol);
-        EquityLoader.saveEquityList(this.equityList.getAllSymbols());
+        Equities.equityList.removeItem(itemOrSymbol);
+        EquityLoader.saveEquityList(Equities.equityList.getAllSymbols());
     }
 
-    public getItem(sym:string) { return this.equityList.getItem(sym); }
+    public getItem(sym:string) { return Equities.equityList.getItem(sym); }
 
     public getCategories():Category[] { 
         return Equities.assembleCategories(
-            this.equityList.getAllSymbols().map(this.equityList.getItem.bind(this.equityList))
+            Equities.equityList.getAllSymbols().map(Equities.equityList.getItem.bind(Equities.equityList))
         );
     }
 
     public getFirstByCat(cat:string):EquityItem {
         const c = this.getCategories()[cat];
         if (c && c.equities.length>0) { return c.equities[0]; }
-        else { return this.equityList.unkownEquity(); }
+        else { return Equities.equityList.unkownEquity(); }
     }
 
     public getMarketUpdate():Promise<boolean> { 
-        return this.equityLoader.marketUpdate()
+        return Equities.equityLoader.marketUpdate()
         .catch((err:any) => {
             console.log(err);
             return false;
@@ -162,9 +165,13 @@ export class Equities {
         .then(() => true); 
     }
     public getVenueSymbols():Promise<VenueSummary> { 
-        return EquityLoader.getTrader().getSymbols(); 
+        return EquityLoader.getTrader().requestSymbols(); 
     }
-    public readSplits()      { return this.equityLoader.requestSplitsIfMissing(); }
+    public readSplits()      { return Equities.equityLoader.requestSplitsIfMissing(); }
+
+    public applySplitsToTrades(item:EquityItem) {
+        return EquityLoader.applySplitsToTrades(item);
+    }
 }
 
 export const gEquities = new Equities();

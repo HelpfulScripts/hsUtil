@@ -292,8 +292,8 @@ export class Data {
             // else: val is a string:
             const strVal = ''+val;
             if (strVal.startsWith('$') && !isNaN(parseFloat(strVal.slice(1)))) { return Data.type.currency; }
-            if (!isNaN(this.toDate(val).getTime()))	                           { return Data.type.date; }
-            if (val.endsWith('%') && !isNaN(parseFloat(val)))                  { return Data.type.percent; }
+            if (!isNaN(this.toDate(strVal).getTime()))	                       { return Data.type.date; }
+            if (strVal.endsWith('%') && !isNaN(parseFloat(strVal)))            { return Data.type.percent; }
 
             // european large number currency representation: '$dd,ddd[,ddd]'
             if ((/^\$\d{0,2}((,\d\d\d)*)/g).test(val)) { 

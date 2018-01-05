@@ -16,29 +16,31 @@ export class PacingQueue {
         this.delayMS = delayMS; 
         this.next(this.queue); 
     }
+
+    private nextTimeout() {
+        setTimeout(() => this.next(this.queue), this.delayMS);
+    }
+
     add(fn: (msSinceAdding:number) => any):Promise<any> {
-        const promise = new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
+            if (this.queue.length === 0) { this.nextTimeout(); }
             this.queue.push({fn:fn, resolve:resolve, reject:reject, time:Date.now()});
-            if (this.queue.length === 1) { 
-                this.next(this.queue);   // new queuing, kick-start timer
-            }
 		});
-        return promise;
     }
 
     next(q:any[]) {
+        console.log(`${}: next pace of ${q.length} pending`);
         if (q.length > 0) {
             const entry = q.shift();
             entry.resolve(
                 entry.fn(Date.now() - entry.time)   // call the registered function with the actual delay 
                 .catch((err:any) => {
-                    console.log(`error calling paced function`);
-                    console.log(err);
+                    console.log(`error calling paced function: ${err}`);
                     console.log(err.stack);
-                    entry.reject(err);
+                    throw err;
                 })
             );
-            setTimeout(() => this.next(this.queue), this.delayMS);
+            this.nextTimeout();
         }
     }
 }

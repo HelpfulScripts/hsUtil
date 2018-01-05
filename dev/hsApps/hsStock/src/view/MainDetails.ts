@@ -49,7 +49,6 @@ export class MainDetails extends Layout {
     getComponents(node: Vnode): Vnode {
         const symbol  = m.route.param('symbol');
         const item:EquityItem = gEquities.getItem(symbol);
-//        const numQuotes = (item.quotes)?item.quotes.rows.length:0;
         const s = item.stats || {};
         const c = item.company || {};
         const divDate = (s.dividendRate && s.exDividendDate)? date('%MM/%D/%YY', new Date(s.exDividendDate)) : '';

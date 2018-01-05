@@ -1,12 +1,11 @@
 import { TraderQuote,
          TraderIntraday,
          TraderSymbol}      from './Trader';
-import { Venues,
+import { VenueIDs,
          VenueSummary,
-         VenueSignature }   from './Venue';
+         Venue }   from './Venue';
 import { EquityItem }       from './Equities';
 import { EquitySplit }      from './Equities';
-import { m }                from 'hslayout';
 import { round }            from 'hsutil';
 
 
@@ -17,7 +16,7 @@ import { round }            from 'hsutil';
  * Behaves passively, i.e. does not initiate any server calls without explicit requests.
  * All methods initating requests are named `request***`
  */
-export class IexVenue extends VenueSignature {
+export class IexVenue extends Venue {
     private static base        = 'https://api.iextrading.com/1.0';
     private static symbolsUrl  =                 `${IexVenue.base}/ref-data/symbols`;
     private static marketUpdateUrl = ()       => `${IexVenue.base}/market`;
@@ -30,17 +29,39 @@ export class IexVenue extends VenueSignature {
 //    private dividendsUrl    = (sym:string) => `${IexVenue.base}/stock/${encodeURIComponent(sym)}/dividends/5y`;
 //    private logoUrl         = (sym:string) => `${IexVenue.base}/stock/${encodeURIComponent(sym)}/logo`;
 
-    private normalizeSymbols = (data:any[]) => {
-console.log(`found ${data.length} symbols for ${this.summary.venue.name}`);        
-        data.forEach((entry:any) => { 
-            this.summary.equities[`sym${entry.symbol}`] = entry; 
-            this.summary.symbols.push(entry.symbol);
-            this.summary.names.push(entry.name);
-        });
+    private static newSummary():VenueSummary {
+       return {
+            venueID:    VenueIDs.IEX, 
+            venueName: 'IEXTrading',
+            symbols:    [],
+            names:      [],
+            equities:   <{string:TraderSymbol}>{}
+        };
     }
 
-    private normalizeStats = (data:any, item:EquityItem):EquityItem => {
-        item.name                 = data.companyName;
+    private static normalizeMeta (data:any, item:EquityItem):EquityItem {
+        if (data) {
+            item.name                    = data.companyName;
+            item.symbol                  = data.symbol;
+            item.cat                     = item.cat || 'Stocks';
+            item.stats.latestDate        = data.latestTime? new Date(data.latestUpdate) : new Date();
+            item.stats.latestPrice       = data.latestPrice;
+            item.stats.closeDate         = new Date(data.closeTime);
+            item.stats.closePrice        = data.close;
+            item.stats.change            = data.change;
+            item.company                 = item.company || {};
+            item.company.sector          = data.sector;
+            item.company.primaryExchange = data.primaryExchange;
+            item.stats = item.stats || {};
+            item.otherStats = item.otherStats || {};
+            delete data.otherStats;
+            Object.keys(data).forEach((k:string) => ((item.stats[k]===undefined)? item.otherStats[k] = data[k] : ''));
+        }
+        return item;
+    }
+
+    private static normalizeStats = (data:any, item:EquityItem):EquityItem => {
+        item.name                 = data.companyName || 'unkown company';
         item.symbol               = data.symbol;
         item.cat                  = item.cat || 'Stocks';
         item.company              = item.company || {};
@@ -62,7 +83,7 @@ console.log(`found ${data.length} symbols for ${this.summary.venue.name}`);
         return item;
     }
 
-    private normalizeQuotes = (data:any[]):TraderQuote[] => {
+    private static normalizeQuotes(data:any[]):TraderQuote[] {
         return data
             .filter((d:any) => d.date)   // remove nulls
             .map((d:any) => {
@@ -77,46 +98,28 @@ console.log(`found ${data.length} symbols for ${this.summary.venue.name}`);
             }); // sorting willbe done in Trader
     }
 
-    private normalizeIntraday = (data:any[]):TraderIntraday[] => {
-        return data
-            .filter((d:any) => d.date && d.minute)   // remove nulls
-            .map((d:any) => {
-                return {
-                    Date: new Date(`${d.date} ${d.minute}`),
-                    high: parseFloat(d.marketHigh),
-                    low:  parseFloat(d.marketLow)
-                };
-            }); // sorting willbe done in Trader
+    private static normalizeIntraday(data:any[]):TraderIntraday[] {
+        return !data? [] : 
+            data.filter((d:any) => d.date && d.minute)   // remove nulls
+                .filter((d:any) => d.marketVolume>0)
+                .map((d:any) => {
+                    return {
+                        Date: new Date(d.date.slice(0,4), d.date.slice(4,6)-1, d.date.slice(-2), d.minute.slice(0,2), d.minute.slice(-2)),
+                        high: parseFloat(d.marketHigh),
+                        low:  parseFloat(d.marketLow)
+                    };
+                }); // sorting willbe done in Trader
     }
 
-    private normalizeSplits = (data:IEXSplit[]): EquitySplit[] => {
-        if (data.length>0) {
+    private static normalizeSplits(data:IEXSplit[]): EquitySplit[] {
+        if (data && data.length>0) {
             data.map((t:IEXSplit) => t.date = new Date(t.exDate));
             return data;
         }
         return undefined;
     }
 
-    private normalizeMeta = (data:any, item:EquityItem):EquityItem => {
-        item.name                    = data.companyName;
-        item.symbol                  = data.symbol;
-        item.cat                     = item.cat || 'Stocks';
-        item.stats.latestDate        = data.latestTime? new Date(data.latestUpdate) : new Date();
-        item.stats.latestPrice       = data.latestPrice;
-        item.stats.closeDate         = new Date(data.closeTime);
-        item.stats.closePrice        = data.close;
-        item.stats.change            = data.change;
-        item.company                 = item.company || {};
-        item.company.sector          = data.sector;
-        item.company.primaryExchange = data.primaryExchange;
-        item.stats = item.stats || {};
-        item.otherStats = item.otherStats || {};
-        delete data.otherStats;
-        Object.keys(data).forEach((k:string) => ((item.stats[k]===undefined)? item.otherStats[k] = data[k] : ''));
-        return item;
-    }
-
-    private processMarketsForLatestUpdate(markets:any[]):Date {
+    private static processMarketsForLatestUpdate(markets:any[]):Date {
         let maxDate:Date;
         let maxMarket = '??';
         markets.forEach((venue:any) => {
@@ -131,109 +134,84 @@ console.log('latest update: ${maxDate} on ${maxMarket}');
         return maxDate;
     }
 
+    private normalizeSymbols = (data:string[]):VenueSummary => {
+console.log(`found ${data.length} symbols for ${this.summary.venueName}`);        
+        data.forEach((entry:any) => { 
+            this.summary.equities[`sym${entry.symbol}`] = entry; 
+            this.summary.symbols.push(entry.symbol);
+            this.summary.names.push(entry.name);
+        });
+        return this.summary;
+    }
 
-    
 
-    summary: VenueSummary;
-
-    /** construct venue with minimal summary */
     constructor() {
         super();
-        this.summary = {
-            venue:     { id:Venues.IEX, name: 'IEXTrading' },
-            symbols:    [],
-            names:      [],
-            equities:   <{string:TraderSymbol}>{}
-        };
+        this.summary = IexVenue.newSummary();
     }
 
     /** retrieves the date and time of the most recent transaction on 
      * any of the markets supported by the venue */
     requestMarketUpdate(): Promise<Date> {
-        return m.request({url:IexVenue.marketUpdateUrl()})
-        .then(this.processMarketsForLatestUpdate);
+        return Venue.addPacedGet(IexVenue.marketUpdateUrl())
+        .then(IexVenue.processMarketsForLatestUpdate);
     }
 
-    /** retrieve list of supported symbols from venue */ 
-    requestVenueSymbols(): Promise<void> {
-        const url = IexVenue.symbolsUrl;
-console.log(`getting Trader symbols ${url}`);        
-        return VenueSignature.addPacedGet(url)
-        .then(this.normalizeSymbols)
-        .catch((err:any) => {
-            console.log(`error requesting ${url}`);
-            console.log(err);
-            console.log(err.stack);
-        });
-    }
-
-    requestMeta(item:EquityItem):Promise<EquityItem> {
+    requestMetaVenue(item:EquityItem):Promise<EquityItem> {
         function request(url:string, type:string, normalize:(data:any, item:EquityItem)=>EquityItem): Promise<EquityItem> {
-console.log(`requesting ${type} from ${url}`);        
-            return VenueSignature.addPacedGet(url)
-                .catch((err:any) => VenueSignature.metaError(item, type, stats, err, this.summary.venue.id))
-                .then((data:any) => !data? 
-                    VenueSignature.metaError(item, `${type}.then`, url, null, this.summary.venue.id) :
-                    normalize(data, item)
-                );
+            return Venue.addPacedGet(url)
+                .then((data:any) => {
+                    if(!data) { throw `no data for request ${url}`; }
+                    return normalize(data, item);
+                });
         }
 
         const stats = IexVenue.statsUrl(item.symbol);
         const meta  = IexVenue.metaUrl(item.symbol);
-        return Promise.all([
-            request(stats, 'stats', this.normalizeStats), 
-            request(meta, 'meta', this.normalizeMeta)
-        ])
-        .then(() => item);  // after all promises resolved, return item.
+        return Promise.resolve()
+        .then(() => request(stats, 'stats', IexVenue.normalizeStats))
+        .catch((err:any) => {
+            console.log(`*** error in request stats for ${stats}: ${err}`);
+        })
+        .then(() => request(meta, 'meta', IexVenue.normalizeMeta));
     }
 
-    requestQuotes(item:EquityItem, missingDays:number):Promise<TraderQuote[]> {
+    requestQuotesVenue(item:EquityItem, missingDays:number):Promise<TraderQuote[]> {
         let timeCode;
-        if (item.quotes.rows.length === 0) {
-            timeCode = '5yr';
-        } else {
-            if (missingDays > 720)  { timeCode = '5yr'; }
-            if (missingDays > 360)  { timeCode = '2yr'; }
-            if (missingDays > 170)  { timeCode = '1yr'; }
-            if (missingDays > 80)   { timeCode = '6m'; }
-            if (missingDays > 28)   { timeCode = '3m'; }
+//        if (!item.quotes || item.quotes.rows.length === 0) {
+//            timeCode = '5yr';
+//        } else {
             if (missingDays > 1)    { timeCode = '1m'; }
-        }
+            if (missingDays > 28)   { timeCode = '3m'; }
+            if (missingDays > 80)   { timeCode = '6m'; }
+//            if (missingDays > 170)  { timeCode = '1yr'; }
+//            if (missingDays > 360)  { timeCode = '2yr'; }
+//            if (missingDays > 720)  { timeCode = '5yr'; }
+//        }
     
         const url = IexVenue.quoteUrl(item.symbol)+'/'+ timeCode;
-        return (!timeCode)? Promise.resolve(<TraderQuote[]>[]) :
-            VenueSignature.addPacedGet(url)
-            .then(this.normalizeQuotes);
+        return (!timeCode)? 
+            Promise.resolve(<TraderQuote[]>[]) :
+            Venue.addPacedGet(url).then(IexVenue.normalizeQuotes);
     }
 
-    requestIntraday(item:EquityItem):Promise<TraderIntraday[]> {
+    requestIntradayVenue(item:EquityItem):Promise<TraderIntraday[]> {
         const url = IexVenue.quoteUrl(item.symbol)+'/1d';
-        return VenueSignature.addPacedGet(url)
-            .then(this.normalizeIntraday);
+        return Venue.addPacedGet(url)
+            .then(IexVenue.normalizeIntraday);
     }
 
-    requestSplits(item:EquityItem):Promise<EquitySplit[]> {
+    requestSplitsVenue(item:EquityItem):Promise<EquitySplit[]> {
         const url = IexVenue.splitsUrl(item.symbol);
-        return VenueSignature.addPacedGet(url)
-            .then(this.normalizeSplits)
-            .catch((err:any):EquitySplit[] => {
-                console.log(`error requesting ${url}`);
-                console.log(err);
-                console.log(err.stack);
-                return [];
-            });
+        return Venue.addPacedGet(url)
+            .then(IexVenue.normalizeSplits);
     }
 
-    requestSymbols():Promise<VenueSummary> {
+    requestSymbolsForVenue():Promise<VenueSummary> {
         const url = IexVenue.symbolsUrl;
 console.log(`getting Trader symbols ${url}`);        
-        return m.request({ method: 'GET', url: url })
-        .then(this.normalizeSymbols)
-        .catch((err:any) => {
-            console.log(`error requesting ${url}`);
-            console.log(err);
-            console.log(err.stack);
-        });
+        return Venue.addPacedGet(url)
+            .then(this.normalizeSymbols);
     }
 };
 

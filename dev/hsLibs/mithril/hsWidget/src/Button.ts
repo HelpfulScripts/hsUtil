@@ -59,11 +59,13 @@ export class ToggleButton extends Selector {
         desc.changed = desc.changed || ((item:string) => console.log(`missing changed() function for Button item ${item}`));
 
         if (toggleIndex<0) { toggleIndex = desc.items.indexOf(desc.selectedItem); }
+
+        // insert click update into passed won click function
         const parentChanged = desc.changed;
         desc.changed = ((item:string) => {
             toggleIndex = (toggleIndex+1) % desc.items.length;
             parentChanged(item);
         });
-        return m(`.hs-toggle-button ${css}`, {style:style, desc:desc}, m('span', this.renderItem(desc, toggleIndex)));
+        return m(`.hs-toggle-button ${css}`, {style:style}, m('span', this.renderItem(desc, toggleIndex)));
     }
 }
