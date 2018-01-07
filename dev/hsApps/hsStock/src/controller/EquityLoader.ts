@@ -109,6 +109,7 @@ export class EquityLoader {
                     if (!trade.appliedSplits) { trade.appliedSplits = {}; }
                     if (!trade.appliedSplits[split.date.getTime()] && trade.Date < split.date) {
                         trade.price *= split.ratio;
+                        trade.shares /= split.ratio;
                         trade.appliedSplits[split.date.getTime()] = split.ratio;
                         item.changed = true;
                     }
@@ -211,7 +212,7 @@ export class EquityLoader {
     public marketUpdate():Promise<boolean> {
         return Promise.all(
             this.list.getAllSymbols()
-            .filter((s:string) => s==='AAPL')
+//            .filter((s:string) => s==='AAPL')
             .map((sym:string) => this.loadRemote(this.list.getItem(sym))
             )
         )

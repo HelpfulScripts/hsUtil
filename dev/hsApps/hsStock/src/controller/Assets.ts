@@ -11,7 +11,7 @@ export interface Transaction {
     Date: Date;
     /** the equity symbol being traded */
     symbol: string;
-    /** the numbermof shares being bought (positive) or sold (negative) */
+    /** the number of shares being bought (positive) or sold (negative) */
     shares: number;
     price?: number;
     appliedSplits?: {[splitDateMS:number]: number};

@@ -46,15 +46,16 @@ export abstract class Plot extends SVGElem {
         );
     }
 
-    drawLabel(clipID:string, data:DataRow[], x:number, y:number, lbl:number, scales:XYScale, sStyle:SeriesStyle) {
+    drawLabel(clipID:string, data:DataRow[], x:number, y:number, lbl:number, scales:XYScale, sDef:SeriesDef) {
+        const sStyle = sDef.style;
         const cfg:TextElem = {
             text:       '', 
             cssClass:   ``,
             style:      `fill:${sStyle.label.color}`,
             xpos:       TextHAlign.middle,
             ypos:       TextVAlign.center,
-            hOffset:    0,
-            vOffset:    0
+            hOffset:    sDef.hOffset,
+            vOffset:    sDef.vOffset
         };
         return !sStyle.marker.visible? m('.invisible-marker','') : m('svg', {class:'hs-graph-series-labels'},
             data.map((p:DataRow) => {

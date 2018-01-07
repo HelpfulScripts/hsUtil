@@ -219,6 +219,8 @@ export interface SeriesDef {
     yh?:string; // high-y values
     yl?:string; // low-y-values
     l?:string;  // labels
+    hOffset?: number; // offset in em
+    vOffset?: number; // offset in em
     /** An index into the `Data[]` pool, identifying the `Data` set to use. defaults to `0` */
     dataIndex?: number;
     /** optional plot type, selected from {@link Series.Series.plot Series.plot}; defaults to  `Series.plot.line` */

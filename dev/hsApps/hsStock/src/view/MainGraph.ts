@@ -4,7 +4,8 @@ import { Data,
          DataSet }      from 'hsdata';
 import { Condition }    from 'hsdata';
 //import { RadioButtons } from 'hswidget';
-import { Button,
+import { 
+//         Button,
          ToggleButton } from 'hswidget';
 import { Graph,
          Series,
@@ -12,19 +13,38 @@ import { Graph,
 import { gEquities,
          EquityItem }   from '../controller/Equities';
 
-let limitDate:Date;
+let limitDateIndex = 0;
+
+function getLimitDate(time:string):Date {
+    const result = new Date();
+    switch (time) {
+        case 'max':  result.setFullYear(result.getFullYear()-30); break;
+        case '20yr': result.setFullYear(result.getFullYear()-20); break;
+        case '10yr': result.setFullYear(result.getFullYear()-10); break;
+        case '5yr':  result.setFullYear(result.getFullYear()-5); break;
+        case '1yr':  result.setFullYear(result.getFullYear()-1); break;
+        case '1mo':  result.setMonth(result.getMonth()-1); break;
+        case '10d':  result.setDate(result.getDate()-10); break;
+        case '1d':   result.setDate(result.getDate()-1); break;
+    }
+    result.setHours(0);
+    return result;
+}
 
 export class MainGraph extends Layout { 
     getComponents(node: Vnode): Vnode { 
-        const timeWindows = ['max', '20yr', '10yr', '5yr', '1yr', '1mo', '10d', '1d'];
-        const limitDates = [
-            new Date('1/1/1990'), new Date('1/1/1997'), new Date('1/1/2007'), new Date('1/1/2013'), new Date('1/1/2017'), new Date('12/1/2017'),
-            new Date('12/20/2017'),  new Date('12/29/2017')
-        ];
-        if (!limitDate) { limitDate = limitDates[1]; }
+        const timeWindows = ['1d', '10d', '1mo', '1yr', '5yr', '10yr', '20yr', 'max'];
+        const limitDates = timeWindows.map(getLimitDate);
+        let limitDate = limitDates[limitDateIndex];
+        let maxDate = new Date();
         const symbol = m.route.param('symbol');
         const item:EquityItem = gEquities.getItem(symbol);
-        const data:DataSet = item.quotes? item.quotes : {names:['Date', 'Close'], rows:[['1/1/17',0], ['12/31/17', 1]]};
+        if (limitDateIndex===0 && item.intraday) {
+            limitDate = <Date>item.intraday.rows[0][0]; // the date
+            maxDate = <Date>item.intraday.rows[item.intraday.rows.length-1][0];
+        }
+        const dataQuotes:DataSet = item.quotes? item.quotes : {names:['Date', 'Close'], rows:[]};
+        const dataIntra:DataSet = item.intraday? item.intraday : {names:['Date', 'Close'], rows:[]};
         const shares:DataSet = Data.toDataSet(item.trades);
 //        const cond:Condition = { Date: (d:Date) => d.getFullYear()>1900};
         const buyCond:Condition = { change: (c:number) => c>0};
@@ -36,16 +56,16 @@ export class MainGraph extends Layout {
             cfg.chart.title.visible = false;
             cfg.axes.primary.x.scale.type = Axes.type.date;
             cfg.axes.primary.x.title.visible = false;
-            cfg.axes.primary.x.scale.domain = ['auto', new Date()]; // always up to today
+            cfg.axes.primary.x.scale.domain = ['auto', maxDate]; // always up to today
             cfg.axes.primary.y.scale.type = Axes.type.log;
             cfg.axes.primary.y.scale.domain = ['tight', 'tight']; // always up to today
             cfg.axes.primary.y.title.visible = false;
             cfg.axes.primary.y.ticks.minor.labels.visible = true;
             cfg.grid.minor.hor.visible = true;
-            cfg.series.data   = [data, shares];
+            cfg.series.data   = [dataQuotes, shares, dataIntra];
             cfg.series.defaultStyle.line.width = 1;
             cfg.series.series = [
-                { x:'Date', yh:'High', yl:'Low', type: Series.plot.area },
+                { x:'Date', yh:'High', yl:'Low', type: Series.plot.area, dataIndex:limitDateIndex===0?2:0},
                 { x:'Date', y:'Close', type: Series.plot.line },
                 { x:'Date', y:'price', l:'change', type: Series.plot.marker, dataIndex:1, cond:buyCond },
                 { x:'Date', y:'price', l:'change', type: Series.plot.marker, dataIndex:1, cond:sellCond }
@@ -57,11 +77,13 @@ export class MainGraph extends Layout {
             cfg.series.series[2].style.marker.color = '#0c0';
             cfg.series.series[2].style.label.color = '#0c0';
             cfg.series.series[2].style.marker.size = 8;
+            cfg.series.series[2].vOffset = 5;   // em
             cfg.series.series[3].style.line.visible = false;
             cfg.series.series[3].style.marker.shape = Series.marker.downTriangle;
             cfg.series.series[3].style.marker.color = '#a00';
             cfg.series.series[3].style.label.color = '#a00';
             cfg.series.series[3].style.marker.size = 8;
+            cfg.series.series[3].vOffset = 5;   // em 
         }}),
         m(ToggleButton, { 
             style: 'left:100px; width:35px;',
@@ -70,14 +92,9 @@ export class MainGraph extends Layout {
                 selectedItem: timeWindows[1],
                 changed: (item:string) => {
                     const i = (timeWindows.indexOf(item) + 1) % timeWindows.length;
-                    limitDate = limitDates[i];
+                    limitDateIndex = i;
                 }
             }
-        }),
-        m(Button, { 
-            style: 'left:150px; width:70px;',
-            name: 'Update',
-            onclick: () => gEquities.getMarketUpdate()
         })
         ];
     }     

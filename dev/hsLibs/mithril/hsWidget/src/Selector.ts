@@ -132,7 +132,9 @@ export const Selectable = {
         node.attrs.desc = undefined;
         const css           = desc.css || '';
         const cssSelected   = `${desc.isSelected?'hs-selected': ''}`;
-        const onclick       = desc.clicked? ()   => { desc.clicked(desc.title); }   : undefined;
+        const onclick       = desc.clicked? ()   => { 
+            desc.clicked(desc.title); 
+        }   : undefined;
         const onmousedown   = desc.mouseDown? () => { desc.mouseDown(desc.title); } : undefined;
         const onmouseup     = desc.mouseUp? ()   => { desc.mouseUp(desc.title); }   : undefined;
         return m(`.hs-selectable ${css} ${cssSelected}`, 

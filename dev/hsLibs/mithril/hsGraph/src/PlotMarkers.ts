@@ -46,7 +46,8 @@ export class PlotMarkers extends Plot {
         if (y===undefined) { return m('.error',''); }
         return [
             this.drawMarker(clipID, data.getData(), x, y, scales, series.style),
-            l? this.drawLabel(clipID, data.getData(), x, y, l, scales, series.style) : undefined
+            (l===undefined)? undefined :
+                this.drawLabel(clipID, data.getData(), x, y, l, scales, series)
         ];
     }
 }

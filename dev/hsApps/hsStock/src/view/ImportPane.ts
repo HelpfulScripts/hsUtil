@@ -26,6 +26,11 @@ function buttons(list:Equities) {
         m(Button, {name:'get Stock Splits', onclick:readSplits}),
 //        m(Button, {name:'clear invalid venues', onclick:gEquities.clearInvalids.bind(gEquities)}),
         m(Button, {name:'Stock Import'}),
+        m(Button, { 
+//            style: 'left:150px; width:70px;',
+            name: 'Update',
+            onclick: () => gEquities.getMarketUpdate()            
+        }),
         m('', `${Symbols.length} records loaded`)
     ];
 }
