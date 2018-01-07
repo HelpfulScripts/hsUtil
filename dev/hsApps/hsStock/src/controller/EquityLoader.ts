@@ -109,7 +109,8 @@ export class EquityLoader {
                     if (!trade.appliedSplits) { trade.appliedSplits = {}; }
                     if (!trade.appliedSplits[split.date.getTime()] && trade.Date < split.date) {
                         trade.price *= split.ratio;
-                        trade.shares /= split.ratio;
+                        trade.change /= split.ratio;
+                        trade.total /= split.ratio;
                         trade.appliedSplits[split.date.getTime()] = split.ratio;
                         item.changed = true;
                     }

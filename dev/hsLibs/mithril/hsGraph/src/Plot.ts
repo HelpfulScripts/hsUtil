@@ -14,6 +14,7 @@ import { XYScale }      from './AxesTypes';
 import { Series, 
          SeriesStyle,
          SeriesDef }    from './Series';
+import { round }        from 'hsutil';
 
 export abstract class Plot extends SVGElem {
     drawLine(clipID:string, data:DataRow[], x:number, y:number, scales:XYScale, sStyle:SeriesStyle) {
@@ -61,7 +62,7 @@ export abstract class Plot extends SVGElem {
             data.map((p:DataRow) => {
                 cfg.x = ''+scales.x.convert(<number>p[x]);
                 cfg.y = ''+scales.y.convert(<number>p[y]);
-                return this.text(cfg, <string>p[lbl]);
+                return this.text(cfg, round(<number>p[lbl], 3));
             })
         );
     }

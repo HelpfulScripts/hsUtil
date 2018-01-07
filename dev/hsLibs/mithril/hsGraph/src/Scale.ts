@@ -59,24 +59,28 @@ function logScaleTickMarks(dom:NumRange, ticks:Ticks) {
 }
 
 const tickCategories = [
-    [10,0,0], [1,0,0], [0,3,0], [0,1,0], [0,0,7], [0,0,1]
+    [10,0,0,0], [1,0,0,0], [0,3,0,0], [0,1,0,0], [0,0,7,0], [0,0,0,8]
 ];
 
 function dateScaleTickMarks(dom:Domain, ticks:Ticks, fmt='%MM/%DD/%YY') {
     function addDates(i:number, tickDefs:TickDefs) {
         const createDate = (idx:number) => new Date(
-            Math.floor(dateDom[idx].getFullYear()/modYr)*modYr + (idx?incYr:0),
-            (incYr > 0)? 0 : Math.floor(dateDom[idx].getMonth()/modMo)*modMo + (idx?incMo:0),
-            (incMo > 0)? 1 : (dateDom[idx].getDate()- ((incDay === 7)? dateDom[idx].getDay() : 0)) + (idx?incDay:0)
+            Math.floor(
+   /* yr*/  dateDom[idx].getFullYear()/modYr)*modYr + (idx?incYr:0),
+   /* mo*/  (incYr > 0)? 0 : Math.floor(dateDom[idx].getMonth()/modMo)*modMo + (idx?incMo:0),
+   /* d */  (incMo > 0)? 1 : (dateDom[idx].getDate()- ((incDay === 7)? dateDom[idx].getDay() : 0)) + (idx?incDay:0),
+   /* h */  (incDay> 0)? 1 : (dateDom[idx].getHours()) + (idx?incHour:0)
         );
-        const incYr  = tickCategories[i][0]; 
-        const incMo  = tickCategories[i][1]; 
-        const incDay = tickCategories[i][2];
-        const modYr  = incYr || 1;
-        const modMo  = incMo || 1;
-        const date0  = createDate(0);
-        const date1  = createDate(1);
-        for (let d = date0; d<=date1; d = new Date(d.getFullYear()+incYr, d.getMonth()+incMo, d.getDate()+incDay)) { 
+        const incYr   = tickCategories[i][0]; 
+        const incMo   = tickCategories[i][1]; 
+        const incDay  = tickCategories[i][2];
+        const incHour = tickCategories[i][3];
+        const modYr   = incYr || 1;
+        const modMo   = incMo || 1;
+        const date0   = createDate(0);
+        const date1   = createDate(1);
+        fmt = incHour? '%hh:%mm' : '%MM/%DD/%YY';
+        for (let d = date0; d<=date1; d = new Date(d.getFullYear()+incYr, d.getMonth()+incMo, d.getDate()+incDay, d.getHours()+incHour)) { 
             addTickDate(tickDefs, d, fmt); 
         } 
 
@@ -87,7 +91,7 @@ function dateScaleTickMarks(dom:Domain, ticks:Ticks, fmt='%MM/%DD/%YY') {
     ];
     const d = dateDom[1].getTime() - dateDom[0].getTime();
     tickCategories.some((cat:number[], i:number) => {
-        const dMin = ms.fromDays((cat[0]*365 + cat[1]*30 + cat[2]) * 1.5);
+        const dMin = ms.fromDays((cat[0]*365 + cat[1]*30 + cat[2]) * 1.5) + ms.fromHours(cat[3]*1.5);
         if (d>dMin) {
             addDates(i, ticks.major);
             addDates(Math.min(i+1, tickCategories.length-1), ticks.minor);

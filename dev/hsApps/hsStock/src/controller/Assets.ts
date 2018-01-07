@@ -12,7 +12,9 @@ export interface Transaction {
     /** the equity symbol being traded */
     symbol: string;
     /** the number of shares being bought (positive) or sold (negative) */
-    shares: number;
+    change: number;
+    /** the total number of shares after the transaction */
+    total: number;
     price?: number;
     appliedSplits?: {[splitDateMS:number]: number};
 }
@@ -40,7 +42,7 @@ function fileToList(data:any):TransactionList {
         .sort((a:any, b:any)=> a.Date < b.Date);
         const latestTrade = data[sym][data[sym].length-1];
         list[sym] = {
-            latestDate:latestTrade.DAte,
+            latestDate:latestTrade.Date,
             latestShares: latestTrade.total,
             trades:<Transaction[]>[]
         };

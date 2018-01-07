@@ -319,7 +319,8 @@ export class Graph extends SVGElem {
                 margin.r = Math.max(margin.r, box[0].x+box[0].width +cfgm.right -viewBoxWidth);               
             }
             margin.t = Math.min(margin.t, 40);  // limit to max 20px
-            margin.b = Math.min(margin.b, 40);  // limit to max 20px
+            margin.b = 30; //Math.min(margin.b, 40);  // limit to max 20px
+            margin.l = 40;
         }
         const margin = {t:-1e6,l:-1e6,b:-1e6,r:-1e6};
         getBBox('hs-graph-axis');
@@ -338,9 +339,9 @@ export class Graph extends SVGElem {
         window.addEventListener("resize", function() { m.redraw(); });
         this.adjustHeight(node); 
         Promise.resolve(node.attrs.cfg)
-               .then(delay(10))
-               .then(this.adjustMargins.bind(this))
-               .then(m.redraw);
+            .then(delay(10))
+            .then(this.adjustMargins.bind(this))
+            .then(m.redraw);
     }
 
     /** 
