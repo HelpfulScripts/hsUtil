@@ -47,14 +47,28 @@ function percentScaleTickMarks(dom:NumRange, ticks:Ticks, numTicks:number) {
 function logScaleTickMarks(dom:NumRange, ticks:Ticks) {
     dom[0] = Math.max(dom[0], 1e-20);
     dom[1] = Math.max(dom[1], 1e-20);
+    let dif = Math.pow(10, Math.floor(Math.log10(dom[1] - dom[0])));
     let min = Math.pow(10, Math.floor(Math.log10(dom[0])));
     let max = Math.pow(10, Math.ceil(Math.log10(dom[1])));
-    for (let i=1; i<20; i++) {
-        for (let v = min; v*i<=max; v*=10) {
-            if (i===1) { addTickNumber(ticks.major, v*i); }
-            else if (i===10) {}
-            else { addTickNumber(ticks.minor, v*i); }
+    if (dif > min) {
+        for (let i=1; i<12; i++) {
+            for (let v = min; v*i<=max; v*=10) {
+                if (i===1) { addTickNumber(ticks.major, v*i); }
+                else if (i===10) {}
+                else { addTickNumber(ticks.minor, v*i); }
+            }
         }
+    } else {
+        min = Math.floor(dom[0]/dif)*dif;
+        max = Math.ceil(dom[1]/dif)*dif;
+        if ((max-min)/dif < 4) { 
+            dif /= 2; 
+        }
+        for (let v = min; v<=max; v+=dif) {
+            addTickNumber(ticks.major, v);
+        }
+        addTickNumber(ticks.major, min);
+        addTickNumber(ticks.major, max);
     }
 }
 
