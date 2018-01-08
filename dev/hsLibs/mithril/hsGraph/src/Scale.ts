@@ -59,7 +59,7 @@ function logScaleTickMarks(dom:NumRange, ticks:Ticks) {
 }
 
 const tickCategories = [
-    [10,0,0,0], [1,0,0,0], [0,3,0,0], [0,1,0,0], [0,0,7,0], [0,0,0,8]
+    [10,0,0,0], [1,0,0,0], [0,3,0,0], [0,1,0,0], [0,0,7,0], [0,0,1,0], [0,0,0,1]
 ];
 
 function dateScaleTickMarks(dom:Domain, ticks:Ticks, fmt='%MM/%DD/%YY') {
@@ -89,6 +89,8 @@ function dateScaleTickMarks(dom:Domain, ticks:Ticks, fmt='%MM/%DD/%YY') {
         (typeof dom[0] === 'number')? new Date(dom[0]) : <Date>dom[0], 
         (typeof dom[1] === 'number')? new Date(dom[1]) : <Date>dom[1]
     ];
+    if (isNaN(dateDom[0].getTime())) { dateDom[0] = new Date('1/1/1980'); } 
+    if (isNaN(dateDom[1].getTime())) { dateDom[0] = new Date(); } 
     const d = dateDom[1].getTime() - dateDom[0].getTime();
     tickCategories.some((cat:number[], i:number) => {
         const dMin = ms.fromDays((cat[0]*365 + cat[1]*30 + cat[2]) * 1.5) + ms.fromHours(cat[3]*1.5);

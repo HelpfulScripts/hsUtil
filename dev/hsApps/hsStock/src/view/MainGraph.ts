@@ -56,7 +56,7 @@ export class MainGraph extends Layout {
             cfg.chart.title.visible = false;
             cfg.axes.primary.x.scale.type = Axes.type.date;
             cfg.axes.primary.x.title.visible = false;
-            cfg.axes.primary.x.scale.domain = ['auto', maxDate]; // always up to today
+            cfg.axes.primary.x.scale.domain = ['auto', 'tight']; // always up to today
             cfg.axes.primary.y.scale.type = Axes.type.log;
             cfg.axes.primary.y.scale.domain = ['tight', 'tight']; // always up to today
             cfg.axes.primary.y.title.visible = false;
