@@ -49,7 +49,7 @@ export function traderQuote2Dataset(dataIn:any[]):DataSet  {
     const names = ['Date', 'Open', 'Close', 'High', 'Low', 'Volume'];
     if (dataIn.length === 0) {
         console.log(`received no quotes ${(<any>dataIn).url}`);
-        return { names:names, rows:[]};
+        return { colNames:names, rows:[]};
     } else {
         const rows  = dataIn
         .filter((e:any) => e.date)
@@ -72,7 +72,7 @@ export function traderQuote2Dataset(dataIn:any[]):DataSet  {
                 ];
             }
         });
-        return { names:names, rows:rows};
+        return { colNames:names, rows:rows};
     }
 };
 
@@ -129,7 +129,7 @@ export class Trader {
     private static addIntraday(quotes:TraderIntraday[], item:EquityItem):EquityItem {
         const names = ['Date', 'High', 'Low'];
         const rows  = quotes.map((t:TraderIntraday) => [t.Date, t.high, t.low]);
-        item.intraday = {names:names, rows:rows};
+        item.intraday = {colNames:names, rows:rows};
         return item;
     }
 
@@ -139,17 +139,21 @@ export class Trader {
      * @param item 
      */
     private static addQuotes(quotes:TraderQuote[], item:EquityItem):EquityItem {
+        const  sortDate = ((r0:Date[], r1:Date[]) => r0[0].getTime() - r1[0].getTime());
         let lastItemDate = new Date('1/1/1980');
         if (!item.quotes) {
             item.quotes = {
-                names: ['Date','Open','Close','High','Low','Volume'],
+                colNames: ['Date','Open','Close','High','Low','Volume'],
                 rows: []
             };
         }
-        const dCol = item.quotes.names.indexOf('Date');
+        const dCol = item.quotes.colNames.indexOf('Date');
         if (item.quotes.rows.length > 0) {
+            item.quotes.rows.sort(sortDate);
+//item.quotes.rows.map((r:any[]) => console.log(r[0]));            
             const latestRow = item.quotes.rows[item.quotes.rows.length-1];
-            lastItemDate = (typeof latestRow[dCol] === 'string')? new Date(latestRow[dCol]) : lastItemDate;
+            lastItemDate = (typeof latestRow[dCol] === 'string')? new Date(latestRow[dCol]) : <Date>latestRow[dCol];
+//console.log(`${item.name}: ${latestRow[0]} ${dCol} ${lastItemDate}`);            
         }
         quotes
             .sort((a:TraderQuote, b:TraderQuote) => a.Date.getTime() - b.Date.getTime())
@@ -159,7 +163,7 @@ export class Trader {
                 }
             });
         if (item.quotes.rows.length > 0) {  // update item.stats
-            const vCol = item.quotes.names.indexOf('Volume');
+            const vCol = item.quotes.colNames.indexOf('Volume');
             const latestRow = item.quotes.rows[item.quotes.rows.length-1];
             item.stats.closeVolume = <number>latestRow[vCol];
             item.stats.closeDate   = <Date>latestRow[dCol];
@@ -171,7 +175,7 @@ export class Trader {
         if (!item.quotes || item.quotes.rows.length === 0) {
             return 10000;
         } else {
-            const dCol      = item.quotes.names.indexOf('Date');
+            const dCol      = item.quotes.colNames.indexOf('Date');
             const latestRow = item.quotes.rows[item.quotes.rows.length-1];
             return ms.toDays(new Date().getTime() - new Date(latestRow[dCol]).getTime());
         }

@@ -66,12 +66,12 @@ export class Data {
         nominal:    'nominal data'
     };
 
-    public static toDataSet(data:DataLiteralSet):DataSet {
+    public static toDataSet(data:DataLiteralSet, name?:string):DataSet {
         data = data || [{}];
         const names = Object.keys(data[0]);
         const rows = data.map((r:any) => 
             names.map((n:string) => r[n]));
-        return { rows:rows, colNames:names };
+        return { rows:rows, colNames:names, name:name||undefined };
     }
 
     constructor(data?:DataSet) {
@@ -83,6 +83,7 @@ export class Data {
      * @param data the data set to import
      */
     public import(data:DataSet) {
+        this.name = data.name;
         this.setData(data.rows, data.colNames);
     }
 
@@ -175,23 +176,6 @@ export class Data {
         }
     }
 
-    /**
-     * sets `data` to the existing data set. If data has previously been set, 
-     * `data` will be added to the end of the list if all `names`  match those of the 
-     * existing set. 
-     * @param data the data to add
-     * @param names an array of names that match the columns
-     * @param autoType unless set to false, the method will attempt to determine the 
-     * type of data and automatically cast data points to their correct value
-     */
-    public setData(data:DataRow[], names:ColumnReference[], autoType=true):void {
-        this.meta = [];
-        this.data = data;
-        names.forEach((col:string) => this.addColumn(col));
-        names.forEach((col:string) => this.findTypes(col));
-        this.castData();
-    }
-
     public * allRows(column:ColumnReference):Iterable<DataVal> {
         const c = this.colNumber(column);
         for (let r=0; r<this.data.length; r++) {
@@ -228,12 +212,33 @@ export class Data {
     //----------------------------
     private data: DataRow[]    = [];
     private meta: MetaStruct[] = [];
+    private name: string;
 
     private getMeta(col:ColumnReference):MetaStruct { 
         if (!this.meta) { this.meta = []; }
         if (!this.meta[col]) { return undefined; }
        	this.meta[col].accessed = true;
         return this.meta[col]; 
+    }
+
+    /**
+     * sets `data` to the existing data set. If data has previously been set, 
+     * `data` will be added to the end of the list if all `names`  match those of the 
+     * existing set. 
+     * @param data the data to add
+     * @param names an array of names that match the columns
+     * @param autoType unless set to false, the method will attempt to determine the 
+     * type of data and automatically cast data points to their correct value
+     */
+    private setData(data:DataRow[], names:string[], autoType=true):void {
+        this.meta = [];
+        this.data = data;
+        if (!names) {
+            console.log();
+        }
+        names.forEach((col:string) => this.addColumn(col));
+        names.forEach((col:string) => this.findTypes(col));
+        this.castData();
     }
 
     private addColumn(newCol:string):number {

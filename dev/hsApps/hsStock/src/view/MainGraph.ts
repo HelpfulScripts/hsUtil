@@ -33,25 +33,26 @@ function getLimitDate(time:string):Date {
 
 export class MainGraph extends Layout { 
     getComponents(node: Vnode): Vnode { 
-        const timeWindows = ['1d', '10d', '1mo', '1yr', '5yr', '10yr', '20yr', 'max'];
+        const timeWindows = ['1yr', '1mo', '10d', '1d', '20yr', '10yr', '5yr'];
         const limitDates = timeWindows.map(getLimitDate);
         let limitDate = limitDates[limitDateIndex];
         let maxDate = new Date();
         const symbol = m.route.param('symbol');
         const item:EquityItem = gEquities.getItem(symbol);
-        if (limitDateIndex===0 && item.intraday) {
+        if (timeWindows[limitDateIndex]==='1d' && item.intraday) {
             limitDate = <Date>item.intraday.rows[0][0]; // the date
             maxDate = <Date>item.intraday.rows[item.intraday.rows.length-1][0];
         }
-        const dataQuotes:DataSet = item.quotes? item.quotes : {names:['Date', 'Close'], rows:[]};
-        const dataIntra:DataSet = item.intraday? item.intraday : {names:['Date', 'Close'], rows:[]};
-        const shares:DataSet = Data.toDataSet(item.trades);
+        const dataQuotes:DataSet = item.quotes? item.quotes : 
+            {name:'Quotes', colNames:['Date', 'Close'], rows:[]};
+        const dataIntra:DataSet = item.intraday? item.intraday : 
+            {name:'Intraday', colNames:['Date', 'Close'], rows:[[]]};
+        const shares:DataSet = Data.toDataSet(item.trades, 'Shares');
 //        const cond:Condition = { Date: (d:Date) => d.getFullYear()>1900};
         const buyCond:Condition = { change: (c:number) => c>0};
         const sellCond:Condition = { change: (c:number) => c<0};
-        
         const timeCond:Condition = { Date: (d:Date) => d>limitDate};
-        return [m(Graph, {cfgFn: (cfg:any) => {
+        return [m('.hs-layout-fill', { onmousemove:console.log}, m(Graph, { cfgFn: (cfg:any) => {
             cfg.graph.timeCond = timeCond;
             cfg.chart.title.visible = false;
             cfg.axes.primary.x.scale.type = Axes.type.date;
@@ -65,7 +66,7 @@ export class MainGraph extends Layout {
             cfg.series.data   = [dataQuotes, shares, dataIntra];
             cfg.series.defaultStyle.line.width = 1;
             cfg.series.series = [
-                { x:'Date', yh:'High', yl:'Low', type: Series.plot.area, dataIndex:limitDateIndex===0?2:0},
+                { x:'Date', yh:'High', yl:'Low', type: Series.plot.area, dataIndex:timeWindows[limitDateIndex]==='1d'?2:0},
                 { x:'Date', y:'Close', type: Series.plot.line },
                 { x:'Date', y:'price', l:'change', type: Series.plot.marker, dataIndex:1, cond:buyCond },
                 { x:'Date', y:'price', l:'change', type: Series.plot.marker, dataIndex:1, cond:sellCond }
@@ -84,12 +85,12 @@ export class MainGraph extends Layout {
             cfg.series.series[3].style.label.color = '#a00';
             cfg.series.series[3].style.marker.size = 8;
             cfg.series.series[3].vOffset = 5;   // em 
-        }}),
+        }})),
         m(ToggleButton, { 
             style: 'left:100px; width:35px;',
             desc: {
                 items:timeWindows, 
-                selectedItem: timeWindows[1],
+                selectedItem: timeWindows[limitDateIndex],
                 changed: (item:string) => {
                     const i = (timeWindows.indexOf(item) + 1) % timeWindows.length;
                     limitDateIndex = i;

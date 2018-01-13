@@ -372,7 +372,7 @@ export class Graph extends SVGElem {
 
         Graph.adjustConfig(cfg);
         node.attrs.cfg = cfg;
-        const result = m('svg', { class:'hs-graph', width:'100%', height:'100%', 
+        return m('svg', { class:'hs-graph', width:'100%', height:'100%', 
                 viewBox:`0 0 ${round(viewBoxWidth)} ${round(viewBoxHeight)}` }, [
             m(Canvas, { cfg:cfg.canvas}),
             m(Chart, { cfg:cfg.chart, plotArea:plotArea }),
@@ -381,7 +381,5 @@ export class Graph extends SVGElem {
             m(Series, { cfg:cfg.series, scales:scales, data:data }),
             m(Legend, { cfg:cfg.legend })
         ]);
-        return result;
     }
 }
-

@@ -42,8 +42,8 @@ function saveMeta(item:EquityItem):EquityItem {
 function updateStats(item: EquityItem):EquityItem {
     if (item && item.quotes && item.quotes.rows && item.quotes.rows.length > 0) {
         const date = item.stats.closeDate;
-        const dCol = item.quotes.names.indexOf('Date');
-        const vCol = item.quotes.names.indexOf('Volume');
+        const dCol = item.quotes.colNames.indexOf('Date');
+        const vCol = item.quotes.colNames.indexOf('Volume');
         const latestRow = item.quotes.rows[item.quotes.rows.length-1];
         if (new Date(latestRow[dCol]) === date) {
             item.stats.closeVolume = <number>latestRow[vCol];
@@ -228,12 +228,20 @@ export class EquityLoader {
         /** adds a quotes DataSet to an item  */
         function addQuotesToItem(quotes:DataSet):EquityItem { 
             item.quotes = quotes;
+            if (item.quotes['names']) {
+                item.quotes.colNames = item.quotes['names'];
+                delete item.quotes['names'];
+            }
             Trader.getVenue(item); // to initialize the venues in item
             return item;
         }
         function copyParts(data:EquityItem) {
             if (item.trades) { data.trades = item.trades; }
             copyProperties(data, item); 
+            if (item.intraday && item.intraday['names']) {
+                item.intraday.colNames = item.intraday['names'];
+                delete item.intraday['names'];
+            }
             EquityLoader.applySplitsToTrades(item);
             return item;         
         }

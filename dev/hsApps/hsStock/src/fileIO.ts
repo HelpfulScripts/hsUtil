@@ -22,6 +22,10 @@ export function load(fname:string):Promise<any> {
     return m.request({
         method: 'GET',
         url: fname                          // relative to 'apps/<APP>/
+    })
+    .catch((err:any):null => {
+        console.log(`error loading ${fname}`);
+        return null;
     });
 }
 
