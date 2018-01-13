@@ -269,7 +269,7 @@ export function filter(data:Data, cond:Condition):Data {
     const colNumber = (name:string):number => data.colNumber(name);
     try {
         return new Data({
-            names: data.colNames(), 
+            colNames: data.colNames(), 
             rows:data.getData().filter((row:DataRow, i:number) => satisfies(cond, i, row, colNumber))
         });
     } catch(err) {

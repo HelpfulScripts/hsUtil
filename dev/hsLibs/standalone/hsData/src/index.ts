@@ -3,7 +3,7 @@ export { NumRange,
          DateDomain,
          NameDomain,
          Domain,
-         ColSpecifier,
+         ColumnReference,
          DataVal,
          DataRow,
          DataSet

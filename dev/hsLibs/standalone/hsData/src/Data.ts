@@ -20,8 +20,8 @@ export type NameDomain = string[];
 /** defines a generic domain that can be any of the typed domains. */
 export type Domain = NumDomain | DateDomain | NameDomain;
 
-/** defines a Column Specifier, either as column name or index in the {@link Data.DataRow `DataRow`} array */
-export type ColSpecifier = number|string;
+/** defines a Column Reference, either as column name or index in the {@link Data.DataRow `DataRow`} array */
+export type ColumnReference = number|string;
 
 /** a generic data value type, used in the {@link Data.DataRow `DataRow`} array */
 export type DataVal = number|string|Date;
@@ -31,8 +31,12 @@ export type DataRow = DataVal[];
 
 /** a JSON format data set, using arrays of names and rows */
 export interface DataSet {
-    rows:DataRow[];
-    names:ColSpecifier[];   
+    /** an optional name for the data set */
+    name?:  string;
+    /** an array of column names. Each name matches the column with the same index in DataRow */
+    colNames:  string[];   
+    /** rows of data */
+    rows:   DataRow[];
 }
 
 /** a JSON format data set, using an array of {name:value, ...} literals*/
@@ -67,7 +71,7 @@ export class Data {
         const names = Object.keys(data[0]);
         const rows = data.map((r:any) => 
             names.map((n:string) => r[n]));
-        return { rows:rows, names:names };
+        return { rows:rows, colNames:names };
     }
 
     constructor(data?:DataSet) {
@@ -79,7 +83,7 @@ export class Data {
      * @param data the data set to import
      */
     public import(data:DataSet) {
-        this.setData(data.rows, data.names);
+        this.setData(data.rows, data.colNames);
     }
 
     /**
@@ -88,7 +92,7 @@ export class Data {
     public export():DataSet {
         return {
             rows: this.getData(),
-            names:this.colNames()
+            colNames:this.colNames()
         };
     }
 
@@ -98,7 +102,7 @@ export class Data {
      * @param column the data column, name or index, for which to return the index. 
      * @return the column number or `undefined`.
      */
-    public colNumber(col:ColSpecifier) {
+    public colNumber(col:ColumnReference) {
         var m = this.getMeta(col);
         if (!m) { return undefined; }
         else {
@@ -113,7 +117,7 @@ export class Data {
      * @param column the data column, name or index. 
      * @return the column name or `undefined`.
      */
-    public colName(col:ColSpecifier) {
+    public colName(col:ColumnReference) {
         var m = this.getMeta(col);
         if (!m) { return undefined; }
         m.accessed = true; 
@@ -134,7 +138,7 @@ export class Data {
      * @param column the data column, name or index. 
      * @return the column type.
      */
-    public colType(col:ColSpecifier) { 
+    public colType(col:ColumnReference) { 
         const meta = this.getMeta(col);
         return meta? meta.types[0].type : Data.type.name;
     }
@@ -144,7 +148,7 @@ export class Data {
      * @param col the column name or index 
      * @param domain the 
      */
-    public findDomain(col:ColSpecifier, domain:Domain) {
+    public findDomain(col:ColumnReference, domain:Domain) {
         if (col === undefined) { // use array index as domain
             domain[0] = 0;
             domain[1] = this.data.length-1;
@@ -180,7 +184,7 @@ export class Data {
      * @param autoType unless set to false, the method will attempt to determine the 
      * type of data and automatically cast data points to their correct value
      */
-    public setData(data:DataRow[], names:ColSpecifier[], autoType=true):void {
+    public setData(data:DataRow[], names:ColumnReference[], autoType=true):void {
         this.meta = [];
         this.data = data;
         names.forEach((col:string) => this.addColumn(col));
@@ -188,7 +192,7 @@ export class Data {
         this.castData();
     }
 
-    public * allRows(column:ColSpecifier):Iterable<DataVal> {
+    public * allRows(column:ColumnReference):Iterable<DataVal> {
         const c = this.colNumber(column);
         for (let r=0; r<this.data.length; r++) {
             yield this.data[r][c];
@@ -225,7 +229,7 @@ export class Data {
     private data: DataRow[]    = [];
     private meta: MetaStruct[] = [];
 
-    private getMeta(col:ColSpecifier):MetaStruct { 
+    private getMeta(col:ColumnReference):MetaStruct { 
         if (!this.meta) { this.meta = []; }
         if (!this.meta[col]) { return undefined; }
        	this.meta[col].accessed = true;
@@ -252,7 +256,7 @@ export class Data {
      * @param col the index of the column to be typed. 
      * @return the most likely type of data in `col`.
      */
-    private findTypes(col:ColSpecifier):string {
+    private findTypes(col:ColumnReference):string {
         const m = this.getMeta(col);
         const types:TypeStruct[] = [];
         Object.keys(Data.type).forEach((t:string) => {
