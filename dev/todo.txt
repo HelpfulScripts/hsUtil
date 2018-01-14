@@ -1,5 +1,5 @@
 1/13/18     hsStock
-deal with missign quotes file for non-existing stock to avoid reporting 404 error
+deal with missing quotes file for non-existing stock to avoid reporting 404 error
 
 12/27/17    hsStock
 ViewLeft equity names wrap instead of showing ellipses 

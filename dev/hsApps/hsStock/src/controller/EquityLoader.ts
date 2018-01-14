@@ -20,21 +20,28 @@ function copyProperties(from:EquityItem, to:EquityItem):EquityItem {
 };
 
 /** saves equity inof to symXXX.json file, skipping the quotes */
-function saveMeta(item:EquityItem):EquityItem {
-    if (item.invalid) {
-        delete item.invalid;
-        item.changed = true;
-    }
+function saveMeta(item:EquityItem):Promise<EquityItem> {
     if (item.changed) {
-        item.changed = undefined;
-        const copy = copyProperties(item, <EquityItem>{});
-//        delete copy.intraday;
-        delete copy.quotes;
-//        delete copy.trades;
-        console.log(`${new Date().getTime() %10000}: saveSym ${item.symbol} to local`);
-        save(copy, `${SAVE_PATH}/stock/sym${item.symbol}.json`);
+        const copy = {
+            symbol:     item.symbol, 
+            name:       item.name,
+            cat:        item.cat,
+            venues:     item.venues,
+            shares:     item.shares,
+            trades:     item.trades,
+            company:    item.company,
+            stats:      item.stats,
+            otherStats: item.otherStats,
+            splits:     item.splits
+        };
+        return save(copy, `${SAVE_PATH}/stock/sym${item.symbol}.json`)
+            .then(() => {
+                console.log(`${new Date().getTime() %10000}: saved sym${item.symbol}.json to local`);
+                item.changed = undefined;
+                return item;
+            });
     }
-    return item;
+    return Promise.resolve(item); 
 }
 
 
@@ -121,7 +128,11 @@ export class EquityLoader {
     }
     public static saveQuotes(item:EquityItem):Promise<EquityItem> {
         console.log(`${new Date().getTime() %10000}: save ${item.quotes.rows.length} Quotes ${item.symbol} to local`);
-        return save(item.quotes, `${SAVE_PATH}/stock/quotes${item.symbol}.json`)
+        const result = {
+            quotes:     item.quotes,
+            intraday:   item.intraday
+        };
+        return save(result, `${SAVE_PATH}/stock/quotes${item.symbol}.json`)
         .catch((err:any) => {
             console.log(`error for in saveQuotes: ${err}`);
             console.log(item);
@@ -141,7 +152,17 @@ export class EquityLoader {
 
     private static requestSymSplitIfMissing(item:EquityItem):Promise<EquityItem> {
         function addSplitsToItem(splits:EquitySplit[]):EquityItem { 
-            item.splits = splits; 
+            if (!item.splits) { 
+                item.splits = splits; 
+            } else {
+                splits.forEach((split:EquitySplit) => {
+                    if (!item.splits.find((s:EquitySplit) => s.date === split.date)) { 
+                        item.splits.push(split); 
+                    }
+                });
+            }
+            item.splits.sort((a:EquitySplit, b:EquitySplit) => a.date.getTime() - b.date.getTime()); 
+            EquityLoader.applySplitsToTrades(item); // new splits are only loaded upon specific request
             return item; 
         };
 
@@ -150,7 +171,6 @@ export class EquityLoader {
         return (item.splits)? Promise.resolve(item) :
             trader.requestSplits(item)
             .then(addSplitsToItem)
-            .then(EquityLoader.applySplitsToTrades)  // new splits are only loaded upon specific request
             .catch((err) => {
                 console.log(`error in readSymSplit: ${err}`);
                 return item;
@@ -226,35 +246,43 @@ export class EquityLoader {
 
     public loadLocal(item:EquityItem):Promise<EquityItem> {
         /** adds a quotes DataSet to an item  */
-        function addQuotesToItem(quotes:DataSet):EquityItem { 
-            item.quotes = quotes;
-            const dateCol  = item.quotes.colNames.indexOf('Date');
-            const closeCol = item.quotes.colNames.indexOf('Close');
-            item.quotes.rows = <DataRow[]>item.quotes.rows
-                .filter((row:any[]) => 
-                    row[dateCol] !==undefined && row[dateCol] !==null &&
-                    row[closeCol]!==undefined && row[closeCol]!==null
-                )
-                .map((row:any[]) => {
-                    row[0] = new Date(row[0]);
-                    return row;
-                });
-            if (item.quotes['names']) {
-                item.quotes.colNames = item.quotes['names'];
-                delete item.quotes['names'];
+        function addQuotesToItem(quotes:{quotes:DataSet, intraday:DataSet}):EquityItem { 
+            if (quotes) {
+                const q = quotes.quotes || quotes;
+                item.quotes = {
+                    colNames: q['colNames'] || q['names'],
+                    rows:     q['rows']
+                };
+                if (quotes.intraday) { 
+                    item.intraday = quotes.intraday; 
+                }
+                const dateCol  = item.quotes.colNames.indexOf('Date');
+                const closeCol = item.quotes.colNames.indexOf('Close');
+                item.quotes.rows = <DataRow[]>item.quotes.rows
+                    .filter((row:any[]) => 
+                        row[dateCol] !==undefined && row[dateCol] !==null &&
+                        row[closeCol]!==undefined && row[closeCol]!==null
+                    )
+                    .map((row:any[]) => {
+                        row[0] = new Date(row[0]);
+                        return row;
+                    });
+                Trader.getVenue(item); // to initialize the venues in item
             }
-            Trader.getVenue(item); // to initialize the venues in item
             return item;
         }
         function copyParts(data:EquityItem) {
             if (item.trades) { data.trades = item.trades; }
             copyProperties(data, item); 
+            return item;         
+        }
+        function normalizeItem(item:EquityItem):Promise<EquityItem> {
             if (item.intraday && item.intraday['names']) {
                 item.intraday.colNames = item.intraday['names'];
                 delete item.intraday['names'];
             }
             EquityLoader.applySplitsToTrades(item);
-            return item;         
+            return saveMeta(item);
         }
         if (item.symbol === '????') {
             return Promise.resolve(item);
@@ -262,7 +290,8 @@ export class EquityLoader {
             return load(`${LOAD_PATH}/stock/sym${item.symbol}.json`)
                 .then(copyParts)
                 .then(() => load(`${LOAD_PATH}/stock/quotes${item.symbol}.json`))
-                .then(addQuotesToItem)        
+                .then(addQuotesToItem) 
+                .then(normalizeItem)       
                 .catch(() => item); // if nothing on local server: ignore
         }
     }
