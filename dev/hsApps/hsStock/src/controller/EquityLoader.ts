@@ -1,4 +1,4 @@
-import { DataSet }      from 'hsdata';
+import { DataSet, DataRow } from 'hsdata';
 import { Trader }       from './Trader';
 import { Transaction }  from './Assets';
 import { EquityList }   from './EquityList';
@@ -228,6 +228,17 @@ export class EquityLoader {
         /** adds a quotes DataSet to an item  */
         function addQuotesToItem(quotes:DataSet):EquityItem { 
             item.quotes = quotes;
+            const dateCol  = item.quotes.colNames.indexOf('Date');
+            const closeCol = item.quotes.colNames.indexOf('Close');
+            item.quotes.rows = <DataRow[]>item.quotes.rows
+                .filter((row:any[]) => 
+                    row[dateCol] !==undefined && row[dateCol] !==null &&
+                    row[closeCol]!==undefined && row[closeCol]!==null
+                )
+                .map((row:any[]) => {
+                    row[0] = new Date(row[0]);
+                    return row;
+                });
             if (item.quotes['names']) {
                 item.quotes.colNames = item.quotes['names'];
                 delete item.quotes['names'];

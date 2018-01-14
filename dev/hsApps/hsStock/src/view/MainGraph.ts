@@ -19,6 +19,7 @@ function getLimitDate(time:string):Date {
     const result = new Date();
     switch (time) {
         case 'max':  result.setFullYear(result.getFullYear()-30); break;
+        case '40yr': result.setFullYear(result.getFullYear()-40); break;
         case '20yr': result.setFullYear(result.getFullYear()-20); break;
         case '10yr': result.setFullYear(result.getFullYear()-10); break;
         case '5yr':  result.setFullYear(result.getFullYear()-5); break;
@@ -33,7 +34,7 @@ function getLimitDate(time:string):Date {
 
 export class MainGraph extends Layout { 
     getComponents(node: Vnode): Vnode { 
-        const timeWindows = ['1yr', '1mo', '10d', '1d', '20yr', '10yr', '5yr'];
+        const timeWindows = ['1yr', '1mo', '10d', '1d', '40yr', '20yr', '10yr', '5yr'];
         const limitDates = timeWindows.map(getLimitDate);
         let limitDate = limitDates[limitDateIndex];
         let maxDate = new Date();

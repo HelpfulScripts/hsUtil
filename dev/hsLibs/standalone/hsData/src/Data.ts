@@ -169,8 +169,10 @@ export class Data {
                 default: 
                     this.data.forEach((r:DataRow) => {
                         let v:number = <number>r[c];
-                        domain[0] = (v<domain[0])? v : domain[0];
-                        domain[1] = (v>domain[1])? v : domain[1];
+                        if (v!==undefined && v!==null) {
+                            domain[0] = (v<domain[0])? v : domain[0];
+                            domain[1] = (v>domain[1])? v : domain[1];
+                        }
                     });
             }
         }
