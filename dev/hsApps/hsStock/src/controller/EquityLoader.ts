@@ -126,6 +126,16 @@ export class EquityLoader {
         }
         return item;
     }
+
+    public static filterQuotes(data:DataSet, dateColName:string, valColName:string) {
+        let dateCol  = data.colNames.indexOf(dateColName);
+        let closeCol = data.colNames.indexOf(valColName);
+        const noNull = (r:any[]) => r[dateCol] !==undefined && r[dateCol] !==null &&
+                                    r[closeCol]!==undefined && r[closeCol]!==null;
+        data.rows = data.rows.filter(noNull);
+        data.rows.map((r:any[]) => r[dateCol] = new Date(r[dateCol]));
+    }
+
     public static saveQuotes(item:EquityItem):Promise<EquityItem> {
         console.log(`${new Date().getTime() %10000}: save ${item.quotes.rows.length} Quotes ${item.symbol} to local`);
         const result = {
@@ -242,15 +252,6 @@ export class EquityLoader {
             console.log(`error in marketUpdate: ${err}`);
             return false;
         });
-    }
-
-    public static filterQuotes(data:DataSet, dateColName:string, valColName:string) {
-        let dateCol  = data.colNames.indexOf(dateColName);
-        let closeCol = data.colNames.indexOf(valColName);
-        const noNull = (r:any[]) => r[dateCol] !==undefined && r[dateCol] !==null &&
-                                    r[closeCol]!==undefined && r[closeCol]!==null;
-        data.rows = data.rows.filter(noNull);
-        data.rows.map((r:any[]) => r[dateCol] = new Date(r[dateCol]));
     }
 
     public loadLocal(item:EquityItem):Promise<EquityItem> {
