@@ -49,7 +49,6 @@ export class MainGraph extends Layout {
         const dataIntra:DataSet = item.intraday? item.intraday : 
             {name:'Intraday', colNames:['Date', 'Close'], rows:[[]]};
         const shares:DataSet = Data.toDataSet(item.trades, 'Shares');
-//        const cond:Condition = { Date: (d:Date) => d.getFullYear()>1900};
         const buyCond:Condition = { change: (c:number) => c>0};
         const sellCond:Condition = { change: (c:number) => c<0};
         const timeCond:Condition = { Date: (d:Date) => d>limitDate};

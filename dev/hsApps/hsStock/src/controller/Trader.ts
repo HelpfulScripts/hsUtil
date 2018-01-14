@@ -1,5 +1,6 @@
 import { EquityItem,
          EquitySplit }      from './Equities';
+import { EquityLoader } from './EquityLoader';
 import { VenueIDs,
          Venue,
          VenueSummary }     from './Venue';
@@ -130,6 +131,7 @@ export class Trader {
         const names = ['Date', 'High', 'Low'];
         const rows  = quotes.map((t:TraderIntraday) => [t.Date, t.high, t.low]);
         item.intraday = {colNames:names, rows:rows};
+        EquityLoader.filterQuotes(item.intraday, 'Date', 'Low');
         return item;
     }
 

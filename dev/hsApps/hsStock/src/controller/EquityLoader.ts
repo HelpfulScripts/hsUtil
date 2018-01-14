@@ -1,4 +1,4 @@
-import { DataSet, DataRow } from 'hsdata';
+import { DataSet }      from 'hsdata';
 import { Trader }       from './Trader';
 import { Transaction }  from './Assets';
 import { EquityList }   from './EquityList';
@@ -52,7 +52,7 @@ function updateStats(item: EquityItem):EquityItem {
         const dCol = item.quotes.colNames.indexOf('Date');
         const vCol = item.quotes.colNames.indexOf('Volume');
         const latestRow = item.quotes.rows[item.quotes.rows.length-1];
-        if (new Date(latestRow[dCol]) === date) {
+        if (latestRow[dCol] === date) {
             item.stats.closeVolume = <number>latestRow[vCol];
         }
     }
@@ -244,6 +244,15 @@ export class EquityLoader {
         });
     }
 
+    public static filterQuotes(data:DataSet, dateColName:string, valColName:string) {
+        let dateCol  = data.colNames.indexOf(dateColName);
+        let closeCol = data.colNames.indexOf(valColName);
+        const noNull = (r:any[]) => r[dateCol] !==undefined && r[dateCol] !==null &&
+                                    r[closeCol]!==undefined && r[closeCol]!==null;
+        data.rows = data.rows.filter(noNull);
+        data.rows.map((r:any[]) => r[dateCol] = new Date(r[dateCol]));
+    }
+
     public loadLocal(item:EquityItem):Promise<EquityItem> {
         /** adds a quotes DataSet to an item  */
         function addQuotesToItem(quotes:{quotes:DataSet, intraday:DataSet}):EquityItem { 
@@ -253,21 +262,8 @@ export class EquityLoader {
                     colNames: q['colNames'] || q['names'],
                     rows:     q['rows']
                 };
-                if (quotes.intraday) { 
-                    item.intraday = quotes.intraday; 
-                }
-                const dateCol  = item.quotes.colNames.indexOf('Date');
-                const closeCol = item.quotes.colNames.indexOf('Close');
-                item.quotes.rows = <DataRow[]>item.quotes.rows
-                    .filter((row:any[]) => 
-                        row[dateCol] !==undefined && row[dateCol] !==null &&
-                        row[closeCol]!==undefined && row[closeCol]!==null
-                    )
-                    .map((row:any[]) => {
-                        row[0] = new Date(row[0]);
-                        return row;
-                    });
-                Trader.getVenue(item); // to initialize the venues in item
+                item.intraday = quotes.intraday? quotes.intraday : 
+                    { colNames: [], rows:[] }; 
             }
             return item;
         }
@@ -277,10 +273,17 @@ export class EquityLoader {
             return item;         
         }
         function normalizeItem(item:EquityItem):Promise<EquityItem> {
-            if (item.intraday && item.intraday['names']) {
-                item.intraday.colNames = item.intraday['names'];
-                delete item.intraday['names'];
+            if (item.quotes) {
+                EquityLoader.filterQuotes(item.quotes, 'Date', 'Close');
             }
+            if (item.intraday) {
+                if (item.intraday['names']) {
+                    item.intraday.colNames = item.intraday['names'];
+                    delete item.intraday['names'];
+                }
+                EquityLoader.filterQuotes(item.intraday, 'Date', 'Low');
+            }
+            Trader.getVenue(item); // to initialize the venues in item
             EquityLoader.applySplitsToTrades(item);
             return saveMeta(item);
         }
