@@ -1,7 +1,7 @@
 /**
  * ## PlotBar 
  * Plots data as vertical bars by configuring the series' `type` 
- * as {@link Series.Series.plot `hsgraph.Series.plot.bar`}. The `cols` name array starts with 
+ * as {@link Series.Series.plot 'bar'}. The `cols` name array starts with 
  * the x-value column, or `undefined` to use the row index as x-values.
  * 
  * #### Mode 1 - Classic Bars
@@ -18,7 +18,7 @@
  * <example>
  * <file name='script.js'>
  * let series = {
- *    names:['time', 'volume', 'open', 'close'],
+ *    colNames:['time', 'volume', 'open', 'close'],
  *    rows:[
  *      [5, 0.2, 0.3, 0.5],
  *      [10, 0.7, 0.1, 0.2],
@@ -32,13 +32,9 @@
  *      view:() => m(hsgraph.Graph, {cfgFn: cfg => {
  *          cfg.chart.title.text = 'Bar Chart';
  *          cfg.series.data   = [series];
- *          cfg.series.series = [{
- *                  y:'volume', 
- *                  type: hsgraph.Series.plot.bar 
- *              },{ 
- *                  y:'open', yl:'close', 
- *                  type: hsgraph.Series.plot.bar 
- *              }
+ *          cfg.series.series = [
+ *              { y:'volume', type: 'bar'},
+ *              { y:'open', yl:'close', type: 'bar'}
  *          ];
  *          cfg.series.series[0].style.bar.width = 80;
  *          cfg.series.series[1].style.bar.offset = 0;
