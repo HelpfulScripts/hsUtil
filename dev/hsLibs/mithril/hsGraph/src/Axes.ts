@@ -16,7 +16,7 @@
  * <example>
  * <file name='script.js'>
  * let series = {
- *    names:['time', 'volume', 'price'],
+ *    colNames:['time', 'volume', 'price'],
  *    rows:[
  *      [0.2, 0.7, 0.87],
  *      [0.4, 0.015, 0.7],
@@ -349,7 +349,7 @@ export class Axes extends SVGElem {
  * <example>
  * <file name='script.js'>
  * let series = {
- *    names:['time', 'volume'],
+ *    colNames:['time', 'volume'],
  *    rows:[
  *      [-1, 0.2],
  *      [0.2, 0.7],
@@ -381,7 +381,7 @@ class ExampleLinearAxis {}
 * <example>
 * <file name='script.js'>
 * let series = {
-*    names:['time', 'volume'],
+*    colNames:['time', 'volume'],
 *    rows:[[0.3, 0.2], [0.32, 0.7], [0.4, 8], [0.56, 10], [0.7, 0.5], [0.8, 15]]
 * };
 * 
@@ -409,7 +409,7 @@ class ExampleLogAxis {}
 * <example>
 * <file name='script.js'>
 * let series = {
-*    names:['time', 'volume'],
+*    colNames:['time', 'volume'],
 *    rows:[['2/6/17', 0.2], ['3/18/17', 0.7], ['5/1/17', 8], ['11/20/17', 10], ['1/15/18', 0.5]]
 * };
 * 

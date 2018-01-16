@@ -66,10 +66,10 @@ export class MainGraph extends Layout {
             cfg.series.data   = [dataQuotes, shares, dataIntra];
             cfg.series.defaultStyle.line.width = 1;
             cfg.series.series = [
-                { x:'Date', yh:'High', yl:'Low', type: Series.plot.area, dataIndex:timeWindows[limitDateIndex]==='1d'?2:0},
-                { x:'Date', y:'Close', type: Series.plot.line },
-                { x:'Date', y:'price', l:'change', type: Series.plot.marker, dataIndex:1, cond:buyCond },
-                { x:'Date', y:'price', l:'change', type: Series.plot.marker, dataIndex:1, cond:sellCond }
+                { x:'Date', yh:'High', yl:'Low', type: 'area', dataIndex:timeWindows[limitDateIndex]==='1d'?2:0},
+                { x:'Date', y:'Close', type: 'line' },
+                { x:'Date', y:'price', l:'change', type: 'marker', dataIndex:1, cond:buyCond },
+                { x:'Date', y:'price', l:'change', type: 'marker', dataIndex:1, cond:sellCond }
             ];
             cfg.series.series[0].style.fill.color = '#ccf';
             cfg.series.series[1].style.line.color = '#008';

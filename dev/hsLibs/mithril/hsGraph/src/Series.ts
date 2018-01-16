@@ -25,7 +25,6 @@ import { Condition }    from 'hsdata';
 import { SVGElem }      from './SVGElem';
 import { Axes }         from './Axes';
 import { XYScale }      from './AxesTypes';
-import { Plot }         from './Plot';
 import { PlotLine }     from './PlotLine';
 import { PlotMarkers }  from './PlotMarkers';
 import { PlotBar }      from './PlotBar';
@@ -130,8 +129,6 @@ export class Series extends SVGElem {
      */
     static adjustConfig(cfg:Config) { 
         cfg.series.series.forEach((s:SeriesDef) => {
-//            s.type = s.type || Series.plot.line;
-//            s.style = s.style || <SeriesStyle>{};
             if (s.x === undefined) { // undefined x-value -> use index as x-value
                 cfg.axes.primary.x.title.hOffset = 0;
                 cfg.axes.primary.x.scale.type = Axes.type.index;
@@ -155,12 +152,13 @@ export class Series extends SVGElem {
         const scales:XYScale = node.attrs.scales.primary;
         const data:Data[]    = node.attrs.data;
         const clipID = cfg.clip? 'hs'+Math.floor(Math.random()*10000) : undefined;
-        cfg.series.map((s:SeriesDef) => s.type.setDefaults(data[s.dataIndex], s, scales));
         return m('svg', { class:'hs-graph-series'}, [
             this.drawClipRect(clipID, scales),
             m('svg', cfg.series.map((s:SeriesDef, i:number) => { 
+                const type = Series.plot[s.type] || Series.plot.line;
+                type.setDefaults(data[s.dataIndex], s, scales);
                 const d = s.cond? data[s.dataIndex].filter(s.cond) : data[s.dataIndex];
-                return m('svg', {class:`hs-graph-series-${i}`}, s.type.plot(d, s, scales, i, clipID));
+                return m('svg', {class:`hs-graph-series-${i}`}, type.plot(d, s, scales, i, clipID));
             }))
         ]);
     }
@@ -223,8 +221,8 @@ export interface SeriesDef {
     vOffset?: number; // offset in em
     /** An index into the `Data[]` pool, identifying the `Data` set to use. defaults to `0` */
     dataIndex?: number;
-    /** optional plot type, selected from {@link Series.Series.plot Series.plot}; defaults to  `Series.plot.line` */
-    type?:Plot;   
+    /** optional plot type, selected from {@link Series.Series.plot Series.plot} as string; defaults to  'line' */
+    type?:string;   
     /** style information to use for plotting; if ommitted, a `type`-dependent default is used */
     style?:SeriesStyle;
     /** optinal filter condition on the data prior to drawing */
@@ -281,7 +279,7 @@ export class SeriesConfig {
         const defStyle = this.defaultStyle;
         const defColors = this.defaultColors;
         cfg.forEach((s:SeriesDef) => {
-            s.type = s.type || Series.plot.line;
+            s.type = s.type || 'line';
             s.style = s.style || <SeriesStyle>{};
             s.dataIndex = s.dataIndex || 0;
             const defaults = {
@@ -290,16 +288,16 @@ export class SeriesConfig {
             copyDefault(s.style, defStyle, defaults);
             this.seriesDefs.push(s);
             switch (s.type) {
-                case Series.plot.line: 
+                case 'line': 
                     s.style.line.visible = true; 
                     break;
-                case Series.plot.marker: 
+                case 'marker': 
                     s.style.marker.visible = true; 
                     break;
-                case Series.plot.area: 
+                case 'area': 
                     s.style.fill.visible = true; 
                     break;
-                case Series.plot.bar: 
+                case 'bar': 
                     s.style.fill.visible = true; 
                     break;
             }

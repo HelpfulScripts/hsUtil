@@ -11,7 +11,7 @@ attribute with the graph's configuration.
  * <example>
  * <file name='script.js'>
  * let data = {
- *    names:['time', 'volume'],
+ *    colNames:['time', 'volume'],
  *    rows:[
  *      [-1, 0.2],
  *      [0.2, 0.7],

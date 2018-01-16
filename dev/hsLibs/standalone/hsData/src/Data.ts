@@ -52,6 +52,9 @@ interface MetaStruct {
     types:      TypeStruct[];   // data types, sorted by likelihood
 }
 
+export type sortFn = (x:any, y:any) => number;
+export type mapFn  = (x:any, i?:number, values?:any[]) => any;
+
 
 export class Data {
     //----------------------------
@@ -78,6 +81,10 @@ export class Data {
         this.import(data);
     }
 
+    public getName():string {
+        return this.name;
+    }
+
     /**
      * Imports data from an object literal `data`
      * @param data the data set to import
@@ -97,6 +104,28 @@ export class Data {
         };
     }
 
+    public getData():DataRow[] {
+        return this.data;
+    }
+
+    /**
+     * adds a new column to the data set
+     * @param newCol the name of the new column
+     * @return the index for the new column
+     */
+    public addColumn(newCol:string):number {
+        let m = this.getMeta(newCol);
+        if (m === undefined) { 
+            m = this.meta[newCol] = <MetaStruct>{};
+            m.name   = newCol; 
+            m.column = this.meta.length;
+            this.meta.push(m);      // access name by both column name and index
+            m.cast 	   = false;         // has not been cast yet
+            m.accessed = false;         // has not been accessed yet
+        }
+        return m.column;
+    }
+
     /**
      * returns the column index of the specified column. 
      * `col` can be either an index or a name.
@@ -104,7 +133,7 @@ export class Data {
      * @return the column number or `undefined`.
      */
     public colNumber(col:ColumnReference) {
-        var m = this.getMeta(col);
+        const m = this.getMeta(col);
         if (!m) { return undefined; }
         else {
             m.accessed = true; 
@@ -185,10 +214,6 @@ export class Data {
         }
     }
 
-    public getData():DataRow[] {
-        return this.data;
-    }
-
     public castData() {
         this.meta.forEach((c:MetaStruct) => {
             const col = c.column;
@@ -202,11 +227,111 @@ export class Data {
     /**
      * filters this data set and returns a new data set with a 
      * shallow copy of rows that pass the `condition`.
-     * See @{link DataFilters DataFilters} for rules and examples on how to construct conditions.
+     * See {@link DataFilters DataFilters} for rules and examples on how to construct conditions.
      * @param condition filters 
+     * @return a new Data object with rows that pass the filter
      */
     public filter(condition:Condition):Data {
         return filter(this, condition);
+    }
+
+    /**
+     * @description Sorts the rows of values based on the result of the `sortFn`, 
+     * which behaves similarly to the Array.sort method.  
+     * Two modes are supported:
+     * # Array Mode
+     * If `col` is omitted, the column arrays are passed as samples into the `sortFn`. 
+     * This allows for complex sorts, combining conditions across multiple columns.
+     * ```
+     * data.sort((row1, row2) => row1[5] - row2[5] );
+     * ```
+     * # Column mode
+     * If `col` is specified, either as index or by column name, the respective column value is passed
+     * into `sortFn`. This allows filtering for simple conditions.<br>
+     * **The specified column will be automatically cast prior to sorting**<br>
+     * `data.sort('Date', function(val1, val2) { return val1 - val2; });`
+     * @param col optional; the data column to use for sorting. 
+     * @param sortFn a function to implement the conditions, 
+     * follows the same specifications as the function passed to Array.sort(). 
+     * Some predefined sort function can be invoked by providing a 
+     * respective string instead of a function. The following functions are defined:
+        <table>
+        <tr><td>'`ascending`'</td><td>sort in ascending order.</td></tr>
+        <tr><td>'`descending`'</td><td>sort in decending order.</td></tr>
+        </table>
+     * @return the Data object in order to allow for chaining.
+     */
+    public sort(sortFn:string|sortFn, col?:ColumnReference):Data {
+        let fn = <sortFn>sortFn;
+        if (!col) {
+            this.data.sort(fn);
+        } else {
+            col = this.colNumber(col);
+            if (sortFn === 'descending') { fn = (a:any, b:any)  => (b>a)?1:((b<a)?-1:0); }
+            if (sortFn === 'ascending')  { fn = (a:any, b:any)  => (b<a)?1:((b>a)?-1:0); }
+            this.data.sort((r1:any[], r2:any[]) => fn(r1[col], r2[col])); 
+        }
+        return this;
+    }
+
+    /** 
+    *  Maps one or more columns in each rows of values based 
+     * on the result of the `mapFn`, which behaves similarly to the Array.map() method.
+     * Two modes are supported:
+     * # Array Mode
+     * If `col` is omitted, the `mapFn` is passed the column arrays per row as parameter. 
+     * This allows for complex mapping combining conditions across multiple columns.
+     * ```
+     * data.map(function(values){ 
+     *    values[1] = values[3] * values[5]; 
+     *    return values; 
+     * });
+     * ```
+     * Be sure to return the `values` array as a result.
+     * # Column mode
+     * If `col` is specified, either as index or by column name, the respective column value is passed
+     * into `mapFn`, along with the row index and the entire row array. This allows for simple mapping.
+     * ```
+     * data.map('Price', function(value, i, values) { 
+     *    return value * 2; 
+     * });
+     * ```
+     * @param col the data column, or columns, to apply the mapping to. 
+     * @param mapFn a function to implement the mapping, 
+     * follows the same specifications as the function passed to Array.map().<br>
+     * For column mode, some predefined map functions can be invoked by providing a 
+     * respective string instead of a function. The following functions are defined:
+        <table>
+        <tr><td>'noop'</td><td>replace value with itself, performing no operation.</td></tr>
+        <tr><td>'cumulate'</td><td>replace value with the cumulative sum of values up to the current element.</td></tr>
+        </table>
+     * @return a new Data object containing the mapping.
+     */
+    public map(mapFn:string|mapFn, col:ColumnReference|ColumnReference[]):Data {
+        const noop = (val:any) => val;
+        const cumulate = () => { let sum=0; return (val:number) => { sum += +val; return sum; };};
+        function getFn() {
+            let fn; // define fn inside each col loop to ensure initialization
+            switch (mapFn) {
+                case 'cumulate': fn = cumulate(); break;
+                case 'noop':     fn = noop; break;
+                default:         fn = <mapFn>mapFn;
+            }
+            return fn;
+        }
+
+        let result = new Data({colNames:this.colNames(), rows:this.data.slice(), name:this.getName()});
+
+        const names = col['length']? <ColumnReference[]>col : [col];            
+        names.map((cn:ColumnReference) => {
+            const col = this.colNumber(cn);
+            let fn = getFn(); // define fn inside each col loop to ensure initialization
+            result.data = result.data.map((row:any[], i:number) => { 
+                row[col] = fn(row[col]); 
+                return row;
+            });
+        });
+        return result;
     }
 
     //----------------------------
@@ -241,19 +366,6 @@ export class Data {
         names.forEach((col:string) => this.addColumn(col));
         names.forEach((col:string) => this.findTypes(col));
         this.castData();
-    }
-
-    private addColumn(newCol:string):number {
-        var m = this.getMeta(newCol);
-        if (m === undefined) { 
-            m = this.meta[newCol] = <MetaStruct>{};
-            m.name   = newCol; 
-            m.column = this.meta.length;
-            this.meta.push(m);      // access name by both column name and index
-        }
-        m.cast 	   = false;         // has not been cast yet
-        m.accessed = false;         // has not been accessed yet
-        return this.meta.length-1;
     }
 
     /**

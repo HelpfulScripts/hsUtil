@@ -257,9 +257,7 @@ export abstract class SVGElem {
         const sy = (y:number) => round(scales.y.convert(y));
         const clip = id? `url(#${id})` : undefined;
         let points = dataFore.map((row:number[]) => `${sx(row[x])},${sy(row[yFore])}`).join(' ') + ' ';
-        points += yBack? 
-            dataBack.map((row:number[]) => `${sx(row[x])},${sy(row[yBack])}`).join(' ') :
-            `${sx((<number[]>dataBack[dataBack.length-1])[x])},${0} ${sx((<number[]>dataBack[0])[x])},${0}`;
+        points += dataBack.map((row:number[]) => `${sx(row[x])},${sy(yBack?row[yBack]:0)}`).join(' ');
         return m('polygon', { 'clip-path': clip, style: style, points: points });
     }
 

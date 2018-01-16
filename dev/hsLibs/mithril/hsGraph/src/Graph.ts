@@ -271,7 +271,8 @@ export class Graph extends SVGElem {
             console.log('cfg.series.data not initialised with array of DataSets');
         }
         const timeCond = cfg.graph.timeCond;
-        return cfg.series.data.map((d:DataSet) => new Data(d).filter(timeCond));
+        return cfg.series.data.map((d:DataSet|Data) => 
+            ((d instanceof Data)? d : new Data(d)).filter(timeCond));
     }
 
     private createScales(axes:any):Scales {
@@ -352,9 +353,10 @@ export class Graph extends SVGElem {
     
         cfg.series.map((s:SeriesDef) => { // for each series:
             if (s.x)  { data[s.dataIndex].findDomain(s.x, domains[0]); }
+            else      { domains[0][0] = 0; domains[0][1] = data[s.dataIndex].export().rows.length-1; }
             if (s.y)  { data[s.dataIndex].findDomain(s.y, domains[1]); }
             if (s.yh) { data[s.dataIndex].findDomain(s.yh, domains[1]); }
-            if (s.yl) { data[s.dataIndex].findDomain(s.yh, domains[1]); }
+            if (s.yl) { data[s.dataIndex].findDomain(s.yl, domains[1]); }
         });
         scales.primary.x.setAutoDomain(domains[0]);
         scales.primary.y.setAutoDomain(domains[1]);
