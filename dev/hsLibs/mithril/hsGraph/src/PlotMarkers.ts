@@ -1,14 +1,14 @@
 /**
  * ## PlotMarkers
  * Plots data as markers by configuring the series' `type` 
- * as {@link Series.Series.plot `Series.plot.markers`}. 
+ * as {@link Series.Series.plot 'markers'}. 
  * The `cols` name array starts with 
  * the x-value column, followed by the y-column.
  * 
  * <example>
  * <file name='script.js'>
  * let series = {
- *    names:['time', 'volume'],
+ *    colNames:['time', 'volume'],
  *    rows:[
  *      [-1, 0.2],
  *      [0.2, 0.7],
@@ -20,9 +20,9 @@
  * 
  * m.mount(root, { 
  *      view:() => m(hsgraph.Graph, {cfgFn: cfg => {
- *          cfg.chart.title.text          = 'Simple Example';
- *          cfg.series.data   = [series];
- *          cfg.series.series = [{ x:'time', y:'volume', type: Series.plot.markers }];
+ *          cfg.chart.title.text = 'Simple Example';
+ *          cfg.series.data      = [series];
+ *          cfg.series.series    = [{ x:'time', y:'volume', type: 'marker' }];
  *      }})
  * });
  *

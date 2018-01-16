@@ -1,13 +1,13 @@
 /**
- * ## PlotLine
+ * ## PlotArea
  * Plots data as a line by configuring the series' `type` 
- * as {@link Series.Series.plot `Series.plot.line`}. The `cols` name array starts with 
+ * as {@link Series.Series.plot 'line'}. The `cols` name array starts with 
  * the x-value column, followed by the y-column.
  * 
  * <example>
  * <file name='script.js'>
  * let series = {
- *    names:['time', 'volume'],
+ *    colNames:['time', 'volume'],
  *    rows:[
  *      [-1, 0.2],
  *      [0.2, 0.7],
@@ -19,9 +19,9 @@
  * 
  * m.mount(root, { 
  *      view:() => m(hsgraph.Graph, {cfgFn: cfg => {
- *          cfg.chart.title.text          = 'Simple Example';
+ *          cfg.chart.title.text = 'Simple Example';
  *          cfg.series.data   = [series];
- *          cfg.series.series = [{ x:'time', y:'volume' }];
+ *          cfg.series.series = [{ x:'time', yh:'volume', type: 'area' }];
  *      }})
  * });
  *
