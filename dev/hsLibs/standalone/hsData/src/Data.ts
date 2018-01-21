@@ -1,5 +1,4 @@
 /**
- * # Data
  */
 
  /** */
@@ -55,7 +54,11 @@ interface MetaStruct {
 export type sortFn = (x:any, y:any) => number;
 export type mapFn  = (x:any, i?:number, values?:any[]) => any;
 
-
+/**
+ * # Data
+ * A simple in-memory database that holds data in rows of columns.
+ * 
+ */
 export class Data {
     //----------------------------
     // public part
@@ -81,6 +84,9 @@ export class Data {
         this.import(data);
     }
 
+    /**
+     * @return the `name` field for this data base, if any
+     */
     public getName():string {
         return this.name;
     }
@@ -104,26 +110,59 @@ export class Data {
         };
     }
 
+    /**
+     * returns the 2D array underlying the data base.
+     */
     public getData():DataRow[] {
         return this.data;
     }
 
     /**
-     * adds a new column to the data set
-     * @param newCol the name of the new column
+     * Returns the values in the specified column as a new array.
+     * @param col the column to return.
+     */
+    public getColumn(col:ColumnReference): DataVal[] {
+        const cn = this.colNumber(col);
+        return this.data.map((row:DataRow) => row[cn]);
+    }
+
+    /**
+     * adds a new column to the data set. if `newCol` already exists, 
+     * the column index is returned withoput change.
+     * @param col the name of the new column
      * @return the index for the new column
      */
-    public addColumn(newCol:string):number {
-        let m = this.getMeta(newCol);
+    public colAdd(col:string):number {
+        let m = this.getMeta(col);
         if (m === undefined) { 
-            m = this.meta[newCol] = <MetaStruct>{};
-            m.name   = newCol; 
+            m = this.meta[col] = <MetaStruct>{};
+            m.name   = col; 
             m.column = this.meta.length;
             this.meta.push(m);      // access name by both column name and index
             m.cast 	   = false;         // has not been cast yet
             m.accessed = false;         // has not been accessed yet
         }
         return m.column;
+    }
+
+    /**
+     * initializes the specifed column with values, adding a new column if needed. 
+     * If `val`is a function, it is called as ```
+     * val(colValue:DataVal, rowIndex:number, row:DataRow)
+     * ```
+     * @param col the column to initialize
+     * @param initializer the value to initialize with, or a function whose return
+     * value is used to initialize the column
+     */
+    public colInitialize(col:ColumnReference, initializer:any) {
+        const cn = this.colNumber(col);
+        if (!cn  && typeof col === 'string') { this.colAdd(col); }
+        const fn = typeof initializer === 'function';
+        if (cn!==undefined) {
+            this.data.map((r:DataRow, i:number) =>
+                r[cn] = fn? initializer(r[cn], i, r) : initializer
+            );
+        }
     }
 
     /**
@@ -204,13 +243,6 @@ export class Data {
                         }
                     });
             }
-        }
-    }
-
-    public * allRows(column:ColumnReference):Iterable<DataVal> {
-        const c = this.colNumber(column);
-        for (let r=0; r<this.data.length; r++) {
-            yield this.data[r][c];
         }
     }
 
@@ -363,7 +395,7 @@ export class Data {
         if (!names) {
             console.log();
         }
-        names.forEach((col:string) => this.addColumn(col));
+        names.forEach((col:string) => this.colAdd(col));
         names.forEach((col:string) => this.findTypes(col));
         this.castData();
     }
@@ -414,9 +446,10 @@ export class Data {
 
             // else: val is a string:
             const strVal = ''+val;
+            if (''+parseFloat(strVal) === strVal)                              { return Data.type.number; }
             if (strVal.startsWith('$') && !isNaN(parseFloat(strVal.slice(1)))) { return Data.type.currency; }
-            if (!isNaN(this.toDate(strVal).getTime()))	                       { return Data.type.date; }
             if (strVal.endsWith('%') && !isNaN(parseFloat(strVal)))            { return Data.type.percent; }
+            if (!isNaN(this.toDate(strVal).getTime()))	                       { return Data.type.date; }
 
             // european large number currency representation: '$dd,ddd[,ddd]'
             if ((/^\$\d{0,2}((,\d\d\d)*)/g).test(val)) { 
@@ -432,6 +465,17 @@ export class Data {
         }
         return null;
     }    
+
+    /**
+     * A generator that provides the specified column value for each row in `Data` in sequence. 
+     * @param column 
+     */
+    private * allRows(column:ColumnReference):Iterable<DataVal> {
+        const c = this.colNumber(column);
+        for (let r=0; r<this.data.length; r++) {
+            yield this.data[r][c];
+        }
+    }
 
     /**
      * @param str the string to convert to a data

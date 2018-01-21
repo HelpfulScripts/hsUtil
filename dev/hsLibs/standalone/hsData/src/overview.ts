@@ -14,7 +14,7 @@
  * - &nbsp; {@link Data.DataRow DataRow} a single row of column values
  * 
  * ## Data Class
- * - &nbsp; {@link Data.Data Data} A simple database object, featuring named columns and filtering functions
+ * - &nbsp; {@link Data.Data Data} A simple row-column based database object, featuring named columns, sorting, mapping and filtering functions
  */
 
  /** */
