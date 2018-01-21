@@ -66,7 +66,7 @@ export class MainGraph extends Layout {
             cfg.series.data   = [dataQuotes, shares, dataIntra];
             cfg.series.defaultStyle.line.width = 1;
             cfg.series.series = [
-                { x:'Date', yh:'High', yl:'Low', type: 'area', dataIndex:timeWindows[limitDateIndex]==='1d'?2:0},
+                { x:'Date', y:'High', yBase:'Low', type: 'area', dataIndex:timeWindows[limitDateIndex]==='1d'?2:0},
                 { x:'Date', y:'Close', type: 'line' },
                 { x:'Date', y:'price', l:'change', type: 'marker', dataIndex:1, cond:buyCond },
                 { x:'Date', y:'price', l:'change', type: 'marker', dataIndex:1, cond:sellCond }
