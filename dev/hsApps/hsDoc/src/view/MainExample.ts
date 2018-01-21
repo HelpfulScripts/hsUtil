@@ -39,8 +39,12 @@
  * 
  * ### Styles
  * Styles will be automatically sandboxed so they are valid only within the enclosing example tags. 
- * This allows multiple examples to co-exist on the same page.
+ * This is achieved by prefixing css tags with a unique exmple ID and allows multiple examples to co-exist on the same page.
+ * In the DOM, the example ID is assgned top the &lt;example&gt; tag.
+ * Use `$exampleID` as css tag in the `css` section of the example to refer to the &lt;example&gt; element, 
+ * as shown below.
  * 
+ * ### Example
  * <example>
  * <file name='script.js'>
  * m.mount(root, { 
@@ -55,11 +59,9 @@
  * });
  * </file>
  * <file name='style.css'>
+ * $exampleID { height: 200px;}
  * .hs-layout { 
  *     margin:0; 
- * }
- * .myExample>.hs-layout {
- *     border: 2px solid white;
  * }
  * .myExample { 
  *     color: red; 
@@ -78,6 +80,8 @@ import { delay }            from 'hsutil';
 import * as hslayout        from 'hslayout';
 import * as hswidget        from 'hswidget';
 import * as hsgraph         from 'hsgraph';
+import * as hsdata          from 'hsdata';
+import * as hsutil          from 'hsutil';
 
 
 /**
@@ -110,10 +114,12 @@ const gInitialized:{string?:CommentDescriptor} = {};
  * @param context the context in which the example script should be run, expressed as `name`:`namespace` pairs.
  */
 export function example(context:any) { 
-    context.m      = m;
+    context.m        = m;
     context.hslayout = hslayout;
     context.hswidget = hswidget;
     context.hsgraph  = hsgraph;
+    context.hsdata   = hsdata;
+    context.hsutil   = hsutil;
     const libNames = Object.keys(context);
     const modules = libNames.map(n => context[n]);
     return (example:string) => { 
@@ -137,8 +143,12 @@ export function example(context:any) {
         const styles = IDs.pages['css']; 
 
         // prefix css selectors with ID of main execution area to sandbox the scope
-        const style = (styles===undefined)? '': styles.replace(/(^|})\s*?(\S*?)\s*?{/gi, (x:string, ...args:any[]) =>
-            x.replace(args[1], `#${IDs.menuID} ${args[1]}`)
+        // (^|}): start of string or end of previous style def
+        // \s*?: any white spaces
+        // (\S*?): capturing group: css name
+        // \s*?{: whitespaces, followed by start of style def
+        const style = (styles===undefined)? '': styles.replace(/(^|})\s*?(\S*?)\s*?{/gi, (x:string, ...args:any[]) => x
+            .replace(args[1], `#${IDs.exampleID} ${args[1]==='$exampleID'?'':args[1]}`)
         );
         return `<style>${style}</style><example id=${IDs.exampleID} class="hs-layout-frame"></example>`;
     };
@@ -190,7 +200,7 @@ function addExampleStructure(IDs:CommentDescriptor):CommentDescriptor {
             m(Layout, {
                 rows:["30px", "fill"],
                 content:[
-                    m(Menu, {desc: IDs.desc}),
+                    m(Menu, {desc: IDs.desc, size:['50px']}),
                     m(Layout, { content: m('.hs-layout .hs-source', source)})
                 ]
             })
