@@ -102,6 +102,19 @@ export abstract class Selector {
         const itemCss = desc.itemCss || [];
         const selectedItem = this.checkSelectedItem(desc);
 
+        return selectable(this.selector.items[l] = this.selector.items[l] || { 
+            title: l, 
+            css: itemCss[i],        // possibly undefined
+            isSelected: l.toLowerCase() === selectedItem, 
+            clicked:(item:string) => {
+                desc.selectedItem = item;
+                this.selector.select(item); // local housekeeping: make sure the item's style shows correct selection
+                if (typeof desc.changed === 'function') { 
+                    desc.changed(item);  // trigger any actions form the selection
+                }     
+            }
+        });
+/*
         return m(Selectable, { 
             // pass existing item or create and pass a new one
             desc: this.selector.items[l] = this.selector.items[l] || { 
@@ -116,7 +129,8 @@ export abstract class Selector {
                     }     
                 }
             } 
-        });      
+        });     
+*/         
     }
 };
 
@@ -143,3 +157,17 @@ export const Selectable = {
         );
     }
 };
+
+export function selectable(desc:SelectableDesc) {
+    const css           = desc.css || '';
+    const cssSelected   = `${desc.isSelected?'hs-selected': ''}`;
+    const onclick       = desc.clicked? ()   => { 
+        desc.clicked(desc.title); 
+    }   : undefined;
+    const onmousedown   = desc.mouseDown? () => { desc.mouseDown(desc.title); } : undefined;
+    const onmouseup     = desc.mouseUp? ()   => { desc.mouseUp(desc.title); }   : undefined;
+    return m(`.hs-selectable ${css} ${cssSelected}`, 
+        { style: desc.style, onclick:onclick, onmousedown:onmousedown, onmouseup:onmouseup },
+        desc.title
+    );
+}

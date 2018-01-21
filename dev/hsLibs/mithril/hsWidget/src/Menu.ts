@@ -39,6 +39,9 @@
  *    border:1px solid #ddd;
  *    border-top: 0px solid #ddd;
  * } 
+ * .hs-selectable { 
+ *     background-color: #f4f4e8; 
+ * }
  * .hs-selected { 
  *     background-color: #eed; 
  *     border-width:0px;
