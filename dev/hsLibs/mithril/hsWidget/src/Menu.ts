@@ -8,10 +8,10 @@
  * ### Attributes (node.attrs):
  * - desc: {@link Menu.MenuDesc MenuDesc}
  *     - items: string[];                 // the items on the menu
- *     - chanmged: (item:string) => void; // called when item clicked
+ *     - changed: (item:string) => void;  // called when item clicked
  *     - selectedItem?: number|string;    // the currently selected item, by index or name
- *     - itemCSS?:string[];               // css to apply to items;
- * - size?:string[];                      // sizes to layout menu items; 
+ *     - itemCSS?: string[];              // css to apply to items;
+ * - size?: string | string[];            // sizes to layout menu items; 
  * 
  * ## Example
  * <example>
@@ -66,7 +66,7 @@ export class Menu extends Selector{
         
         return m(Layout, {
             css: '.hs-menu',
-            columns: [size],
+            columns: size.length===undefined? [size] : size,
             content: desc.items.map((l:string, i:number) => this.renderItem(desc, i))
         });
     }
