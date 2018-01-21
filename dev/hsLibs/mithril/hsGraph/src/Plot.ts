@@ -67,6 +67,17 @@ export abstract class Plot extends SVGElem {
         );
     }
 
+    drawArea(clipID:string, data:DataRow[], x:number, yFore:number, yBack:number, scales:XYScale, sStyle:SeriesStyle) {
+        if (sStyle.fill.visible) {
+            const style = `fill: ${sStyle.fill.color};`;
+            const drawFore = data;
+            const drawBack = data.slice().reverse();
+            return this.polygon(drawFore, drawBack, x, yFore, yBack, scales, clipID, style);
+        } else {
+            m('.invisible-line','');
+        }
+    }
+
     abstract plot(data:Data, series:SeriesDef, scales:XYScale, i:number, clipID:string): Vnode[];
 
     setDefaults(data:Data, series:SeriesDef, scales:XYScale) {

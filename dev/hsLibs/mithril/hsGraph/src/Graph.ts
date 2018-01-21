@@ -352,11 +352,10 @@ export class Graph extends SVGElem {
         const domains = <NumDomain[]>[[1e20, -1e20], [1e20, -1e20]];
     
         cfg.series.map((s:SeriesDef) => { // for each series:
-            if (s.x)  { data[s.dataIndex].findDomain(s.x, domains[0]); }
-            else      { domains[0][0] = 0; domains[0][1] = data[s.dataIndex].export().rows.length-1; }
-            if (s.y)  { data[s.dataIndex].findDomain(s.y, domains[1]); }
-            if (s.yh) { data[s.dataIndex].findDomain(s.yh, domains[1]); }
-            if (s.yl) { data[s.dataIndex].findDomain(s.yl, domains[1]); }
+            if (s.x)     { data[s.dataIndex].findDomain(s.x, domains[0]); }
+            else         { domains[0][0] = 0; domains[0][1] = data[s.dataIndex].export().rows.length-1; }
+            if (s.y)     { data[s.dataIndex].findDomain(s.y, domains[1]); }
+            if (s.yBase) { data[s.dataIndex].findDomain(s.yBase, domains[1]); }
         });
         scales.primary.x.setAutoDomain(domains[0]);
         scales.primary.y.setAutoDomain(domains[1]);

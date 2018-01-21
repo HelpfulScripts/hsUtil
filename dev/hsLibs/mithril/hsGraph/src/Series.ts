@@ -3,7 +3,8 @@
  * renders the one or more series in a variety of styles.
  * 
  * ### Configurations and Defaults
- * See {@link Series.Series.defaultConfig Series.defaultConfig}
+ * See {@link Series.Series.defaultConfig Series.defaultConfig} for defaults
+ * and {@link Series.SeriesDef SeriesDef} for defining configuration details.
  * 
  * ### Attributes
  * The `Series` class is called by {@link Graph.Graph `Graph`} as 
@@ -20,7 +21,8 @@
 import { m, Vnode}      from 'hslayout';
 import { Config,
          VisibleCfg }   from './Graph';
-import { Data, DataSet }from 'hsdata';
+import { Data, 
+         DataSet }      from 'hsdata';
 import { Condition }    from 'hsdata';
 import { SVGElem }      from './SVGElem';
 import { Axes }         from './Axes';
@@ -73,6 +75,11 @@ export class Series extends SVGElem {
         marker:  new PlotMarkers(),
         bar:     new PlotBar(),
         area:    new PlotArea()
+    };
+
+    static map = {
+        stacked: 'stacked',
+        shared:  'shared'
     };
 
     /** 
@@ -152,13 +159,38 @@ export class Series extends SVGElem {
         const scales:XYScale = node.attrs.scales.primary;
         const data:Data[]    = node.attrs.data;
         const clipID = cfg.clip? 'hs'+Math.floor(Math.random()*10000) : undefined;
+        cfg.series.map((s:SeriesDef) => {
+            if (s.map === Series.map.shared) {  // reset ySum if needed
+                s.ySum = '$sum';
+                data[s.dataIndex].colAdd(s.ySum);            // add $max if not present
+                data[s.dataIndex].colInitialize(s.ySum, 0);  // and initialize to 0
+            }
+        });
+        cfg.series.map((s:SeriesDef) => {
+            const dt = data[s.dataIndex];
+            if (s.map===Series.map.shared) {    // aggregate ySum over series
+                const valCol = dt.colNumber(s.y);                       
+                dt.colInitialize(s.ySum, (v:number, i:number, row:number[])=>{ return v+row[valCol]; });
+            }
+            if (s.map) {
+                s.yBase = '$'+ s.map;
+                dt.colAdd(s.yBase);             // add $stacked or $shared if not present
+                dt.colInitialize(s.yBase, 0);   // and initialize to 0
+            }
+        });
         return m('svg', { class:'hs-graph-series'}, [
             this.drawClipRect(clipID, scales),
             m('svg', cfg.series.map((s:SeriesDef, i:number) => { 
+                const dt = data[s.dataIndex];
                 const type = Series.plot[s.type] || Series.plot.line;
-                type.setDefaults(data[s.dataIndex], s, scales);
-                const d = s.cond? data[s.dataIndex].filter(s.cond) : data[s.dataIndex];
-                return m('svg', {class:`hs-graph-series-${i}`}, type.plot(d, s, scales, i, clipID));
+                type.setDefaults(dt, s, scales);
+                const d = s.cond? dt.filter(s.cond) : dt;
+                const plot = type.plot(d, s, scales, i, clipID);  // plot y above yBase; 
+                if (s.map) {                                      // if 'stacked' or 'shared' -> accumulate y
+                    const valCol = d.colNumber(s.y);                       
+                    d.colInitialize(s.yBase, (v:number, i:number, row:number[])=>{ return v+row[valCol]; });
+                }
+                return m('svg', {class:`hs-graph-series-${i}`}, plot);
             }))
         ]);
     }
@@ -204,7 +236,28 @@ export interface SeriesStyle {
 }
 
 /** 
- * Defines Series columns and values to use, as well as the plot type to apply 
+ * Defines Series columns and values to use, as well as the plot type to apply.
+ * The following settings are available for configuration:
+ * ```
+ * cfg.series.series = [{
+ *    type: TYPE,        // the series type, e.g. 'line', etc. See below.
+ *    dataIndex: number, // the `Data` set to use. The index refers to the position in `series.data`
+ *    x: string,         // the column name or index of the x-coordinate to use for drawing
+ *    y: string,         // the column name or index of the y-coordinate to use for drawing
+ *    yBase: string,     // if specified, used as lower series for filling the area
+ *    l: string,         // the column name or index to use for series labels
+ *    hOffset: number;   // horizontal label offset in em o
+ *    vOffset?: number;  // vertical label offset in em
+ *    map?: 'stacked' | 'shared'; // stack series, or show the share (normalize to 100%)
+ *    style: {@link SeriesStyle SeriesStyle},  // allows overriding a default style setting
+ *    cond: {@link hsData:DataFilters.Condition Condition} // allows specifying a filter applied to data before rendering.
+ * }]
+ * ```
+ * The following series <TYPE>s are available. For configuration details, see:
+ * - 'line':  (or omitted): {@link PlotLine PlotLine}
+ * - 'markers': {@link PlotMarkers PlotMarkers}
+ * - 'area':    {@link PlotArea PlotArea}
+ * - 'bar':     {@link PlotBar PlotBar}
  */
 export interface SeriesDef {
     /** 
@@ -212,13 +265,14 @@ export interface SeriesDef {
      * [0] is reserved for the x direction. 
      * Further elements are dependent on the {@link Series.type plot} type. 
      */
-    x:string;   // x values
-    y?:string;  // y values
-    yh?:string; // high-y values
-    yl?:string; // low-y-values
-    l?:string;  // labels
-    hOffset?: number; // offset in em
-    vOffset?: number; // offset in em
+    x:string;               // x values
+    y?:string;              // y values
+    yBase?:string;          // if specified, treats (y/yBase) as (high/low) series
+    ySum?:string;           // internal support column for 'shared' mode;
+    l?:string;              // labels
+    hOffset?: number;       // offset in em
+    vOffset?: number;       // offset in em
+    map?: string;           // accepts 'stacked'and 'shared'
     /** An index into the `Data[]` pool, identifying the `Data` set to use. defaults to `0` */
     dataIndex?: number;
     /** optional plot type, selected from {@link Series.Series.plot Series.plot} as string; defaults to  'line' */
@@ -231,7 +285,7 @@ export interface SeriesDef {
 
 
 /** 
- * Defines configurable settings. 
+ * Defines the default settings. 
  * Implemented as a class rather than interface to allow for a getter/setter implementation
  * of `series`. This allows for postprocessing user configurations while maintaining 
  * convenient notation, e.g.

@@ -10,9 +10,9 @@
  * Example: `y:'volume'`
  * 
  * #### Mode 2 - High-Low Bars
- * Specify names for y and yl values to create high-low bars that reach from the 
- * y-value to the yl-value for each data row. Negative heights are allowed.
- * Example: `y:'open', yl:'close'`
+ * Specify names for y and yBase values to create high-low bars that reach from the 
+ * y-value to the yBase-value for each data row. Negative heights are allowed.
+ * Example: `y:'open', yBase:'close'`
  * 
  * #### Example
  * <example>
@@ -34,7 +34,7 @@
  *          cfg.series.data   = [series];
  *          cfg.series.series = [
  *              { y:'volume', type: 'bar'},
- *              { y:'open', yl:'close', type: 'bar'}
+ *              { y:'open', yBase:'close', type: 'bar'}
  *          ];
  *          cfg.series.series[0].style.bar.width = 80;
  *          cfg.series.series[1].style.bar.offset = 0;
@@ -88,10 +88,10 @@ export class PlotBar extends Plot {
     plot(data:Data, series:SeriesDef, scales:XYScale, i:number, clipID:string): Vnode[] {
         const x = data.colNumber(series.x);
         const y = data.colNumber(series.y);
-        const yl = series.yl? data.colNumber(series.yl) : undefined;
+        const yBase = series.yBase? data.colNumber(series.yBase) : undefined;
         if (y===undefined) { return m('.error',''); }
         return [
-            this.drawBar(clipID, data, x, y, yl, scales, series.style, i),
+            this.drawBar(clipID, data, x, y, yBase, scales, series.style, i),
         ];
     }
 }

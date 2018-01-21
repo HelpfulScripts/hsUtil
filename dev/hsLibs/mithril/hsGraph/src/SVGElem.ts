@@ -253,11 +253,16 @@ export abstract class SVGElem {
      * @param style an optional `style` attribute, e.g. to set the stroke and stroke-width.
      */
     polygon(dataFore:DataRow[], dataBack:DataRow[], x:number, yFore:number, yBack:number, scales:XYScale, id:string, style?:string):Vnode {
-        const sx = (x:number) => round(scales.x.convert(x));
-        const sy = (y:number) => round(scales.y.convert(y));
+        const indexed = (x===undefined);
+        const sx = (_x:number) => round(scales.x.convert(_x));
+        const sy = (_y:number) => round(scales.y.convert(_y));
         const clip = id? `url(#${id})` : undefined;
-        let points = dataFore.map((row:number[]) => `${sx(row[x])},${sy(row[yFore])}`).join(' ') + ' ';
-        points += dataBack.map((row:number[]) => `${sx(row[x])},${sy(yBack?row[yBack]:0)}`).join(' ');
+        const points:string = 
+                dataFore.map((row:number[], i:number) => 
+                    `${sx(indexed?i:row[x])},${sy(row[yFore])}`)
+        .concat(dataBack.map((row:number[], i:number) => 
+                    `${sx(indexed?(dataBack.length-i-1):row[x])},${sy(yBack?row[yBack]:0)}`
+        )).join(' ');
         return m('polygon', { 'clip-path': clip, style: style, points: points });
     }
 
