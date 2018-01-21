@@ -1,40 +1,8 @@
-@bg-example: #eed;
-@bg-source:  #dde;
-@border: 1px solid #ddd; 
-@selectBorder: 1px solid #eee;
 
 body {
     color: black;
 }
 
-example {
-    display:block;
-    height: 300px;
-    width: 100%;
-    padding: 5px;
-    box-sizing: border-box;
-     
-    .hs-source              { 
-        background-color: @bg-source;  
-        font-size: 12px;
-    }
-    .hs-execution           { 
-        background-color: @bg-example; 
-        div { margin: 0px; }
-        .hs-leaf { padding: 5px; } 
-    }
-    .hs-layout {
-        .hs-selectable           { 
-            background-color: #fff; 
-            border-left: @border;  
-            border-right: @border;  
-        }
-        .hs-selected  { 
-            background-color: @bg-source; 
-        } 
-    }
-    pre { padding-left: 10px; }
-}
 
 .hs-layout {
     margin:0;

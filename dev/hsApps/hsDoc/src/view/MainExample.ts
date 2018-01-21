@@ -148,7 +148,7 @@ export function example(context:any) {
         // (\S*?): capturing group: css name
         // \s*?{: whitespaces, followed by start of style def
         const style = (styles===undefined)? '': styles.replace(/(^|})\s*?(\S*?)\s*?{/gi, (x:string, ...args:any[]) => x
-            .replace(args[1], `#${IDs.exampleID} ${args[1]==='$exampleID'?'':args[1]}`)
+            .replace(args[1], args[1]==='$exampleID'? `#${IDs.exampleID}`: `#${IDs.menuID} ${args[1]}`)
         );
         return `<style>${style}</style><example id=${IDs.exampleID} class="hs-layout-frame"></example>`;
     };
@@ -199,9 +199,10 @@ function addExampleStructure(IDs:CommentDescriptor):CommentDescriptor {
             }),
             m(Layout, {
                 rows:["30px", "fill"],
+                css: '.hs-source',
                 content:[
                     m(Menu, {desc: IDs.desc, size:['50px']}),
-                    m(Layout, { content: m('.hs-layout .hs-source', source)})
+                    m(Layout, { content: m('.hs-layout .hs-source-main', source)})
                 ]
             })
         ]})
