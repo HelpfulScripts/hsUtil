@@ -2,18 +2,18 @@
  * # Menu Widget
  * Creates a simple menu with several items.
  * 
- * ### Invocation
+ * ### Profile
  * invoked as `m(Menu, { desc:<MenuDesc> })`
  * 
  * ### Attributes (node.attrs):
- * - desc: {@link Menu.MenuDesc MenuDesc}
- *     - items: string[];                 // the items on the menu
- *     - changed: (item:string) => void;  // called when item clicked
- *     - selectedItem?: number|string;    // the currently selected item, by index or name
- *     - itemCSS?: string[];              // css to apply to items;
+ * - `desc:` {@link Menu.MenuDesc MenuDesc}
+ *     - `items: string[]`;                 // the items on the menu
+ *     - `changed: (item:string) => void`;  // called when item clicked
+ *     - `selectedItem?: number|string`;    // the currently selected item, by index or name
+ *     - `itemCSS?: string[]`;              // css to apply to items;
  * - size?: string | string[];            // sizes to layout menu items; 
  * 
- * ## Example
+ * ### Example
  * <example>
  * <file name='script.js'>
  * const items = ['One', 'Two', 'Three'];
@@ -58,7 +58,7 @@ import { Selector }         from './Selector';
 /**
  * Creates a simple menu with several items, as configured by the desc:SelectorDesc object passed as a parameter. 
  */
-export class Menu extends Selector{
+export class Menu extends Selector {
     view(node: Vnode): Vnode {
         const desc = node.attrs.desc;
         node.attrs.desc = undefined;
@@ -66,7 +66,9 @@ export class Menu extends Selector{
 
         desc.items = desc.items;
         desc.changed = desc.changed || ((item:string) => console.log(`missing changed() function for menu item ${item}`));
-        
+        desc.selectedItem = desc.selectedItem || 0;
+        this.internalStateUpdate(desc, desc.selectedItem);
+console.log(desc.selectedItem);        
         return m(Layout, {
             css: '.hs-menu',
             columns: size.length===undefined? [size] : size,

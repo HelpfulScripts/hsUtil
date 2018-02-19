@@ -10,8 +10,11 @@ export { SelectorDesc } from './Selector';
 export { Button,
          RadioButtons,
          ToggleButton } from './Button'; 
+export { CornerButton,
+         ButtonSymbols
+        }               from './CornerButton';
 export { AddButton, 
          RemoveButton } from './AddRemove'; 
 export { Collapsible }  from './Collapsible'; 
-export { DropOver }     from './DropOver'; 
 export { Modal }        from './Modal'; 
+export { TypeAhead }    from './TypeAhead'; 

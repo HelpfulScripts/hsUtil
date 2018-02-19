@@ -98,7 +98,7 @@ export class Chart extends SVGElem {
     drawBackground(plotArea:Rect) {
         const tl = plotArea.tl;
         const br = plotArea.br;
-        return this.rect({x:tl.x, y:tl.y}, {w: br.x-tl.x, h: br.y-tl.y});
+        return this.rect({x:tl.x, y:tl.y}, {w: br.x-tl.x, h: br.y-tl.y},'');
     }
 
     drawTitle(plotArea:Rect, cfg:ChartConfig) {

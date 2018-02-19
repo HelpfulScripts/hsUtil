@@ -61,20 +61,27 @@ import { SeriesDef }    from './Series';
 
 export class PlotArea extends Plot { 
     plot(data:Data, series:SeriesDef, scales:XYScale, i:number, clipID:string): Vnode[] {
-        const x = data.colNumber(series.x);
-        const y = data.colNumber(series.y);
+        const x     = data.colNumber(series.x);
+        const y     = data.colNumber(series.y);
         const yBase = data.colNumber(series.yBase);  // or undefined
-        const yMax = data.colNumber('$sum');
+        const yMax  = data.colNumber('$sum');
+        const mapRow = (row:any[]) =>
+            (yMax===undefined)? [
+                row[x],
+                row[y]+row[yBase],
+                row[yBase]
+            ] : [
+                row[x],
+                (row[y]+row[yBase]) / row[yMax],
+                row[yBase] / row[yMax]
+            ]; 
         if (y===undefined) { return m('.error',''); }
-        const d = (!series.map)? data.getData() : data.getData().map((row:any[]) => {
-            const r = row.slice(); 
-            r[y] = (r[y]+r[yBase]); 
-            if (yMax!==undefined) {
-                r[y]     /= r[yMax];
-                r[yBase] /= r[yMax];
-            }
-            return r; 
-        });
-        return [this.drawArea(clipID, d, x, y, yBase, scales, series.style)];
+        if (series.map) {
+            const d = data.getData().map(mapRow);
+            return [this.drawArea(clipID, d, 0, 1, 2, scales, series.style, series.y)];
+        } else {
+            const d = data.getData();
+            return [this.drawArea(clipID, d, x, y, yBase, scales, series.style, series.y)];
+        }
     }
 }

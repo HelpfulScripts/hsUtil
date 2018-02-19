@@ -88,49 +88,35 @@ export abstract class Selector {
         select: this.updateSelected.bind(this)
     };
 
-    checkSelectedItem(desc:SelectorDesc):string {
+    checkSelectedItem(desc:SelectorDesc) {
         if (typeof desc.selectedItem === 'number') { 
             desc.selectedItem = desc.items[desc.selectedItem % desc.items.length];
         } else if (desc.selectedItem === undefined) {
             desc.selectedItem = desc.items[0];
         }
-        return desc.selectedItem.toLowerCase();
+    }
+
+    internalStateUpdate(desc:SelectorDesc, item:string) {
+        this.checkSelectedItem(desc);
+        desc.selectedItem = item;
+        this.selector.select(item); // local housekeeping: make sure the item's style shows correct selection
     }
 
     renderItem(desc:SelectorDesc, i:number) {
-        const l:string = desc.items[i];
+        const l:string = desc.items[i] || '';
         const itemCss = desc.itemCss || [];
-        const selectedItem = this.checkSelectedItem(desc);
 
         return selectable(this.selector.items[l] = this.selector.items[l] || { 
             title: l, 
             css: itemCss[i],        // possibly undefined
-            isSelected: l.toLowerCase() === selectedItem, 
+            isSelected: l.toLowerCase() === desc.selectedItem?(<string>desc.selectedItem).toLowerCase() : false, 
             clicked:(item:string) => {
-                desc.selectedItem = item;
-                this.selector.select(item); // local housekeeping: make sure the item's style shows correct selection
+                this.internalStateUpdate(desc, item);
                 if (typeof desc.changed === 'function') { 
-                    desc.changed(item);  // trigger any actions form the selection
+                    desc.changed(item);  // trigger any actions from the selection
                 }     
             }
         });
-/*
-        return m(Selectable, { 
-            // pass existing item or create and pass a new one
-            desc: this.selector.items[l] = this.selector.items[l] || { 
-                title: l, 
-                css: itemCss[i],        // possibly undefined
-                isSelected: l.toLowerCase() === selectedItem, 
-                clicked:(item:string) => {
-                    desc.selectedItem = item;
-                    this.selector.select(item); // local housekeeping: make sure the item's style shows correct selection
-                    if (typeof desc.changed === 'function') { 
-                        desc.changed(item);  // trigger any actions form the selection
-                    }     
-                }
-            } 
-        });     
-*/         
     }
 };
 
@@ -146,9 +132,7 @@ export const Selectable = {
         node.attrs.desc = undefined;
         const css           = desc.css || '';
         const cssSelected   = `${desc.isSelected?'hs-selected': ''}`;
-        const onclick       = desc.clicked? ()   => { 
-            desc.clicked(desc.title); 
-        }   : undefined;
+        const onclick       = desc.clicked? ()   => { desc.clicked(desc.title); }   : undefined;
         const onmousedown   = desc.mouseDown? () => { desc.mouseDown(desc.title); } : undefined;
         const onmouseup     = desc.mouseUp? ()   => { desc.mouseUp(desc.title); }   : undefined;
         return m(`.hs-selectable ${css} ${cssSelected}`, 

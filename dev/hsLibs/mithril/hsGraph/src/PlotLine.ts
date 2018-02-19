@@ -43,8 +43,8 @@ export class PlotLine extends Plot {
         if (x===undefined) { return m('.error',''); }
         if (y===undefined) { return m('.error',''); }
         return [
-            this.drawLine(clipID, data.getData(), x, y, scales, series.style),
-            this.drawMarker(clipID, data.getData(), x, y, scales, series.style)
+            this.drawLine(clipID, data.getData(), x, y, scales, series.style, series.y),
+            this.drawMarker(clipID, data.getData(), x, y, scales, series.style, series.y)
         ];
     }
 }

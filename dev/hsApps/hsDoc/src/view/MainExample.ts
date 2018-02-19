@@ -116,6 +116,7 @@ const gInitialized:{string?:CommentDescriptor} = {};
 export function example(context:any) { 
     context.m        = m;
     context.hslayout = hslayout;
+//    import ('hswidget').then(_ => context.hswidget = _);
     context.hswidget = hswidget;
     context.hsgraph  = hsgraph;
     context.hsdata   = hsdata;

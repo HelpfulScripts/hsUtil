@@ -166,6 +166,7 @@ function resolveTerminalCondition(name:string, val:any, row:DataRow, colNumber:(
     const valIsArray = ((typeof val === 'object') && (val.length!==undefined));
     if (isNaN(col)) { 
         console.log(`column name '${name}' cannot be resolved in terminal condition ${name}=${val}`);
+        console.log(row);
         return false; // -> this condition is not met;
     } else if (valIsFunction) { 
         // query true if function evaluates to true
@@ -185,7 +186,7 @@ function resolveTerminalCondition(name:string, val:any, row:DataRow, colNumber:(
  * @param row the row values 
  * @param and 
  */
-function resolveCondition(condition:Condition, r:number, row:DataRow, colNumber:(name:string)=>number, and=true):boolean { 
+function resolveCondition(condition:Condition, row:DataRow, r:number, colNumber:(name:string)=>number, and=true):boolean { 
     let orResult = false;
     let andResult= true;          
     // undefined condition is TRUE
@@ -205,7 +206,7 @@ function resolveCondition(condition:Condition, r:number, row:DataRow, colNumber:
                 // empty OR is false:	
                 false : 
                 // else: OR is true if any sub-condition is met
-                mc.some((cd:AndCondition) => resolveCondition(cd, r, row, colNumber, false));
+                mc.some((cd:AndCondition) => resolveCondition(cd, row, r, colNumber, false));
         } 
         // AND condition: {...}
         else { 	
@@ -215,9 +216,9 @@ function resolveCondition(condition:Condition, r:number, row:DataRow, colNumber:
                 
                 // resolve SetConditions:
                 switch (name) {
-                    case 'or':  conditionMet = resolveCondition(setCond.or, r, row, colNumber, false); break;
-                    case 'and': conditionMet = resolveCondition(setCond.and, r, row, colNumber, true); break;
-                    case 'not': conditionMet = !resolveCondition(setCond.not, r, row, colNumber, true); break;
+                    case 'or':  conditionMet = resolveCondition(setCond.or, row, r, colNumber, false); break;
+                    case 'and': conditionMet = resolveCondition(setCond.and, row, r, colNumber, true); break;
+                    case 'not': conditionMet = !resolveCondition(setCond.not, row, r, colNumber, true); break;
                     default:    conditionMet = resolveTerminalCondition(name, condition[name], row, colNumber); 
                 }
                 if (conditionMet) { orResult  = true;  if(!and) { break; }} // OR conjunction: exit for name loop if condition met
@@ -231,13 +232,24 @@ function resolveCondition(condition:Condition, r:number, row:DataRow, colNumber:
     return and? andResult : orResult;
 }
 
-export function filter(data:Data, cond:Condition):Data {
+export type ReduceFn = (keep:boolean, row:DataRow, i:number) => void;
+
+export function filter(data:Data, cond:Condition, reduceFn?:string|ReduceFn):Data {
+    const noop = () => 0;
     const colNumber = (name:string):number => data.colNumber(name);
+    let fn:ReduceFn;
+    switch (reduceFn) {
+        default: fn = (typeof reduceFn === 'function')? <ReduceFn>reduceFn : noop;
+    } 
     try {
         return new Data({
             name:     data.getName(),
             colNames: data.colNames(), 
-            rows:data.getData().filter((row:DataRow, i:number) => resolveCondition(cond, i, row, colNumber))
+            rows:data.getData().filter((row:DataRow, i:number) => {
+                const keep = resolveCondition(cond, row, i, colNumber);
+                if (fn) { fn(keep, row, i); }
+                return keep;
+            })
         });
     } catch(err) {
         console.log(err);

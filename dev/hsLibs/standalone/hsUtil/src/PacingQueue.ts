@@ -29,7 +29,6 @@ export class PacingQueue {
     }
 
     next(q:any[]) {
-        console.log(`${}: next pace of ${q.length} pending`);
         if (q.length > 0) {
             const entry = q.shift();
             entry.resolve(

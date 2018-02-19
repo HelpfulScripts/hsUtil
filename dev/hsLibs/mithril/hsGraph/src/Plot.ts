@@ -17,12 +17,12 @@ import { Series,
 import { round }        from 'hsutil';
 
 export abstract class Plot extends SVGElem {
-    drawLine(clipID:string, data:DataRow[], x:number, y:number, scales:XYScale, sStyle:SeriesStyle) {
+    drawLine(clipID:string, data:DataRow[], x:number, y:number, scales:XYScale, sStyle:SeriesStyle, title?:string) {
         const style = `stroke: ${sStyle.line.color}; stroke-width:${sStyle.line.width};`;
-        return !sStyle.line.visible? m('.invisible-line','') : this.polyline(data, x, y, scales, clipID, style);
+        return !sStyle.line.visible? m('.invisible-line','') : this.polyline(data, x, y, scales, clipID, style, title);
     }
 
-    drawMarker(clipID:string, data:DataRow[], x:number, y:number, scales:XYScale, sStyle:SeriesStyle) {
+    drawMarker(clipID:string, data:DataRow[], x:number, y:number, scales:XYScale, sStyle:SeriesStyle, title?:string) {
         const mrk = Series.marker;
         let style = `fill:${sStyle.marker.color}`;
         return !sStyle.marker.visible? m('.invisible-marker','') : m('svg', {class:'hs-graph-series-markers'},
@@ -32,15 +32,15 @@ export abstract class Plot extends SVGElem {
                 const r  = sStyle.marker.size;
                 switch (sStyle.marker.shape) {
                     case mrk.circle: 
-                        return this.circle({x:cx, y:cy}, r, style);
+                        return this.circle({x:cx, y:cy}, r, style, title);
                     case mrk.square: 
-                        return this.rect({x:cx-r, y:cy-r}, {w:2*r, h:2*r}, style);
+                        return this.rect({x:cx-r, y:cy-r}, {w:2*r, h:2*r}, style, title);
                     case mrk.diamond: 
-                        return this.shape([[cx-r, cy], [cx, cy+r], [cx+r, cy], [cx, cy-r]], undefined, style);
+                        return this.shape([[cx-r, cy], [cx, cy+r], [cx+r, cy], [cx, cy-r]], undefined, style, title);
                     case mrk.upTriangle: 
-                        return this.shape([[cx-r, cy+r], [cx+r, cy+r], [cx, cy-r]], undefined, style);
+                        return this.shape([[cx-r, cy+r], [cx+r, cy+r], [cx, cy-r]], undefined, style, title);
                     case mrk.downTriangle: 
-                        return this.shape([[cx-r, cy-r], [cx+r, cy-r], [cx, cy+r]], undefined, style);
+                        return this.shape([[cx-r, cy-r], [cx+r, cy-r], [cx, cy+r]], undefined, style, title);
                 }
                 return m(`.unkown-marker-${sStyle.marker.shape}`,'');
             })
@@ -67,12 +67,12 @@ export abstract class Plot extends SVGElem {
         );
     }
 
-    drawArea(clipID:string, data:DataRow[], x:number, yFore:number, yBack:number, scales:XYScale, sStyle:SeriesStyle) {
+    drawArea(clipID:string, data:DataRow[], x:number, yFore:number, yBack:number, scales:XYScale, sStyle:SeriesStyle, title:string) {
         if (sStyle.fill.visible) {
             const style = `fill: ${sStyle.fill.color};`;
             const drawFore = data;
             const drawBack = data.slice().reverse();
-            return this.polygon(drawFore, drawBack, x, yFore, yBack, scales, clipID, style);
+            return this.polygon(drawFore, drawBack, x, yFore, yBack, scales, clipID, style, title);
         } else {
             m('.invisible-line','');
         }

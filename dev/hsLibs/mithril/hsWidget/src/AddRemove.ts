@@ -2,7 +2,7 @@
  * # AddRemove Buttons
  * Adds `+` and `-` buttons to add or remove items from a list.
  * 
- * ### Invocation
+ * ### Profile
  * invoked as 
  * ```
  *  m('div', [

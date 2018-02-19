@@ -101,8 +101,8 @@ function dateScaleTickMarks(dom:Domain, ticks:Ticks, fmt='%MM/%DD/%YY') {
 
     }
     const dateDom:Date[] = [
-        (typeof dom[0] === 'number')? new Date(dom[0]) : <Date>dom[0], 
-        (typeof dom[1] === 'number')? new Date(dom[1]) : <Date>dom[1]
+        (typeof dom[0] === 'number')? new Date(<number>dom[0]) : <Date>dom[0], 
+        (typeof dom[1] === 'number')? new Date(<number>dom[1]) : <Date>dom[1]
     ];
     if (isNaN(dateDom[0].getTime())) { dateDom[0] = new Date('1/1/1980'); } 
     if (isNaN(dateDom[1].getTime())) { dateDom[0] = new Date(); } 

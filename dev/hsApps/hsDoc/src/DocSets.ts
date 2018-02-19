@@ -41,7 +41,7 @@ export class DocSets {
      */
     public static loadList(file?:string):Promise<void> {
         file = file || FILE;   
-        console.log('requesting docSet ' + file);
+//console.log('requesting docSet ' + file);
         return DocSets.loadIndexSet(file); 
     }
 
@@ -73,7 +73,7 @@ export class DocSets {
     private static loadIndexSet(file:string):Promise<void> { 
         return m.request({ method: "GET", url: file })
             .then((result:any) =>  {
-                console.log('received index');
+//console.log('received index');
                 DocSets.gTitle = result.title;
                 let i = file.lastIndexOf('/');
                 const dir = file.substring(0,i+1);
@@ -95,7 +95,7 @@ export class DocSets {
 function loadDocSet(dir:string, file:string):Promise<void> {
     return m.request({ method: "GET", url: dir+file })
         .then((r:any) => {
-            console.log('received ' + dir+file);
+// console.log('received ' + dir+file);
             DocSets.add(r);
         })
         .catch(console.log);

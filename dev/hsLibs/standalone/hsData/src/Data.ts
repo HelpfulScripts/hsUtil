@@ -52,7 +52,7 @@ interface MetaStruct {
 }
 
 export type sortFn = (x:any, y:any) => number;
-export type mapFn  = (x:any, i?:number, values?:any[]) => any;
+export type mapFn  = (colVal:any, colIndex?:number, rowIndex?:number, rows?:any[][]) => any;
 
 /**
  * # Data
@@ -329,7 +329,13 @@ export class Data {
      * });
      * ```
      * @param col the data column, or columns, to apply the mapping to. 
-     * @param mapFn a function to implement the mapping, 
+     * @param mapFn a function to implement the mapping,
+     * called on each row of the data set in turn as `mapFn(val, i, c, rows)`, where
+     * - `val`: the column value in the current row
+     * - `c`: the column index in the current row
+     * - `i`: the row index 
+     * - `rows`: the rows being iterated over
+`    * 
      * follows the same specifications as the function passed to Array.map().<br>
      * For column mode, some predefined map functions can be invoked by providing a 
      * respective string instead of a function. The following functions are defined:
@@ -339,9 +345,12 @@ export class Data {
         </table>
      * @return a new Data object containing the mapping.
      */
-    public map(mapFn:string|mapFn, col:ColumnReference|ColumnReference[]):Data {
+    public map(col:ColumnReference|ColumnReference[], mapFn:string|mapFn):Data {
         const noop = (val:any) => val;
-        const cumulate = () => { let sum=0; return (val:number) => { sum += +val; return sum; };};
+        const cumulate = () => { 
+            let sum=0; 
+            return (val:number, i:number) => { sum += +val; return sum; };
+        };
         function getFn() {
             let fn; // define fn inside each col loop to ensure initialization
             switch (mapFn) {
@@ -356,10 +365,10 @@ export class Data {
 
         const names = col['length']? <ColumnReference[]>col : [col];            
         names.map((cn:ColumnReference) => {
-            const col = this.colNumber(cn);
+            const c = this.colNumber(cn);
             let fn = getFn(); // define fn inside each col loop to ensure initialization
-            result.data = result.data.map((row:any[], i:number) => { 
-                row[col] = fn(row[col]); 
+            result.data = result.data.map((row:any[], i:number, rows:any[][]) => { 
+                row[c] = fn(row[c], c, i, rows); 
                 return row;
             });
         });
@@ -478,7 +487,7 @@ export class Data {
     }
 
     /**
-     * @param str the string to convert to a data
+     * @param val the string to convert to a date
      * @param limitYear the year below which the century is corrected. Defaults to 1970.
      * @returns a new Date object parsed from `str`.
      * @description returns a new Date object parsed from `str` and corrects for a difference in 
@@ -490,7 +499,7 @@ export class Data {
     private toDate(val:DataVal, limitYear=1970):Date {
         let d:Date;
         if (val instanceof Date) { d = <Date>val; }
-                            else { d = new Date(val); }   
+                            else { d = new Date(<string>val); }   
         let yr=d.getFullYear();
         if (yr < 100) { 
             yr += 1900; 

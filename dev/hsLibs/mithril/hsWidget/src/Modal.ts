@@ -2,47 +2,49 @@
  * # Modal Widget
  * returns a Vnode that covers the entire window. 
  * 
- * ### Invocation
- * invoked as 
- * ```
- * m(Collapsible, { css:<string>, isExpanded:true, components:[
- *     m('', 'the title'),
- *     m('', ['body item1', 'body item2', 'body item3')
- * ]})
- * ```
+ * ### Profile
+ * invoked as `m(Modal, { <Attributes> })`
  * 
  * ### Attributes (node.attrs):
- * - border: the `px` or `%` of the window size to use as border on each side.
+ * - `width?:  string` the `px` or `%` of the window width to use, or 'auto' if omitted.
+ * - `height?: string` the `px` or `%` of the window height to use, or 'auto' if omitted.
+ * - `content: Vnode` the mithril node to show as content of the modal
+ * - `dismiss: ()=>void` a function that is called when the modal box is dismissed
  * 
  * ### Example
  * <example>
  * <file name='script.js'>
- * m.mount(root, {view: () => m(hslayout.Layout, {
- *     rows:["100%"],
- *     content:[
- *          m('', {onclick:hswidget.Modal.show}, [
- *              'click me',
- *              m(hswidget.Modal, { border:'5px', content: m('', 'click border to release') })
- *          ])
- *     ]
- * })});
+ * let showModal = false;
+ * m.mount(root, {view: () => m('.hs-white', [
+ *      m('h4', {onclick:() => showModal = true }, 'click me'),
+ *      showModal? m(hswidget.Modal, { 
+ *          width:  '300px',
+ *          height: '200px',
+ *          dismiss: () => showModal = false,
+ *          content: m('', 'click border to release') 
+ *      }) : undefined
+ *    ])
+ * });
  * </file>
  * </example>
  */
 
  /** */
-import { m, Vnode}      from 'hslayout';
+import { m, Vnode}  from 'hslayout'; 
+import { CornerButton } from './CornerButton';
 
 export class Modal {
-    private static modal:boolean; 
-    public static show()    { Modal.modal = true; }
-    public static dismiss() { Modal.modal = false; }
     view(node:Vnode) {
-        const b = node.attrs.border || '20%';
-        const attrs = { style: `left:${b}; right:${b}; top:${b}; bottom:${b};`};
-        return m('.hs-modal-frame', !Modal.modal? '': [
-            m('.hs-modal-background', { onclick: Modal.dismiss}, ''),
-            m('.hs-modal-foreground', attrs, node.attrs.content || 'modal pane')
+        const w = node.attrs.width  || 'auto';
+        const h = node.attrs.height || 'auto';
+        const attrs = { style: `width:${w}; height:${h};`};
+        return m('.hs-modal-frame', [
+            m('.hs-modal-background', { onclick: node.attrs.dismiss}, ''),
+            m('.hs-modal-foreground', attrs, !node.attrs.content? 'modal pane' : [
+                node.attrs.content,
+//                m('.hs-modal-close', { onclick: node.attrs.dismiss }, m.trust('&times;')) 
+                m(CornerButton, { onclick: node.attrs.dismiss, symbol:CornerButton.getSymbol('cross') }) 
+            ])
         ]);
     }
 }

@@ -128,7 +128,7 @@ export abstract class SVGElem {
      * @param area the width and height of the rect
      * @param style optional css style setting, such as stroke or stroke-width
      */
-    rect(tl:Point, area:Area, style?:string):Vnode {
+    rect(tl:Point, area:Area, style:string, title?:string):Vnode {
         if (area.w < 0) {
             tl.x += area.w;
             area.w = -area.w;
@@ -143,7 +143,7 @@ export abstract class SVGElem {
             height: round(area.h) + (area.hunit||''),
             style: style
         };
-        return m('rect', param);
+        return m('rect', param), m('title', title);
     }
 
     /**
@@ -152,8 +152,11 @@ export abstract class SVGElem {
      * @param r the circle's radius, in domain coordinates
      * @param style optional css style setting, such as stroke or stroke-width
      */
-    circle(c:Point, r:number, style?:string):Vnode {
-        return m('circle', { cx: round(c.x), cy: round(c.y), r: round(r), style: style });
+    circle(c:Point, r:number, style:string, title?:string):Vnode {
+        return m('circle', 
+            { cx: round(c.x), cy: round(c.y), r: round(r), style: style },
+            m('title', title)
+        );
     }
 
     /**
@@ -232,12 +235,13 @@ export abstract class SVGElem {
      * @param id the unique clip-path id to use, or undefined
      * @param style an optional `style` attribute, e.g. to set the stroke and stroke-width.
      */
-    polyline(data:DataRow[], x:number, y:number, scales:XYScale, id:string, style?:string):Vnode {
+    polyline(data:DataRow[], x:number, y:number, scales:XYScale, id:string, style?:string, title?:string):Vnode {
         return m('polyline', { 
             'clip-path': id? `url(#${id})` : undefined,
             style: style,
             points: data.map((row:number[]) => 
-                `${round(scales.x.convert(row[x]))},${round(scales.y.convert(row[y]))}`).join(' ')}); 
+                `${round(scales.x.convert(row[x]))},${round(scales.y.convert(row[y]))}`).join(' ')
+        }, m('title', title)); 
     }
 
     /**
@@ -252,7 +256,7 @@ export abstract class SVGElem {
      * @param id the unique clip-path id to use, or undefined
      * @param style an optional `style` attribute, e.g. to set the stroke and stroke-width.
      */
-    polygon(dataFore:DataRow[], dataBack:DataRow[], x:number, yFore:number, yBack:number, scales:XYScale, id:string, style?:string):Vnode {
+    polygon(dataFore:DataRow[], dataBack:DataRow[], x:number, yFore:number, yBack:number, scales:XYScale, id:string, style?:string, title?:string):Vnode {
         const indexed = (x===undefined);
         const sx = (_x:number) => round(scales.x.convert(_x));
         const sy = (_y:number) => round(scales.y.convert(_y));
@@ -263,7 +267,7 @@ export abstract class SVGElem {
         .concat(dataBack.map((row:number[], i:number) => 
                     `${sx(indexed?(dataBack.length-i-1):row[x])},${sy(yBack?row[yBack]:0)}`
         )).join(' ');
-        return m('polygon', { 'clip-path': clip, style: style, points: points });
+        return m('polygon', { 'clip-path': clip, style: style, points: points }, m('title', title));
     }
 
     /**
@@ -278,12 +282,13 @@ export abstract class SVGElem {
      * @param id the unique clip-path id to use, or undefined
      * @param style an optional `style` attribute, e.g. to set the stroke and stroke-width.
      */
-    shape(points:DataRow[], id:string, style?:string):Vnode {
+    shape(points:DataRow[], id:string, style:string, title?:string):Vnode {
         return m('polyline', { 
             'clip-path': id? `url(#${id})` : undefined,
             style: style,
             points: points.map((row:number[]) => 
-                `${round(row[0])},${round(row[1])}`).join(' ')}); 
+                `${round(row[0])},${round(row[1])}`).join(' ')
+            }, m('title', title)); 
     }
 }
 

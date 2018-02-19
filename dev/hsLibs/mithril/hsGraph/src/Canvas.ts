@@ -62,8 +62,9 @@ export class Canvas extends SVGElem {
         const cg = node.attrs.cfg;
         return m('svg', {class: 'hs-graph-canvas'}, [
             this.rect({x:0, y:0},
-                { w:cg.range.w, h:cg.range.h, 
-                  wunit:cg.range.wunit, hunit:cg.range.hunit}),
+                { w:cg.range.w, h:cg.range.h, wunit:cg.range.wunit, hunit:cg.range.hunit},
+                '' // style string
+            )
         ]);
     }
 }

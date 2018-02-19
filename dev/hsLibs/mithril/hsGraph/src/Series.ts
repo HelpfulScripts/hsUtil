@@ -315,7 +315,7 @@ export class SeriesConfig {
      * Colors will be chosen by series index from `defaultColors`.
      */
     public defaultStyle:SeriesStyle = {
-        line:   { color:'default', visible: true, width: 5},
+        line:   { color:'default', visible: true, width: 2},
         marker: { color:'default', visible: false, size: 10, shape: Series.marker.circle},
         label:  { color:'default', visible: false },
         fill:   { color:'default', visible: false },

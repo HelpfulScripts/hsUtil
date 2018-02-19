@@ -22,19 +22,25 @@
  * ### Example
  * <example>
  * <file name='script.js'>
- * m.mount(root, {view: () => m(hslayout.Layout, {
- *     rows:["100%"],
- *     content:[
- *         m(hswidget.Collapsible, { css:'.myExample', components: [
- *              m('.myTitle', 'click me to toggle'),
- *              [
- *                  m('.myItem', 'body item1'), 
- *                  m('.myItem', 'body item2'), 
- *                  m('.myItem', 'body item3')
- *              ]
- *         ]}),
- *     ]
- * })});
+ * m.mount(root, {view: () => m('.hs-white', [
+ *    m(hswidget.Collapsible, { css:'.myExample', components: [
+ *       m('.myTitle', 'click me to toggle'), [
+ *          m('.myItem', 'body item1'), 
+ *          m('.myItem', 'body item2'), 
+ *          m('.myItem', 'body item3')
+ *       ]
+ *    ]}),
+ *    m('', 'This is a background text that will be pushed down by the Collapsible')
+ * ])});
+ * </file>
+ * <file name='style.css'>
+ * .myTitle {
+ *    display: inline-block;
+ *    border-radius: 0px 4px;
+ *    padding: 1px;
+ *    border-bottom: 1px solid blue;
+ *    width: auto;
+ * }
  * </file>
  * </example>
  */
@@ -53,10 +59,10 @@ export class Collapsible {
         if (node.attrs.isExpanded!==undefined) {
             this.expanded = node.attrs.isExpanded;
         }
-        return m(`.hs-Collapsible ${css}`, { onclick:()=>this.expanded = !this.expanded}, [
+        return m(`.hs-collapsible ${css}`, { onclick:this.toggle.bind(this)}, [
             components[0],
-            components[1]? m('.hs-Collapsible-content', 
-                { class: this.expanded?'':'hs-collapsed' }, 
+            components[1]? m('.hs-collapsible-content', 
+                { class: this.expanded?'hs-collapsible-expanded':'' }, 
                 components[1].map((c:any) =>c)) : undefined
         ]);
     }

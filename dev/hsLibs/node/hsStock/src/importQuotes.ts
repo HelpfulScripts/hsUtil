@@ -19,15 +19,16 @@ function importYahooFile(files:string[]) {
         const sym = file.split('.')[0];
 console.log(sym);        
         const destFile = destDir+'quotes'+sym+'.json';
-        console.log(`augmenting '${destFile}'`);
+        console.log(`augmenting quotes '${destFile}'`);
         fsUtil.readJsonFile(destFile)
         .then((dest:any) => {
-            const minDate = new Date(dest.rows[0][0]); 
+            const rows = dest.quotes.rows;
+            const minDate = new Date(rows[0][0]); 
             src.table.forEach((row:DataRow, i:number) => {
                 const d = new Date(<string>row[0]);
                 if (d<minDate) {
                     // Date Open High Low Close AdjClose Volume --> Date Open Close High Low Volume
-                    dest.rows.push([
+                    rows.push([
                         `${d.getFullYear()}-${('0'+(d.getMonth()+1)).slice(-2)}-${('0'+d.getDate()).slice(-2)}`, 
                         parseFloat(<string>row[1]), 
                         parseFloat(<string>row[4]), 
@@ -37,17 +38,12 @@ console.log(sym);
                     ]);
                 }
             });
-            dest.rows.sort((a:string[], b:string[]) => a[0] < b[0]?-1 : (a[0] > b[0]? 1 : 0));
-console.log(`minDate: ${minDate}, writing ${destFile}`);   
+            rows.sort((a:string[], b:string[]) => a[0] < b[0]?-1 : (a[0] > b[0]? 1 : 0));
+console.log(`minDate: ${minDate}`);   
 
+            console.log(`writing quotes '${destFile}'`);
             return fsUtil.writeJsonFile(destFile, dest);             
         });
-/*            
-        fsUtil.writeJsonFile(srcDir+sym, {
-            names: table.columns.names,
-            rows: table.table
-        });
-*/        
     });
 }
 
