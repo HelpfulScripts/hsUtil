@@ -7,9 +7,9 @@
  */
 export { Menu }         from './Menu'; 
 export { SelectorDesc } from './Selector'; 
-export { Button,
-         RadioButtons,
-         ToggleButton } from './Button'; 
+export { Button }       from './Button'; 
+export { RadioButton }  from './RadioButton'; 
+export { ToggleButton } from './ToggleButton'; 
 export { CornerButton,
          ButtonSymbols
         }               from './CornerButton';

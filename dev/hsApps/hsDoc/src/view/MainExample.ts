@@ -90,15 +90,21 @@ import * as hsutil          from 'hsutil';
 interface CommentDescriptor { 
     exampleID: string;                  // example tag ID
     menuID:    string;                  // menu tag ID
-    desc:   SelectorDesc;                   // menu items
+    desc:   SelectorDesc;               // menu items
     pages:  {string?:string};           // page content for each menu item
     executeScript?: (root:any) => void; // the example code to execute
+    executeSource?: '';                 // the source code to execute
 }
 
 /**
  * Map containing various exampkle configurations 
  */
 const gInitialized:{string?:CommentDescriptor} = {};
+
+/**
+ * 
+ */
+let gActiveScriptPage = 'js';
 
 /**
  * creates the example configuration, generates the DOM hook, and sets up the example execution.
@@ -123,16 +129,17 @@ export function example(context:any) {
     context.hsutil   = hsutil;
     const libNames = Object.keys(context);
     const modules = libNames.map(n => context[n]);
-    return (example:string) => { 
-        const instance = shortCheckSum(example);
+    return (exmpl:string) => { 
+        const instance = shortCheckSum(exmpl);
         let IDs = gInitialized[instance]; 
         if (!IDs) {
             IDs = gInitialized[instance] = initDesc(() => addExample(IDs)   // called when source menu changes
                 .then(executeScript) 
                 .catch(executeError)
             );
+            IDs.executeSource = exmpl;
             try {
-                const scriptFn = new Function('root', ...libNames, getCommentDescriptor(IDs, example));    
+                const scriptFn = new Function('root', ...libNames, getCommentDescriptor(IDs, exmpl));    
                 IDs.executeScript = (root:any) => scriptFn(root, ...modules);
             }
             catch(e) { console.log('creating script:' + e); }
@@ -188,7 +195,7 @@ function addExample(IDs:CommentDescriptor):Promise<CommentDescriptor> {
  * @param IDs the `CommentDescriptor` to execute on. 
  */
 function addExampleStructure(IDs:CommentDescriptor):CommentDescriptor { 
-    const item = IDs.desc.selectedItem;
+    const item = gActiveScriptPage; // IDs.desc.selectedItem; // get the selected script page: js or css
     const source = m.trust(`<code><pre>${IDs.pages[item]}</pre></code>`);
     const root = document.getElementById(IDs.exampleID);
 
@@ -202,7 +209,7 @@ function addExampleStructure(IDs:CommentDescriptor):CommentDescriptor {
                 rows:["30px", "fill"],
                 css: '.hs-source',
                 content:[
-                    m(Menu, {desc: IDs.desc, size:['50px']}),
+                    m(Menu, {desc: IDs.desc, size:['50px'], changed: (newItem:string) => gActiveScriptPage = newItem}),
                     m(Layout, { content: m('.hs-layout .hs-source-main', source)})
                 ]
             })
@@ -220,6 +227,7 @@ function executeScript(IDs:CommentDescriptor) {
     try { IDs.executeScript(root); }
     catch(e) { 
         console.log("error executing script: " + e); 
+        console.log(IDs.executeSource);
         console.log(e.stack);
     }
     m.redraw();

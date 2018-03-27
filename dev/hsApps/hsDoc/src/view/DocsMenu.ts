@@ -26,8 +26,8 @@ export class DocsMenu extends Layout {
         }
         const items = DocSets.get(); 
         return {
-            items: items.map((c:any) => c),
-            selectedItem: (attrs.route && attrs.route.lib)? attrs.route.lib : items[0],
+            items: items.map((c:string) => c),
+            selectedDefault: (attrs.route && attrs.route.lib)? attrs.route.lib : items[0],
             changed: (item:string) => m.route.set('/api/:lib/0', {lib:item})
         };
     }
