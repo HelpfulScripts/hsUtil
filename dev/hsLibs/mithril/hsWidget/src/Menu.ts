@@ -7,11 +7,13 @@
  * 
  * ### Attributes (node.attrs):
  * - `desc:` {@link Menu.MenuDesc MenuDesc}
- *     - `items: string[]`;                 // the items on the menu
- *     - `changed: (item:string) => void`;  // called when item clicked
- *     - `selectedItem?: number|string`;    // the currently selected item, by index or name
- *     - `itemCSS?: string[]`;              // css to apply to items;
- * - size?: string | string[];            // sizes to layout menu items; 
+ *     - `items: string[]`                  the items on the menu
+ *     - `changed: (item:string) => void`   called when item clicked
+ *     - `selectedDefault?: number|string`  the currently selected item, by index or name
+ *     - `itemCSS?: string[]`               css to apply to items;
+ * - `css?: string`                         css class to assign to button group
+ * - `style?: string`                       style string to apply to button tag
+ * - `size?: string | string[]`             sizes to layout menu items; 
  * 
  * ### Example
  * <example>
@@ -51,28 +53,13 @@
  */
 
  /** */
-import { Layout, m, Vnode } from 'hslayout';
-import { Selector }         from './Selector';
+import { Vnode }        from 'hslayout';
+import { RadioButton }  from './RadioButton';
 
 
 /**
  * Creates a simple menu with several items, as configured by the desc:SelectorDesc object passed as a parameter. 
  */
-export class Menu extends Selector {
-    view(node: Vnode): Vnode {
-        const desc = node.attrs.desc;
-        node.attrs.desc = undefined;
-        const size = node.attrs.size || []; // possibly undefined
-
-        desc.items = desc.items;
-        desc.changed = desc.changed || ((item:string) => console.log(`missing changed() function for menu item ${item}`));
-        desc.selectedItem = desc.selectedItem || 0;
-        this.internalStateUpdate(desc, desc.selectedItem);
-console.log(desc.selectedItem);        
-        return m(Layout, {
-            css: '.hs-menu',
-            columns: size.length===undefined? [size] : size,
-            content: desc.items.map((l:string, i:number) => this.renderItem(desc, i))
-        });
-    }
+export class Menu extends RadioButton {
+    view(node: Vnode): Vnode { return this.viewGroup('.hs-menu', node); }
 };

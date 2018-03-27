@@ -19,18 +19,22 @@
  */
 
  /** */
-import { m, Vnode } from 'hslayout';
+import { m } from 'hslayout';
 
 /** passed into Menu from the calling application */
 export interface SelectorDesc {
     /** the items on the menu */
     items: string[];
-    /** the currently selected item */
-    selectedItem?: string|number;
-    /** the function to call when the selection changes */
-    changed: (item:string) => void;
     /** optional array of css styles; each will be applied to the respective item  */
     itemCss?: string[];
+    /** the initial selected item */
+    selectedDefault?: string|number;
+    /** the function to call when the selection changes */
+    changed: (item:string) => void;
+    /** the function to call if this item receives a mouseDown event */
+    mouseDown?: (item:string) => void;
+    /** the function to call if this item receives a mouseUp event */
+    mouseUp?: (item:string) => void;
 }
 
 /** interface of the parameter passed to a `Selectable` */
@@ -51,13 +55,15 @@ export interface SelectableDesc {
     mouseUp?: (item:string) => void;
 }
 
+export type selectFn = (items:{string:SelectableDesc}, title:string) => void;
+
 /** 
  * called to update selection after the item with title `title` was selected.
  * `oneOfItems` ensures that `title` will be selected and all others deselected
  */
-export function oneOfItems(title:string) {
-    Object.keys(this.selector.items).forEach((key:string) => { 
-        this.selector.items[key].isSelected = (key===title); 
+export function oneOfItems(items:{string:SelectableDesc}, title:string) {
+    Object.keys(this.items).forEach((key:string) => { 
+        this.items[key].isSelected = (key===title); 
     });
 }
 
@@ -65,8 +71,8 @@ export function oneOfItems(title:string) {
  * called to update selection after the item with title `title` was selected.
  * `anyItems` ensures that `title` will be selected independant of all others
  */
-export function anyItems(title:string) {
-    this.selector.items[title].isSelected = !this.selector.items[title].isSelected; 
+export function anyItems(items:{string:SelectableDesc}, title:string) {
+    this.items[title].isSelected = !this.items[title].isSelected; 
 }
 
 
@@ -76,40 +82,53 @@ export function anyItems(title:string) {
 export abstract class Selector {
     /** 
      * determines which function to use to updatye selections after events.
-     * Three pre-configured function include:
+     * Pre-configured function include:
      * - oneOfItems: default; only one item of the set can be selected at a time
      * - anyItem: each item can individually be selected. Pressing an item again will deselect it.
      */
-    updateSelected = [oneOfItems, anyItems][0];
+    private updateSelected:selectFn = [oneOfItems, anyItems][0];
+
+    protected selectedItem: string; 
 
     /** instance variable, keeping a list of menu items and a `select` function for tracking which item is selected. */
-    selector = { 
-        items:<{string:SelectableDesc}> {},
-        select: this.updateSelected.bind(this)
+    private items = <{string:SelectableDesc}>{};
+
+    init(desc:SelectorDesc, updateSelected:selectFn = oneOfItems):SelectorDesc {
+        this.updateSelected = updateSelected.bind(this);
+        desc.items = desc.items || [];
+        desc.changed = desc.changed || ((item:string) => console.log(`missing changed() function for menu item ${item}`));
+        this.checkSelectedItem(desc);
+        return desc;
     };
 
+    /** ensures that `selectedItem` is defined and is a string */
     checkSelectedItem(desc:SelectorDesc) {
-        if (typeof desc.selectedItem === 'number') { 
-            desc.selectedItem = desc.items[desc.selectedItem % desc.items.length];
-        } else if (desc.selectedItem === undefined) {
-            desc.selectedItem = desc.items[0];
+        if (this.selectedItem === undefined) {
+            if (typeof desc.selectedDefault === 'number') { 
+                this.selectedItem = desc.items[desc.selectedDefault % desc.items.length];
+            } else {
+                this.selectedItem = desc.selectedDefault || desc.items[0];
+            }
         }
     }
 
     internalStateUpdate(desc:SelectorDesc, item:string) {
+        this.selectedItem = item;
         this.checkSelectedItem(desc);
-        desc.selectedItem = item;
-        this.selector.select(item); // local housekeeping: make sure the item's style shows correct selection
+        this.updateSelected(this.items, this.selectedItem); // local housekeeping: make sure the item's style shows correct selection
     }
 
     renderItem(desc:SelectorDesc, i:number) {
         const l:string = desc.items[i] || '';
         const itemCss = desc.itemCss || [];
 
-        return selectable(this.selector.items[l] = this.selector.items[l] || { 
+        this.checkSelectedItem(desc);
+        return selectable({ 
             title: l, 
             css: itemCss[i],        // possibly undefined
-            isSelected: l.toLowerCase() === desc.selectedItem?(<string>desc.selectedItem).toLowerCase() : false, 
+            isSelected: this.selectedItem? (l.toLowerCase() === this.selectedItem.toLowerCase()) : false, 
+            mouseDown: desc.mouseDown,
+            mouseUp: desc.mouseUp,
             clicked:(item:string) => {
                 this.internalStateUpdate(desc, item);
                 if (typeof desc.changed === 'function') { 
@@ -121,11 +140,23 @@ export abstract class Selector {
 };
 
 /**
- * Creates a `Selectable` as part of the `Selector`, 
+ * Creates a Selectable as part of the `Selector`, 
  * as configured by the desc:SelectableDesc object passed as a parameter.
  * Selectables can be in one of two states, selected or not selected. 
- * 
+ * @return an `.hs-selectable` node
  */
+export function selectable(childDesc:SelectableDesc) {
+    const css           = childDesc.css || '';
+    const cssSelected   = `${childDesc.isSelected?'hs-selected': ''}`;
+    const onclick       = childDesc.clicked?   () => { childDesc.clicked(childDesc.title); }   : undefined;
+    const onmousedown   = childDesc.mouseDown? () => { childDesc.mouseDown(childDesc.title); } : undefined;
+    const onmouseup     = childDesc.mouseUp?   () => { childDesc.mouseUp(childDesc.title); }   : undefined;
+    return m(`.hs-selectable ${css} ${cssSelected}`, 
+        { style: childDesc.style, onclick:onclick, onmousedown:onmousedown, onmouseup:onmouseup },
+        childDesc.title
+    );
+}
+/*
 export const Selectable = {
     view(node: Vnode): Vnode {
         const desc:SelectableDesc = node.attrs.desc;
@@ -141,17 +172,4 @@ export const Selectable = {
         );
     }
 };
-
-export function selectable(desc:SelectableDesc) {
-    const css           = desc.css || '';
-    const cssSelected   = `${desc.isSelected?'hs-selected': ''}`;
-    const onclick       = desc.clicked? ()   => { 
-        desc.clicked(desc.title); 
-    }   : undefined;
-    const onmousedown   = desc.mouseDown? () => { desc.mouseDown(desc.title); } : undefined;
-    const onmouseup     = desc.mouseUp? ()   => { desc.mouseUp(desc.title); }   : undefined;
-    return m(`.hs-selectable ${css} ${cssSelected}`, 
-        { style: desc.style, onclick:onclick, onmousedown:onmousedown, onmouseup:onmouseup },
-        desc.title
-    );
-}
+*/
