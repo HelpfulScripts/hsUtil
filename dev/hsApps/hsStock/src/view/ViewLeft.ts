@@ -2,7 +2,7 @@ import { m, Vnode}      from 'hslayout';
 import { Collapsible,
          AddButton, 
          Modal,
-         Button,
+         TypeAhead,
          RemoveButton }  from 'hswidget';
 import { gEquities,
          Equities,
@@ -12,13 +12,17 @@ import { authenticated } from '../Router';
 import { readAssets,TransactionList }   from '../controller/Assets';
 
 let gAssets:TransactionList;
+let ModalShow = false;
 
 export const ViewLeft = {
     view: (node: Vnode):Vnode => {
         const symbol  = m.route.param('symbol');
         return m('.hs-left-nav', [
             gEquities? navList(gEquities, symbol) : 'left',
-            m(Modal, { content: m(AddItemForm, {list:gEquities}) })
+            ModalShow? m(Modal, { 
+                content: m(AddItemForm, {list:gEquities}),
+                dismiss: () => ModalShow=false
+            }) : undefined
         ]);
     }
 };
@@ -42,7 +46,7 @@ function categoryEntry(c:Category, list:Equities, symbol:string) {
                 c.equities.length + ' ',
                 c.cat
             ]),
-            m(AddButton, { onclick:Modal.show })
+            m(AddButton, { onclick:()=> ModalShow=true })
         ]);
     }
 
@@ -103,12 +107,17 @@ class AddItemForm {
             cat: 'Stocks',
             name: this.symbol
         });           
-        Modal.dismiss();
+//        Modal.dismiss();
     };
         
     view(node:Vnode) {
-        const form = this;
+//        const form = this;
         this.list = node.attrs.list;
+        return m(TypeAhead, {list: '', onsubmit:(e:any) => {
+            this.symbol = e.currentTarget.value;
+            this.submit.apply(this);
+        }});
+/*            
         return m('.hs-form',  m('form', { onsubmit: () => form.submit.apply(this) }, [
             m('input[type="text"][placeholder="Symbol"][name="symbol"]', {
                 value: form.symbol,
@@ -118,5 +127,6 @@ class AddItemForm {
             }),
             m(Button, {name:'add', onclick:() => form.submit.apply(this)})
         ]));
+*/        
     }
 }

@@ -62,12 +62,15 @@ function emphasize(item:string, match:string) {
 
 class GetList {
     public list:string[] = [];
-    constructor(list:string|string[]) {
+    private captureList(list:any[], map:(l:any[])=>string[]) {
+        this.list = map? map(list) : list;
+    }
+    constructor(list:string|string[], map?:(item:any[])=>string[]) {
         if (typeof list === 'string') {
             m.request({ method: "GET", url: list })
-            .then((data:string[]) => this.list = data);
+            .then((data:any[]) => this.captureList(data, map));
         } else {
-            this.list = list;
+            this.captureList(list, map);
         }
     }
 }

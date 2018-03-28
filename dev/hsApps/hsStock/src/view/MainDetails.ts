@@ -54,7 +54,7 @@ export class MainDetails extends Layout {
         const divDate = (s.dividendRate && s.exDividendDate)? date('%MM/%D/%YY', new Date(s.exDividendDate)) : '';
         const pe = s.peRatio || round((s.latestPrice || 0) / s.latestEPS, 3);
         const latestDate = date('%MM/%DD/%YY: ', new Date(s.latestDate));
-        const latestEPSDate = date('%MM/%D/%YY', new Date(s.latestEPSDate||0));
+        const latestEPSDate = s.latestEPSDate? date('%MM/%D/%YY', new Date(s.latestEPSDate)) : '1/1/1970';
         const latestEPS     = s.latestEPS? `$${s.latestEPS}`: '--';
         const latestEPSRate = s.latestEPS? `${round(100*s.latestEPS/s.latestPrice,3)}%`: '--';
         const week52high    = s.week52high? `$${s.week52high}` : '--';

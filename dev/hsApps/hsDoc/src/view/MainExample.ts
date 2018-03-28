@@ -91,20 +91,17 @@ interface CommentDescriptor {
     exampleID: string;                  // example tag ID
     menuID:    string;                  // menu tag ID
     desc:   SelectorDesc;               // menu items
+    attrs?: {string?:string};           // <example attr=value>
     pages:  {string?:string};           // page content for each menu item
     executeScript?: (root:any) => void; // the example code to execute
     executeSource?: '';                 // the source code to execute
+    activeSrcPage:string;               // the active page for the source display
 }
 
 /**
  * Map containing various exampkle configurations 
  */
 const gInitialized:{string?:CommentDescriptor} = {};
-
-/**
- * 
- */
-let gActiveScriptPage = 'js';
 
 /**
  * creates the example configuration, generates the DOM hook, and sets up the example execution.
@@ -122,7 +119,6 @@ let gActiveScriptPage = 'js';
 export function example(context:any) { 
     context.m        = m;
     context.hslayout = hslayout;
-//    import ('hswidget').then(_ => context.hswidget = _);
     context.hswidget = hswidget;
     context.hsgraph  = hsgraph;
     context.hsdata   = hsdata;
@@ -148,17 +144,20 @@ export function example(context:any) {
         } else {
             addExample(IDs).then(executeScript).catch(executeError);
         }
-        const styles = IDs.pages['css']; 
+
+        const frameHeight = (IDs.attrs? IDs.attrs.height : undefined) || '300px';
+        const wrapWithID = (css:string) => css==='$exampleID'? `#${IDs.exampleID}`: `#${IDs.menuID} ${css}`;
 
         // prefix css selectors with ID of main execution area to sandbox the scope
         // (^|}): start of string or end of previous style def
         // \s*?: any white spaces
         // (\S*?): capturing group: css name
         // \s*?{: whitespaces, followed by start of style def
-        const style = (styles===undefined)? '': styles.replace(/(^|})\s*?(\S*?)\s*?{/gi, (x:string, ...args:any[]) => x
-            .replace(args[1], args[1]==='$exampleID'? `#${IDs.exampleID}`: `#${IDs.menuID} ${args[1]}`)
+        const style = (!IDs.pages['css'])? '':                              // empty if no css defined
+                      IDs.pages['css'].replace(/(^|})\s*?(\S*?)\s*?{/gi,    // otherwise wrap each css statement
+                         (x:string, ...args:any[]) => x.replace(args[1], wrapWithID(args[1]))
         );
-        return `<style>${style}</style><example id=${IDs.exampleID} class="hs-layout-frame"></example>`;
+        return `<style>${style}</style><example id=${IDs.exampleID} style="height:${frameHeight}" class="hs-layout-frame"></example>`;
     };
 }
 
@@ -175,7 +174,8 @@ function initDesc(fn:any):CommentDescriptor {
             changed: fn,
             size: ["50px"]
         },
-        pages:{}
+        pages:{},
+        activeSrcPage: undefined
     };
 }
 
@@ -195,9 +195,14 @@ function addExample(IDs:CommentDescriptor):Promise<CommentDescriptor> {
  * @param IDs the `CommentDescriptor` to execute on. 
  */
 function addExampleStructure(IDs:CommentDescriptor):CommentDescriptor { 
-    const item = gActiveScriptPage; // IDs.desc.selectedItem; // get the selected script page: js or css
-    const source = m.trust(`<code><pre>${IDs.pages[item]}</pre></code>`);
+    const item = IDs.activeSrcPage || 'js'; // IDs.desc.selectedItem; // get the selected script page: js or css
     const root = document.getElementById(IDs.exampleID);
+console.log(`activeSrcPage is ${IDs.activeSrcPage} - ${item}`);        
+
+    IDs.desc.changed = (newItem:string) => {
+        IDs.activeSrcPage = newItem;
+console.log(`changed activeSrcPage to ${IDs.activeSrcPage}`);        
+    };
 
     m.mount(root, {view: () => m(Layout, { 
         columns: ["50%"],
@@ -209,8 +214,8 @@ function addExampleStructure(IDs:CommentDescriptor):CommentDescriptor {
                 rows:["30px", "fill"],
                 css: '.hs-source',
                 content:[
-                    m(Menu, {desc: IDs.desc, size:['50px'], changed: (newItem:string) => gActiveScriptPage = newItem}),
-                    m(Layout, { content: m('.hs-layout .hs-source-main', source)})
+                    m(Menu, {desc: IDs.desc, size:['50px'] }),
+                    m(Layout, { content: m('.hs-layout .hs-source-main', m.trust(`<code><pre>${IDs.pages[item]}</pre></code>`))})
                 ]
             })
         ]})
@@ -247,6 +252,11 @@ function executeError(e:any) {
  */
 function getCommentDescriptor(IDs:CommentDescriptor, example:string):string {
     let result = '';
+    let attrs = example.match(/<example\s(\S*?)(\s|>)/i);
+    if (attrs && attrs[1]) { 
+        const at = attrs[1].split('=');
+        IDs.attrs =  {[at[0]]: at[1]};
+    }
     example.replace(/<file[\s]*name=[\S]*?\.([\s\S]*?)['|"]>([\S\s]*?)<\/file>/gi, function(text:string) {
         const args = [...arguments];
         const content = args[2].trim(); // the part between <file> and </file>

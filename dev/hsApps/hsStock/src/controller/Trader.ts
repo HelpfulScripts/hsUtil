@@ -154,7 +154,7 @@ export class Trader {
             item.quotes.rows.sort(sortDate);
 //item.quotes.rows.map((r:any[]) => console.log(r[0]));            
             const latestRow = item.quotes.rows[item.quotes.rows.length-1];
-            lastItemDate = (typeof latestRow[dCol] === 'string')? new Date(latestRow[dCol]) : <Date>latestRow[dCol];
+            lastItemDate = (typeof latestRow[dCol] === 'string')? new Date(<string>latestRow[dCol]) : <Date>latestRow[dCol];
 //console.log(`${item.name}: ${latestRow[0]} ${dCol} ${lastItemDate}`);            
         }
         quotes
@@ -179,7 +179,7 @@ export class Trader {
         } else {
             const dCol      = item.quotes.colNames.indexOf('Date');
             const latestRow = item.quotes.rows[item.quotes.rows.length-1];
-            return ms.toDays(new Date().getTime() - new Date(latestRow[dCol]).getTime());
+            return ms.toDays(new Date().getTime() - new Date(<string>latestRow[dCol]).getTime());
         }
     }
 

@@ -3,7 +3,6 @@ import { Layout }       from 'hslayout';
 import { Data,
          DataSet }      from 'hsdata';
 import { Condition }    from 'hsdata';
-//import { RadioButtons } from 'hswidget';
 import { 
 //         Button,
          ToggleButton } from 'hswidget';
@@ -24,6 +23,7 @@ function getLimitDate(time:string):Date {
         case '10yr': result.setFullYear(result.getFullYear()-10); break;
         case '5yr':  result.setFullYear(result.getFullYear()-5); break;
         case '1yr':  result.setFullYear(result.getFullYear()-1); break;
+        case '3mo':  result.setMonth(result.getMonth()-(3+result.getMonth()%3)); break;
         case '1mo':  result.setMonth(result.getMonth()-1); break;
         case '10d':  result.setDate(result.getDate()-10); break;
         case '1d':   result.setDate(result.getDate()-1); break;
@@ -34,9 +34,10 @@ function getLimitDate(time:string):Date {
 
 export class MainGraph extends Layout { 
     getComponents(node: Vnode): Vnode { 
-        const timeWindows = ['1yr', '1mo', '10d', '1d', '40yr', '20yr', '10yr', '5yr'];
+        const timeWindows = ['1yr', '3mo', '1mo', '10d', '1d', '40yr', '20yr', '10yr', '5yr'];
         const limitDates = timeWindows.map(getLimitDate);
         let limitDate = limitDates[limitDateIndex];
+console.log(`time ${limitDateIndex}: ${timeWindows[limitDateIndex]} ${limitDate.toDateString()}`);        
         let maxDate = new Date();
         const symbol = m.route.param('symbol');
         const item:EquityItem = gEquities.getItem(symbol);

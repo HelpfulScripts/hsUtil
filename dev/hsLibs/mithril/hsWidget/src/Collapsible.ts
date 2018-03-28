@@ -34,6 +34,7 @@
  * ])});
  * </file>
  * <file name='style.css'>
+ * div { margin-top: 5px; }
  * .myTitle {
  *    display: inline-block;
  *    border-radius: 0px 4px;

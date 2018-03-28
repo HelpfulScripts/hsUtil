@@ -28,7 +28,7 @@ export interface SelectorDesc {
     /** optional array of css styles; each will be applied to the respective item  */
     itemCss?: string[];
     /** the initial selected item */
-    selectedDefault?: string|number;
+    defaultItem?: string|number;
     /** the function to call when the selection changes */
     changed: (item:string) => void;
     /** the function to call if this item receives a mouseDown event */
@@ -104,10 +104,10 @@ export abstract class Selector {
     /** ensures that `selectedItem` is defined and is a string */
     checkSelectedItem(desc:SelectorDesc) {
         if (this.selectedItem === undefined) {
-            if (typeof desc.selectedDefault === 'number') { 
-                this.selectedItem = desc.items[desc.selectedDefault % desc.items.length];
+            if (typeof desc.defaultItem === 'number') { 
+                this.selectedItem = desc.items[desc.defaultItem % desc.items.length];
             } else {
-                this.selectedItem = desc.selectedDefault || desc.items[0];
+                this.selectedItem = desc.defaultItem || desc.items[0];
             }
         }
     }

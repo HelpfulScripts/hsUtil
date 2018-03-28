@@ -19,7 +19,7 @@ export const TradePane = {
         });
     }    
 };
-
+/*
 function getInvestments2():[Data, Data] {
     let investment = new Data({ colNames: ['Date', 'Total'], rows: [], name:'Investments'});
     let categories = new Data({ colNames: ['Date', 'Total'], rows: [], name:'Categories' });
@@ -35,7 +35,7 @@ function getInvestments2():[Data, Data] {
     categories.sort('ascending', 'Date');
     return [investment, categories];
 }
-
+*/
 function getInvestments():[Data, Data] {
     let investment = new Data({ colNames: ['Date', 'Total'], rows: [], name:'Investments'});
     let categories = new Data({ colNames: ['Date', 'Total'], rows: [], name:'Categories' });

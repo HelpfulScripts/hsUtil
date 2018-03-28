@@ -9,7 +9,7 @@
  * - `desc:` {@link Menu.MenuDesc MenuDesc}
  *     - `items: string[]`                  the items on the menu
  *     - `changed: (item:string) => void`   called when item clicked
- *     - `selectedDefault?: number|string`  the currently selected item, by index or name
+ *     - `defaultItem?: number|string`  the currently selected item, by index or name
  *     - `itemCSS?: string[]`               css to apply to items;
  * - `css?: string`                         css class to assign to button group
  * - `style?: string`                       style string to apply to button tag
@@ -27,7 +27,7 @@
  *     content:[
  *         m(hswidget.Menu, {desc: {
  *             items: items,
- *             selectedItem: 'Two',
+ *             defaultItem: 'Two',
  *             changed: item => 
  *                theContent = content[items.indexOf(item)]
  *         }}),
