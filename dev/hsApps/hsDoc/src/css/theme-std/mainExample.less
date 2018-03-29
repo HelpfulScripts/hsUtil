@@ -27,6 +27,12 @@ example {
     }
 
     .hs-source {
+        .hs-menu .hs-selectable {
+            background-color: white;
+            &.hs-selected {
+                background-color: @bg-source;
+            }
+        }
         .hs-source-main {
             background-color: @bg-source;  
             font-size: 12px;

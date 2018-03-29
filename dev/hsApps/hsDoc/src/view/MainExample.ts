@@ -195,13 +195,11 @@ function addExample(IDs:CommentDescriptor):Promise<CommentDescriptor> {
  * @param IDs the `CommentDescriptor` to execute on. 
  */
 function addExampleStructure(IDs:CommentDescriptor):CommentDescriptor { 
-    const item = IDs.activeSrcPage || 'js'; // IDs.desc.selectedItem; // get the selected script page: js or css
+    let item = IDs.activeSrcPage || 'js';
     const root = document.getElementById(IDs.exampleID);
-console.log(`activeSrcPage is ${IDs.activeSrcPage} - ${item}`);        
 
     IDs.desc.changed = (newItem:string) => {
-        IDs.activeSrcPage = newItem;
-console.log(`changed activeSrcPage to ${IDs.activeSrcPage}`);        
+        item = IDs.activeSrcPage = newItem;
     };
 
     m.mount(root, {view: () => m(Layout, { 

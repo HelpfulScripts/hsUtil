@@ -13,7 +13,7 @@
  * ### Attributes (node.attrs):
  * - desc: {@link Selector.SelectorDesc SelectorDesc}
  *     - items: string[];                // the items on the selector
- *     - selectedItem?: number|string;   // the currently selected item, by index or name
+ *     - defaultItem?: number|string;    // the initial selected item, by index or name
  *     - changed: (item:string) => void; // called when selection changed
  *     - itemCss?:string[];              // css to apply to items;
  */
@@ -119,6 +119,12 @@ export abstract class Selector {
     }
 
     renderItem(desc:SelectorDesc, i:number) {
+        const reactor = (callback:(itm:string)=>void) => (item:string) => {
+            this.internalStateUpdate(desc, item);
+            if (typeof callback === 'function') { 
+                callback(item);  // trigger any actions from the selection
+            }     
+        }; 
         const l:string = desc.items[i] || '';
         const itemCss = desc.itemCss || [];
 
@@ -127,14 +133,9 @@ export abstract class Selector {
             title: l, 
             css: itemCss[i],        // possibly undefined
             isSelected: this.selectedItem? (l.toLowerCase() === this.selectedItem.toLowerCase()) : false, 
-            mouseDown: desc.mouseDown,
-            mouseUp: desc.mouseUp,
-            clicked:(item:string) => {
-                this.internalStateUpdate(desc, item);
-                if (typeof desc.changed === 'function') { 
-                    desc.changed(item);  // trigger any actions from the selection
-                }     
-            }
+            mouseDown: reactor(desc.mouseDown),
+            mouseUp: reactor(desc.mouseUp),
+            clicked: reactor(desc.changed)
         });
     }
 };
@@ -156,20 +157,3 @@ export function selectable(childDesc:SelectableDesc) {
         childDesc.title
     );
 }
-/*
-export const Selectable = {
-    view(node: Vnode): Vnode {
-        const desc:SelectableDesc = node.attrs.desc;
-        node.attrs.desc = undefined;
-        const css           = desc.css || '';
-        const cssSelected   = `${desc.isSelected?'hs-selected': ''}`;
-        const onclick       = desc.clicked? ()   => { desc.clicked(desc.title); }   : undefined;
-        const onmousedown   = desc.mouseDown? () => { desc.mouseDown(desc.title); } : undefined;
-        const onmouseup     = desc.mouseUp? ()   => { desc.mouseUp(desc.title); }   : undefined;
-        return m(`.hs-selectable ${css} ${cssSelected}`, 
-            { style: desc.style, onclick:onclick, onmousedown:onmousedown, onmouseup:onmouseup },
-            desc.title
-        );
-    }
-};
-*/

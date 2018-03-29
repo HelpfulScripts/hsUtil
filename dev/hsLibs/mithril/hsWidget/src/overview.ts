@@ -42,7 +42,7 @@ Provides various UI widgets:
  * 
  *    m('h2.myGapMenus', 'Menus'),
  *    m('h4', 'Please select:'),
- *    m(hswidget.Menu, {desc: {
+ *    m(hswidget.Menu, { css: '.myMenu', desc: {
  *       items: items,
  *       defaultItem: 'Two',
  *       changed: (item) => theContent = content[items.indexOf(item)]
@@ -66,19 +66,20 @@ Provides various UI widgets:
  *    border:1px solid #ddd;
  *    border-top: 0px solid #ddd;
  * } 
- * .hs-menu .hs-selectable { 
+ * .myMenu .hs-selectable { 
  *     background-color: #eef; 
  * }
- * .hs-menu .hs-selected { 
+ * .myMenu .hs-selected { 
  *     background-color: #ddf; 
  *     border-width:0px;
  * }
  * .myCollapsible {
  *     margin-bottom: 5px;
  * }
- * .myCollapsible .myTitle {
+ * .myTitle {
  *     font-weight:bold;
- *     padding-top: 3px;
+ *     padding: 3px;
+ *     background-color: #eee;
  * }
  * .myCollapsible .hs-collapsible-expanded {
  *     margin-left: 10px;
