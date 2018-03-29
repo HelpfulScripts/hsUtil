@@ -15,15 +15,13 @@
  * <example>
  * <file name='script.js'>
  * let clicked = 0;
- * let radio = '';
- * let toggle = '';
  * 
  * m.mount(root, {view: () => m('.hs-white', [
  *    m('h4', 'Please click:'),
- *    m(hswidget.Button, { 
- *        name: clicked%2? 'I am clicked!' : `click me${clicked>0?' again':''}!`,
- *        onclick: () => clicked++
- *    })
+ *    m(hswidget.Button, { desc: {
+ *        name: 'click me',
+ *        clicked: () => clicked++
+ *    }}),
  * ])});
  * </file>
  * </example>

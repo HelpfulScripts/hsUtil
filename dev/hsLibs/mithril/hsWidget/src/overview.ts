@@ -12,16 +12,9 @@ Provides various UI widgets:
 | &nbsp; {@link AddRemove RemoveButton} | An inline `-` button that will remove an item. |
 | &nbsp; {@link TypeAhead TypeAhead} | A TypeAhead search input form. |
 
- * <example height=1200px>
+ * <example height=1700px>
  * <file name='script.js'>
- * const items = ['One', 'Two', 'Three'];
- * const content   = ['1st', '2nd', '3rd'];
- * let  theContent = content[1];
- * let clicked = 0;
- * let radio = '';
- * let toggle = '';
- * 
- * m.mount(root, {view: () => m('.hs-white', [
+ * const render = () => m.mount(root, {view: () => m('.hs-white', [
  * 
  *    m('h2.myGapButtons', 'Buttons'),
  *    m('h4', `Please click: (${clicked}-times clicked)`),
@@ -43,22 +36,69 @@ Provides various UI widgets:
  *    m('h2.myGapMenus', 'Menus'),
  *    m('h4', 'Please select:'),
  *    m(hswidget.Menu, { css: '.myMenu', desc: {
- *       items: items,
+ *       items: menuItems,
  *       defaultItem: 'Two',
- *       changed: (item) => theContent = content[items.indexOf(item)]
+ *       changed: (item) => theContent = content[menuItems.indexOf(item)]
  *    }}),
  *    m('myMenuMain', theContent),
  * 
+ *    m('h2.myGapModal', 'Modal Dialog Box'),
+ *    m('h4', {onclick:() => showModal = true }, 'Click me to open a modal box'),
+ *    showModal? m(hswidget.Modal, {
+ *       width:  '300px',
+ *       height: '200px',
+ *       dismiss: () => showModal = false,
+ *       content: m('', 'click on border or on the x to release')
+ *    }) : undefined,
+ * 
  *    m('h2.myGapCollapsibless', 'Collapsibles'),
  *    m(hswidget.Collapsible, { css:'.myCollapsible', components: [
- *       m('.myTitle', 'click me to toggle'), [
+ *       m('span.myTitle', 'click me to toggle'), [
  *          m('', 'body item1'), 
  *          m('', 'body item2'), 
  *          m('', 'body item3')
  *       ]
  *    ]}),
- *    m('', 'This is a background text that will be pushed down by the Collapsible')
+ *    m('', 'This is a background text that will be pushed down by the Collapsible'),
+ * 
+ *    m('h2.myGapCornerButtons', 'Corner Buttons'),
+ *    m('h4', lastCornerButton),
+ *    m('', Object.keys(hswidget.ButtonSymbols).map(
+ *       (b) => m('.myCornerPositioned', [
+ *          buttons[b]? m('.myCornerClicked', 'Yayy!!') : m('', b),
+ *          m(hswidget.CornerButton, { symbol:hswidget.CornerButton.getSymbol(b), onclick:click(b) })
+ *       ])
+ *    )),
  * ])});
+ * 
+ * 
+ * //--------------------------------------
+ * // supporting variables:
+ * const menuItems = ['One', 'Two', 'Three'];
+ * const content   = ['1st', '2nd', '3rd'];
+ * let  theContent = content[1];
+ * let clicked = 0;
+ * let radio = '';
+ * let toggle = '';
+ * const buttons = {};
+ * let lastCornerButton = '';
+ * let showModal = false;
+ * 
+ * const click = (button) => () => {
+ *    lastCornerButton = '';
+ *    if (hswidget.ButtonSymbols[button]) {
+ *       lastCornerButton = m.trust(`last button pressed: ${hswidget.ButtonSymbols[button].sym}`);
+ *       buttons[button] = true;
+ *       setTimeout(reset(button), 800);
+ *    }
+ * };
+ * 
+ * const reset = (button) => () => {
+ *    buttons[button] = false;
+ *    m.redraw();
+ * }
+ *
+ * render();
  * </file>
  *
  * <file name='style.css'>
@@ -76,18 +116,34 @@ Provides various UI widgets:
  * .myCollapsible {
  *     margin-bottom: 5px;
  * }
- * .myTitle {
+ * .myCollapsible .hs-collapsible-title {
  *     font-weight:bold;
- *     padding: 3px;
+ *     padding-left: 3px;
  *     background-color: #eee;
  * }
  * .myCollapsible .hs-collapsible-expanded {
  *     margin-left: 10px;
  * }
+ * .myCornerClicked { background-color: #efe; }
+ * .myCornerPositioned { 
+ *      position: relative; 
+ *      display: inline-block;
+ *      box-sizing: border-box;
+ *      background-color: #eee; 
+ *      text-align: center;
+ *      font-size: 70%;
+ *      margin:  2px;
+ *      padding-top: 20px;
+ *      height: 50px;
+ *      width:  50px;
+ * }
+ * .hs-corner-button { color: #008; }
  * 
- * .myGapButtons        { margin-top: 220px; }
+ * .myGapButtons        { margin-top: 100px; }
  * .myGapMenus          { margin-top: 80px; }
- * .myGapCollapsibless  { margin-top: 50px; }
+ * .myGapModal          { margin-top: 50px; }
+ * .myGapCollapsibless  { margin-top: 120px; }
+ * .myGapCornerButtons  { margin-top: 100px; }
  * </file>
  * </example>
 */

@@ -3,6 +3,10 @@
     position: relative;
 }
 
+.hs-collapsible-title {
+
+}
+
 .hs-collapsible-content {
     left: 5px;
     position: relative;
@@ -12,4 +16,41 @@
     &.hs-collapsible-expanded {
         max-height:100%;
     }
+}
+
+@ArrowLegs: 5px solid transparent;
+@ArrowHypothenuse: 7px solid #666;
+.hs-collapsible-arrow {
+    width: 0; 
+    height: 0; 
+    display:inline-block;
+}
+
+.hs-collapsible-arrow-up {
+    .hs-collapsible-arrow;
+    border-bottom: @ArrowHypothenuse;
+    border-left: @ArrowLegs;
+    border-right: @ArrowLegs;
+}
+
+.hs-collapsible-arrow-down {
+    .hs-collapsible-arrow;
+    border-top: @ArrowHypothenuse;
+    border-left: @ArrowLegs;
+    border-right: @ArrowLegs;
+}
+
+.hs-collapsible-arrow-right {
+    .hs-collapsible-arrow;
+    border-left: @ArrowHypothenuse;
+    border-top: @ArrowLegs;
+    border-bottom: @ArrowLegs;
+    padding-right: 3px;
+}
+
+.hs-collapsible-arrow-left {
+    .hs-collapsible-arrow;
+    border-right: @ArrowHypothenuse; 
+    border-top: @ArrowLegs;
+    border-bottom: @ArrowLegs;
 }

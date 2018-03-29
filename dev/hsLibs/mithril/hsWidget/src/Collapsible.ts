@@ -61,7 +61,10 @@ export class Collapsible {
             this.expanded = node.attrs.isExpanded;
         }
         return m(`.hs-collapsible ${css}`, { onclick:this.toggle.bind(this)}, [
-            components[0],
+            m('.hs-collapsible-title',[
+                m(this.expanded?'.hs-collapsible-arrow-down' : '.hs-collapsible-arrow-right'),
+                components[0],
+            ]),
             components[1]? m('.hs-collapsible-content', 
                 { class: this.expanded?'hs-collapsible-expanded':'' }, 
                 components[1].map((c:any) =>c)) : undefined
