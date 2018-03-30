@@ -57,17 +57,20 @@ export class Collapsible {
     view(node:Vnode) {
         const css        = node.attrs.css;
         const components = node.attrs.components;
+        const preArrow   = node.attrs.preArrow;
+        const postArrow  = node.attrs.postArrow;
         if (node.attrs.isExpanded!==undefined) {
             this.expanded = node.attrs.isExpanded;
         }
         return m(`.hs-collapsible ${css}`, { onclick:this.toggle.bind(this)}, [
             m('.hs-collapsible-title',[
-                m(this.expanded?'.hs-collapsible-arrow-down' : '.hs-collapsible-arrow-right'),
+                !preArrow? m('') : m(`.hs-collapsible-pre .hs-collapsible-arrow-${this.expanded?'down' : 'right'}`),
                 components[0],
+                !postArrow? m('') : m(`.hs-collapsible-post .hs-collapsible-arrow-${this.expanded?'down' : 'left'}`),
             ]),
             components[1]? m('.hs-collapsible-content', 
                 { class: this.expanded?'hs-collapsible-expanded':'' }, 
-                components[1].map((c:any) =>c)) : undefined
+                components[1].map((c:any) =>m('',c))) : undefined
         ]);
     }
 }

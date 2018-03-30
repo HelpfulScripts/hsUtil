@@ -73,8 +73,8 @@ function navList(docSet:any, field:string):Vnode[] {
         let selected = false;
         if (field===''+mdl.id || field.indexOf(mdl.fullPath) === 0) { selected=true; }
 
-        return m(Collapsible, {css:`.hs-left-nav-module`, isExpanded:selected, components:[
-            libLink(`a.hs-left-nav-module-name ${selected?'.hs-left-nav-selected':''}`, mdl.lib, mdl.fullPath, mdl.name),
+        return m(Collapsible, {css:`.hs-left-nav-module`, preArrow: true, isExpanded:selected, components:[
+            m(`${selected?'.hs-left-nav-selected':''}`, libLink(`a.hs-left-nav-module-name `, mdl.lib, mdl.fullPath, mdl.name)),
             !mdl.groups? undefined : mdl.groups.map((g:any) => entries(g, mdl, field))
         ]});
     }

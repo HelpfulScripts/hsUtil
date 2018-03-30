@@ -12,7 +12,7 @@ Provides various UI widgets:
 | &nbsp; {@link AddRemove RemoveButton} | An inline `-` button that will remove an item. |
 | &nbsp; {@link TypeAhead TypeAhead} | A TypeAhead search input form. |
 
- * <example height=1700px>
+ * <example height=2050px>
  * <file name='script.js'>
  * const render = () => m.mount(root, {view: () => m('.hs-white', [
  * 
@@ -53,14 +53,34 @@ Provides various UI widgets:
  * 
  *    m('h2.myGapCollapsibless', 'Collapsibles'),
  *    m(hswidget.Collapsible, { css:'.myCollapsible', components: [
- *       m('span.myTitle', 'click me to toggle'), [
- *          m('', 'body item1'), 
- *          m('', 'body item2'), 
- *          m('', 'body item3')
- *       ]
+ *       m('.myTitle', 'click me to toggle - no arrows'), content 
  *    ]}),
- *    m('', 'This is a background text that will be pushed down by the Collapsible'),
+ *    m(hswidget.Collapsible, { css:'.myCollapsible', preArrow:true, components: [
+ *       m('.myTitle', 'click me to toggle - left arrow'), content 
+ *    ]}),
+ *    m(hswidget.Collapsible, { css:'.myCollapsible', postArrow:true, components: [
+ *       m('.myTitle', 'click me to toggle - right arrow'), content 
+ *    ]}),
+ *    m(hswidget.Collapsible, { css:'.myCollapsible', preArrow:true, postArrow:true, components: [
+ *       m('.myTitle', 'click me to toggle - both arrows'), content
+ *    ]}),
+ *    m('', 'Background text, will be pushed down by the Collapsible'),
  * 
+ *    m('h2.myGapTypeAhead', 'Typeahead Search'),
+ *    m('h4', 'In-Memory List: ' + hero.length? `Selected: ${hero}` : 'Search for a Superhero'),
+ *    m(hswidget.TypeAhead, { 
+ *       placeholder: 'favorite hero',
+ *       onsubmit: item => hero = item,
+ *       list: ['Batman', 'Superman', 'Spiderman', 'Hulk']
+ *    }),
+ *    m('h4', `Remote List: ${friend.length? 'Selected: '+ friend : 'Search for a Friend'}`),
+ *    m(hswidget.TypeAhead, { 
+ *       placeholder: 'best friend',
+ *       onsubmit: item => friend = item,
+ *       autofocus: true,
+ *       list: 'example/search.json'
+ *    }),
+ *
  *    m('h2.myGapCornerButtons', 'Corner Buttons'),
  *    m('h4', lastCornerButton),
  *    m('', Object.keys(hswidget.ButtonSymbols).map(
@@ -83,6 +103,8 @@ Provides various UI widgets:
  * const buttons = {};
  * let lastCornerButton = '';
  * let showModal = false;
+ * let hero = '';
+ * let friend = '';
  * 
  * const click = (button) => () => {
  *    lastCornerButton = '';
@@ -139,11 +161,12 @@ Provides various UI widgets:
  * }
  * .hs-corner-button { color: #008; }
  * 
- * .myGapButtons        { margin-top: 100px; }
+ * .myGapButtons        { margin-top: 90px; }
  * .myGapMenus          { margin-top: 80px; }
  * .myGapModal          { margin-top: 50px; }
- * .myGapCollapsibless  { margin-top: 120px; }
- * .myGapCornerButtons  { margin-top: 100px; }
+ * .myGapCollapsibless  { margin-top: 115px; }
+ * .myGapTypeAhead      { margin-top: 130px; }
+ * .myGapCornerButtons  { margin-top: 105px; }
  * </file>
  * </example>
 */
