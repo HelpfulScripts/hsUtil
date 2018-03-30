@@ -62,15 +62,14 @@ export class Collapsible {
         if (node.attrs.isExpanded!==undefined) {
             this.expanded = node.attrs.isExpanded;
         }
-        return m(`.hs-collapsible ${css}`, { onclick:this.toggle.bind(this)}, [
+        const expCSS = this.expanded?'hs-collapsible-expanded':'';
+        return m(`.hs-collapsible ${css} ${expCSS}`, { onclick:this.toggle.bind(this)}, [
             m('.hs-collapsible-title',[
                 !preArrow? m('') : m(`.hs-collapsible-pre .hs-collapsible-arrow-${this.expanded?'down' : 'right'}`),
                 components[0],
                 !postArrow? m('') : m(`.hs-collapsible-post .hs-collapsible-arrow-${this.expanded?'down' : 'left'}`),
             ]),
-            components[1]? m('.hs-collapsible-content', 
-                { class: this.expanded?'hs-collapsible-expanded':'' }, 
-                components[1].map((c:any) =>m('',c))) : undefined
+            components[1]? m('.hs-collapsible-content', components[1].map((c:any) =>m('',c))) : undefined
         ]);
     }
 }

@@ -20,14 +20,14 @@
         font-size:0.8em;
         list-style-type: none; 
     }
-
+/*
     a.hs-left-nav-selected {
         background-color: @SelectColor;
         &:hover {
             background-color: darken(@HoverColor, 10%);
         }
     }
-
+*/
 
     .hs-library-name{
         font-size: 1.6em;
@@ -59,12 +59,17 @@
 
 
 
-    .hs-left-nav-module .hs-collapsible-title {
-        padding-left:5px;
-        font-size: 1.2em;
-        background-color: #eee;
-        &:hover {
-            background-color: #ccc;
+    .hs-left-nav-module {
+        .hs-collapsible-title {
+            padding-left:5px;
+            font-size: 1.2em;
+            background-color: #eee;
+            &:hover {
+                background-color: #ccc;
+            }
+        }
+        &.hs-collapsible-expanded .hs-collapsible-title {
+            background-color: @SelectColor;
         }
     }
 
