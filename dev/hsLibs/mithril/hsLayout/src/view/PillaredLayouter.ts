@@ -242,6 +242,16 @@ abstract class PillarLayouter extends Layouter{
  *     ["fill", "20%"]    // last relative, rest equal
  * ];
  * let c = [];
+ * m.mount(root, { 
+ *     view:() => m(hslayout.Layout, {
+ *         rows:[],  // each row a style
+ *         content: styles.map(i => m(hslayout.Layout, {
+ *             css: '.myExample', 
+ *             content: c.map(c=>(''+i)), // the style descriptor
+ *             columns: i                 // a style from styles
+ *         }))
+ *     })
+ * });
  * function next() {
  *     if (c.length >= 5) { c = []; }
  *     else { c.push(''); }
@@ -249,16 +259,6 @@ abstract class PillarLayouter extends Layouter{
  *     m.redraw();
  * }
  * 
- * m.mount(root, { 
- *     view:() => m(hslayout.Layout, {
- *         rows:[],  // each row a style
- *         content: styles.map(i => m(hslayout.Layout, {
- *             css: '.myExample', 
- *             content: c.map(c=>(''+i)),
- *             columns: i    // a style from styles
- *         }))
- *     })
- * });
  * next();
  * </file>
  * <file name='style.css'>

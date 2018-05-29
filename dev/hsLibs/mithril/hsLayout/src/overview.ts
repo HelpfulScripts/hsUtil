@@ -37,11 +37,11 @@
  * ### Example
  * <example>
  * <file name='script.js'>
+ * const theContent = ['Top row: 50px', 'Bottom row: remainder']
  * m.mount(root, {view: () => m(hslayout.Layout, {
  *     css: 'myColumn',
- *     rows: ["150px", "fill"], 
- *     content:['Top row: 150px', 
- *              'Bottom row: remainder']
+ *     rows: ["50px", "fill"], 
+ *     content:theContent
  *     })
  * });
  * </file>

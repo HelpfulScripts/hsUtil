@@ -1,22 +1,26 @@
 {
-  "name": "hsLayout",
+  "name": "hslayout",
   "main": "./index.js",
   "types": "./index.d.ts",
-  "version": "2.0.0",
+  "version": "2.0.6",
   "keywords": [],
   "description": "Helpful Scripts UI layout utility",
   "author": {
-    "name": "Hauke Schmidt",
-    "email": "hauke.schmidt@us.bosch.com"
+    "name": "masterscripter",
+    "email": "helpfulscripts@gmail.com"
   },
   "scripts": {
     "start": "grunt",
     "test": "ospec"
   },
+  "license": "MIT",
   "engines": {
     "node": ">= 0.10.0"
   },
   "plugins": [
     "plugins/markdown"
-  ]
+  ],
+  "dependencies": {
+    "mithril": "^1.1.4"
+  }
 }
