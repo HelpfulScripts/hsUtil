@@ -1,6 +1,5 @@
+_dist
+_example
 node_modules
-.baseDir.*
-.tscache/
-_example/
-_dist/
-_dist/**
+.DS_Store
+.tscache
