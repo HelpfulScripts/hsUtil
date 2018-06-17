@@ -105,6 +105,10 @@ module.exports = (grunt, dir, dependencies, type) => {
             example:{ expand:true, cwd: 'src/example', 
                 src:['**/*', '!**/*.ts'], dest:'_dist/example' 
             },
+            libStage: { files: [
+                { expand:true, cwd: '_dist/src',        // copy everything from _dist/src to _dist/bin
+                    src:['**/*'], dest:'_dist/bin' }
+            ]},
             lib2NPM: { files: [
                 { expand:true, cwd: '_dist/bin',        // copy everything from _dist/bin
                     src:['**/*'], dest:`node_modules/${libPath}/` }
