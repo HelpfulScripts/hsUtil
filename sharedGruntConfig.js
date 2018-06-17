@@ -12,11 +12,12 @@ function hsCamelCase(name) {
 }
 
 module.exports = (grunt, dir, dependencies, type) => {
+    const devPath = dir.slice(0, dir.indexOf('/dev/')+5);
     const pkg = grunt.file.readJSON(dir+'/package.json');
     const slash = pkg.name.lastIndexOf('/');
     const lib = hsCamelCase(slash<0? pkg.name : pkg.name.slice(slash+1));
     const libPath = lib.toLowerCase();
-    console.log(`${lib}: ${type}`);    
+    console.log(`${devPath} > ${lib}: ${type}`);    
 
 	// These plugins provide necessary tasks.
 	grunt.loadNpmTasks('grunt-contrib-watch');
@@ -29,10 +30,10 @@ module.exports = (grunt, dir, dependencies, type) => {
     grunt.loadNpmTasks('grunt-webpack');
 
     //------ Add Doc Tasks
-    grunt.registerTask('doc', ['clean:docs', 'typedoc', 'copy:docs', 'sourceCode']);
+    grunt.registerTask('doc', ['clean:docs', 'copy:htmlGH', 'typedoc', 'sourceCode', 'copy:docs2NPM']);
 
     //------ Add Staging Tasks
-    grunt.registerTask('stage', [`${(type === 'app')? 'copy:stageApp': 'copy:deployLib'}`]);
+    grunt.registerTask('stage', [`${(type === 'app')? 'copy:app2NPM': 'copy:lib2NPM'}`]);
     
     //------ Add Test Tasks
     grunt.registerTask('ospec', () => { require('child_process').spawnSync('npm', ['test'], {stdio: 'inherit'}); });
@@ -40,24 +41,20 @@ module.exports = (grunt, dir, dependencies, type) => {
         grunt.loadNpmTasks('grunt-jasmine-node-coverage');
         grunt.registerTask('test', ['clean:test', 'copy:test', 'build-specES5', 'jasmine_node' ]); }
     else { 
-        grunt.registerTask('test', ['clean:test', 'copy:test', 'build-spec' /*, 'ospec' */ ]); 
+        grunt.registerTask('test', ['clean:test', 'copy:test', 'build-spec', 'ospec']); 
     }
     
     //------ Add Build Tasks
-    grunt.registerTask('build-html',    ['copy:build']);
+    grunt.registerTask('build-html',    ['copy:buildHTML']);
     grunt.registerTask('build-css',     ['less']);
     grunt.registerTask('build-example', ['clean:example', 'copy:example', 'ts:example', 'less:example', 'webpack:exampleDev']);
-    grunt.registerTask('build-appDev',  ['copy:example', 'webpack:appDev']);
-    grunt.registerTask('build-appPrd',  ['copy:example', 'webpack:appProd']);
     grunt.registerTask('build-js',      ['tslint:src', 'ts:src']);
     grunt.registerTask('build-jsMin',   ['ts:srcMin']);
     grunt.registerTask('build-es5',     ['tslint:src', 'ts:srcES5']);
     grunt.registerTask('build-spec',    ['tslint:spec', 'ts:test']);    
     grunt.registerTask('build-specES5', ['tslint:spec', 'ts:testES5']);    
 
-    tasks = assembleBuildTasks(type);
-    grunt.registerTask('build', tasks[0]);
-    grunt.registerTask('buildMin', tasks[1]);
+    registerBuildTasks(type);
    
     //------ Add other MultiTasks
     grunt.registerTask('make',    ['build', 'test', 'doc', 'stage']);
@@ -83,45 +80,50 @@ module.exports = (grunt, dir, dependencies, type) => {
 				'* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
                 ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
         clean: {
-			src:    ['_dist'],
+			dist:    ['_dist'],
             docs:   ['_dist/docs'],
             test:   ['_dist/tests'],
             example:['_example', '_dist/example']
         },
         copy: {
-            build:  { expand:true, cwd:'src/', 
+            buildHTML:  { expand:true, cwd:'src/', 
                 src:['*.html'], dest:'_dist/' 
             },
+            bin:{ files: [
+                { expand:true, cwd: 'src/bin',  // if present, scaffolding for bin distribution
+                    src:['**/*', '!**/*.ts'], dest:'_dist/bin' 
+                },
+                { expand:true, cwd: './',       // readme and package.json
+                    src:['*.md', 'package.json'], dest:'_dist/bin' 
+                }
+            ]},
+            htmlGH: { files: [
+                { expand:true, cwd: devPath,    // index.html and indexGH.html
+                    src:['index.html', 'indexGH.html'], dest:'_dist/docs' 
+                }
+            ]},
             example:{ expand:true, cwd: 'src/example', 
                 src:['**/*', '!**/*.ts'], dest:'_dist/example' 
             },
-            deployLib: { files: [
-                { expand:true, cwd: '_dist/src', 
-                    src:['**/*'], dest:`node_modules/${libPath}/` },
-                { expand:true, cwd: './', 
-                    src:['./package.json'], dest:`node_modules/${libPath}/` }
+            lib2NPM: { files: [
+                { expand:true, cwd: '_dist/bin',        // copy everything from _dist/bin
+                    src:['**/*'], dest:`node_modules/${libPath}/` }
             ]},
-            stageApp: { files: [
-                { expand:true, cwd: '_dist/src', 
-                    src:['**/*.css*'], dest:'_dist' }, 
-                { expand:true, cwd: '_dist/', 
-                    src:['*', 'example/**/*'], dest:`node_modules/${libPath}/docs` }, 
-                { expand:true, cwd: './', 
-                    src:['./package.json'], dest:`node_modules/${libPath}/` }
+            app2NPM: { files: [ 
+                { expand:true, cwd: '_dist/bin',        // copy everything from _dist/bin
+                src:['**/*'], dest:`node_modules/${libPath}/` }
             ]},
-            docs:   { files: [
+            docs2NPM:   { files: [                      // copy the module's typeodc json  
                 { expand:true, cwd: '_dist/docs', 
                     src:['**/*.json'], dest:`node_modules/${libPath}/docs`},
-                { expand:true, cwd: '_dist/docs', 
-                    src:['**/*.json'], dest:`docs/data`}, 
-                { expand:true, cwd: './', 
-                    src:['*.md'], dest:`node_modules/${libPath}`}
+                { expand:true, cwd: '_dist/',           // copy examples to npm docs
+                    src:['example/**/*'], dest:`node_modules/${libPath}/docs` }, 
             ]},
 		    test: { files: [
                 { expand:true, cwd:'_dist/',    
-                    src:['*.js', '*.css', '*.html'], dest:'_dist/test/'
+                    src:['*.js', '*.css', '*.html'], dest:'_dist/tests/'
                 },
-                { cwd:'example/', expand:true, src:['*.json'], dest:'_dist/test/'}
+                { cwd:'example/', expand:true, src:['*.json'], dest:'_dist/tests/'}
             ]}
         },
         less: {
@@ -130,7 +132,7 @@ module.exports = (grunt, dir, dependencies, type) => {
             },
             css: {
                 files: {
-                    '_dist/src/<%= pkg.name %>.css': 'src/css/<%= pkg.name %>.less'
+                    '_dist/bin/<%= pkg.name %>.css': 'src/css/<%= pkg.name %>.less'
                 }
             },
             example: {
@@ -185,12 +187,11 @@ module.exports = (grunt, dir, dependencies, type) => {
                     target: 'es6',
                     module: 'commonjs',
                     moduleResolution: "node",
-                    json:   `_dist/docs/${lib}.json`,
-                    out:    '_dist/docs',
+                    json:   `_dist/docs/data/${lib}.json`,
                     mode:   'modules',
                     name:   `${lib}`
                 },
-                src: ['src/**/*.ts']
+                src: ['src/**/*.ts', "!src/**/*.spec.ts"]
             }
         },
 		jasmine_node: {
@@ -211,7 +212,7 @@ module.exports = (grunt, dir, dependencies, type) => {
 						]
 					}
 				},
-				src: ['_dist/test/**/*.js'] 
+				src: ['_dist/tests/**/*.js'] 
 			}
 		},
 
@@ -223,7 +224,7 @@ module.exports = (grunt, dir, dependencies, type) => {
                 entry: './_dist/src/index.js',
                 output: {
                     filename: `${lib}.js`,
-                    path: path.resolve(dir, './_dist')
+                    path: path.resolve(dir, './_dist/bin')
                 },
                 plugins: [
                     new UglifyJsPlugin({
@@ -239,30 +240,24 @@ module.exports = (grunt, dir, dependencies, type) => {
                 devtool: "inline-source-map",
                 output: {
                     filename: `${lib}.js`,
-                    path: path.resolve(dir, './_dist')
+                    path: path.resolve(dir, './_dist/bin')
                 }
             },
-            test: {
-                entry: './_dist/src/index.js',
-                output: {
-                    filename: `${lib}.js`,
-                    path: path.resolve(dir, './_dist')
-                }
-            },
-
-            exampleProd: { 
-                entry: './_example/example/start.js',
-                output: {
-                    filename: `${lib}.js`,
-                    path: path.resolve(dir, '_dist/example')
-                }
-            },
+/*
             exampleDev: { 
-                entry: './_example/example/start.js',
+                entry: './_dist/example/start.js',
                 devtool: "inline-source-map",
                 output: {
                     filename: `${lib}.js`,
                     path: path.resolve(dir, '_dist/example')
+                }
+            },
+*/            
+            test: {
+                entry: './_dist/bin/index.js',
+                output: {
+                    filename: `${lib}.js`,
+                    path: path.resolve(dir, './_dist')
                 }
             }
         },
@@ -271,7 +266,7 @@ module.exports = (grunt, dir, dependencies, type) => {
                 expand: true, 
                 cwd: 'src/', 
                 src: ['**/*.ts'], 
-                dest: 'docs/src/',
+                dest: '_dist/docs/src/',
                 rename: (dest, src) => dest + src.slice(src.lastIndexOf('/')+1).replace('.ts','.html')
             }
         },
@@ -304,24 +299,23 @@ module.exports = (grunt, dir, dependencies, type) => {
 		}
     }
 
-    function assembleBuildTasks(type) {
-        let buildTasks = ['clean:src', 'build-html', 'build-css'];
+    function registerBuildTasks(type) {
+        let buildTasks = ['clean:dist', 'build-html', 'build-css', /*'build-example',*/ 'copy:bin', 'copy:example'];
         let buildProduct;
         switch (type) {
-            case 'node': buildProduct = buildTasks = buildTasks.concat(['build-es5', 'copy:example']); 
-                        break;
-            case 'util': buildTasks = buildTasks.concat(['build-js']); 
-                        buildProduct = buildTasks.concat(['build-jsMin']);
-                        break;
-            case 'app':  buildProduct = buildTasks.concat(['build-jsMin', 'build-appPrd']);
-                        buildTasks   = buildTasks.concat(['build-js', 'build-appDev']); 
-                        break;
+            case 'node':    buildProduct = buildTasks = buildTasks.concat(['build-es5']); 
+                            break;
+            case 'app':     buildProduct = buildTasks.concat(['build-jsMin', 'webpack:appProd']);
+                            buildTasks   = buildTasks.concat(['build-js', 'webpack:appDev']); 
+                            break;
+            case 'util':    
             case 'lib': 
-            default:     buildProduct = buildTasks.concat(['build-jsMin', 'build-example']);
-                        buildTasks   = buildTasks.concat(['build-js', 'build-example']); 
-                        break;
+            default:        buildProduct = buildTasks.concat(['build-jsMin', 'copy:libStage']);
+                            buildTasks   = buildTasks.concat(['build-js', 'copy:libStage']); 
+                            break;
         }
-        return [buildTasks, buildProduct];
+        grunt.registerTask('build', buildTasks);
+        grunt.registerTask('buildMin', buildProduct);
     }
 
     function printHelp() {
@@ -383,10 +377,19 @@ module.exports = (grunt, dir, dependencies, type) => {
     }
 
     function writeIndexJson() {
-        grunt.file.write('docs/data/index.json', `{"docs": ["${lib}.json"], "title": "HS Libraries"}`);
+        grunt.file.write('_dist/docs/data/index.json', `{"docs": ["${lib}.json"], "title": "HS Libraries"}`);
     }
 
     function publish_gh() {
-        grunt.util.spawn({cmd: './ghpages-push.sh'}, (error, result, code) => console.log(result));
+        grunt.log.writeln(`spawning ${devPath}ghpages-push.sh`);
+        var done = this.async();
+        grunt.util.spawn({
+            cmd: devPath+'ghpages-push.sh',
+            args: [dir]
+        }, (error, result, code) => {
+            grunt.log.writeln(`>> ${result.stdout.replace(/[\n|\r]/g, '\n>> ')}`);
+            grunt.log.writeln(`exit code: ${code}, errors:${result.stderr}`);
+            done();
+        });
     }
 };

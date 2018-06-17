@@ -3,8 +3,10 @@ hsUtil [![npm version](https://badge.fury.io/js/hsutil.svg)](https://badge.fury.
 
 Helpful Scripts framework-independent utility functions. 
 
-**hsutil** provides JavaScript-based utility functions. These functions are independant of any framework 
-such as `mithril` or `angularJS`.
+**hsutil** provides JavaScript-based utility functions. 
+
+## Installation
+`npm i hsutil`
 
 ## Provided Functions
 - `TimedPromise` functions that provide delays and timeouts for promises.
