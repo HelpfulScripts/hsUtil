@@ -119,9 +119,9 @@ module.exports = (grunt, dir, dependencies, type) => {
             ]},
             docs2NPM:   { files: [                      // copy the module's typeodc json  
                 { expand:true, cwd: '_dist/docs', 
-                    src:['**/*.json'], dest:`node_modules/${libPath}/docs`},
+                    src:['**/*.json'], dest:`node_modules/${libPath}`},
                 { expand:true, cwd: '_dist/',           // copy examples to npm docs
-                    src:['example/**/*'], dest:`node_modules/${libPath}/docs` }, 
+                    src:['example/**/*'], dest:`node_modules/${libPath}` }, 
             ]},
 		    test: { files: [
                 { expand:true, cwd:'_dist/',    
