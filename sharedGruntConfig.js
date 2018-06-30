@@ -115,7 +115,9 @@ module.exports = (grunt, dir, dependencies, type) => {
             ]},
             lib2NPM: { files: [
                 { expand:true, cwd: '_dist/bin',        // copy everything from _dist/bin
-                    src:['**/*'], dest:`node_modules/${libPath}/` }
+                    src:['**/*'], dest:`node_modules/${libPath}/` },
+                { expand:true, cwd: '_dist/docs/src',        // copy source htmls to hsDocs
+                    src:['**/*'], dest:`${devPath}/hsApps/hsDocs/_dist/docs/src` }
             ]},
             app2NPM: { files: [ 
                 { expand:true, cwd: '_dist/bin',        // copy everything from _dist/bin
@@ -163,33 +165,49 @@ module.exports = (grunt, dir, dependencies, type) => {
             }
         },
         ts: {
+            options: {
+                target: "es6",
+                module: "es6",
+                rootDir: "./src",
+                moduleResolution: "node",
+                inlineSourceMap: true,
+                removeComments: true,
+                noImplicitAny: true,
+                suppressImplicitAnyIndexErrors: true
+            },
             src : {
                 outDir:     "_dist/src",
                 src: ["src/**/*.ts", "!src/**/*.spec.ts", "!src/example/*.ts"],
-                tsconfig:   __dirname+'/tsconfigGrunt.json'
             },
             srcES5 : {
+                options: {
+                    target: 'es5',                 // target javascript language. [es3 | es5 (grunt-ts default) | es6]
+                    module: 'CommonJS',            // target javascript module style. [amd (default) | commonjs]    
+                },
                 outDir:     "_dist/src",
                 src: ["src/**/*.ts", "!src/**/*.spec.ts", "!src/example/*.ts"],
-                tsconfig:   __dirname+'/tsconfigGruntES5.json'
             },
             srcMin : {
                 outDir:     "_dist/src",
                 src: ["src/**/*.ts", "!src/**/*.spec.ts", "!src/example/*.ts"],
-                tsconfig:   __dirname+'/tsconfigProduct.json'
             },
             example : {
                 outDir:     "_example",
                 src: ["src/example/*.ts"],
-                tsconfig:   __dirname+'/tsconfigGrunt.json'
             },
             test : {
+                options: {
+                    target: 'es6',                 
+                    module: 'CommonJS',           
+                    allowJs: true,
+                    declaration: false,
+                    rootDir: "./"
+                },
                 outDir:     "_dist/tests",
-                src: ["src/**/*.spec.ts"],
-                tsconfig:   __dirname+'/tsconfigGruntES5.json'
+                src: ["src/**/*.spec.ts", "node_modules/hslayout/**/*.js"],
             }
         },
-        typedoc: {
+        typedoc: { 
             code: {
                 options: {
                     target: 'es6',
@@ -197,7 +215,7 @@ module.exports = (grunt, dir, dependencies, type) => {
                     moduleResolution: "node",
                     json:   `_dist/docs/data/${lib}.json`,
                     mode:   'modules',
-                    name:   `${lib}`
+                    name:   `${lib}`,
                 },
                 src: ['src/**/*.ts', '!src/**/*.*.ts', '!src/example/**/*'] // no specs, no example
             }
