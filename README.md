@@ -7,8 +7,6 @@ hsUtil
 
 Helpful Scripts framework-independent utility functions. 
 
-**hsutil** provides JavaScript-based utility functions. 
-
 ## Installation
 `npm i hsutil`
 
