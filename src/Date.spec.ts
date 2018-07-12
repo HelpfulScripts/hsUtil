@@ -1,5 +1,11 @@
+if (!global['window']) {
+    global['window'] = require("mithril/test-utils/browserMock.js")();
+    global['document'] = window.document;
+
+}
+
 import { date, ms } from './Date';
-import { o }        from 'hslayout';
+import { o }        from './mithril';
 
 
 o.spec("date", () => {
