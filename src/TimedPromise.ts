@@ -1,5 +1,5 @@
 /**
- * ## Helpful Script Utility Module
+ * ## Helpful Script Timing Support
  * Provides convenience functions that don't depend on specific frameworks or libraries 
  */
 
