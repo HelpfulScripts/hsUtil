@@ -1,5 +1,5 @@
 import { timeout, delay } from './TimedPromise';
-import { o }    from 'hslayout';
+import { o }              from './mithril';
 
 o.spec("node", () => {
     let reject: any; 
