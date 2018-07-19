@@ -5,14 +5,20 @@ hsUtil
 [![Built with Grunt](https://cdn.gruntjs.com/builtwith.svg)](https://gruntjs.com/) 
 [![NPM License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://www.npmjs.com/package/hsutil) 
 
-Helpful Scripts framework-independent utility functions. 
+Helpful Scripts utility functions. 
 
 ## Installation
 `npm i hsutil`
 
-## Provided Functions
+## Provided Functions - no external dependencies:
 - `TimedPromise` functions that provide delays and timeouts for promises.
 - `CheckSum` a quick checksum implementation for small strings
 - `Date` printf-style date formatting function
+
+## Provided Function - dependency on [showdown](https://www.npmjs.com/package/showdown)
 - `showdown` an ES6 wrapper for the showdown library
 
+## Provided Function - dependency on [xlsx](https://www.npmjs.com/package/xlsx)
+- `excel` an ES6 wrapper for accessing excel files
+
+See [docs](https://helpfulscripts.github.io/hsUtil/indexGH.html#!/api/hsUtil/0) for details
