@@ -5,7 +5,7 @@ hsUtil
 [![Built with Grunt](https://cdn.gruntjs.com/builtwith.svg)](https://gruntjs.com/) 
 [![NPM License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://www.npmjs.com/package/hsutil) 
 
-Helpful Scripts utility functions. 
+Helpful Scripts utility functions for use in both browser and `node` environments
 
 ## Installation
 `npm i hsutil`
@@ -17,8 +17,5 @@ Helpful Scripts utility functions.
 
 ## Provided Function - dependency on [showdown](https://www.npmjs.com/package/showdown)
 - `showdown` an ES6 wrapper for the showdown library
-
-## Provided Function - dependency on [xlsx](https://www.npmjs.com/package/xlsx)
-- `excel` an ES6 wrapper for accessing excel files
 
 See [docs](https://helpfulscripts.github.io/hsUtil/indexGH.html#!/api/hsUtil/0) for details

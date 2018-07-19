@@ -1,7 +1,7 @@
 /**
  * # hsUtil
  * 
- * Helpful Scripts utility functions. 
+ * Helpful Scripts utility functions for use in both browser and `node` environments
  * [Github page](https://github.com/HelpfulScripts/hsUtil)
  * 
  * ## Index - no external dependencies:

@@ -49,7 +49,6 @@
     "webpack": "^3.12.0"
   },
   "dependencies": {
-    "showdown": "^1.8.6",
-    "xlsx": "^0.13.2"
+    "showdown": "^1.8.6"
   }
 }
