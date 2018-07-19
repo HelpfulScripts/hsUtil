@@ -1,12 +1,12 @@
 {
   "name": "hsutil",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "main": "./index.js",
   "types": "./index.d.ts",
   "keywords": [
-      "es6",
-      "showdown",
-      "date-printf"
+    "es6",
+    "showdown",
+    "date-printf"
   ],
   "description": "Helpful Scripts cross-framework libraries ",
   "homepage": "https://helpfulscripts.github.io/hsUtil/indexGH.html#!/api/hsUtil/0",
