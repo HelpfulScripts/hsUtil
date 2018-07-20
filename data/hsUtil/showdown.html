@@ -17,8 +17,12 @@
 <span id=2 class="line">&nbsp;&nbsp;&nbsp;2</span><br>
 <span id=3 class="line">&nbsp;&nbsp;&nbsp;3</span>const&nbsp;converter&nbsp;=&nbsp;new&nbsp;showdown.Converter();<br>
 <span id=4 class="line">&nbsp;&nbsp;&nbsp;4</span><br>
-<span id=5 class="line">&nbsp;&nbsp;&nbsp;5</span>export&nbsp;function&nbsp;markDown(text:string)&nbsp;{&nbsp;<br>
-<span id=6 class="line">&nbsp;&nbsp;&nbsp;6</span>&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;converter.makeHtml(text);<br>
-<span id=7 class="line">&nbsp;&nbsp;&nbsp;7</span>}<br></code></div>
+<span id=5 class="line">&nbsp;&nbsp;&nbsp;5</span><comment>/**<br>
+<span id=6 class="line">&nbsp;&nbsp;&nbsp;6</span>&nbsp;*&nbsp;converts&nbsp;`text`&nbsp;to&nbsp;its&nbsp;[showdwon](https://www.npmjs.com/package/showdown)&nbsp;equivalent<br>
+<span id=7 class="line">&nbsp;&nbsp;&nbsp;7</span>&nbsp;*&nbsp;@param&nbsp;text&nbsp;the&nbsp;text&nbsp;to&nbsp;convert<br>
+<span id=8 class="line">&nbsp;&nbsp;&nbsp;8</span>&nbsp;*/</comment><br>
+<span id=9 class="line">&nbsp;&nbsp;&nbsp;9</span>export&nbsp;function&nbsp;markDown(text:string)&nbsp;{&nbsp;<br>
+<span id=10 class="line">&nbsp;&nbsp;10</span>&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;converter.makeHtml(text);<br>
+<span id=11 class="line">&nbsp;&nbsp;11</span>}<br></code></div>
                 </body>
             

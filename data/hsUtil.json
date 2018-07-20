@@ -1471,6 +1471,9 @@
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
+							"comment": {
+								"shortText": "converts `text` to its [showdwon](https://www.npmjs.com/package/showdown) equivalent"
+							},
 							"parameters": [
 								{
 									"id": 53,
@@ -1478,6 +1481,9 @@
 									"kind": 32768,
 									"kindString": "Parameter",
 									"flags": {},
+									"comment": {
+										"text": "the text to convert\n"
+									},
 									"type": {
 										"type": "intrinsic",
 										"name": "string"
@@ -1493,7 +1499,7 @@
 					"sources": [
 						{
 							"fileName": "showdown.ts",
-							"line": 5,
+							"line": 9,
 							"character": 24
 						}
 					]
