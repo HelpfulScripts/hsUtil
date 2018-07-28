@@ -9,52 +9,52 @@ import { o }        from './mithril';
 
 
 o.spec("date", () => {
-	o('should have date defined as a function', () => {
-		o(date).notEquals(undefined);
-		o(typeof date).equals('function');
+	it('should have date defined as a function', () => {
+		expect(date).not.toBe(undefined);
+		expect(typeof date).toEqual('function');
 	});
   
-	o.spec('formatting of date 7/4/2010', () => {
+	describe('formatting of date 7/4/2010', () => {
 		let d = new Date('7/4/2010');
 
-		o('should convert "%YYYY-%MMMM-%DD"', () => {
-			o(date("%YYYY-%MMMM-%DD", d)).equals("2010-July-04");
+		it('should convert "%YYYY-%MMMM-%DD"', () => {
+			expect(date("%YYYY-%MMMM-%DD", d)).toEqual("2010-July-04");
 		});
 
-		o('should convert "%YY%MMM%D %YY"', () => {
-			o(date("%YY%MMM%D %YY", d)).equals("10Jul4 10");
+		it('should convert "%YY%MMM%D %YY"', () => {
+			expect(date("%YY%MMM%D %YY", d)).toEqual("10Jul4 10");
 		});
 
-		o('should convert "%YY%MM%D %h:%m:%ss.%j"', () => {
-			o(date("%YY%MM%D %h:%m:%ss.%j", d)).equals("10074 0:0:00.0");
+		it('should convert "%YY%MM%D %h:%m:%ss.%j"', () => {
+			expect(date("%YY%MM%D %h:%m:%ss.%j", d)).toEqual("10074 0:0:00.0");
 		});
 
-		o('should convert "%DDD, %YY%MM%DD %hh:%mm:%ss.%jj"', () => {
-			o(date("%DDD, %YY%MM%DD %hh:%mm:%ss.%jj", d)).equals("Sun, 100704 00:00:00.00");
+		it('should convert "%DDD, %YY%MM%DD %hh:%mm:%ss.%jj"', () => {
+			expect(date("%DDD, %YY%MM%DD %hh:%mm:%ss.%jj", d)).toEqual("Sun, 100704 00:00:00.00");
 		});
 
-		o('should convert "%DDDD, %YY%MM%DD %hh:%mm:%ss.%jjj"', () => {
-			o(date("%DDDD, %YY%MM%DD %hh:%mm:%ss.%jjj", d)).equals("Sunday, 100704 00:00:00.000");
+		it('should convert "%DDDD, %YY%MM%DD %hh:%mm:%ss.%jjj"', () => {
+			expect(date("%DDDD, %YY%MM%DD %hh:%mm:%ss.%jjj", d)).toEqual("Sunday, 100704 00:00:00.000");
 		});
 	});
 	
-	o.spec('formatting of current date', () => {
+	describe('formatting of current date', () => {
 		let now = new Date();
 		
-		o('should format ' + now.toDateString(), () => {
-			o(date("%YYYY-%MM-%DD")).equals(date("%YYYY-%MM-%DD", now));
+		it('should format ' + now.toDateString(), () => {
+			expect(date("%YYYY-%MM-%DD")).toEqual(date("%YYYY-%MM-%DD", now));
 		});
 	});
 });
 
 o.spec("ms", () => {
     const time = 3.75;
-    o('fromMinutes', () => o(ms.fromMinutes(time)).equals(time*60*1000));
-    o('fromHours',   () => o(ms.fromHours(time)).equals(time*60*60*1000));
-    o('fromDays',    () => o(ms.fromDays(time)).equals(time*24*60*60*1000));
-    o('fromWeeks',    () => o(ms.fromWeeks(time)).equals(time*7*24*60*60*1000));
-    o('toMinutes', () => o(ms.toMinutes(time*60*1000)).equals(time));
-    o('toHours',   () => o(ms.toHours(time*60*60*1000)).equals(time));
-    o('toDays',    () => o(ms.toDays(time*24*60*60*1000)).equals(time));
-    o('toWeeks',    () => o(ms.toWeeks(time*7*24*60*60*1000)).equals(time));
+    it('fromMinutes', () => expect(ms.fromMinutes(time)).toEqual(time*60*1000));
+    it('fromHours',   () => expect(ms.fromHours(time)).toEqual(time*60*60*1000));
+    it('fromDays',    () => expect(ms.fromDays(time)).toEqual(time*24*60*60*1000));
+    it('fromWeeks',    () => expect(ms.fromWeeks(time)).toEqual(time*7*24*60*60*1000));
+    it('toMinutes', () => expect(ms.toMinutes(time*60*1000)).toEqual(time));
+    it('toHours',   () => expect(ms.toHours(time*60*60*1000)).toEqual(time));
+    it('toDays',    () => expect(ms.toDays(time*24*60*60*1000)).toEqual(time));
+    it('toWeeks',    () => expect(ms.toWeeks(time*7*24*60*60*1000)).toEqual(time));
 });
