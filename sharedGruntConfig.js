@@ -39,7 +39,7 @@ module.exports = (grunt, dir, dependencies, type) => {
     //------ Add Test Tasks
     grunt.registerTask('ospec', () => { require('child_process').spawnSync('./node_modules/.bin/ospec', {stdio: 'inherit'}); });
     grunt.registerTask('jest',  () => { require('child_process').spawnSync('./node_modules/.bin/jest',  ['-c=jest.config.json'], {stdio: 'inherit'}); });
-    grunt.registerTask('test', ['clean:test', /*'copy:test', 'build-spec', 'ospec',*/ 'jest', 'copy:coverage2Docs']); 
+    grunt.registerTask('test', ['clean:test', /*'copy:test', 'build-spec', 'ospec',*/ 'jest']); 
     
     //------ Add Build Tasks
     grunt.registerTask('build-html',    ['copy:buildHTML']);
@@ -124,10 +124,6 @@ module.exports = (grunt, dir, dependencies, type) => {
             docs2NPM:   { files: [                      // copy the module's docs to npm  
                 { expand:true, cwd: 'docs', 
                     src:['**/*'], dest:`node_modules/${libPath}/docs`}
-            ]},
-            coverage2Docs: { files: [                    // copy the module's coverage to docs 
-                { expand:true, cwd: '_dist', 
-                    src:['coverage/**/*'], dest:`./docs`}
             ]},
 		    test: { files: [
                 { expand:true, cwd:'_dist/',    
