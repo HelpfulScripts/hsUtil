@@ -16,7 +16,8 @@ export function timeout(ms:number):Promise<void> {
 /**
  * @description delays a promise, passing the parameter 
  * received from the calling promise down to the resolving promise.
- * Usage 1: a delay within the `then` chain:
+ * 
+ * **Usage 1:** a delay within the `then` chain:
  * ```
  * <PromiseLike>
  *    .then(...)
@@ -24,7 +25,7 @@ export function timeout(ms:number):Promise<void> {
  *    .then(...)
  *    .catch(...)
  * ```
- * Usage 2: an initial delay
+ * **Usage 2:** an initial delay
  * ```
  * delay(10)()
  *    .then(...)
@@ -42,9 +43,10 @@ export function delay(ms:number)   {
 }
 
 /**
- * # Pace
- * ensures that a functions in a sequence are not executed faster than a preset minimum delay.
- * Usage: ```
+ * @description ensures that a functions in a sequence are not executed faster than a preset minimum delay.
+ * 
+ * **Usage:** 
+ * ```
  * const q = new PacingQueue(100); // 100ms between calls
  * ...
  * q.add((ms) => `I have been called after ${ms}ms`;})
@@ -60,7 +62,7 @@ export class Pace {
      * two registered functions; defaults to 100;
      */
     constructor(pace=100) {
-        this.pace = pace; 
+        this.pace = pace+5; // add 5ms margin. delay() may trigger a millisecond or two early
     }
 
     /**
