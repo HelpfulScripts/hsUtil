@@ -1,14 +1,7 @@
-if (!global['window']) {
-    global['window'] = require("mithril/test-utils/browserMock.js")();
-    global['document'] = window.document;
-
-}
-
 import { date, ms } from './Date';
-import { o }        from './mithril';
 
 
-o.spec("date", () => {
+describe('date', () => {
 	it('should have date defined as a function', () => {
 		expect(date).not.toBe(undefined);
 		expect(typeof date).toEqual('function');
@@ -47,7 +40,7 @@ o.spec("date", () => {
 	});
 });
 
-o.spec("ms", () => {
+describe('ms', () => {
     const time = 3.75;
     it('fromMinutes', () => expect(ms.fromMinutes(time)).toEqual(time*60*1000));
     it('fromHours',   () => expect(ms.fromHours(time)).toEqual(time*60*60*1000));
