@@ -681,7 +681,7 @@
 			]
 		},
 		{
-			"id": 54,
+			"id": 66,
 			"name": "\"Number\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -694,7 +694,7 @@
 			},
 			"children": [
 				{
-					"id": 55,
+					"id": 67,
 					"name": "round",
 					"kind": 64,
 					"kindString": "Function",
@@ -703,7 +703,7 @@
 					},
 					"signatures": [
 						{
-							"id": 56,
+							"id": 68,
 							"name": "round",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -713,7 +713,7 @@
 							},
 							"parameters": [
 								{
-									"id": 57,
+									"id": 69,
 									"name": "n",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -727,7 +727,7 @@
 									}
 								},
 								{
-									"id": 58,
+									"id": 70,
 									"name": "d",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -762,7 +762,7 @@
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						55
+						67
 					]
 				}
 			],
@@ -775,30 +775,32 @@
 			]
 		},
 		{
-			"id": 59,
-			"name": "\"PacingQueue\"",
+			"id": 41,
+			"name": "\"TimedPromise\"",
 			"kind": 1,
 			"kindString": "External module",
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "/Users/sth1pal/Documents/Development/JavaScript/nodejs/ts6/dev/hsLibs/standalone/hsUtil/src/PacingQueue.ts",
+			"originalName": "/Users/sth1pal/Documents/Development/JavaScript/nodejs/ts6/dev/hsLibs/standalone/hsUtil/src/TimedPromise.ts",
 			"comment": {
-				"shortText": "# PacingQueue\nensures that a functions in a sequence are not executed faster than a preset minimum delay"
+				"shortText": "## Helpful Script Timing Support\nProvides convenience functions that don't depend on specific frameworks or libraries"
 			},
 			"children": [
 				{
-					"id": 60,
-					"name": "PacingQueue",
+					"id": 42,
+					"name": "Pace",
 					"kind": 128,
 					"kindString": "Class",
 					"flags": {
 						"isExported": true
 					},
-					"comment": {},
+					"comment": {
+						"shortText": "# Pace\nensures that a functions in a sequence are not executed faster than a preset minimum delay.\nUsage: ```\nconst q = new PacingQueue(100); // 100ms between calls\n...\nq.add((ms) => `I have been called after ${ms}ms`;})\n   .then((result) => console.log(result));     // prints: I have been called after ***ms`\n```"
+					},
 					"children": [
 						{
-							"id": 64,
+							"id": 45,
 							"name": "constructor",
 							"kind": 512,
 							"kindString": "Constructor",
@@ -808,16 +810,16 @@
 							"comment": {},
 							"signatures": [
 								{
-									"id": 65,
-									"name": "new PacingQueue",
+									"id": 46,
+									"name": "new Pace",
 									"kind": 16384,
 									"kindString": "Constructor signature",
 									"flags": {},
 									"comment": {},
 									"parameters": [
 										{
-											"id": 66,
-											"name": "delayMS",
+											"id": 47,
+											"name": "pace",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
@@ -830,53 +832,33 @@
 									],
 									"type": {
 										"type": "reference",
-										"name": "PacingQueue",
-										"id": 60
+										"name": "Pace",
+										"id": 42
 									}
 								}
 							],
 							"sources": [
 								{
-									"fileName": "PacingQueue.ts",
-									"line": 10,
-									"character": 24
+									"fileName": "TimedPromise.ts",
+									"line": 56,
+									"character": 26
 								}
 							]
 						},
 						{
-							"id": 63,
-							"name": "baseMS",
+							"id": 43,
+							"name": "pace",
 							"kind": 1024,
 							"kindString": "Property",
 							"flags": {
+								"isPrivate": true,
 								"isExported": true
 							},
 							"sources": [
 								{
-									"fileName": "PacingQueue.ts",
-									"line": 10,
-									"character": 10
-								}
-							],
-							"type": {
-								"type": "intrinsic",
-								"name": "number"
-							},
-							"defaultValue": " Date.now()"
-						},
-						{
-							"id": 61,
-							"name": "delayMS",
-							"kind": 1024,
-							"kindString": "Property",
-							"flags": {
-								"isExported": true
-							},
-							"sources": [
-								{
-									"fileName": "PacingQueue.ts",
-									"line": 8,
-									"character": 11
+									"fileName": "TimedPromise.ts",
+									"line": 55,
+									"character": 16
 								}
 							],
 							"type": {
@@ -885,31 +867,29 @@
 							}
 						},
 						{
-							"id": 62,
-							"name": "queue",
+							"id": 44,
+							"name": "waitUntil",
 							"kind": 1024,
 							"kindString": "Property",
 							"flags": {
+								"isPrivate": true,
 								"isExported": true
 							},
 							"sources": [
 								{
-									"fileName": "PacingQueue.ts",
-									"line": 9,
-									"character": 9
+									"fileName": "TimedPromise.ts",
+									"line": 56,
+									"character": 21
 								}
 							],
 							"type": {
-								"type": "array",
-								"elementType": {
-									"type": "intrinsic",
-									"name": "any"
-								}
+								"type": "intrinsic",
+								"name": "number"
 							},
-							"defaultValue": " <any[]>[]"
+							"defaultValue": "0"
 						},
 						{
-							"id": 69,
+							"id": 48,
 							"name": "add",
 							"kind": 2048,
 							"kindString": "Method",
@@ -918,36 +898,41 @@
 							},
 							"signatures": [
 								{
-									"id": 70,
+									"id": 49,
 									"name": "add",
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
+									"comment": {
+										"shortText": "adds the function to the queue. After an appropriate time has passed,\nthe function will be called with the delay in ms as parameter.",
+										"returns": "a promise that resolved to the result of the function\n"
+									},
 									"parameters": [
 										{
-											"id": 71,
+											"id": 50,
 											"name": "fn",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
+											"comment": {},
 											"type": {
 												"type": "reflection",
 												"declaration": {
-													"id": 72,
+													"id": 51,
 													"name": "__type",
 													"kind": 65536,
 													"kindString": "Type literal",
 													"flags": {},
 													"signatures": [
 														{
-															"id": 73,
+															"id": 52,
 															"name": "__call",
 															"kind": 4096,
 															"kindString": "Call signature",
 															"flags": {},
 															"parameters": [
 																{
-																	"id": 74,
+																	"id": 53,
 																	"name": "msSinceAdding",
 																	"kind": 32768,
 																	"kindString": "Parameter",
@@ -966,8 +951,8 @@
 													],
 													"sources": [
 														{
-															"fileName": "PacingQueue.ts",
-															"line": 24,
+															"fileName": "TimedPromise.ts",
+															"line": 72,
 															"character": 11
 														}
 													]
@@ -989,84 +974,9 @@
 							],
 							"sources": [
 								{
-									"fileName": "PacingQueue.ts",
-									"line": 24,
+									"fileName": "TimedPromise.ts",
+									"line": 72,
 									"character": 7
-								}
-							]
-						},
-						{
-							"id": 75,
-							"name": "next",
-							"kind": 2048,
-							"kindString": "Method",
-							"flags": {
-								"isExported": true
-							},
-							"signatures": [
-								{
-									"id": 76,
-									"name": "next",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"parameters": [
-										{
-											"id": 77,
-											"name": "q",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "array",
-												"elementType": {
-													"type": "intrinsic",
-													"name": "any"
-												}
-											}
-										}
-									],
-									"type": {
-										"type": "intrinsic",
-										"name": "void"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "PacingQueue.ts",
-									"line": 31,
-									"character": 8
-								}
-							]
-						},
-						{
-							"id": 67,
-							"name": "nextTimeout",
-							"kind": 2048,
-							"kindString": "Method",
-							"flags": {
-								"isPrivate": true,
-								"isExported": true
-							},
-							"signatures": [
-								{
-									"id": 68,
-									"name": "nextTimeout",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"type": {
-										"type": "intrinsic",
-										"name": "void"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "PacingQueue.ts",
-									"line": 20,
-									"character": 23
 								}
 							]
 						}
@@ -1076,69 +986,35 @@
 							"title": "Constructors",
 							"kind": 512,
 							"children": [
-								64
+								45
 							]
 						},
 						{
 							"title": "Properties",
 							"kind": 1024,
 							"children": [
-								63,
-								61,
-								62
+								43,
+								44
 							]
 						},
 						{
 							"title": "Methods",
 							"kind": 2048,
 							"children": [
-								69,
-								75,
-								67
+								48
 							]
 						}
 					],
 					"sources": [
 						{
-							"fileName": "PacingQueue.ts",
-							"line": 7,
-							"character": 24
+							"fileName": "TimedPromise.ts",
+							"line": 54,
+							"character": 17
 						}
 					]
-				}
-			],
-			"groups": [
+				},
 				{
-					"title": "Classes",
-					"kind": 128,
-					"children": [
-						60
-					]
-				}
-			],
-			"sources": [
-				{
-					"fileName": "PacingQueue.ts",
-					"line": 1,
-					"character": 0
-				}
-			]
-		},
-		{
-			"id": 41,
-			"name": "\"TimedPromise\"",
-			"kind": 1,
-			"kindString": "External module",
-			"flags": {
-				"isExported": true
-			},
-			"originalName": "/Users/sth1pal/Documents/Development/JavaScript/nodejs/ts6/dev/hsLibs/standalone/hsUtil/src/TimedPromise.ts",
-			"comment": {
-				"shortText": "## Helpful Script Timing Support\nProvides convenience functions that don't depend on specific frameworks or libraries"
-			},
-			"children": [
-				{
-					"id": 45,
+					"id": 57,
 					"name": "delay",
 					"kind": 64,
 					"kindString": "Function",
@@ -1147,7 +1023,7 @@
 					},
 					"signatures": [
 						{
-							"id": 46,
+							"id": 58,
 							"name": "delay",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -1157,13 +1033,13 @@
 								"tags": [
 									{
 										"tag": "description",
-										"text": "delay promise for use in `Promise.all(param).then(delay(ms)).then(doSomething)`.\n`delay` passes the parameter received from the calling promise down to the resolving promise.\nUsage:\n```\nPromise.resolve(...)\n   .then(delay(10))\n   .then(...)\n   .catch(...)\n```"
+										"text": "delays a promise, passing the parameter\nreceived from the calling promise down to the resolving promise.\nUsage 1: a delay within the `then` chain:\n```\n<PromiseLike>\n   .then(...)\n   .then(delay(10))\n   .then(...)\n   .catch(...)\n```\nUsage 2: an initial delay\n```\ndelay(10)()\n   .then(...)\n   .catch(...)\n```"
 									}
 								]
 							},
 							"parameters": [
 								{
-									"id": 47,
+									"id": 59,
 									"name": "ms",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -1183,13 +1059,13 @@
 					"sources": [
 						{
 							"fileName": "TimedPromise.ts",
-							"line": 29,
+							"line": 36,
 							"character": 21
 						}
 					]
 				},
 				{
-					"id": 42,
+					"id": 54,
 					"name": "timeout",
 					"kind": 64,
 					"kindString": "Function",
@@ -1198,7 +1074,7 @@
 					},
 					"signatures": [
 						{
-							"id": 43,
+							"id": 55,
 							"name": "timeout",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -1214,7 +1090,7 @@
 							},
 							"parameters": [
 								{
-									"id": 44,
+									"id": 56,
 									"name": "ms",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -1251,11 +1127,18 @@
 			],
 			"groups": [
 				{
+					"title": "Classes",
+					"kind": 128,
+					"children": [
+						42
+					]
+				},
+				{
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						45,
-						42
+						57,
+						54
 					]
 				}
 			],
@@ -1268,7 +1151,7 @@
 			]
 		},
 		{
-			"id": 78,
+			"id": 71,
 			"name": "\"index\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -1285,7 +1168,7 @@
 			]
 		},
 		{
-			"id": 79,
+			"id": 72,
 			"name": "\"mithril\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -1295,7 +1178,7 @@
 			"originalName": "/Users/sth1pal/Documents/Development/JavaScript/nodejs/ts6/dev/hsLibs/standalone/hsUtil/src/mithril.ts",
 			"children": [
 				{
-					"id": 81,
+					"id": 74,
 					"name": "Vnode",
 					"kind": 4194304,
 					"kindString": "Type alias",
@@ -1318,7 +1201,7 @@
 					}
 				},
 				{
-					"id": 80,
+					"id": 73,
 					"name": "m",
 					"kind": 32,
 					"kindString": "Variable",
@@ -1343,7 +1226,7 @@
 					"defaultValue": " require(\"mithril\")"
 				},
 				{
-					"id": 82,
+					"id": 75,
 					"name": "o",
 					"kind": 32,
 					"kindString": "Variable",
@@ -1370,15 +1253,15 @@
 					"title": "Type aliases",
 					"kind": 4194304,
 					"children": [
-						81
+						74
 					]
 				},
 				{
 					"title": "Variables",
 					"kind": 32,
 					"children": [
-						80,
-						82
+						73,
+						75
 					]
 				}
 			],
@@ -1391,7 +1274,7 @@
 			]
 		},
 		{
-			"id": 83,
+			"id": 76,
 			"name": "\"overview\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -1401,7 +1284,7 @@
 			"originalName": "/Users/sth1pal/Documents/Development/JavaScript/nodejs/ts6/dev/hsLibs/standalone/hsUtil/src/overview.ts",
 			"comment": {
 				"shortText": "# hsUtil",
-				"text": "Helpful Scripts utility functions for use in both browser and `node` environments\n[Github page](https://github.com/HelpfulScripts/hsUtil)\n\n## Index - no external dependencies:\n- &nbsp; {@link TimedPromise TimedPromise} functions that provide delays and timeouts for promises.\n- &nbsp; {@link CheckSum CheckSum} a quick checksum implementation for small strings\n- &nbsp; {@link Date Date} printf-style date formatting function\n- &nbsp; {@link round Number.round} rounding to n digits\n\n## Index - dependency on [showdown](https://www.npmjs.com/package/showdown)\n- &nbsp; {@link showdown showdown} an ES6 wrapper for the showdown library\n"
+				"text": "Helpful Scripts utility functions for use in both browser and `node` environments\n[`[Github page]`](https://github.com/HelpfulScripts/hsUtil)\n[`[Coverage Info]`](./data/src/hsUtil/coverage/)\n___\n\n## Index - no external dependencies:\n- &nbsp; {@link TimedPromise TimedPromise} functions that provide delays and timeouts for promises.\n- &nbsp; {@link CheckSum CheckSum} a quick checksum implementation for small strings\n- &nbsp; {@link Date Date} printf-style date formatting function\n- &nbsp; {@link round Number.round} rounding to n digits\n\n## Index - dependency on [showdown](https://www.npmjs.com/package/showdown)\n- &nbsp; {@link showdown showdown} an ES6 wrapper for the showdown library\n"
 			},
 			"sources": [
 				{
@@ -1412,7 +1295,7 @@
 			]
 		},
 		{
-			"id": 48,
+			"id": 60,
 			"name": "\"showdown\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -1422,7 +1305,7 @@
 			"originalName": "/Users/sth1pal/Documents/Development/JavaScript/nodejs/ts6/dev/hsLibs/standalone/hsUtil/src/showdown.ts",
 			"children": [
 				{
-					"id": 50,
+					"id": 62,
 					"name": "converter",
 					"kind": 32,
 					"kindString": "Variable",
@@ -1443,7 +1326,7 @@
 					"defaultValue": " new showdown.Converter()"
 				},
 				{
-					"id": 49,
+					"id": 61,
 					"name": "showdown",
 					"kind": 32,
 					"kindString": "Variable",
@@ -1464,7 +1347,7 @@
 					"defaultValue": " require('showdown')"
 				},
 				{
-					"id": 51,
+					"id": 63,
 					"name": "markDown",
 					"kind": 64,
 					"kindString": "Function",
@@ -1473,7 +1356,7 @@
 					},
 					"signatures": [
 						{
-							"id": 52,
+							"id": 64,
 							"name": "markDown",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -1483,7 +1366,7 @@
 							},
 							"parameters": [
 								{
-									"id": 53,
+									"id": 65,
 									"name": "text",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -1517,15 +1400,15 @@
 					"title": "Variables",
 					"kind": 32,
 					"children": [
-						50,
-						49
+						62,
+						61
 					]
 				},
 				{
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						51
+						63
 					]
 				}
 			],
@@ -1545,13 +1428,12 @@
 			"children": [
 				1,
 				5,
-				54,
-				59,
+				66,
 				41,
-				78,
-				79,
-				83,
-				48
+				71,
+				72,
+				76,
+				60
 			]
 		}
 	]

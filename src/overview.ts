@@ -2,7 +2,9 @@
  * # hsUtil
  * 
  * Helpful Scripts utility functions for use in both browser and `node` environments
- * [Github page](https://github.com/HelpfulScripts/hsUtil)
+ * [`[Github page]`](https://github.com/HelpfulScripts/hsUtil)
+ * [`[Coverage Info]`](./data/src/hsUtil/coverage/)
+ * ___
  * 
  * ## Index - no external dependencies:
  * - &nbsp; {@link TimedPromise TimedPromise} functions that provide delays and timeouts for promises.

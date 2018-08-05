@@ -1,7 +1,7 @@
 import { shortCheckSum } from './Checksum';
 
 describe('Checksum', () => {
-    test('shortCheckSum should exist', () => {
-        expect(shortCheckSum).toBeDefined();
+   it('should create correct checksum', () => {
+        expect(shortCheckSum('make checksum for this text')).toEqual('1234e6cd');
     });
 });
