@@ -85,3 +85,24 @@ export class Pace {
         }
     }
 }
+
+
+/**
+ * Sequentially calls the provided `tasks` in a `.then()` chain of promises, 
+ * guaranteeing the order of execution per index order in the array. 
+ * Each task can return a result, or a promise for a result.
+ * @param tasks an array of task calls to execute in sequence. Each call will pass the array of results for tasks so far executed.
+ * @param initialResult optional initial array to collect the task results.
+ */
+export function promiseChain<T>(tasks:((results:T[])=>T|Promise<T>)[], initialResult:T[]=[]): Promise<T[]> {
+    return tasks.reduce((chain:Promise<T[]>, task:(result:T[])=>T|Promise<T>): Promise<T[]> =>
+        // execute a task by chaining it to the previous ones via `.then()`
+        chain.then((_results:T[]) => Promise.resolve(task(_results)).then((r:T) => {
+            // add the task's result to the `results` array
+            _results.push(r);
+            return _results;
+        })), 
+        Promise.resolve(initialResult)
+    );
+}
+

@@ -12,7 +12,7 @@
                     height:90%;
             }
             code { padding: 5px 0;}</style></html><body>
-                <h1>src/TimedPromise.ts</h1>
+                <h1>src/promises.ts</h1>
                 <div class='listing'><code><span id=1 class="line">&nbsp;&nbsp;&nbsp;1</span><comment>/**<br>
 <span id=2 class="line">&nbsp;&nbsp;&nbsp;2</span>&nbsp;*&nbsp;##&nbsp;Helpful&nbsp;Script&nbsp;Timing&nbsp;Support<br>
 <span id=3 class="line">&nbsp;&nbsp;&nbsp;3</span>&nbsp;*&nbsp;Provides&nbsp;convenience&nbsp;functions&nbsp;that&nbsp;don't&nbsp;depend&nbsp;on&nbsp;specific&nbsp;frameworks&nbsp;or&nbsp;libraries&nbsp;<br>
@@ -100,6 +100,27 @@
 <span id=85 class="line">&nbsp;&nbsp;85</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
 <span id=86 class="line">&nbsp;&nbsp;86</span>&nbsp;&nbsp;&nbsp;&nbsp;}<br>
 <span id=87 class="line">&nbsp;&nbsp;87</span>}<br>
-<span id=88 class="line">&nbsp;&nbsp;88</span><br></code></div>
+<span id=88 class="line">&nbsp;&nbsp;88</span><br>
+<span id=89 class="line">&nbsp;&nbsp;89</span><br>
+<span id=90 class="line">&nbsp;&nbsp;90</span><comment>/**<br>
+<span id=91 class="line">&nbsp;&nbsp;91</span>&nbsp;*&nbsp;Sequentially&nbsp;calls&nbsp;the&nbsp;provided&nbsp;`tasks`&nbsp;in&nbsp;a&nbsp;`.then()`&nbsp;chain&nbsp;of&nbsp;promises,&nbsp;<br>
+<span id=92 class="line">&nbsp;&nbsp;92</span>&nbsp;*&nbsp;guaranteeing&nbsp;the&nbsp;order&nbsp;of&nbsp;execution&nbsp;per&nbsp;index&nbsp;order&nbsp;in&nbsp;the&nbsp;array.&nbsp;<br>
+<span id=93 class="line">&nbsp;&nbsp;93</span>&nbsp;*&nbsp;Each&nbsp;task&nbsp;can&nbsp;return&nbsp;a&nbsp;result,&nbsp;or&nbsp;a&nbsp;promise&nbsp;for&nbsp;a&nbsp;result.<br>
+<span id=94 class="line">&nbsp;&nbsp;94</span>&nbsp;*&nbsp;@param&nbsp;tasks&nbsp;an&nbsp;array&nbsp;of&nbsp;task&nbsp;calls&nbsp;to&nbsp;execute&nbsp;in&nbsp;sequence.&nbsp;Each&nbsp;call&nbsp;will&nbsp;pass&nbsp;the&nbsp;array&nbsp;of&nbsp;results&nbsp;for&nbsp;tasks&nbsp;so&nbsp;far&nbsp;executed.<br>
+<span id=95 class="line">&nbsp;&nbsp;95</span>&nbsp;*&nbsp;@param&nbsp;initialResult&nbsp;optional&nbsp;initial&nbsp;array&nbsp;to&nbsp;collect&nbsp;the&nbsp;task&nbsp;results.<br>
+<span id=96 class="line">&nbsp;&nbsp;96</span>&nbsp;*/</comment><br>
+<span id=97 class="line">&nbsp;&nbsp;97</span>export&nbsp;function&nbsp;promiseChain<T>(tasks:((results:T[])=>T|Promise<T>)[],&nbsp;initialResult:T[]=[]):&nbsp;Promise<T[]>&nbsp;{<br>
+<span id=98 class="line">&nbsp;&nbsp;98</span>&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;tasks.reduce((chain:Promise<T[]>,&nbsp;task:(result:T[])=>T|Promise<T>):&nbsp;Promise<T[]>&nbsp;=><br>
+<span id=99 class="line">&nbsp;&nbsp;99</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;execute&nbsp;a&nbsp;task&nbsp;by&nbsp;chaining&nbsp;it&nbsp;to&nbsp;the&nbsp;previous&nbsp;ones&nbsp;via&nbsp;`.then()`<br>
+<span id=100 class="line">&nbsp;100</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;chain.then((_results:T[])&nbsp;=>&nbsp;Promise.resolve(task(_results)).then((r:T)&nbsp;=>&nbsp;{<br>
+<span id=101 class="line">&nbsp;101</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;add&nbsp;the&nbsp;task's&nbsp;result&nbsp;to&nbsp;the&nbsp;`results`&nbsp;array<br>
+<span id=102 class="line">&nbsp;102</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_results.push(r);<br>
+<span id=103 class="line">&nbsp;103</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;_results;<br>
+<span id=104 class="line">&nbsp;104</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;})),&nbsp;<br>
+<span id=105 class="line">&nbsp;105</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Promise.resolve(initialResult)<br>
+<span id=106 class="line">&nbsp;106</span>&nbsp;&nbsp;&nbsp;&nbsp;);<br>
+<span id=107 class="line">&nbsp;107</span>}<br>
+<span id=108 class="line">&nbsp;108</span><br>
+<span id=109 class="line">&nbsp;109</span><br></code></div>
                 </body>
             

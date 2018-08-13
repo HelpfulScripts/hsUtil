@@ -6,3 +6,4 @@ export declare class Pace {
     constructor(pace?: number);
     add(fn: (msSinceAdding: number) => any): Promise<any>;
 }
+export declare function promiseChain<T>(tasks: ((results: T[]) => T | Promise<T>)[], initialResult?: T[]): Promise<T[]>;
