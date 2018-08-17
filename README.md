@@ -1,6 +1,6 @@
 hsUtil 
 ========
-[![npm version](https://badge.fury.io/js/hsutil.svg)](https://badge.fury.io/js/hsdatab) 
+[![npm version](https://badge.fury.io/js/hsutil.svg)](https://badge.fury.io/js/hsutil) 
 [![Build Status](https://travis-ci.org/HelpfulScripts/hsUtil.svg?branch=master)](https://travis-ci.org/HelpfulScripts/hsUtil)
 [![Coverage Status](https://coveralls.io/repos/github/HelpfulScripts/hsUtil/badge.svg)](https://coveralls.io/github/HelpfulScripts/hsUtil)
 [![Built with Grunt](https://cdn.gruntjs.com/builtwith.svg)](https://gruntjs.com/) 

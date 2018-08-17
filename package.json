@@ -8,6 +8,7 @@
     "showdown",
     "date-printf"
   ],
+  "license": "MIT",
   "description": "Helpful Scripts cross-framework libraries ",
   "homepage": "https://helpfulscripts.github.io/hsUtil/indexGH.html#!/api/hsUtil/0",
   "author": {
