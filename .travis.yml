@@ -2,8 +2,9 @@ language: node_js
 node_js:
   - "8"
 jobs:
-   include:
-      - stage: build
-        script: grunt build
-      - stage: test
-        script: grunt test
+  include:
+    - stage: build
+      script: grunt travis
+cache:
+  directories:
+    - "node_modules"
