@@ -7,8 +7,8 @@
  * ___
  * 
  * ## Index - no external dependencies:
- * - &nbsp; {@link TimedPromise TimedPromise} functions that provide delays and timeouts for promises.
- * - &nbsp; {@link CheckSum CheckSum} a quick checksum implementation for small strings
+ * - &nbsp; {@link promises promises} functions that provide delays and timeouts for promises.
+ * - &nbsp; {@link Checksum Checksum} a quick checksum implementation for small strings
  * - &nbsp; {@link Date Date} printf-style date formatting function
  * - &nbsp; {@link round Number.round} rounding to n digits
  * 

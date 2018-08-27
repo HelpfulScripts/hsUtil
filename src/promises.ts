@@ -43,7 +43,7 @@ export function delay(ms:number)   {
 }
 
 /**
- * @description ensures that a functions in a sequence are not executed faster than a preset minimum delay.
+ * @description ensures that function calls in a sequence are not executed faster than a preset minimum delay.
  * 
  * **Usage:** 
  * ```
@@ -56,6 +56,7 @@ export function delay(ms:number)   {
 export class Pace {
     private pace:number;    // the pace of calls in ms
     private waitUntil = 0;  // the earliest time for the next call
+    private waitCount = 0;  // number of calls currently in queue waiting
 
     /**
      * @param delay the minimum number of milliseconds between executions of 
@@ -64,6 +65,8 @@ export class Pace {
     constructor(pace=100) {
         this.pace = pace+5; // add 5ms margin. delay() may trigger a millisecond or two early
     }
+
+    getWaitCount() { return this.waitCount; }
 
     /**
      * adds the function to the queue. After an appropriate time has passed, 
@@ -79,7 +82,9 @@ export class Pace {
         } else {
             const diff = this.waitUntil - addTime;
             this.waitUntil += this.pace + 5;
+            this.waitCount++;
             return Promise.resolve().then(delay(diff)).then(() => {
+                this.waitCount--;
                 return fn(Date.now()-addTime);
             });
         }

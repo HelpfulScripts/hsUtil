@@ -84,11 +84,14 @@ describe('Promise', () => {
     
         test(`check results`, () => {
             expect.assertions(3*calls.length);
-            return results.then(res => res.map(r => {
-                expect(Math.abs(r.reportedWait-r.internalWait)).toBeLessThan(2);
-                expect(r.internalWait).toBeGreaterThanOrEqual(r.id*wait);
-                expect(r.internalWait).toBeLessThanOrEqual(r.id*wait+50);
-            }));
+            return Promise.all([
+                // results.then(() => expect(queue.getWaitCount()).toBeGreaterThan(3)),
+                results.then(res => res.map(r => {
+                    expect(Math.abs(r.reportedWait-r.internalWait)).toBeLessThan(2);
+                    expect(r.internalWait).toBeGreaterThanOrEqual(r.id*wait);
+                    expect(r.internalWait).toBeLessThanOrEqual(r.id*wait+50);
+                }))
+            ]);
         });
     });
 
@@ -122,10 +125,10 @@ describe('Promise', () => {
             return promiseChain(delays.map(d => doDelay(d)), [])
                 .then((res:callResult[]) => Promise.all([
                     expect(res[0].ms).toEqual(1000),
-                    expect(res[0].at).toBeLessThan(res[1].at),
-                    expect(res[0].at).toBeLessThan(res[2].at),
+                    expect(res[0].at).toBeLessThanOrEqual(res[1].at),
+                    expect(res[0].at).toBeLessThanOrEqual(res[2].at),
                     expect(res[1].ms).toEqual(10),
-                    expect(res[1].at).toBeLessThan(res[2].at),
+                    expect(res[1].at).toBeLessThanOrEqual(res[2].at),
                     expect(res[2].ms).toEqual(1),
                 ]));
         });
