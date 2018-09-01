@@ -1442,7 +1442,7 @@
 											"kindString": "Call signature",
 											"flags": {},
 											"comment": {
-												"shortText": "Simplifies node `util.examine` call.\nUsage: `log.info(log.examine(struct, 1))`"
+												"shortText": "Simplifies node `util.inspect` call.\nUsage: `log.info(log.inspect(struct, 1))`"
 											},
 											"parameters": [
 												{
@@ -1452,7 +1452,7 @@
 													"kindString": "Parameter",
 													"flags": {},
 													"comment": {
-														"text": "the object literal to examine"
+														"text": "the object literal to inspect"
 													},
 													"type": {
 														"type": "intrinsic",
@@ -2288,7 +2288,7 @@
 					"sources": [
 						{
 							"fileName": "log.ts",
-							"line": 264,
+							"line": 263,
 							"character": 15
 						}
 					]

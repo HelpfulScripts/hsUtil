@@ -439,8 +439,7 @@
 <a name='L391'></a><a href='#L391'>391</a>
 <a name='L392'></a><a href='#L392'>392</a>
 <a name='L393'></a><a href='#L393'>393</a>
-<a name='L394'></a><a href='#L394'>394</a>
-<a name='L395'></a><a href='#L395'>395</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L394'></a><a href='#L394'>394</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -701,7 +700,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
@@ -1078,9 +1076,9 @@ export type LogType = {
     config(cfg:{colors?:boolean, format?:string, level?:symbol }):void;
 &nbsp;
     /**
-     * Simplifies node `util.examine` call.
-     * Usage: `log.info(log.examine(struct, 1))`
-     * @param msg the object literal to examine
+     * Simplifies node `util.inspect` call.
+     * Usage: `log.info(log.inspect(struct, 1))`
+     * @param msg the object literal to inspect
      * @param depth depth of recursion, defaults to 1. Use `null` for infinite depth
      */
     inspect(msg:any, depth?:number):string;
@@ -1095,7 +1093,6 @@ type peType  = (path:string)=&gt;Promise&lt;boolean&gt;;
 &nbsp;
 /** the global log object */
 export const log:LogType = create('', utils_logToFile, utils_pathExists);
-&nbsp;
 &nbsp;
 function create(_prefix:string, logToFile:ltfType, pathExists:peType):LogType {
     const context = {
