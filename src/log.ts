@@ -126,7 +126,8 @@ const color = {
 };
 
 
-export interface LogType {
+export type LogType = {
+    (_prefix:string, logToFile?:ltfType, pathExists?:peType): LogType;
     DEBUG:  symbol;
     INFO:   symbol;
     WARN:   symbol;
@@ -241,13 +242,13 @@ export interface LogType {
     config(cfg:{colors?:boolean, format?:string, level?:symbol }):void;
 
     /**
-     * Simplifies node `util.inspect` call.
-     * Usage: `log.info(log.inspect(struct, 1))`
-     * @param msg the object literal to inspect
+     * Simplifies node `util.examine` call.
+     * Usage: `log.info(log.examine(struct, 1))`
+     * @param msg the object literal to examine
      * @param depth depth of recursion, defaults to 1. Use `null` for infinite depth
      */
     inspect(msg:any, depth?:number):string;
-}
+};
 
 type ltfType = (filename:string, msg:string)=>Promise<string>;
 type peType  = (path:string)=>Promise<boolean>;
@@ -257,9 +258,10 @@ function utils_pathExists(path:string):Promise<boolean> { return Promise.resolve
 
 
 /** the global log object */
-export const log = create('', utils_logToFile, utils_pathExists);
+export const log:LogType = create('', utils_logToFile, utils_pathExists);
 
-function create(_prefix:string, logToFile:ltfType, pathExists:peType) {
+
+function create(_prefix:string, logToFile:ltfType, pathExists:peType):LogType {
     const context = {
         level:      <LevelDesc>undefined,
         prefix:     _prefix,
@@ -354,47 +356,39 @@ function create(_prefix:string, logToFile:ltfType, pathExists:peType) {
         if (cfg.level!==undefined)  { level(cfg.level); }               // e.g. INFO
     }
 
-    function inspect(msg:any, depth=1):string {
-        function _inspect(msg:any, depth:number, indent:number) {
-            let result = '';
-            const space = ' '.repeat(3*indent);
-            if (typeof msg === 'function') { 
-                result = 'function';
-            } else if (typeof msg === 'object') {
-                if (depth===0) { 
-                    result = '...';
-                } else if (msg.length) {
-                    result = `[${msg.join(', ')}]`;
-                } else {
-                    result = '{\n' + Object.keys(msg).map(k => 
-                        `   ${space}${k}: ${_inspect(msg[k], depth-1, indent+1)}`).join(',\n') + `\n${space}}`;
-                }
-            } else if (typeof msg === 'string') {
-                result = `"${msg}"`;
-            } else {
-                result = msg;
-            }
-            return result;
-        }
-        return _inspect(msg, depth, 0);
+    function inspect(msg:any, depth=1, indent=''):string {
+        if (depth===null) { depth = 999; }
+        if (msg === null) { return 'null'; }
+        if (typeof msg === 'function') { return 'function'; }
+        if (typeof msg === 'string') { return `'${msg}'`; }
+        if (typeof msg === 'object') {
+            if (depth<0) { return (msg.length===undefined)? '{...}' : '[...]'; }
+            if (msg.length !== undefined) { return `[${msg.map((e:any)=>(e===undefined)?'':inspect(e, depth-1, indent)).join(', ')}]`; }
+            return '{\n' + Object.keys(msg).map(k => `   ${indent}${k}: ${
+                inspect(msg[k], depth-1, indent+'   ')
+            }`).join(',\n') + `\n${indent}}`;
+        } 
+        return msg.toString();
     }
 
-    const result:any = (prefix:string, logToFile=context.logToFile, pathExists=context.pathExists) => create(prefix, logToFile, pathExists);
-    result.DEBUG    = DEBUG;
-    result.INFO     = INFO;
-    result.WARN     = WARN;
-    result.ERROR    = ERROR;
-    result.level    = level;
-    result.debug    = debug;
-    result.info     = info;
-    result.warn     = warn;
-    result.error    = error;
-    result.format   = format;
-    result.prefix   = prefix;
-    result.out      = out;
-    result.logFile  = logFile;
-    result.config   = config;
-    result.inspect  = inspect;
-    return result;
+    const newLog:any = function(prefix:string, logToFile=context.logToFile, pathExists=context.pathExists) { 
+        return create(prefix, logToFile, pathExists);
+    };
+    newLog.DEBUG    = DEBUG;
+    newLog.INFO     = INFO;
+    newLog.WARN     = WARN;
+    newLog.ERROR    = ERROR;
+    newLog.level    = level;
+    newLog.debug    = debug;
+    newLog.info     = info;
+    newLog.warn     = warn;
+    newLog.error    = error;
+    newLog.format   = format;
+    newLog.prefix   = prefix;
+    newLog.out      = out;
+    newLog.logFile  = logFile;
+    newLog.config   = config;
+    newLog.inspect  = inspect;
+    return newLog;
 }
 

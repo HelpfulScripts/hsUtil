@@ -149,11 +149,14 @@ describe('log', () => {
 
     describe('inspect', () => {
         const t = {a: 'aa', b: {c:()=>'result'}};
-        test('create inspection level 1', () => {
-            expect(log.inspect(t)).toEqual('{\n   a: "aa",\n   b: ...\n}');
+        test('create inspection level 0', () => {
+            expect(log.inspect(t, 0)).toEqual("{\n   a: 'aa',\n   b: {...}\n}");
         });
         test('create inspection level infinite depth', () => {
-            expect(log.inspect(t, null)).toEqual('{\n   a: "aa",\n   b: {\n      c: function\n   }\n}');
+            expect(log.inspect(t, null)).toEqual("{\n   a: 'aa',\n   b: {\n      c: function\n   }\n}");
+        });
+        test('create inspection array infinite depth', () => {
+            expect(log.inspect([t], null)).toEqual("[{\n   a: 'aa',\n   b: {\n      c: function\n   }\n}]");
         });
     });    
 });

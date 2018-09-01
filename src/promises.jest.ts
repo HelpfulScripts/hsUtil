@@ -14,7 +14,7 @@ describe('Promise', () => {
             return timeout(wait)
             .then(() => { throw `unexpected 'then' call`; })
             .catch(() => Promise.all([
-                expect(Math.abs(Date.now()-now)).toBeGreaterThanOrEqual(wait),
+                expect(Math.abs(Date.now()-now)).toBeGreaterThanOrEqual(wait-10),
                 expect(Math.abs(Date.now()-now)).toBeLessThan(wait+50),
             ]));
         });
@@ -30,7 +30,7 @@ describe('Promise', () => {
                 // resolves after <wait> ms
                 return Promise.resolve('abc').then(delay(wait))
                 .then(res => Promise.all([
-                    expect(Math.abs(Date.now()-now)).toBeGreaterThanOrEqual(wait),
+                    expect(Math.abs(Date.now()-now)).toBeGreaterThanOrEqual(wait-2),
                     expect(Math.abs(Date.now()-now)).toBeLessThan(wait+50),
                     expect(res).toEqual('abc')
                 ]))
@@ -45,7 +45,7 @@ describe('Promise', () => {
                 // resolves after <wait> ms
                 return delay(wait)('abc')
                 .then(res => Promise.all([
-                    expect(Math.abs(Date.now()-now)).toBeGreaterThanOrEqual(wait),
+                    expect(Math.abs(Date.now()-now)).toBeGreaterThanOrEqual(wait-2),
                     expect(Math.abs(Date.now()-now)).toBeLessThan(wait+50),
                     expect(res).toEqual('abc')
                 ]))
