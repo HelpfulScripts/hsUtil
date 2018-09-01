@@ -242,9 +242,9 @@ export type LogType = {
     config(cfg:{colors?:boolean, format?:string, level?:symbol }):void;
 
     /**
-     * Simplifies node `util.examine` call.
-     * Usage: `log.info(log.examine(struct, 1))`
-     * @param msg the object literal to examine
+     * Simplifies node `util.inspect` call.
+     * Usage: `log.info(log.inspect(struct, 1))`
+     * @param msg the object literal to inspect
      * @param depth depth of recursion, defaults to 1. Use `null` for infinite depth
      */
     inspect(msg:any, depth?:number):string;
@@ -259,7 +259,6 @@ function utils_pathExists(path:string):Promise<boolean> { return Promise.resolve
 
 /** the global log object */
 export const log:LogType = create('', utils_logToFile, utils_pathExists);
-
 
 function create(_prefix:string, logToFile:ltfType, pathExists:peType):LogType {
     const context = {
