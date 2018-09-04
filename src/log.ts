@@ -138,15 +138,15 @@ export type LogType = {
      * Valid values are {@link hsNode.log.DEBUG DEBUG}, {@link hsNode.log.INFO INFO}, 
      * {@link hsNode.log.WARN WARN}, {@link hsNode.log.ERROR ERROR}, or `null`.
      * Subsequent reporting calls will be filtered such that only calls with an importance 
-     * at least the same as `newLevel` will be written to the log.
+     * at least the same as `newLevel` will be written to the log.<p>
      * 
      * By default, `newLevel` sets the reporting level for the module only, and takes precedence over
-     * any global level setting. Providing `null` as level value passes precedence back to the global setting.\
-     * THis allows for simple per-module settings, for example in debugging scenarios.
+     * any global level setting. Providing `null` as level value passes precedence back to the global setting.
+     * This allows for simple per-module settings, for example in debugging scenarios.
      * @param newLevelSym the new reporting level to set. 
      * If omitted, the method returns the currently set reporting level. 
      * If set to `null`, the module's local reporting level defaults to the global reporting level; `setGlobalLevel` is ignored.
-     * @param setGlobalLevel if true, sets the global reporting level for all modules. 
+     * @param setGlobalLevel defaults to `false`. If `true`, sets the global reporting level for all modules. 
      * @return the new reporting level (DEBUG, INFO, ERROR)
      */
     level(newLevelSym?:symbol, setGlobalLevel?:boolean):symbol;
@@ -204,11 +204,12 @@ export type LogType = {
      * sets a new logfile name template. Logfiles are created using this template 
      * at the time of each log entry call. If the file exists, the log entry will be appended.
      * This is a global setting that affects reporting in all modules.
-     * @param file a template to use for log file names. Options for calling:
-     * - `logFile()`: return current logfile template without changing the template
+     * Usage:
+     * - `logFile()`: return the current logfile name
      * - `logFile(null)`: disable log file
      * - `logFile('')`: set default log file template `log-%YYYY-%MM-%DD.txt`
      * - `logFile('log%D/%M/%Y.log')`: set new log file template
+     * @param file a template to use for log file names. Options for calling:
      * @return promise to return the current logfile, or `undefined` if loggimng is disabled.
      */
     logFile(file?:string):Promise<string>;
@@ -217,9 +218,10 @@ export type LogType = {
      * sets the format string to use for logging. If no parameter is specified,
      * the function returns the currently set format string. The preset is '%YYYY%MM%DD %hh:%mm:%ss.%jjj'
      * For supported formats see {@link date date}.
-     * @param fmtStr optional format string to use; 
+     * Usage
      * - `format(null)` sets the format to `defDateFormat` 
      * - `format()` returns the current format without changing it.
+     * @param fmtStr optional format string to use; 
      * @return the currently set format string
      */
     format(fmtStr?:string):string;
