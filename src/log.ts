@@ -135,10 +135,10 @@ export type LogType = {
 
     /**
      * sets the reporting level according to `newLevel`. 
-     * Valid values are {@link hsNode.log.DEBUG DEBUG}, {@link hsNode.log.INFO INFO}, 
-     * {@link hsNode.log.WARN WARN}, {@link hsNode.log.ERROR ERROR}, or `null`.
+     * Valid values are {@link log.DEBUG log.DEBUG}, {@link log.INFO log.INFO}, 
+     * {@link log.WARN log.WARN}, {@link log.ERROR log.ERROR}, or `null`.
      * Subsequent reporting calls will be filtered such that only calls with an importance 
-     * at least the same as `newLevel` will be written to the log.<p>
+     * at least the same as `newLevel` will be written to the log.<br>
      * 
      * By default, `newLevel` sets the reporting level for the module only, and takes precedence over
      * any global level setting. Providing `null` as level value passes precedence back to the global setting.
@@ -147,7 +147,7 @@ export type LogType = {
      * If omitted, the method returns the currently set reporting level. 
      * If set to `null`, the module's local reporting level defaults to the global reporting level; `setGlobalLevel` is ignored.
      * @param setGlobalLevel defaults to `false`. If `true`, sets the global reporting level for all modules. 
-     * @return the new reporting level (DEBUG, INFO, ERROR)
+     * @return the new reporting level (DEBUG, INFO, WARN, ERROR)
      */
     level(newLevelSym?:symbol, setGlobalLevel?:boolean):symbol;
 
@@ -358,11 +358,12 @@ function create(_prefix:string, logToFile:ltfType, pathExists:peType):LogType {
     }
 
     function inspect(msg:any, depth=1, indent=''):string {
-        if (depth===null) { depth = 999; }
-        if (msg === null) { return 'null'; }
-        if (typeof msg === 'function') { return 'function'; }
-        if (typeof msg === 'string') { return `'${msg}'`; }
-        if (typeof msg === 'object') {
+        if (depth===null)               { depth = 999; }
+        if (msg === null)               { return 'null'; }
+        if (msg === undefined)          { return 'undefined'; }
+        if (typeof msg === 'function')  { return 'function'; }
+        if (typeof msg === 'string')    { return `'${msg}'`; }
+        if (typeof msg === 'object')    {
             if (depth<0) { return (msg.length===undefined)? '{...}' : '[...]'; }
             if (msg.length !== undefined) { return `[${msg.map((e:any)=>(e===undefined)?'':inspect(e, depth-1, indent)).join(', ')}]`; }
             return '{\n' + Object.keys(msg).map(k => `   ${indent}${k}: ${

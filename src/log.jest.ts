@@ -158,5 +158,9 @@ describe('log', () => {
         test('create inspection array infinite depth', () => {
             expect(log.inspect([t], null)).toEqual("[{\n   a: 'aa',\n   b: {\n      c: function\n   }\n}]");
         });
+        test('inspect undefined', () => {
+            expect(log.inspect(undefined, null)).toEqual("undefined");
+            expect(log.inspect([undefined], null)).toEqual("[]");
+        });
     });    
 });
