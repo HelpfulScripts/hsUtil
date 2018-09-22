@@ -54,9 +54,10 @@ export function delay(ms:number)   {
  * ```
  */
 export class Pace {
-    private pace:number;    // the pace of calls in ms
-    private waitUntil = 0;  // the earliest time for the next call
-    private waitCount = 0;  // number of calls currently in queue waiting
+    private pace:number;      // the pace of calls in ms
+    private waitUntil   = 0;  // the earliest time for the next call
+    private waitCount   = 0;  // number of calls currently in queue waiting
+    private beingCalled = 0;  // registered functiuons that have been called , but have not resolved yet.
 
     /**
      * @param delay the minimum number of milliseconds between executions of 
@@ -66,7 +67,8 @@ export class Pace {
         this.pace = pace+5; // add 5ms margin. delay() may trigger a millisecond or two early
     }
 
-    getWaitCount() { return this.waitCount; }
+    getWaitCount()    { return this.waitCount; }
+    getCallingCount() { return this.beingCalled; }
 
     /**
      * adds the function to the queue. After an appropriate time has passed, 
@@ -76,18 +78,19 @@ export class Pace {
      */
     add(fn: (msSinceAdding:number) => any):Promise<any> {
         const addTime = Date.now();
-        if (this.waitUntil < addTime) {
-            this.waitUntil = addTime + this.pace;
-            return Promise.resolve(fn(Date.now()-addTime));
-        } else {
-            const diff = this.waitUntil - addTime;
-            this.waitUntil += this.pace + 5;
-            this.waitCount++;
-            return Promise.resolve().then(delay(diff)).then(() => {
-                this.waitCount--;
-                return fn(Date.now()-addTime);
-            });
-        }
+        if (this.waitUntil < addTime) { this.waitUntil = addTime; }
+        const diff = this.waitUntil - addTime;
+        this.waitUntil += this.pace + 5;
+        this.waitCount++;
+        return delay(diff)().then(() => {
+            this.waitCount--;
+            this.beingCalled++;
+            return fn(Date.now()-addTime);
+        })
+        .then((ret:any) => {
+            this.beingCalled--;
+            return ret;
+        });
     }
 }
 

@@ -65,6 +65,7 @@ describe('Promise', () => {
             }
             exec(reportedMS:number):any { 
                 this.end   = Date.now(); 
+                console.log(`exec: internal: ${this.end-this.start}, reported: ${reportedMS}`);                    
                 return {id: this.id, internalWait: this.end-this.start, reportedWait: reportedMS};
             }
         }
@@ -76,22 +77,22 @@ describe('Promise', () => {
         let results;
     
         // add a call for each element in calls, then wait for all to have beed called.
-        beforeAll(() => results = Promise.all(calls.map(i => {
+        beforeAll(() => results = calls.map(i => {
             const test = new Test(i);
             return queue.add(test.exec.bind(test));
-            }))
+            })
         );
     
         test(`check results`, () => {
             expect.assertions(3*calls.length);
-            return Promise.all([
-                // results.then(() => expect(queue.getWaitCount()).toBeGreaterThan(3)),
-                results.then(res => res.map(r => {
+            return Promise.all(
+                results.map(async result => {
+                    const r = await result;
                     expect(Math.abs(r.reportedWait-r.internalWait)).toBeLessThan(2);
                     expect(r.internalWait).toBeGreaterThanOrEqual(r.id*wait);
                     expect(r.internalWait).toBeLessThanOrEqual(r.id*wait+50);
-                }))
-            ]);
+                }) 
+            );
         });
     });
 
