@@ -56,7 +56,7 @@
 <span id=41 class="line">&nbsp;&nbsp;41</span>&nbsp;*&nbsp;@returns&nbsp;a&nbsp;copy&nbsp;of&nbsp;`formatString`&nbsp;where&nbsp;all&nbsp;supported&nbsp;patterns&nbsp;are&nbsp;replaced&nbsp;by&nbsp;the&nbsp;respective&nbsp;values&nbsp;from&nbsp;`date`.<br>
 <span id=42 class="line">&nbsp;&nbsp;42</span>&nbsp;*/</comment><br>
 <span id=43 class="line">&nbsp;&nbsp;43</span>export&nbsp;function&nbsp;date(formatString:string,&nbsp;date=new&nbsp;Date()):string&nbsp;{<br>
-<span id=44 class="line">&nbsp;&nbsp;44</span>&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;isNaN(&nbsp;date.getTime()&nbsp;)?<br>
+<span id=44 class="line">&nbsp;&nbsp;44</span>&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;(typeof&nbsp;formatString&nbsp;!==&nbsp;'string'&nbsp;||&nbsp;isNaN(date.getTime()))&nbsp;?<br>
 <span id=45 class="line">&nbsp;&nbsp;45</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'invalid':<br>
 <span id=46 class="line">&nbsp;&nbsp;46</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;formatString<br>
 <span id=47 class="line">&nbsp;&nbsp;47</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.replace(/%YYYY/g,	''+date.getFullYear())<br>

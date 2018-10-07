@@ -775,7 +775,7 @@
 			]
 		},
 		{
-			"id": 188,
+			"id": 181,
 			"name": "\"index\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -2203,7 +2203,7 @@
 					}
 				},
 				{
-					"id": 182,
+					"id": 175,
 					"name": "log",
 					"kind": 32,
 					"kindString": "Variable",
@@ -2217,7 +2217,7 @@
 					"sources": [
 						{
 							"fileName": "log.ts",
-							"line": 263,
+							"line": 259,
 							"character": 16
 						}
 					],
@@ -2226,24 +2226,24 @@
 						"name": "LogType",
 						"id": 111
 					},
-					"defaultValue": " create('', utils_logToFile, utils_pathExists)"
+					"defaultValue": " create('', \n    (filename:string, msg:string):Promise<string> => Promise.resolve(undefined), \n    /** default implementation for browser usage: don't allow '/' in log file name */\n    (path:string):Promise<boolean> =>Promise.resolve(path.indexOf('/')>=0? false : true)\n)"
 				},
 				{
-					"id": 183,
+					"id": 176,
 					"name": "create",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 184,
+							"id": 177,
 							"name": "create",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 185,
+									"id": 178,
 									"name": "_prefix",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2254,7 +2254,7 @@
 									}
 								},
 								{
-									"id": 186,
+									"id": 179,
 									"name": "logToFile",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2266,7 +2266,7 @@
 									}
 								},
 								{
-									"id": 187,
+									"id": 180,
 									"name": "pathExists",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2290,109 +2290,6 @@
 							"fileName": "log.ts",
 							"line": 265,
 							"character": 15
-						}
-					]
-				},
-				{
-					"id": 175,
-					"name": "utils_logToFile",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {},
-					"signatures": [
-						{
-							"id": 176,
-							"name": "utils_logToFile",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"parameters": [
-								{
-									"id": 177,
-									"name": "filename",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "intrinsic",
-										"name": "string"
-									}
-								},
-								{
-									"id": 178,
-									"name": "msg",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "intrinsic",
-										"name": "string"
-									}
-								}
-							],
-							"type": {
-								"type": "reference",
-								"name": "Promise",
-								"typeArguments": [
-									{
-										"type": "intrinsic",
-										"name": "string"
-									}
-								]
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "log.ts",
-							"line": 258,
-							"character": 24
-						}
-					]
-				},
-				{
-					"id": 179,
-					"name": "utils_pathExists",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {},
-					"signatures": [
-						{
-							"id": 180,
-							"name": "utils_pathExists",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"parameters": [
-								{
-									"id": 181,
-									"name": "path",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "intrinsic",
-										"name": "string"
-									}
-								}
-							],
-							"type": {
-								"type": "reference",
-								"name": "Promise",
-								"typeArguments": [
-									{
-										"type": "intrinsic",
-										"name": "boolean"
-									}
-								]
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "log.ts",
-							"line": 259,
-							"character": 25
 						}
 					]
 				},
@@ -2762,16 +2659,14 @@
 						102,
 						100,
 						94,
-						182
+						175
 					]
 				},
 				{
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						183,
-						175,
-						179
+						176
 					]
 				},
 				{
@@ -2792,7 +2687,7 @@
 			]
 		},
 		{
-			"id": 189,
+			"id": 182,
 			"name": "\"overview\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -3579,9 +3474,9 @@
 				1,
 				5,
 				80,
-				188,
+				181,
 				85,
-				189,
+				182,
 				41,
 				74
 			]

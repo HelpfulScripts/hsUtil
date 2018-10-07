@@ -255,12 +255,12 @@ export type LogType = {
 type ltfType = (filename:string, msg:string)=>Promise<string>;
 type peType  = (path:string)=>Promise<boolean>;
 
-function utils_logToFile(filename:string, msg:string):Promise<string> { return Promise.resolve(undefined); }
-function utils_pathExists(path:string):Promise<boolean> { return Promise.resolve(true); }
-
-
 /** the global log object */
-export const log:LogType = create('', utils_logToFile, utils_pathExists);
+export const log:LogType = create('', 
+    (filename:string, msg:string):Promise<string> => Promise.resolve(undefined), 
+    /** default implementation for browser usage: don't allow '/' in log file name */
+    (path:string):Promise<boolean> =>Promise.resolve(path.indexOf('/')>=0? false : true)
+);
 
 function create(_prefix:string, logToFile:ltfType, pathExists:peType):LogType {
     const context = {

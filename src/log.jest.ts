@@ -1,5 +1,6 @@
 
-import { log as gLog }      from './log';  const log = gLog('log.jest');
+import { log as _log }  from './log';  const log = _log('log.jest');
+import { date }         from './Date';
 
 describe('log', () => {
     let gLog: any;
@@ -37,6 +38,13 @@ describe('log', () => {
     );
     
     describe('reporting functions', () => {
+        it('should print default info', () =>
+            _log.info("yes").then(() => { 
+                expect(_log.level()).toBe(_log.INFO);
+                expect(gMsg).toMatch(/INFO.*yes/); 
+            }) 
+        );
+        
         it('should print info', () =>
             log.info("yes").then(() => { 
                 expect(log.level()).toBe(log.INFO);
@@ -118,6 +126,32 @@ describe('log', () => {
             return expect(gMsg).toMatch(/INFO.*yes/);  
         });
     });
+
+    describe('logFile', () => {
+        it('should disable logfile', async () => {
+            await log.logFile(null);
+            return expect(await log.logFile()).toBe('invalid');
+        });
+        it('should return current logfile name', async () => {
+            await log.logFile('a.log');
+            return expect(await log.logFile()).toMatch('a.log');
+        });
+        it('should set default logfile name', async () => {
+            const name = date('log-%YYYY-%MM-%DD.txt');
+            await log.logFile('');
+            return expect(await log.logFile()).toMatch(name);
+        });
+        it('should set logfile name', async () => {
+            const name = 'log%D-%M-%YY.log';
+            await log.logFile(name);
+            return expect(await log.logFile()).toMatch(date(name));
+        });
+        it('should disable logfile for invalid path', async () => {
+            const name = './hui/log%D-%M-%Y.log';
+            await log.logFile(name);
+            return expect(await log.logFile()).toMatch('invalid');
+        });
+    });
     
     describe('formatting', () => {
         afterEach(() => log.format(null));   // reset the date format
@@ -149,18 +183,36 @@ describe('log', () => {
 
     describe('inspect', () => {
         const t = {a: 'aa', b: {c:()=>'result'}};
-        test('create inspection level 0', () => {
+        it('should inspect at level 0', () => {
             expect(log.inspect(t, 0)).toEqual("{\n   a: 'aa',\n   b: {...}\n}");
         });
-        test('create inspection level infinite depth', () => {
+        it('should inspect at infinite depth', () => {
             expect(log.inspect(t, null)).toEqual("{\n   a: 'aa',\n   b: {\n      c: function\n   }\n}");
         });
-        test('create inspection array infinite depth', () => {
+        it('should inspect array at infinite depth', () => {
             expect(log.inspect([t], null)).toEqual("[{\n   a: 'aa',\n   b: {\n      c: function\n   }\n}]");
         });
-        test('inspect undefined', () => {
+        it('should inspect undefined', () => {
             expect(log.inspect(undefined, null)).toEqual("undefined");
             expect(log.inspect([undefined], null)).toEqual("[]");
         });
+        it('should inspect null', () => {
+            expect(log.inspect(null, null)).toEqual("null");
+            expect(log.inspect([null], null)).toEqual("[null]");
+        });
+        it('should inspect boolean', () => {
+            expect(log.inspect(true, null)).toEqual("true");
+        });
     });    
+
+    describe('config', () => {
+        it('should set debug level', () => {
+            log.config({level:log.DEBUG});
+            return expect(log.level()).toBe(log.DEBUG);
+        });
+        it('should set colors', () => {
+            log.config({colors:true});
+            return expect(log.level()).toBe(log.INFO);
+        });
+    });
 });
