@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">93.94% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>31/33</span>
+        <span class='fraction'>33/33</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">75% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>3/4</span>
+        <span class='fraction'>4/4</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">87.5% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>14/16</span>
+        <span class='fraction'>16/16</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">93.1% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>27/29</span>
+        <span class='fraction'>29/29</span>
       </div>
     </div>
     <p class="quiet">
@@ -231,8 +231,8 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -347,8 +347,8 @@ export class Pace {
         this.pace = pace+5; // add 5ms margin. delay() may trigger a millisecond or two early
     }
 &nbsp;
-<span class="fstat-no" title="function not covered" >    getWaitCount</span>()    { <span class="cstat-no" title="statement not covered" >return this.waitCount; </span>}
-<span class="fstat-no" title="function not covered" >    getCallingCount</span>() { <span class="cstat-no" title="statement not covered" >return this.beingCalled; </span>}
+    getWaitCount()    { return this.waitCount; }
+    getCallingCount() { return this.beingCalled; }
 &nbsp;
     /**
      * adds the function to the queue. After an appropriate time has passed, 
@@ -382,7 +382,7 @@ export class Pace {
  * @param tasks an array of task calls to execute in sequence. Each call will pass the array of results for tasks so far executed.
  * @param initialResult optional initial array to collect the task results.
  */
-export function promiseChain&lt;T&gt;(tasks:((results:T[])=&gt;T|Promise&lt;T&gt;)[], initialResult:T[]=<span class="branch-0 cbranch-no" title="branch not covered" >[])</span>: Promise&lt;T[]&gt; {
+export function promiseChain&lt;T&gt;(tasks:((results:T[])=&gt;T|Promise&lt;T&gt;)[], initialResult:T[]=[]): Promise&lt;T[]&gt; {
     return tasks.reduce((chain:Promise&lt;T[]&gt;, task:(result:T[])=&gt;T|Promise&lt;T&gt;): Promise&lt;T[]&gt; =&gt;
         // execute a task by chaining it to the previous ones via `.then()`
         chain.then((_results:T[]) =&gt; Promise.resolve(task(_results)).then((r:T) =&gt; {

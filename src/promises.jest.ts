@@ -83,6 +83,12 @@ describe('Promise', () => {
             })
         );
     
+        test(`calling count`, () => {
+            expect(queue.getCallingCount()).toBe(0);
+        });
+        test(`wait count`, () => {
+            expect(queue.getWaitCount()).toBe(5);
+        });
         test(`check results`, () => {
             expect.assertions(3*calls.length);
             return Promise.all(
@@ -123,7 +129,7 @@ describe('Promise', () => {
         });
         it('should resolve in sequence of array: 1000, 10, 1', () => {
             expect.assertions(6);
-            return promiseChain(delays.map(d => doDelay(d)), [])
+            return promiseChain(delays.map(d => doDelay(d)))  // start from []
                 .then((res:callResult[]) => Promise.all([
                     expect(res[0].ms).toEqual(1000),
                     expect(res[0].at).toBeLessThanOrEqual(res[1].at),

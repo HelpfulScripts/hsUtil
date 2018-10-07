@@ -337,7 +337,7 @@ FN:106,(anonymous_13)
 FN:108,(anonymous_14)
 FN:108,(anonymous_15)
 FNF:16
-FNH:14
+FNH:16
 FNDA:1,timeout
 FNDA:1,(anonymous_1)
 FNDA:13,delay
@@ -345,8 +345,8 @@ FNDA:13,(anonymous_3)
 FNDA:13,(anonymous_4)
 FNDA:13,(anonymous_5)
 FNDA:1,(anonymous_6)
-FNDA:0,(anonymous_7)
-FNDA:0,(anonymous_8)
+FNDA:1,(anonymous_7)
+FNDA:1,(anonymous_8)
 FNDA:5,(anonymous_9)
 FNDA:5,(anonymous_10)
 FNDA:5,(anonymous_11)
@@ -365,8 +365,8 @@ DA:58,1
 DA:59,1
 DA:60,1
 DA:67,1
-DA:70,0
-DA:71,0
+DA:70,1
+DA:71,1
 DA:80,5
 DA:81,5
 DA:82,5
@@ -384,13 +384,13 @@ DA:108,3
 DA:110,3
 DA:111,3
 LF:29
-LH:27
+LH:29
 BRDA:66,0,0,1
 BRDA:81,1,0,1
 BRDA:81,1,1,4
-BRDA:105,2,0,0
+BRDA:105,2,0,1
 BRF:4
-BRH:3
+BRH:4
 end_of_record
 TN:
 SF:/Users/sth1pal/Documents/Development/JavaScript/nodejs/ts6/dev/hsLibs/standalone/hsUtil/src/showdown.ts
