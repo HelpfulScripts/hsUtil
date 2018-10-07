@@ -41,7 +41,7 @@ function formatNumber(number:number, digits:number):string {
  * @returns a copy of `formatString` where all supported patterns are replaced by the respective values from `date`.
  */
 export function date(formatString:string, date=new Date()):string {
-    return isNaN( date.getTime() )?
+    return (typeof formatString !== 'string' || isNaN(date.getTime())) ?
         'invalid':
         formatString
             .replace(/%YYYY/g,	''+date.getFullYear())
