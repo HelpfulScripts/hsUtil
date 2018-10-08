@@ -159,7 +159,7 @@ export type LogType = {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the file written to, or undefined
      */
-    debug(msg:string, log?:boolean):Promise<string>;
+    debug(msg:any, log?:boolean):Promise<string>;
 
     /**
      * reports an informational message to the log. 
@@ -169,7 +169,7 @@ export type LogType = {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the file written to, or undefined
      */
-    info(msg:string, log?:boolean):Promise<string>;
+    info(msg:any, log?:boolean):Promise<string>;
 
     /**
      * reports an warning message to the log. 
@@ -179,7 +179,7 @@ export type LogType = {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the file written to, or undefined
      */
-    warn(msg:string, log?:boolean):Promise<string>;
+    warn(msg:any, log?:boolean):Promise<string>;
 
     /**
      * reports an error message to the log. 
@@ -188,7 +188,7 @@ export type LogType = {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the file written to, or undefined
      */
-    error(msg:string, log?:boolean):Promise<string>;
+    error(msg:any, log?:boolean):Promise<string>;
 
     /**
      * reports an error message to the log. 
@@ -288,7 +288,7 @@ function create(_prefix:string, logToFile:ltfType, pathExists:peType):LogType {
         return newLevel.sym;
     }
 
-    function debug(msg:string, log2File=true):Promise<string> { return out(DEBUG, msg, log2File); }
+    function debug(msg:any, log2File=true):Promise<string> { return out(DEBUG, msg, log2File); }
     function info(msg:any, log2File=true):Promise<string> { return out(INFO, msg, log2File); }
     function warn(msg:any, log2File=true):Promise<string> { return out(WARN, msg, log2File); }
     function error(msg:any, log2File=true):Promise<string> { return out(ERROR, msg, log2File); }

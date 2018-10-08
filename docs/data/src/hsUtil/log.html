@@ -174,7 +174,7 @@
 <span id=159 class="line">&nbsp;159</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;log&nbsp;optional&nbsp;flag&nbsp;to&nbsp;enable/suppress&nbsp;logging&nbsp;to&nbsp;file.&nbsp;Defaults&nbsp;to&nbsp;`true`<br>
 <span id=160 class="line">&nbsp;160</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;promise&nbsp;to&nbsp;return&nbsp;the&nbsp;file&nbsp;written&nbsp;to,&nbsp;or&nbsp;undefined<br>
 <span id=161 class="line">&nbsp;161</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</comment><br>
-<span id=162 class="line">&nbsp;162</span>&nbsp;&nbsp;&nbsp;&nbsp;debug(msg:string,&nbsp;log?:boolean):Promise<string>;<br>
+<span id=162 class="line">&nbsp;162</span>&nbsp;&nbsp;&nbsp;&nbsp;debug(msg:any,&nbsp;log?:boolean):Promise<string>;<br>
 <span id=163 class="line">&nbsp;163</span><br>
 <span id=164 class="line">&nbsp;164</span>&nbsp;&nbsp;&nbsp;&nbsp;<comment>/**<br>
 <span id=165 class="line">&nbsp;165</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;reports&nbsp;an&nbsp;informational&nbsp;message&nbsp;to&nbsp;the&nbsp;log.&nbsp;<br>
@@ -184,7 +184,7 @@
 <span id=169 class="line">&nbsp;169</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;log&nbsp;optional&nbsp;flag&nbsp;to&nbsp;enable/suppress&nbsp;logging&nbsp;to&nbsp;file.&nbsp;Defaults&nbsp;to&nbsp;`true`<br>
 <span id=170 class="line">&nbsp;170</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;promise&nbsp;to&nbsp;return&nbsp;the&nbsp;file&nbsp;written&nbsp;to,&nbsp;or&nbsp;undefined<br>
 <span id=171 class="line">&nbsp;171</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</comment><br>
-<span id=172 class="line">&nbsp;172</span>&nbsp;&nbsp;&nbsp;&nbsp;info(msg:string,&nbsp;log?:boolean):Promise<string>;<br>
+<span id=172 class="line">&nbsp;172</span>&nbsp;&nbsp;&nbsp;&nbsp;info(msg:any,&nbsp;log?:boolean):Promise<string>;<br>
 <span id=173 class="line">&nbsp;173</span><br>
 <span id=174 class="line">&nbsp;174</span>&nbsp;&nbsp;&nbsp;&nbsp;<comment>/**<br>
 <span id=175 class="line">&nbsp;175</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;reports&nbsp;an&nbsp;warning&nbsp;message&nbsp;to&nbsp;the&nbsp;log.&nbsp;<br>
@@ -194,7 +194,7 @@
 <span id=179 class="line">&nbsp;179</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;log&nbsp;optional&nbsp;flag&nbsp;to&nbsp;enable/suppress&nbsp;logging&nbsp;to&nbsp;file.&nbsp;Defaults&nbsp;to&nbsp;`true`<br>
 <span id=180 class="line">&nbsp;180</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;promise&nbsp;to&nbsp;return&nbsp;the&nbsp;file&nbsp;written&nbsp;to,&nbsp;or&nbsp;undefined<br>
 <span id=181 class="line">&nbsp;181</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</comment><br>
-<span id=182 class="line">&nbsp;182</span>&nbsp;&nbsp;&nbsp;&nbsp;warn(msg:string,&nbsp;log?:boolean):Promise<string>;<br>
+<span id=182 class="line">&nbsp;182</span>&nbsp;&nbsp;&nbsp;&nbsp;warn(msg:any,&nbsp;log?:boolean):Promise<string>;<br>
 <span id=183 class="line">&nbsp;183</span><br>
 <span id=184 class="line">&nbsp;184</span>&nbsp;&nbsp;&nbsp;&nbsp;<comment>/**<br>
 <span id=185 class="line">&nbsp;185</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;reports&nbsp;an&nbsp;error&nbsp;message&nbsp;to&nbsp;the&nbsp;log.&nbsp;<br>
@@ -203,7 +203,7 @@
 <span id=188 class="line">&nbsp;188</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;log&nbsp;optional&nbsp;flag&nbsp;to&nbsp;enable/suppress&nbsp;logging&nbsp;to&nbsp;file.&nbsp;Defaults&nbsp;to&nbsp;`true`<br>
 <span id=189 class="line">&nbsp;189</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;promise&nbsp;to&nbsp;return&nbsp;the&nbsp;file&nbsp;written&nbsp;to,&nbsp;or&nbsp;undefined<br>
 <span id=190 class="line">&nbsp;190</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</comment><br>
-<span id=191 class="line">&nbsp;191</span>&nbsp;&nbsp;&nbsp;&nbsp;error(msg:string,&nbsp;log?:boolean):Promise<string>;<br>
+<span id=191 class="line">&nbsp;191</span>&nbsp;&nbsp;&nbsp;&nbsp;error(msg:any,&nbsp;log?:boolean):Promise<string>;<br>
 <span id=192 class="line">&nbsp;192</span><br>
 <span id=193 class="line">&nbsp;193</span>&nbsp;&nbsp;&nbsp;&nbsp;<comment>/**<br>
 <span id=194 class="line">&nbsp;194</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;reports&nbsp;an&nbsp;error&nbsp;message&nbsp;to&nbsp;the&nbsp;log.&nbsp;<br>
@@ -303,7 +303,7 @@
 <span id=288 class="line">&nbsp;288</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;newLevel.sym;<br>
 <span id=289 class="line">&nbsp;289</span>&nbsp;&nbsp;&nbsp;&nbsp;}<br>
 <span id=290 class="line">&nbsp;290</span><br>
-<span id=291 class="line">&nbsp;291</span>&nbsp;&nbsp;&nbsp;&nbsp;function&nbsp;debug(msg:string,&nbsp;log2File=true):Promise<string>&nbsp;{&nbsp;return&nbsp;out(DEBUG,&nbsp;msg,&nbsp;log2File);&nbsp;}<br>
+<span id=291 class="line">&nbsp;291</span>&nbsp;&nbsp;&nbsp;&nbsp;function&nbsp;debug(msg:any,&nbsp;log2File=true):Promise<string>&nbsp;{&nbsp;return&nbsp;out(DEBUG,&nbsp;msg,&nbsp;log2File);&nbsp;}<br>
 <span id=292 class="line">&nbsp;292</span>&nbsp;&nbsp;&nbsp;&nbsp;function&nbsp;info(msg:any,&nbsp;log2File=true):Promise<string>&nbsp;{&nbsp;return&nbsp;out(INFO,&nbsp;msg,&nbsp;log2File);&nbsp;}<br>
 <span id=293 class="line">&nbsp;293</span>&nbsp;&nbsp;&nbsp;&nbsp;function&nbsp;warn(msg:any,&nbsp;log2File=true):Promise<string>&nbsp;{&nbsp;return&nbsp;out(WARN,&nbsp;msg,&nbsp;log2File);&nbsp;}<br>
 <span id=294 class="line">&nbsp;294</span>&nbsp;&nbsp;&nbsp;&nbsp;function&nbsp;error(msg:any,&nbsp;log2File=true):Promise<string>&nbsp;{&nbsp;return&nbsp;out(ERROR,&nbsp;msg,&nbsp;log2File);&nbsp;}<br>

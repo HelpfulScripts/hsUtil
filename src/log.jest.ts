@@ -39,9 +39,9 @@ describe('log', () => {
     
     describe('reporting functions', () => {
         it('should print default info', () =>
-            _log.info("yes").then(() => { 
+            _log.info("global").then(() => { 
                 expect(_log.level()).toBe(_log.INFO);
-                expect(gMsg).toMatch(/INFO.*yes/); 
+                expect(gMsg).toMatch(/INFO.*global/); 
             }) 
         );
         
@@ -202,6 +202,11 @@ describe('log', () => {
         });
         it('should inspect boolean', () => {
             expect(log.inspect(true, null)).toEqual("true");
+        });
+        it('should inspect via out()', async () => {
+            await log.info(t);
+            return expect(gMsg).toMatch(/log.jest INFO\s*?/gm);
+//            return expect(gMsg).toMatch(/log\.jest INFO  {\s*a: 'aa',\s*b: {...}\s*}/gm);
         });
     });    
 
