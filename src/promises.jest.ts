@@ -74,7 +74,7 @@ describe('Promise', () => {
         const calls = [0, 1, 2, 3, 4];
     
         const queue = new Pace(); // default is 100
-        let results;
+        let results:any[];
     
         // add a call for each element in calls, then wait for all to have beed called.
         beforeAll(() => results = calls.map(i => {
@@ -92,7 +92,7 @@ describe('Promise', () => {
         test(`check results`, () => {
             expect.assertions(3*calls.length);
             return Promise.all(
-                results.map(async result => {
+                results.map(async (result:any) => {
                     const r = await result;
                     expect(Math.abs(r.reportedWait-r.internalWait)).toBeLessThan(2);
                     expect(r.internalWait).toBeGreaterThanOrEqual(r.id*wait);
