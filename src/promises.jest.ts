@@ -139,7 +139,7 @@ describe('Promise', () => {
                     } else {
                         expect(r.internalWait).toBeGreaterThanOrEqual(callBusy+15);
                         expect(r.internalWait).toBeLessThanOrEqual(callBusy+100);
-                        expect(r.completedWait).toBeLessThanOrEqual(2*callBusy+50);
+                        expect(r.completedWait).toBeLessThanOrEqual(2*callBusy+100);
                     }
                 }) 
             );
