@@ -1,6 +1,6 @@
 {
     "name": "hsutil",
-    "version": "2.6.3",
+    "version": "2.6.4",
     "main": "./index.js",
     "types": "./index.d.ts",
     "keywords": [
@@ -26,8 +26,7 @@
     "engines": {
         "node": ">= 10.14.0"
     },
-    "plugins": [
-    ],
+    "plugins": [],
     "devDependencies": {
         "@types/node": "^7.0.66",
         "@types/jest": "^23.3.1",
@@ -52,6 +51,5 @@
         "uglifyjs-webpack-plugin": "^1.2.5",
         "webpack": "^4.25.1"
     },
-    "dependencies": {
-    }
+    "dependencies": {}
 }
