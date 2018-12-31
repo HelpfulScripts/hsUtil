@@ -1,58 +1,57 @@
 {
-  "name": "hsutil",
-  "version": "2.6.3",
-  "main": "./index.js",
-  "types": "./index.d.ts",
-  "keywords": [
-    "es6",
-    "showdown",
-    "date-printf"
-  ],
-  "license": "MIT",
-  "description": "Helpful Scripts cross-framework libraries ",
-  "homepage": "https://helpfulscripts.github.io/hsUtil/indexGH.html#!/api/hsUtil/0",
-  "author": {
-    "name": "masterscripter",
-    "email": "helpfulscripts@gmail.com"
-  },
-  "scripts": {
-    "build": "grunt build",
-    "test": "grunt test"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/HelpfulScripts/hsUtil.git"
-  },
-  "engines": {
-    "node": ">= 10.14.0"
-  },
-  "plugins": [
-    "plugins/markdown"
-  ],
-  "devDependencies": {
-    "@types/node": "^7.0.66",
-    "@types/jest": "^23.3.1",
-    "coveralls": "^3.0.2",
-    "grunt": "^1.0.3",
-    "grunt-contrib-clean": "^1.0.0",
-    "grunt-contrib-concat": "^1.0.1",
-    "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-less": "^2.0.0",
-    "grunt-contrib-uglify": "^2.0.0",
-    "grunt-contrib-watch": "^1.1.0",
-    "grunt-ts": "^6.0.0-beta.19",
-    "grunt-tslint": "^4.0.1",
-    "grunt-typedoc": "^0.2.4",
-    "grunt-webpack": "^3.1.2",
-    "grunt-coveralls": "^2.0.0",
-    "jest": "^23.4.2",
-    "ts-jest": "^23.0.1",
-    "tslint": "^4.5.1",
-    "typedoc": "^0.12.0",
-    "typescript": "^3.1.1",
-    "uglifyjs-webpack-plugin": "^1.2.5",
-    "webpack": "^3.12.0"
-  },
-  "dependencies": {
-  }
+    "name": "hsutil",
+    "version": "2.6.3",
+    "main": "./index.js",
+    "types": "./index.d.ts",
+    "keywords": [
+        "es6",
+        "showdown",
+        "date-printf"
+    ],
+    "license": "MIT",
+    "description": "Helpful Scripts cross-framework libraries ",
+    "homepage": "https://helpfulscripts.github.io/hsUtil/indexGH.html#!/api/hsUtil/0",
+    "author": {
+        "name": "masterscripter",
+        "email": "helpfulscripts@gmail.com"
+    },
+    "scripts": {
+        "build": "grunt build",
+        "test": "grunt test"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/HelpfulScripts/hsUtil.git"
+    },
+    "engines": {
+        "node": ">= 10.14.0"
+    },
+    "plugins": [
+    ],
+    "devDependencies": {
+        "@types/node": "^7.0.66",
+        "@types/jest": "^23.3.1",
+        "coveralls": "^3.0.2",
+        "grunt": "^1.0.3",
+        "grunt-contrib-clean": "^1.0.0",
+        "grunt-contrib-concat": "^1.0.1",
+        "grunt-contrib-copy": "^1.0.0",
+        "grunt-contrib-less": "^2.0.0",
+        "grunt-contrib-uglify": "^2.0.0",
+        "grunt-contrib-watch": "^1.1.0",
+        "grunt-ts": "^6.0.0-beta.19",
+        "grunt-tslint": "^4.0.1",
+        "grunt-typedoc": "^0.2.4",
+        "grunt-webpack": "^3.1.2",
+        "grunt-coveralls": "^2.0.0",
+        "jest": "^23.4.2",
+        "ts-jest": "^23.0.1",
+        "tslint": "^4.5.1",
+        "typedoc": "^0.12.0",
+        "typescript": "^3.1.1",
+        "uglifyjs-webpack-plugin": "^1.2.5",
+        "webpack": "^3.12.0"
+    },
+    "dependencies": {
+    }
 }
