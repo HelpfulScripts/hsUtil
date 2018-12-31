@@ -22,22 +22,22 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>33/33</span>
+        <span class='fraction'>42/42</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">77.78% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>4/4</span>
+        <span class='fraction'>7/9</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>16/16</span>
+        <span class='fraction'>19/19</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>29/29</span>
+        <span class='fraction'>38/38</span>
       </div>
     </div>
   </div>
@@ -159,7 +159,25 @@
 114
 115
 116
-117</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -196,9 +214,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">18x</span>
+<span class="cline-any cline-yes">18x</span>
+<span class="cline-any cline-yes">18x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -215,6 +233,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -225,11 +244,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -243,7 +265,21 @@
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">20x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
@@ -331,17 +367,20 @@ export function delay(ms:number)   {
  * ```
  */
 export class Pace {
+    private maxConcurrent   = -1;   // max number of concurrent requests being called
     private pace:number;      // the pace of calls in ms
-    private waitUntil   = 0;  // the earliest time for the next call
-    private waitCount   = 0;  // number of calls currently in queue waiting
-    private beingCalled = 0;  // registered functiuons that have been called , but have not resolved yet.
+    private waitUntil       = 0;  // the earliest time for the next call
+    private waitCount       = 0;  // number of calls currently in queue waiting
+    private beingCalled     = 0;  // registered functiuons that have been called , but have not resolved yet.
 &nbsp;
     /**
      * @param delay the minimum number of milliseconds between executions of 
      * two registered functions; defaults to 100;
+     * @param maxConcurrent the maximum number of concurrent execution calls; defaults to -1 (no limit)
      */
-    constructor(pace=100) {
+    constructor(pace=<span class="branch-0 cbranch-no" title="branch not covered" >100,</span> maxConcurrent=<span class="branch-0 cbranch-no" title="branch not covered" >-1)</span> {
         this.pace = pace+5; // add 5ms margin. delay() may trigger a millisecond or two early
+        this.maxConcurrent = maxConcurrent;
     }
 &nbsp;
     getWaitCount()    { return this.waitCount; }
@@ -354,16 +393,31 @@ export class Pace {
      * @return a promise that resolved to the result of the function
      */
     add(fn: (msSinceAdding:number) =&gt; any):Promise&lt;any&gt; {
+// const id = Math.floor(Math.random()*10000);
         const addTime = Date.now();
         if (this.waitUntil &lt; addTime) { this.waitUntil = addTime; }
         const diff = this.waitUntil - addTime;
         this.waitUntil += this.pace + 5;
         this.waitCount++;
-        return delay(diff)().then(() =&gt; {
+// console.log(`created #${id}: wait:${this.waitCount}, called:${this.beingCalled}`);
+        return delay(diff)()
+        .then(async () =&gt; {
+// console.log(`delayed #${id}: wait:${this.waitCount}, called:${this.beingCalled}`);
+            await new Promise(resolve =&gt; {
+                const waitLoop = () =&gt; {
+                    if (this.maxConcurrent &lt; 0 || this.beingCalled &lt; this.maxConcurrent) {
+                        resolve();
+                    } else {
+                        setTimeout(waitLoop, 10);
+                    }
+                };
+                waitLoop();
+            });
+// console.log(`calling #${id}: wait:${this.waitCount}, called:${this.beingCalled}`);
             this.waitCount--;
             this.beingCalled++;
             return fn(Date.now()-addTime);
-        })
+            })
         .then((ret:any) =&gt; {
             this.beingCalled--;
             return ret;

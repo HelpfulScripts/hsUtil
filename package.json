@@ -54,6 +54,5 @@
     "webpack": "^3.12.0"
   },
   "dependencies": {
-    "showdown": "^1.8.6"
   }
 }

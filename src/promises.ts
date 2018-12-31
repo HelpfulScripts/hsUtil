@@ -54,17 +54,20 @@ export function delay(ms:number)   {
  * ```
  */
 export class Pace {
+    private maxConcurrent   = -1;   // max number of concurrent requests being called
     private pace:number;      // the pace of calls in ms
-    private waitUntil   = 0;  // the earliest time for the next call
-    private waitCount   = 0;  // number of calls currently in queue waiting
-    private beingCalled = 0;  // registered functiuons that have been called , but have not resolved yet.
+    private waitUntil       = 0;  // the earliest time for the next call
+    private waitCount       = 0;  // number of calls currently in queue waiting
+    private beingCalled     = 0;  // registered functiuons that have been called , but have not resolved yet.
 
     /**
      * @param delay the minimum number of milliseconds between executions of 
      * two registered functions; defaults to 100;
+     * @param maxConcurrent the maximum number of concurrent execution calls; defaults to -1 (no limit)
      */
-    constructor(pace=100) {
+    constructor(pace=100, maxConcurrent=-1) {
         this.pace = pace+5; // add 5ms margin. delay() may trigger a millisecond or two early
+        this.maxConcurrent = maxConcurrent;
     }
 
     getWaitCount()    { return this.waitCount; }
@@ -77,16 +80,31 @@ export class Pace {
      * @return a promise that resolved to the result of the function
      */
     add(fn: (msSinceAdding:number) => any):Promise<any> {
+// const id = Math.floor(Math.random()*10000);
         const addTime = Date.now();
         if (this.waitUntil < addTime) { this.waitUntil = addTime; }
         const diff = this.waitUntil - addTime;
         this.waitUntil += this.pace + 5;
         this.waitCount++;
-        return delay(diff)().then(() => {
+// console.log(`created #${id}: wait:${this.waitCount}, called:${this.beingCalled}`);
+        return delay(diff)()
+        .then(async () => {
+// console.log(`delayed #${id}: wait:${this.waitCount}, called:${this.beingCalled}`);
+            await new Promise(resolve => {
+                const waitLoop = () => {
+                    if (this.maxConcurrent < 0 || this.beingCalled < this.maxConcurrent) {
+                        resolve();
+                    } else {
+                        setTimeout(waitLoop, 10);
+                    }
+                };
+                waitLoop();
+            });
+// console.log(`calling #${id}: wait:${this.waitCount}, called:${this.beingCalled}`);
             this.waitCount--;
             this.beingCalled++;
             return fn(Date.now()-addTime);
-        })
+            })
         .then((ret:any) => {
             this.beingCalled--;
             return ret;

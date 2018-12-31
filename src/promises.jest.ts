@@ -55,6 +55,10 @@ describe('Promise', () => {
     });
 
     describe('Pace', () => {
+        const wait      = 25;   // ms min delay between calls
+        const callBusy  = 200;  // duration of call in ms
+        const calls = [0, 1, 2, 3, 4];
+
         class Test {
             start:number;
             end: number;
@@ -63,17 +67,46 @@ describe('Promise', () => {
                 this.start = Date.now(); 
                 this.id = id;
             }
-            exec(reportedMS:number):any { 
+            exec(reportedMS:number):Promise<any> { 
                 this.end   = Date.now(); 
-                console.log(`exec: internal: ${this.end-this.start}, reported: ${reportedMS}`);                    
-                return {id: this.id, internalWait: this.end-this.start, reportedWait: reportedMS};
+                // console.log(`exec #${this.id}: internal: ${this.end-this.start}ms, reported: ${reportedMS}ms`);  
+                const result = {
+                    id: this.id, 
+                    internalWait: this.end-this.start, 
+                    completedWait: 0,
+                    reportedWait: reportedMS};
+                return delay(callBusy)()
+                .then(() => {
+                    result.completedWait = Date.now()-this.start;
+                    console.log(`done #${this.id}: internal: ${result.internalWait}ms, reported: ${reportedMS}ms, completed: ${result.completedWait}ms`);                    
+                    return result;
+                });
             }
         }
         
-        const wait = 100;   // 100ms between calls
-        const calls = [0, 1, 2, 3, 4];
+        /* 
+             0: burst #0 #1 #2 #3 #4 #5
+             0: execute #0, 1 active for 200ms, 
+            25: delayed #1, 2 active for 200ms
+            50: delayed #2, 3 active for 200ms
+            75: delayed #3 -> capped
+           100: delayed #4 -> capped
+           200: #0 done, 2 active
+           200-210: execute #3, 3 active
+           225: #1 done, 2 active
+           225-235: execute #4, 3 active
+           250: #2 done, 2 active
+           275: #3 done, 1 active
+           425-435: #4 done, 0 active
+
+           #0: internal 40ms, completed 244ms
+           #1: internal 27ms, completed 235ms
+           #2: internal 56ms, completed 263ms
+           #3: internal 222ms, completed 428ms
+           #4: internal 225ms, completed 432ms
+        */
     
-        const queue = new Pace(); // default is 100
+        const queue = new Pace(wait, 3); // default is 100
         let results:any[];
     
         // add a call for each element in calls, then wait for all to have beed called.
@@ -87,16 +120,27 @@ describe('Promise', () => {
             expect(queue.getCallingCount()).toBe(0);
         });
         test(`wait count`, () => {
-            expect(queue.getWaitCount()).toBe(5);
+            expect(queue.getWaitCount()).toBe(calls.length);
         });
         test(`check results`, () => {
-            expect.assertions(3*calls.length);
+            expect.assertions(4*calls.length);
             return Promise.all(
                 results.map(async (result:any) => {
                     const r = await result;
                     expect(Math.abs(r.reportedWait-r.internalWait)).toBeLessThan(2);
-                    expect(r.internalWait).toBeGreaterThanOrEqual(r.id*wait);
-                    expect(r.internalWait).toBeLessThanOrEqual(r.id*wait+50);
+                    if (r.id===0) {
+                        expect(r.internalWait).toBeGreaterThanOrEqual(0);
+                        expect(r.internalWait).toBeLessThanOrEqual(45);
+                        expect(r.completedWait).toBeLessThanOrEqual(callBusy+50);
+                    } else if (r.id<3) {
+                        expect(r.internalWait).toBeGreaterThanOrEqual((r.id-1)*wait);
+                        expect(r.internalWait).toBeLessThanOrEqual((r.id+1)*wait+10);
+                        expect(r.completedWait).toBeLessThanOrEqual(callBusy+(r.id+1)*wait+20);
+                    } else {
+                        expect(r.internalWait).toBeGreaterThanOrEqual(callBusy+15);
+                        expect(r.internalWait).toBeLessThanOrEqual(callBusy+50);
+                        expect(r.completedWait).toBeLessThanOrEqual(2*callBusy+50);
+                    }
                 }) 
             );
         });
