@@ -2697,7 +2697,7 @@
 			"originalName": "/Users/sth1pal/Documents/Development/JavaScript/nodejs/ts6/dev/hsLibs/standalone/hsUtil/src/overview.ts",
 			"comment": {
 				"shortText": "# hsUtil",
-				"text": "Helpful Scripts utility functions for use in both browser and `node` environments\n[`[Github page]`](https://github.com/HelpfulScripts/hsUtil)\n[`[Coverage Info]`](./data/src/hsUtil/coverage/)\n___\n\n## Index - no external dependencies:\n- &nbsp; {@link promises promises} functions that provide delays and timeouts for promises.\n- &nbsp; {@link Checksum Checksum} a quick checksum implementation for small strings\n- &nbsp; {@link Date Date} printf-style date formatting function\n- &nbsp; {@link round Number.round} rounding to n digits\n\n## Index - dependency on [showdown](https://www.npmjs.com/package/showdown)\n- &nbsp; {@link showdown showdown} an ES6 wrapper for the showdown library\n"
+				"text": "Helpful Scripts utility functions for use in both browser and `node` environments\n[`[Github page]`](https://github.com/HelpfulScripts/hsUtil)\n[`[Coverage Info]`](./data/src/hsUtil/coverage/)\n___\n\n## Index - no external dependencies:\n- &nbsp; {@link promises promises} functions that provide delays and timeouts for promises.\n- &nbsp; {@link Checksum Checksum} a quick checksum implementation for small strings\n- &nbsp; {@link Date Date} printf-style date formatting function\n- &nbsp; {@link round Number.round} rounding to n digits\n"
 			},
 			"sources": [
 				{
