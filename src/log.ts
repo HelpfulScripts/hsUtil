@@ -71,6 +71,9 @@
  * - &nbsp; {@link log.LogType.format  log.format()}
  * - &nbsp; {@link log.LogType.prefix  log.prefix()}
  * - &nbsp; {@link log.LogType.logFile log.logFile()}
+ * 
+ * ## Inspection support:
+ * - &nbsp; {@link log.LogType.inspect log.inspect()}
  */
 
 /** importing nodejs file system function; needed to create logfiles */
@@ -373,7 +376,7 @@ function create(_prefix:string, logToFile:ltfType, pathExists:peType):LogType {
         return msg.toString();
     }
 
-    const newLog:any = function(prefix:string, logToFile=context.logToFile, pathExists=context.pathExists) { 
+    const newLog:any = function(prefix:string, logToFile:ltfType=context.logToFile, pathExists:peType=context.pathExists) { 
         return create(prefix, logToFile, pathExists);
     };
     newLog.DEBUG    = DEBUG;

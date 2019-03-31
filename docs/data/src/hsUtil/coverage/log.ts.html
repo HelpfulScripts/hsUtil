@@ -439,7 +439,13 @@
 394
 395
 396
-397</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+397
+398
+399
+400</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -908,6 +914,9 @@
  * - &amp;nbsp; {@link log.LogType.format  log.format()}
  * - &amp;nbsp; {@link log.LogType.prefix  log.prefix()}
  * - &amp;nbsp; {@link log.LogType.logFile log.logFile()}
+ * 
+ * ## Inspection support:
+ * - &amp;nbsp; {@link log.LogType.inspect log.inspect()}
  */
 &nbsp;
 /** importing nodejs file system function; needed to create logfiles */
@@ -1210,7 +1219,7 @@ function create(_prefix:string, logToFile:ltfType, pathExists:peType):LogType {
         return msg.toString();
     }
 &nbsp;
-    const newLog:any = function(prefix:string, logToFile=context.logToFile, pathExists=context.pathExists) { 
+    const newLog:any = function(prefix:string, logToFile:ltfType=context.logToFile, pathExists:peType=context.pathExists) { 
         return create(prefix, logToFile, pathExists);
     };
     newLog.DEBUG    = DEBUG;
