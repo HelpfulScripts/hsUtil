@@ -847,34 +847,34 @@
  * 
  * ### Using the global log object 
  * Settings in `log` are shared across modules
- * &lt;pre&gt;
+ * ```
  * import { log } from 'hsnode'; 
  * log.info('by the way:'); // -&gt; 20160817 09:59:08.032 info by the way:
  * log.error('oh dear!');   // -&gt; 20160817 09:59:08.045 error *** oh dear!
- * &lt;/pre&gt;
+ * ```
  * 
  * ### Using a local log object 
  * Settings in `log` remain local to the module 
- * &lt;pre&gt;
+ * ```
  * import { log as gLog } from 'hsnode'; const log = gLog('myModule')
  * log.info('by the way:'); // -&gt; 20160817 09:59:08.032 myModule info by the way:
  * log.error('oh dear!');   // -&gt; 20160817 09:59:08.045 myModule error *** oh dear!
- * &lt;/pre&gt;
+ * ```
  * 
  * ### Using the `format` template:
- * &lt;pre&gt;
+ * ```
  * log.format('%MMM %DD %hh%mm%ss');
  * log.info('by the way:');  // -&gt; Aug 17 095908 info by the way:
  * log.error('oh dear!');    // -&gt; Aug 17 095908 error *** oh dear!
- * &lt;/pre&gt;
+ * ```
  * 
  * ### Change the module prefix:
- * &lt;pre&gt;
+ * ```
  * log.prefix('Main');
  * log.format('%hh%mm%ss');
  * log.info('by the way:');  // -&gt; 09:59:08.032 Main info by the way:
  * log.error('oh dear!');    // -&gt; 09:59:08.045 Main error *** oh dear!
- * &lt;/pre&gt;
+ * ```
  * 
  * ### Setting the Log level locally for the module
  * ```
