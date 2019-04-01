@@ -11,7 +11,7 @@ function hsCamelCase(name) {
 }
 
 module.exports = (grunt, dir, dependencies, type, lib) => {
-    const devPath = dir.slice(0, dir.indexOf('/dev/')+5);
+    const devPath = dir.slice(0, dir.indexOf('/dev/'));
     const pkg = grunt.file.readJSON(dir+'/package.json');
     const slash = pkg.name.lastIndexOf('/');
     lib = lib || hsCamelCase(slash<0? pkg.name : pkg.name.slice(slash+1));
@@ -93,7 +93,7 @@ module.exports = (grunt, dir, dependencies, type, lib) => {
                 }
             ]},
             html: { files: [
-                { expand:true, cwd: devPath+'/staging/',    // docs index.html from staging
+                { expand:true, cwd: devPath+'/staging/apps/hsDocs/',    // docs index.html from staging
                     src:['index.html'], dest:'docs' 
                 }
             ]},
