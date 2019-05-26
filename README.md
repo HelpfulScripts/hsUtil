@@ -1,9 +1,10 @@
 hsUtil 
 ========
-[![npm version](https://badge.fury.io/js/hsutil.svg)](https://badge.fury.io/js/hsutil) 
+[![npm version](https://badge.fury.io/js/hsutil.svg)](https://badge.fury.io/js/hsutil)
+[![GitHub](https://img.shields.io/badge/GitHub-hsUtil-blue.svg)](https://github.com/helpfulscripts/hsutil)
+[![docs](https://img.shields.io/badge/hsDocs-hsUtil-blue.svg)](https://helpfulscripts.github.io/hsUtil/#!/api/hsUtil/0)
 [![Build Status](https://travis-ci.org/HelpfulScripts/hsUtil.svg?branch=master)](https://travis-ci.org/HelpfulScripts/hsUtil)
 [![Coverage Status](https://coveralls.io/repos/github/HelpfulScripts/hsUtil/badge.svg)](https://coveralls.io/github/HelpfulScripts/hsUtil)
-[![Built with Grunt](https://cdn.gruntjs.com/builtwith.svg)](https://gruntjs.com/) 
 [![NPM License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://www.npmjs.com/package/hsutil) 
 [![Known Vulnerabilities](https://snyk.io/test/github/HelpfulScripts/hsUtil/badge.svg?targetFile=package.json)](https://snyk.io/test/github/HelpfulScripts/hsUtil?targetFile=package.json)
 
