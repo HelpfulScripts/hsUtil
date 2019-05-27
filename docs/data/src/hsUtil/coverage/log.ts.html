@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">95.73% </span>
+        <span class="strong">94.96% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>112/117</span>
+        <span class='fraction'>113/119</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">91.11% </span>
@@ -30,14 +30,14 @@
         <span class='fraction'>82/90</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">94.74% </span>
+        <span class="strong">90.48% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>18/19</span>
+        <span class='fraction'>19/21</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">96% </span>
+        <span class="strong">95.1% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>96/100</span>
+        <span class='fraction'>97/102</span>
       </div>
     </div>
   </div>
@@ -777,7 +777,7 @@
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -785,7 +785,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1134,10 +1134,10 @@ function create(_prefix:string, logToFile:ltfType, pathExists:peType):LogType {
         return newLevel.sym;
     }
 &nbsp;
-    function debug(msg:any, log2File=true):Promise&lt;string&gt; { return out(DEBUG, msg, log2File); }
-    function info(msg:any, log2File=true):Promise&lt;string&gt; { return out(INFO, msg, log2File); }
-    function warn(msg:any, log2File=true):Promise&lt;string&gt; { return out(WARN, msg, log2File); }
-    function error(msg:any, log2File=true):Promise&lt;string&gt; { return out(ERROR, msg, log2File); }
+    async function debug(msg:any, log2File=true):Promise&lt;string&gt; { return await out(DEBUG, msg, log2File); }
+    async function info(msg:any, log2File=true):Promise&lt;string&gt; { return await out(INFO, msg, log2File); }
+    async function warn(msg:any, log2File=true):Promise&lt;string&gt; { return await out(WARN, msg, log2File); }
+    async function error(msg:any, log2File=true):Promise&lt;string&gt; { return await out(ERROR, msg, log2File); }
 &nbsp;
     function format(fmtStr?:string):string { 
         if (fmtStr === null) { gDateFormat = defDateFormat; }
@@ -1150,7 +1150,7 @@ function create(_prefix:string, logToFile:ltfType, pathExists:peType):LogType {
         return context.prefix;
     }
 &nbsp;
-    function out(lvl:symbol, msg:any, log2File=true): Promise&lt;string&gt; {	
+    async function out(lvl:symbol, msg:any, log2File=true): Promise&lt;string&gt; {	
         const colors = { [ERROR]: color.red+color.bold, [WARN]: color.yellow+color.bold, [DEBUG]: color.blue, [INFO]: color.green };
         let desc = gLevels[lvl];
         const filterLevel = context.level || gGlobalLevel;
@@ -1162,38 +1162,38 @@ function create(_prefix:string, logToFile:ltfType, pathExists:peType):LogType {
             console.log(gColors? colorLine : <span class="branch-1 cbranch-no" title="branch not covered" >logLine)</span>;
             <span class="missing-if-branch" title="if path not taken" >I</span>if (msg &amp;&amp; msg.stack) { <span class="cstat-no" title="statement not covered" >console.log(msg.stack); </span>}
             if (gLogFile &amp;&amp; log2File) {
-                return context.logToFile(date(gLogFile), logLine);
+                return await context.logToFile(date(gLogFile), logLine);
             }
         }
-        return Promise.resolve(undefined);
+        return undefined;
     }
 &nbsp;
-    function logFile(file?:string):Promise&lt;string&gt; {
+    async function logFile(file?:string):Promise&lt;string&gt; {
         if (file === null) {                    // disable logging in file
             gLogFile = undefined; 
-            return info("disabling logfile");
+            return await info("disabling logfile");
         } else if (file === undefined) {        // leave gLogFile unchanged, return promise for logfile name
-            return Promise.resolve(date(gLogFile));
+            return date(gLogFile);
         } else if (file.indexOf('/')&gt;=0) { 
-            return context.pathExists(file)
-                .then((exists:boolean) =&gt; { 
+            return await context.pathExists(file)
+                .then(async (exists:boolean) =&gt; { 
                     <span class="missing-if-branch" title="else path not taken" >E</span>if (!exists) {
                         gLogFile = undefined;
-                        return warn(`path '${file}' doesn't exists; logfile disabled`);
+                        return await warn(`path '${file}' doesn't exists; logfile disabled`);
                     }
 <span class="cstat-no" title="statement not covered" >                    gLogFile = file;</span>
-<span class="cstat-no" title="statement not covered" >                    return info("now logging to file " + date(file));</span>
+<span class="cstat-no" title="statement not covered" >                    return await info("now logging to file " + date(file));</span>
                 })
-                .catch(<span class="fstat-no" title="function not covered" >() </span>=&gt; { 
+                .catch(<span class="fstat-no" title="function not covered" >async () </span>=&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > { </span></span>
 <span class="cstat-no" title="statement not covered" >                    gLogFile = undefined; </span>
-<span class="cstat-no" title="statement not covered" >                    return error(`checking path ${file}; logfile disabled`);</span>
+<span class="cstat-no" title="statement not covered" >                    return await error(`checking path ${file}; logfile disabled`);</span>
                 });
         } else if (file === '') {
             file = 'log-%YYYY-%MM-%DD.txt';
         } else {
         }
         gLogFile=file;
-        return info(gLogFile? `now logging to file ${date(gLogFile)}` : <span class="branch-1 cbranch-no" title="branch not covered" >'logfile disbaled')</span>;
+        return await info(gLogFile? `now logging to file ${date(gLogFile)}` : <span class="branch-1 cbranch-no" title="branch not covered" >'logfile disbaled')</span>;
     }
 &nbsp;
     function config(cfg:{colors?:boolean, format?:string, level?:symbol }) {

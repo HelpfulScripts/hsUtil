@@ -291,10 +291,10 @@ function create(_prefix:string, logToFile:ltfType, pathExists:peType):LogType {
         return newLevel.sym;
     }
 
-    function debug(msg:any, log2File=true):Promise<string> { return out(DEBUG, msg, log2File); }
-    function info(msg:any, log2File=true):Promise<string> { return out(INFO, msg, log2File); }
-    function warn(msg:any, log2File=true):Promise<string> { return out(WARN, msg, log2File); }
-    function error(msg:any, log2File=true):Promise<string> { return out(ERROR, msg, log2File); }
+    async function debug(msg:any, log2File=true):Promise<string> { return await out(DEBUG, msg, log2File); }
+    async function info(msg:any, log2File=true):Promise<string> { return await out(INFO, msg, log2File); }
+    async function warn(msg:any, log2File=true):Promise<string> { return await out(WARN, msg, log2File); }
+    async function error(msg:any, log2File=true):Promise<string> { return await out(ERROR, msg, log2File); }
 
     function format(fmtStr?:string):string { 
         if (fmtStr === null) { gDateFormat = defDateFormat; }
@@ -307,7 +307,7 @@ function create(_prefix:string, logToFile:ltfType, pathExists:peType):LogType {
         return context.prefix;
     }
 
-    function out(lvl:symbol, msg:any, log2File=true): Promise<string> {	
+    async function out(lvl:symbol, msg:any, log2File=true): Promise<string> {	
         const colors = { [ERROR]: color.red+color.bold, [WARN]: color.yellow+color.bold, [DEBUG]: color.blue, [INFO]: color.green };
         let desc = gLevels[lvl];
         const filterLevel = context.level || gGlobalLevel;
@@ -319,38 +319,38 @@ function create(_prefix:string, logToFile:ltfType, pathExists:peType):LogType {
             console.log(gColors? colorLine : logLine);
             if (msg && msg.stack) { console.log(msg.stack); }
             if (gLogFile && log2File) {
-                return context.logToFile(date(gLogFile), logLine);
+                return await context.logToFile(date(gLogFile), logLine);
             }
         }
-        return Promise.resolve(undefined);
+        return undefined;
     }
 
-    function logFile(file?:string):Promise<string> {
+    async function logFile(file?:string):Promise<string> {
         if (file === null) {                    // disable logging in file
             gLogFile = undefined; 
-            return info("disabling logfile");
+            return await info("disabling logfile");
         } else if (file === undefined) {        // leave gLogFile unchanged, return promise for logfile name
-            return Promise.resolve(date(gLogFile));
+            return date(gLogFile);
         } else if (file.indexOf('/')>=0) { 
-            return context.pathExists(file)
-                .then((exists:boolean) => { 
+            return await context.pathExists(file)
+                .then(async (exists:boolean) => { 
                     if (!exists) {
                         gLogFile = undefined;
-                        return warn(`path '${file}' doesn't exists; logfile disabled`);
+                        return await warn(`path '${file}' doesn't exists; logfile disabled`);
                     }
                     gLogFile = file;
-                    return info("now logging to file " + date(file));
+                    return await info("now logging to file " + date(file));
                 })
-                .catch(() => { 
+                .catch(async () => { 
                     gLogFile = undefined; 
-                    return error(`checking path ${file}; logfile disabled`);
+                    return await error(`checking path ${file}; logfile disabled`);
                 });
         } else if (file === '') {
             file = 'log-%YYYY-%MM-%DD.txt';
         } else {
         }
         gLogFile=file;
-        return info(gLogFile? `now logging to file ${date(gLogFile)}` : 'logfile disbaled');
+        return await info(gLogFile? `now logging to file ${date(gLogFile)}` : 'logfile disbaled');
     }
 
     function config(cfg:{colors?:boolean, format?:string, level?:symbol }) {
