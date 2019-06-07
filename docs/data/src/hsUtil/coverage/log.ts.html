@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">94.96% </span>
+        <span class="strong">94.92% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>113/119</span>
+        <span class='fraction'>112/118</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">91.11% </span>
@@ -35,9 +35,9 @@
         <span class='fraction'>19/21</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">95.1% </span>
+        <span class="strong">95.05% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>97/102</span>
+        <span class='fraction'>96/101</span>
       </div>
     </div>
   </div>
@@ -441,8 +441,7 @@
 396
 397
 398
-399
-400</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+399</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -801,7 +800,6 @@
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -848,7 +846,7 @@
  * ### Using the global log object 
  * Settings in `log` are shared across modules
  * ```
- * import { log } from 'hsnode'; 
+ * import { log } from 'hsutil'; 
  * log.info('by the way:'); // -&gt; 20160817 09:59:08.032 info by the way:
  * log.error('oh dear!');   // -&gt; 20160817 09:59:08.045 error *** oh dear!
  * ```
@@ -856,7 +854,7 @@
  * ### Using a local log object 
  * Settings in `log` remain local to the module 
  * ```
- * import { log as gLog } from 'hsnode'; const log = gLog('myModule')
+ * import { log as gLog } from 'hsutil'; const log = gLog('myModule')
  * log.info('by the way:'); // -&gt; 20160817 09:59:08.032 myModule info by the way:
  * log.error('oh dear!');   // -&gt; 20160817 09:59:08.045 myModule error *** oh dear!
  * ```
@@ -959,7 +957,7 @@ const defDateFormat = '%YYYY%MM%DD %hh:%mm:%ss.%jjj';
 let gDateFormat     = defDateFormat;
 &nbsp;
 /** boolean determining if log will be printed in color */
-let gColors = true;
+let gColors = false;
 &nbsp;
 /** shell color escape codes */
 const color = {
@@ -1157,9 +1155,9 @@ function create(_prefix:string, logToFile:ltfType, pathExists:peType):LogType {
         if (desc.importance &gt;= filterLevel.importance) {
             const dateStr = date(gDateFormat);
             let line = (typeof msg === 'string')? msg : inspect(msg, 0);
-            const logLine = (dateStr + ' ' + context.prefix + desc.desc + ' ' + line);
+            const logLine   =                    `${dateStr} ${context.prefix} ${desc.desc} ${line}`;
             const colorLine = `${colors[lvl]||<span class="branch-1 cbranch-no" title="branch not covered" >''}</span> ${dateStr} ${context.prefix} ${desc.desc} ${color.clear} ${line}`;
-            console.log(gColors? colorLine : <span class="branch-1 cbranch-no" title="branch not covered" >logLine)</span>;
+            console.log(gColors? <span class="branch-0 cbranch-no" title="branch not covered" >colorLine </span>: logLine);
             <span class="missing-if-branch" title="if path not taken" >I</span>if (msg &amp;&amp; msg.stack) { <span class="cstat-no" title="statement not covered" >console.log(msg.stack); </span>}
             if (gLogFile &amp;&amp; log2File) {
                 return await context.logToFile(date(gLogFile), logLine);
@@ -1197,10 +1195,9 @@ function create(_prefix:string, logToFile:ltfType, pathExists:peType):LogType {
     }
 &nbsp;
     function config(cfg:{colors?:boolean, format?:string, level?:symbol }) {
-        let colors = true;
-        if (cfg.colors!==undefined) { gColors = colors = cfg.colors; }  // true / false
-        if (cfg.format!==undefined) { format(cfg.format); }             // e.g. '%YYYY%MM%DD %hh:%mm:%ss.%jjj'
-        if (cfg.level!==undefined)  { level(cfg.level); }               // e.g. INFO
+        if (cfg.colors!==undefined) { gColors = cfg.colors; }   // true / false
+        if (cfg.format!==undefined) { format(cfg.format); }     // e.g. '%YYYY%MM%DD %hh:%mm:%ss.%jjj'
+        if (cfg.level!==undefined)  { level(cfg.level); }       // e.g. INFO
     }
 &nbsp;
     function inspect(msg:any, depth=<span class="branch-0 cbranch-no" title="branch not covered" >1,</span> indent=''):string {

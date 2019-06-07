@@ -5,7 +5,7 @@
  * ### Using the global log object 
  * Settings in `log` are shared across modules
  * ```
- * import { log } from 'hsnode'; 
+ * import { log } from 'hsutil'; 
  * log.info('by the way:'); // -> 20160817 09:59:08.032 info by the way:
  * log.error('oh dear!');   // -> 20160817 09:59:08.045 error *** oh dear!
  * ```
@@ -13,7 +13,7 @@
  * ### Using a local log object 
  * Settings in `log` remain local to the module 
  * ```
- * import { log as gLog } from 'hsnode'; const log = gLog('myModule')
+ * import { log as gLog } from 'hsutil'; const log = gLog('myModule')
  * log.info('by the way:'); // -> 20160817 09:59:08.032 myModule info by the way:
  * log.error('oh dear!');   // -> 20160817 09:59:08.045 myModule error *** oh dear!
  * ```
@@ -116,7 +116,7 @@ const defDateFormat = '%YYYY%MM%DD %hh:%mm:%ss.%jjj';
 let gDateFormat     = defDateFormat;
 
 /** boolean determining if log will be printed in color */
-let gColors = true;
+let gColors = false;
 
 /** shell color escape codes */
 const color = {
@@ -314,7 +314,7 @@ function create(_prefix:string, logToFile:ltfType, pathExists:peType):LogType {
         if (desc.importance >= filterLevel.importance) {
             const dateStr = date(gDateFormat);
             let line = (typeof msg === 'string')? msg : inspect(msg, 0);
-            const logLine = (dateStr + ' ' + context.prefix + desc.desc + ' ' + line);
+            const logLine   =                    `${dateStr} ${context.prefix} ${desc.desc} ${line}`;
             const colorLine = `${colors[lvl]||''} ${dateStr} ${context.prefix} ${desc.desc} ${color.clear} ${line}`;
             console.log(gColors? colorLine : logLine);
             if (msg && msg.stack) { console.log(msg.stack); }
@@ -354,10 +354,9 @@ function create(_prefix:string, logToFile:ltfType, pathExists:peType):LogType {
     }
 
     function config(cfg:{colors?:boolean, format?:string, level?:symbol }) {
-        let colors = true;
-        if (cfg.colors!==undefined) { gColors = colors = cfg.colors; }  // true / false
-        if (cfg.format!==undefined) { format(cfg.format); }             // e.g. '%YYYY%MM%DD %hh:%mm:%ss.%jjj'
-        if (cfg.level!==undefined)  { level(cfg.level); }               // e.g. INFO
+        if (cfg.colors!==undefined) { gColors = cfg.colors; }   // true / false
+        if (cfg.format!==undefined) { format(cfg.format); }     // e.g. '%YYYY%MM%DD %hh:%mm:%ss.%jjj'
+        if (cfg.level!==undefined)  { level(cfg.level); }       // e.g. INFO
     }
 
     function inspect(msg:any, depth=1, indent=''):string {
