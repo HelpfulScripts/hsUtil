@@ -775,7 +775,7 @@
 			]
 		},
 		{
-			"id": 177,
+			"id": 176,
 			"name": "\"index\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -890,970 +890,983 @@
 					]
 				},
 				{
-					"id": 107,
+					"id": 86,
 					"name": "LogType",
-					"kind": 4194304,
-					"kindString": "Type alias",
+					"kind": 256,
+					"kindString": "Interface",
 					"flags": {
 						"isExported": true
 					},
-					"sources": [
+					"signatures": [
 						{
-							"fileName": "log.ts",
-							"line": 132,
-							"character": 19
-						}
-					],
-					"type": {
-						"type": "reflection",
-						"declaration": {
-							"id": 108,
-							"name": "__type",
-							"kind": 65536,
-							"kindString": "Type literal",
+							"id": 87,
+							"name": "__call",
+							"kind": 4096,
+							"kindString": "Call signature",
 							"flags": {},
-							"signatures": [
+							"parameters": [
 								{
-									"id": 109,
-									"name": "__call",
-									"kind": 4096,
-									"kindString": "Call signature",
+									"id": 88,
+									"name": "_prefix",
+									"kind": 32768,
+									"kindString": "Parameter",
 									"flags": {},
-									"parameters": [
-										{
-											"id": 110,
-											"name": "_prefix",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 111,
-											"name": "logToFile",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {
-												"isOptional": true
-											},
-											"type": {
-												"type": "reference",
-												"name": "ltfType",
-												"id": 162
-											}
-										},
-										{
-											"id": 112,
-											"name": "pathExists",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {
-												"isOptional": true
-											},
-											"type": {
-												"type": "reference",
-												"name": "peType",
-												"id": 167
-											}
-										}
-									],
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								},
+								{
+									"id": 89,
+									"name": "logToFile",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {
+										"isOptional": true
+									},
 									"type": {
 										"type": "reference",
-										"name": "LogType",
-										"id": 107
+										"name": "ltfType",
+										"id": 161
+									}
+								},
+								{
+									"id": 90,
+									"name": "pathExists",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {
+										"isOptional": true
+									},
+									"type": {
+										"type": "reference",
+										"name": "peType",
+										"id": 166
 									}
 								}
 							],
-							"children": [
+							"type": {
+								"type": "reference",
+								"name": "LogType",
+								"id": 86
+							}
+						}
+					],
+					"children": [
+						{
+							"id": 91,
+							"name": "DEBUG",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
 								{
-									"id": 113,
-									"name": "DEBUG",
-									"kind": 32,
-									"kindString": "Variable",
-									"flags": {},
-									"sources": [
-										{
-											"fileName": "log.ts",
-											"line": 134,
-											"character": 9
-										}
-									],
-									"type": {
-										"type": "intrinsic",
-										"name": "symbol"
-									}
-								},
+									"fileName": "log.ts",
+									"line": 134,
+									"character": 9
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "symbol"
+							}
+						},
+						{
+							"id": 94,
+							"name": "ERROR",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
 								{
-									"id": 116,
-									"name": "ERROR",
-									"kind": 32,
-									"kindString": "Variable",
-									"flags": {},
-									"sources": [
-										{
-											"fileName": "log.ts",
-											"line": 137,
-											"character": 9
-										}
-									],
-									"type": {
-										"type": "intrinsic",
-										"name": "symbol"
-									}
-								},
+									"fileName": "log.ts",
+									"line": 137,
+									"character": 9
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "symbol"
+							}
+						},
+						{
+							"id": 92,
+							"name": "INFO",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
 								{
-									"id": 114,
-									"name": "INFO",
-									"kind": 32,
-									"kindString": "Variable",
-									"flags": {},
-									"sources": [
-										{
-											"fileName": "log.ts",
-											"line": 135,
-											"character": 8
-										}
-									],
-									"type": {
-										"type": "intrinsic",
-										"name": "symbol"
-									}
-								},
+									"fileName": "log.ts",
+									"line": 135,
+									"character": 8
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "symbol"
+							}
+						},
+						{
+							"id": 93,
+							"name": "WARN",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
 								{
-									"id": 115,
-									"name": "WARN",
-									"kind": 32,
-									"kindString": "Variable",
-									"flags": {},
-									"sources": [
-										{
-											"fileName": "log.ts",
-											"line": 136,
-											"character": 8
-										}
-									],
-									"type": {
-										"type": "intrinsic",
-										"name": "symbol"
-									}
-								},
+									"fileName": "log.ts",
+									"line": 136,
+									"character": 8
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "symbol"
+							}
+						},
+						{
+							"id": 129,
+							"name": "config",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
 								{
-									"id": 151,
+									"id": 130,
 									"name": "config",
-									"kind": 64,
-									"kindString": "Function",
+									"kind": 4096,
+									"kindString": "Call signature",
 									"flags": {},
-									"signatures": [
+									"comment": {
+										"shortText": "configures the log facility.\n- cfg.colors: boolean, determines if output is colored\n- cfg.logfile: sets the naming template for the logfile. Set logFile=null to disable.\n- cfg.format: sets the format for the timestamp for each log entry\n- cfg.level: sets the reporting level (same as calling log.level())"
+									},
+									"parameters": [
 										{
-											"id": 152,
-											"name": "config",
-											"kind": 4096,
-											"kindString": "Call signature",
+											"id": 131,
+											"name": "cfg",
+											"kind": 32768,
+											"kindString": "Parameter",
 											"flags": {},
 											"comment": {
-												"shortText": "configures the log facility.\n- cfg.colors: boolean, determines if output is colored\n- cfg.logfile: sets the naming template for the logfile. Set logFile=null to disable.\n- cfg.format: sets the format for the timestamp for each log entry\n- cfg.level: sets the reporting level (same as calling log.level())"
+												"text": "\n"
 											},
-											"parameters": [
-												{
-													"id": 153,
-													"name": "cfg",
-													"kind": 32768,
-													"kindString": "Parameter",
+											"type": {
+												"type": "reflection",
+												"declaration": {
+													"id": 132,
+													"name": "__type",
+													"kind": 65536,
+													"kindString": "Type literal",
 													"flags": {},
-													"comment": {
-														"text": "\n"
-													},
-													"type": {
-														"type": "reflection",
-														"declaration": {
-															"id": 154,
-															"name": "__type",
-															"kind": 65536,
-															"kindString": "Type literal",
-															"flags": {},
-															"children": [
-																{
-																	"id": 155,
-																	"name": "colors",
-																	"kind": 32,
-																	"kindString": "Variable",
-																	"flags": {
-																		"isOptional": true
-																	},
-																	"sources": [
-																		{
-																			"fileName": "log.ts",
-																			"line": 247,
-																			"character": 22
-																		}
-																	],
-																	"type": {
-																		"type": "intrinsic",
-																		"name": "boolean"
-																	}
-																},
-																{
-																	"id": 156,
-																	"name": "format",
-																	"kind": 32,
-																	"kindString": "Variable",
-																	"flags": {
-																		"isOptional": true
-																	},
-																	"sources": [
-																		{
-																			"fileName": "log.ts",
-																			"line": 247,
-																			"character": 39
-																		}
-																	],
-																	"type": {
-																		"type": "intrinsic",
-																		"name": "string"
-																	}
-																},
-																{
-																	"id": 157,
-																	"name": "level",
-																	"kind": 32,
-																	"kindString": "Variable",
-																	"flags": {
-																		"isOptional": true
-																	},
-																	"sources": [
-																		{
-																			"fileName": "log.ts",
-																			"line": 247,
-																			"character": 54
-																		}
-																	],
-																	"type": {
-																		"type": "intrinsic",
-																		"name": "symbol"
-																	}
-																}
-															],
-															"groups": [
-																{
-																	"title": "Variables",
-																	"kind": 32,
-																	"children": [
-																		155,
-																		156,
-																		157
-																	]
-																}
-															],
+													"children": [
+														{
+															"id": 133,
+															"name": "colors",
+															"kind": 32,
+															"kindString": "Variable",
+															"flags": {
+																"isOptional": true
+															},
 															"sources": [
 																{
 																	"fileName": "log.ts",
 																	"line": 247,
-																	"character": 15
+																	"character": 22
 																}
+															],
+															"type": {
+																"type": "intrinsic",
+																"name": "boolean"
+															}
+														},
+														{
+															"id": 134,
+															"name": "format",
+															"kind": 32,
+															"kindString": "Variable",
+															"flags": {
+																"isOptional": true
+															},
+															"sources": [
+																{
+																	"fileName": "log.ts",
+																	"line": 247,
+																	"character": 39
+																}
+															],
+															"type": {
+																"type": "intrinsic",
+																"name": "string"
+															}
+														},
+														{
+															"id": 135,
+															"name": "level",
+															"kind": 32,
+															"kindString": "Variable",
+															"flags": {
+																"isOptional": true
+															},
+															"sources": [
+																{
+																	"fileName": "log.ts",
+																	"line": 247,
+																	"character": 54
+																}
+															],
+															"type": {
+																"type": "intrinsic",
+																"name": "symbol"
+															}
+														}
+													],
+													"groups": [
+														{
+															"title": "Variables",
+															"kind": 32,
+															"children": [
+																133,
+																134,
+																135
 															]
 														}
-													}
+													],
+													"sources": [
+														{
+															"fileName": "log.ts",
+															"line": 247,
+															"character": 15
+														}
+													]
 												}
-											],
-											"type": {
-												"type": "intrinsic",
-												"name": "void"
 											}
 										}
 									],
-									"sources": [
-										{
-											"fileName": "log.ts",
-											"line": 247,
-											"character": 10
-										}
-									]
-								},
-								{
-									"id": 121,
-									"name": "debug",
-									"kind": 64,
-									"kindString": "Function",
-									"flags": {},
-									"signatures": [
-										{
-											"id": 122,
-											"name": "debug",
-											"kind": 4096,
-											"kindString": "Call signature",
-											"flags": {},
-											"comment": {
-												"shortText": "reports an debug message to the log.\nThe message will actually be reported to the log only if the current\nreporting level is DEBUG or lower.",
-												"returns": "promise to return the file written to, or undefined\n"
-											},
-											"parameters": [
-												{
-													"id": 123,
-													"name": "msg",
-													"kind": 32768,
-													"kindString": "Parameter",
-													"flags": {},
-													"comment": {
-														"text": "the message to report. If msg is an object literal, a deep inspection will be printed."
-													},
-													"type": {
-														"type": "intrinsic",
-														"name": "any"
-													}
-												},
-												{
-													"id": 124,
-													"name": "log",
-													"kind": 32768,
-													"kindString": "Parameter",
-													"flags": {
-														"isOptional": true
-													},
-													"comment": {
-														"text": "optional flag to enable/suppress logging to file. Defaults to `true`"
-													},
-													"type": {
-														"type": "intrinsic",
-														"name": "boolean"
-													}
-												}
-											],
-											"type": {
-												"type": "reference",
-												"name": "Promise",
-												"typeArguments": [
-													{
-														"type": "intrinsic",
-														"name": "string"
-													}
-												]
-											}
-										}
-									],
-									"sources": [
-										{
-											"fileName": "log.ts",
-											"line": 165,
-											"character": 9
-										}
-									]
-								},
-								{
-									"id": 133,
-									"name": "error",
-									"kind": 64,
-									"kindString": "Function",
-									"flags": {},
-									"signatures": [
-										{
-											"id": 134,
-											"name": "error",
-											"kind": 4096,
-											"kindString": "Call signature",
-											"flags": {},
-											"comment": {
-												"shortText": "reports an error message to the log.\nThe message will always be reported to the log.",
-												"returns": "promise to return the file written to, or undefined\n"
-											},
-											"parameters": [
-												{
-													"id": 135,
-													"name": "msg",
-													"kind": 32768,
-													"kindString": "Parameter",
-													"flags": {},
-													"comment": {
-														"text": "the message to report. If msg is an object literal, a deep inspection will be printed."
-													},
-													"type": {
-														"type": "intrinsic",
-														"name": "any"
-													}
-												},
-												{
-													"id": 136,
-													"name": "log",
-													"kind": 32768,
-													"kindString": "Parameter",
-													"flags": {
-														"isOptional": true
-													},
-													"comment": {
-														"text": "optional flag to enable/suppress logging to file. Defaults to `true`"
-													},
-													"type": {
-														"type": "intrinsic",
-														"name": "boolean"
-													}
-												}
-											],
-											"type": {
-												"type": "reference",
-												"name": "Promise",
-												"typeArguments": [
-													{
-														"type": "intrinsic",
-														"name": "string"
-													}
-												]
-											}
-										}
-									],
-									"sources": [
-										{
-											"fileName": "log.ts",
-											"line": 194,
-											"character": 9
-										}
-									]
-								},
-								{
-									"id": 145,
-									"name": "format",
-									"kind": 64,
-									"kindString": "Function",
-									"flags": {},
-									"signatures": [
-										{
-											"id": 146,
-											"name": "format",
-											"kind": 4096,
-											"kindString": "Call signature",
-											"flags": {},
-											"comment": {
-												"shortText": "sets the format string to use for logging. If no parameter is specified,\nthe function returns the currently set format string. The preset is '%YYYY%MM%DD %hh:%mm:%ss.%jjj'\nFor supported formats see {@link date date}.\nUsage\n- `format(null)` sets the format to `defDateFormat`\n- `format()` returns the current format without changing it.",
-												"returns": "the currently set format string\n"
-											},
-											"parameters": [
-												{
-													"id": 147,
-													"name": "fmtStr",
-													"kind": 32768,
-													"kindString": "Parameter",
-													"flags": {
-														"isOptional": true
-													},
-													"comment": {
-														"text": "optional format string to use;"
-													},
-													"type": {
-														"type": "intrinsic",
-														"name": "string"
-													}
-												}
-											],
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										}
-									],
-									"sources": [
-										{
-											"fileName": "log.ts",
-											"line": 230,
-											"character": 10
-										}
-									]
-								},
-								{
-									"id": 125,
-									"name": "info",
-									"kind": 64,
-									"kindString": "Function",
-									"flags": {},
-									"signatures": [
-										{
-											"id": 126,
-											"name": "info",
-											"kind": 4096,
-											"kindString": "Call signature",
-											"flags": {},
-											"comment": {
-												"shortText": "reports an informational message to the log.\nThe message will actually be reported to the log only if the current\nreporting level is INFO or lower.",
-												"returns": "promise to return the file written to, or undefined\n"
-											},
-											"parameters": [
-												{
-													"id": 127,
-													"name": "msg",
-													"kind": 32768,
-													"kindString": "Parameter",
-													"flags": {},
-													"comment": {
-														"text": "the message to report. If msg is an object literal, a deep inspection will be printed."
-													},
-													"type": {
-														"type": "intrinsic",
-														"name": "any"
-													}
-												},
-												{
-													"id": 128,
-													"name": "log",
-													"kind": 32768,
-													"kindString": "Parameter",
-													"flags": {
-														"isOptional": true
-													},
-													"comment": {
-														"text": "optional flag to enable/suppress logging to file. Defaults to `true`"
-													},
-													"type": {
-														"type": "intrinsic",
-														"name": "boolean"
-													}
-												}
-											],
-											"type": {
-												"type": "reference",
-												"name": "Promise",
-												"typeArguments": [
-													{
-														"type": "intrinsic",
-														"name": "string"
-													}
-												]
-											}
-										}
-									],
-									"sources": [
-										{
-											"fileName": "log.ts",
-											"line": 175,
-											"character": 8
-										}
-									]
-								},
-								{
-									"id": 158,
-									"name": "inspect",
-									"kind": 64,
-									"kindString": "Function",
-									"flags": {},
-									"signatures": [
-										{
-											"id": 159,
-											"name": "inspect",
-											"kind": 4096,
-											"kindString": "Call signature",
-											"flags": {},
-											"comment": {
-												"shortText": "Simplifies node `util.inspect` call.\nUsage: `log.info(log.inspect(struct, 1))`"
-											},
-											"parameters": [
-												{
-													"id": 160,
-													"name": "msg",
-													"kind": 32768,
-													"kindString": "Parameter",
-													"flags": {},
-													"comment": {
-														"text": "the object literal to inspect"
-													},
-													"type": {
-														"type": "intrinsic",
-														"name": "any"
-													}
-												},
-												{
-													"id": 161,
-													"name": "depth",
-													"kind": 32768,
-													"kindString": "Parameter",
-													"flags": {
-														"isOptional": true
-													},
-													"comment": {
-														"text": "depth of recursion, defaults to 1. Use `null` for infinite depth\n"
-													},
-													"type": {
-														"type": "intrinsic",
-														"name": "number"
-													}
-												}
-											],
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										}
-									],
-									"sources": [
-										{
-											"fileName": "log.ts",
-											"line": 255,
-											"character": 11
-										}
-									]
-								},
-								{
-									"id": 117,
-									"name": "level",
-									"kind": 64,
-									"kindString": "Function",
-									"flags": {},
-									"signatures": [
-										{
-											"id": 118,
-											"name": "level",
-											"kind": 4096,
-											"kindString": "Call signature",
-											"flags": {},
-											"comment": {
-												"shortText": "sets the reporting level according to `newLevel`.\nValid values are {@link log.DEBUG log.DEBUG}, {@link log.INFO log.INFO},\n{@link log.WARN log.WARN}, {@link log.ERROR log.ERROR}, or `null`.\nSubsequent reporting calls will be filtered such that only calls with an importance\nat least the same as `newLevel` will be written to the log.<br>",
-												"text": "By default, `newLevel` sets the reporting level for the module only, and takes precedence over\nany global level setting. Providing `null` as level value passes precedence back to the global setting.\nThis allows for simple per-module settings, for example in debugging scenarios.",
-												"returns": "the new reporting level (DEBUG, INFO, WARN, ERROR)\n"
-											},
-											"parameters": [
-												{
-													"id": 119,
-													"name": "newLevelSym",
-													"kind": 32768,
-													"kindString": "Parameter",
-													"flags": {
-														"isOptional": true
-													},
-													"comment": {
-														"text": "the new reporting level to set.\nIf omitted, the method returns the currently set reporting level.\nIf set to `null`, the module's local reporting level defaults to the global reporting level; `setGlobalLevel` is ignored."
-													},
-													"type": {
-														"type": "intrinsic",
-														"name": "symbol"
-													}
-												},
-												{
-													"id": 120,
-													"name": "setGlobalLevel",
-													"kind": 32768,
-													"kindString": "Parameter",
-													"flags": {
-														"isOptional": true
-													},
-													"comment": {
-														"text": "defaults to `false`. If `true`, sets the global reporting level for all modules."
-													},
-													"type": {
-														"type": "intrinsic",
-														"name": "boolean"
-													}
-												}
-											],
-											"type": {
-												"type": "intrinsic",
-												"name": "symbol"
-											}
-										}
-									],
-									"sources": [
-										{
-											"fileName": "log.ts",
-											"line": 155,
-											"character": 9
-										}
-									]
-								},
-								{
-									"id": 142,
-									"name": "logFile",
-									"kind": 64,
-									"kindString": "Function",
-									"flags": {},
-									"signatures": [
-										{
-											"id": 143,
-											"name": "logFile",
-											"kind": 4096,
-											"kindString": "Call signature",
-											"flags": {},
-											"comment": {
-												"shortText": "sets a new logfile name template. Logfiles are created using this template\nat the time of each log entry call. If the file exists, the log entry will be appended.\nThis is a global setting that affects reporting in all modules.\nUsage:\n- `logFile()`: return the current logfile name\n- `logFile(null)`: disable log file\n- `logFile('')`: set default log file template `log-%YYYY-%MM-%DD.txt`\n- `logFile('log%D/%M/%Y.log')`: set new log file template",
-												"returns": "promise to return the current logfile, or `undefined` if loggimng is disabled.\n"
-											},
-											"parameters": [
-												{
-													"id": 144,
-													"name": "file",
-													"kind": 32768,
-													"kindString": "Parameter",
-													"flags": {
-														"isOptional": true
-													},
-													"comment": {
-														"text": "a template to use for log file names. Options for calling:"
-													},
-													"type": {
-														"type": "intrinsic",
-														"name": "string"
-													}
-												}
-											],
-											"type": {
-												"type": "reference",
-												"name": "Promise",
-												"typeArguments": [
-													{
-														"type": "intrinsic",
-														"name": "string"
-													}
-												]
-											}
-										}
-									],
-									"sources": [
-										{
-											"fileName": "log.ts",
-											"line": 218,
-											"character": 11
-										}
-									]
-								},
-								{
-									"id": 137,
-									"name": "out",
-									"kind": 64,
-									"kindString": "Function",
-									"flags": {},
-									"signatures": [
-										{
-											"id": 138,
-											"name": "out",
-											"kind": 4096,
-											"kindString": "Call signature",
-											"flags": {},
-											"comment": {
-												"shortText": "reports an error message to the log.\nThe message will be reported to the log if `lvl` meets or exceeds the current reporting level.",
-												"returns": "promise to return the file written to, or undefined\n"
-											},
-											"parameters": [
-												{
-													"id": 139,
-													"name": "lvl",
-													"kind": 32768,
-													"kindString": "Parameter",
-													"flags": {},
-													"comment": {
-														"text": "the reporting level of `msg`"
-													},
-													"type": {
-														"type": "intrinsic",
-														"name": "symbol"
-													}
-												},
-												{
-													"id": 140,
-													"name": "msg",
-													"kind": 32768,
-													"kindString": "Parameter",
-													"flags": {},
-													"comment": {
-														"text": "the message to report. If msg is an object literal, a deep inspection will be printed."
-													},
-													"type": {
-														"type": "intrinsic",
-														"name": "any"
-													}
-												},
-												{
-													"id": 141,
-													"name": "log",
-													"kind": 32768,
-													"kindString": "Parameter",
-													"flags": {
-														"isOptional": true
-													},
-													"comment": {
-														"text": "optional flag to enable/suppress logging to file. Defaults to `true`"
-													},
-													"type": {
-														"type": "intrinsic",
-														"name": "boolean"
-													}
-												}
-											],
-											"type": {
-												"type": "reference",
-												"name": "Promise",
-												"typeArguments": [
-													{
-														"type": "intrinsic",
-														"name": "string"
-													}
-												]
-											}
-										}
-									],
-									"sources": [
-										{
-											"fileName": "log.ts",
-											"line": 204,
-											"character": 7
-										}
-									]
-								},
-								{
-									"id": 148,
-									"name": "prefix",
-									"kind": 64,
-									"kindString": "Function",
-									"flags": {},
-									"signatures": [
-										{
-											"id": 149,
-											"name": "prefix",
-											"kind": 4096,
-											"kindString": "Call signature",
-											"flags": {},
-											"comment": {
-												"shortText": "defines a prefix to be printed for each call to a log function.",
-												"returns": "the new prefix\n"
-											},
-											"parameters": [
-												{
-													"id": 150,
-													"name": "prf",
-													"kind": 32768,
-													"kindString": "Parameter",
-													"flags": {
-														"isOptional": true
-													},
-													"comment": {
-														"text": "the prefix to prepend. Defaults to '';"
-													},
-													"type": {
-														"type": "intrinsic",
-														"name": "string"
-													}
-												}
-											],
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										}
-									],
-									"sources": [
-										{
-											"fileName": "log.ts",
-											"line": 237,
-											"character": 10
-										}
-									]
-								},
-								{
-									"id": 129,
-									"name": "warn",
-									"kind": 64,
-									"kindString": "Function",
-									"flags": {},
-									"signatures": [
-										{
-											"id": 130,
-											"name": "warn",
-											"kind": 4096,
-											"kindString": "Call signature",
-											"flags": {},
-											"comment": {
-												"shortText": "reports an warning message to the log.\nThe message will actually be reported to the log only if the current\nreporting level is WARN or lower.",
-												"returns": "promise to return the file written to, or undefined\n"
-											},
-											"parameters": [
-												{
-													"id": 131,
-													"name": "msg",
-													"kind": 32768,
-													"kindString": "Parameter",
-													"flags": {},
-													"comment": {
-														"text": "the message to report. If msg is an object literal, a deep inspection will be printed."
-													},
-													"type": {
-														"type": "intrinsic",
-														"name": "any"
-													}
-												},
-												{
-													"id": 132,
-													"name": "log",
-													"kind": 32768,
-													"kindString": "Parameter",
-													"flags": {
-														"isOptional": true
-													},
-													"comment": {
-														"text": "optional flag to enable/suppress logging to file. Defaults to `true`"
-													},
-													"type": {
-														"type": "intrinsic",
-														"name": "boolean"
-													}
-												}
-											],
-											"type": {
-												"type": "reference",
-												"name": "Promise",
-												"typeArguments": [
-													{
-														"type": "intrinsic",
-														"name": "string"
-													}
-												]
-											}
-										}
-									],
-									"sources": [
-										{
-											"fileName": "log.ts",
-											"line": 185,
-											"character": 8
-										}
-									]
-								}
-							],
-							"groups": [
-								{
-									"title": "Variables",
-									"kind": 32,
-									"children": [
-										113,
-										116,
-										114,
-										115
-									]
-								},
-								{
-									"title": "Functions",
-									"kind": 64,
-									"children": [
-										151,
-										121,
-										133,
-										145,
-										125,
-										158,
-										117,
-										142,
-										137,
-										148,
-										129
-									]
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
 								}
 							],
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 132,
-									"character": 21
+									"line": 247,
+									"character": 10
+								}
+							]
+						},
+						{
+							"id": 99,
+							"name": "debug",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 100,
+									"name": "debug",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "reports an debug message to the log.\nThe message will actually be reported to the log only if the current\nreporting level is DEBUG or lower.",
+										"returns": "promise to return the file written to, or undefined\n"
+									},
+									"parameters": [
+										{
+											"id": 101,
+											"name": "msg",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"comment": {
+												"text": "the message to report. If msg is an object literal, a deep inspection will be printed."
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "any"
+											}
+										},
+										{
+											"id": 102,
+											"name": "log",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"text": "optional flag to enable/suppress logging to file. Defaults to `true`"
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "boolean"
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"name": "Promise",
+										"typeArguments": [
+											{
+												"type": "intrinsic",
+												"name": "string"
+											}
+										]
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 165,
+									"character": 9
+								}
+							]
+						},
+						{
+							"id": 111,
+							"name": "error",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 112,
+									"name": "error",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "reports an error message to the log.\nThe message will always be reported to the log.",
+										"returns": "promise to return the file written to, or undefined\n"
+									},
+									"parameters": [
+										{
+											"id": 113,
+											"name": "msg",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"comment": {
+												"text": "the message to report. If msg is an object literal, a deep inspection will be printed."
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "any"
+											}
+										},
+										{
+											"id": 114,
+											"name": "log",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"text": "optional flag to enable/suppress logging to file. Defaults to `true`"
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "boolean"
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"name": "Promise",
+										"typeArguments": [
+											{
+												"type": "intrinsic",
+												"name": "string"
+											}
+										]
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 194,
+									"character": 9
+								}
+							]
+						},
+						{
+							"id": 123,
+							"name": "format",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 124,
+									"name": "format",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "sets the format string to use for logging. If no parameter is specified,\nthe function returns the currently set format string. The preset is '%YYYY%MM%DD %hh:%mm:%ss.%jjj'\nFor supported formats see {@link date date}.\nUsage\n- `format(null)` sets the format to `defDateFormat`\n- `format()` returns the current format without changing it.",
+										"returns": "the currently set format string\n"
+									},
+									"parameters": [
+										{
+											"id": 125,
+											"name": "fmtStr",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"text": "optional format string to use;"
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 230,
+									"character": 10
+								}
+							]
+						},
+						{
+							"id": 103,
+							"name": "info",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 104,
+									"name": "info",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "reports an informational message to the log.\nThe message will actually be reported to the log only if the current\nreporting level is INFO or lower.",
+										"returns": "promise to return the file written to, or undefined\n"
+									},
+									"parameters": [
+										{
+											"id": 105,
+											"name": "msg",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"comment": {
+												"text": "the message to report. If msg is an object literal, a deep inspection will be printed."
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "any"
+											}
+										},
+										{
+											"id": 106,
+											"name": "log",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"text": "optional flag to enable/suppress logging to file. Defaults to `true`"
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "boolean"
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"name": "Promise",
+										"typeArguments": [
+											{
+												"type": "intrinsic",
+												"name": "string"
+											}
+										]
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 175,
+									"character": 8
+								}
+							]
+						},
+						{
+							"id": 136,
+							"name": "inspect",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 137,
+									"name": "inspect",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "Simplifies node `util.inspect` call.\nUsage: `log.info(log.inspect(struct, 1))`"
+									},
+									"parameters": [
+										{
+											"id": 138,
+											"name": "msg",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"comment": {
+												"text": "the object literal to inspect"
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "any"
+											}
+										},
+										{
+											"id": 139,
+											"name": "depth",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"text": "depth of recursion, defaults to 1. Use `null` for infinite depth\n"
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "number"
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 255,
+									"character": 11
+								}
+							]
+						},
+						{
+							"id": 95,
+							"name": "level",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 96,
+									"name": "level",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "sets the reporting level according to `newLevel`.\nValid values are {@link log.DEBUG log.DEBUG}, {@link log.INFO log.INFO},\n{@link log.WARN log.WARN}, {@link log.ERROR log.ERROR}, or `null`.\nSubsequent reporting calls will be filtered such that only calls with an importance\nat least the same as `newLevel` will be written to the log.<br>",
+										"text": "By default, `newLevel` sets the reporting level for the module only, and takes precedence over\nany global level setting. Providing `null` as level value passes precedence back to the global setting.\nThis allows for simple per-module settings, for example in debugging scenarios.",
+										"returns": "the new reporting level (DEBUG, INFO, WARN, ERROR)\n"
+									},
+									"parameters": [
+										{
+											"id": 97,
+											"name": "newLevelSym",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"text": "the new reporting level to set.\nIf omitted, the method returns the currently set reporting level.\nIf set to `null`, the module's local reporting level defaults to the global reporting level; `setGlobalLevel` is ignored."
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "symbol"
+											}
+										},
+										{
+											"id": 98,
+											"name": "setGlobalLevel",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"text": "defaults to `false`. If `true`, sets the global reporting level for all modules."
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "boolean"
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "symbol"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 155,
+									"character": 9
+								}
+							]
+						},
+						{
+							"id": 120,
+							"name": "logFile",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 121,
+									"name": "logFile",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "sets a new logfile name template. Logfiles are created using this template\nat the time of each log entry call. If the file exists, the log entry will be appended.\nThis is a global setting that affects reporting in all modules.\nUsage:\n- `logFile()`: return the current logfile name\n- `logFile(null)`: disable log file\n- `logFile('')`: set default log file template `log-%YYYY-%MM-%DD.txt`\n- `logFile('log%D/%M/%Y.log')`: set new log file template",
+										"returns": "promise to return the current logfile, or `undefined` if loggimng is disabled.\n"
+									},
+									"parameters": [
+										{
+											"id": 122,
+											"name": "file",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"text": "a template to use for log file names. Options for calling:"
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"name": "Promise",
+										"typeArguments": [
+											{
+												"type": "intrinsic",
+												"name": "string"
+											}
+										]
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 218,
+									"character": 11
+								}
+							]
+						},
+						{
+							"id": 115,
+							"name": "out",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 116,
+									"name": "out",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "reports an error message to the log.\nThe message will be reported to the log if `lvl` meets or exceeds the current reporting level.",
+										"returns": "promise to return the file written to, or undefined\n"
+									},
+									"parameters": [
+										{
+											"id": 117,
+											"name": "lvl",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"comment": {
+												"text": "the reporting level of `msg`"
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "symbol"
+											}
+										},
+										{
+											"id": 118,
+											"name": "msg",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"comment": {
+												"text": "the message to report. If msg is an object literal, a deep inspection will be printed."
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "any"
+											}
+										},
+										{
+											"id": 119,
+											"name": "log",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"text": "optional flag to enable/suppress logging to file. Defaults to `true`"
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "boolean"
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"name": "Promise",
+										"typeArguments": [
+											{
+												"type": "intrinsic",
+												"name": "string"
+											}
+										]
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 204,
+									"character": 7
+								}
+							]
+						},
+						{
+							"id": 126,
+							"name": "prefix",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 127,
+									"name": "prefix",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "defines a prefix to be printed for each call to a log function.",
+										"returns": "the new prefix\n"
+									},
+									"parameters": [
+										{
+											"id": 128,
+											"name": "prf",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"text": "the prefix to prepend. Defaults to '';"
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 237,
+									"character": 10
+								}
+							]
+						},
+						{
+							"id": 107,
+							"name": "warn",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 108,
+									"name": "warn",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "reports an warning message to the log.\nThe message will actually be reported to the log only if the current\nreporting level is WARN or lower.",
+										"returns": "promise to return the file written to, or undefined\n"
+									},
+									"parameters": [
+										{
+											"id": 109,
+											"name": "msg",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"comment": {
+												"text": "the message to report. If msg is an object literal, a deep inspection will be printed."
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "any"
+											}
+										},
+										{
+											"id": 110,
+											"name": "log",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"text": "optional flag to enable/suppress logging to file. Defaults to `true`"
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "boolean"
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"name": "Promise",
+										"typeArguments": [
+											{
+												"type": "intrinsic",
+												"name": "string"
+											}
+										]
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 185,
+									"character": 8
 								}
 							]
 						}
-					}
+					],
+					"groups": [
+						{
+							"title": "Properties",
+							"kind": 1024,
+							"children": [
+								91,
+								94,
+								92,
+								93
+							]
+						},
+						{
+							"title": "Methods",
+							"kind": 2048,
+							"children": [
+								129,
+								99,
+								111,
+								123,
+								103,
+								136,
+								95,
+								120,
+								115,
+								126,
+								107
+							]
+						}
+					],
+					"sources": [
+						{
+							"fileName": "log.ts",
+							"line": 132,
+							"character": 24
+						}
+					]
 				},
 				{
-					"id": 162,
+					"id": 161,
 					"name": "ltfType",
 					"kind": 4194304,
 					"kindString": "Type alias",
@@ -1868,21 +1881,21 @@
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 163,
+							"id": 162,
 							"name": "__type",
 							"kind": 65536,
 							"kindString": "Type literal",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 164,
+									"id": 163,
 									"name": "__call",
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
 									"parameters": [
 										{
-											"id": 165,
+											"id": 164,
 											"name": "filename",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -1893,7 +1906,7 @@
 											}
 										},
 										{
-											"id": 166,
+											"id": 165,
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -1927,7 +1940,7 @@
 					}
 				},
 				{
-					"id": 167,
+					"id": 166,
 					"name": "peType",
 					"kind": 4194304,
 					"kindString": "Type alias",
@@ -1942,21 +1955,21 @@
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 168,
+							"id": 167,
 							"name": "__type",
 							"kind": 65536,
 							"kindString": "Type literal",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 169,
+									"id": 168,
 									"name": "__call",
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
 									"parameters": [
 										{
-											"id": 170,
+											"id": 169,
 											"name": "path",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -1990,7 +2003,7 @@
 					}
 				},
 				{
-					"id": 86,
+					"id": 140,
 					"name": "DEBUG",
 					"kind": 32,
 					"kindString": "Variable",
@@ -2014,7 +2027,7 @@
 					"defaultValue": " Symbol('DEBUG')"
 				},
 				{
-					"id": 89,
+					"id": 143,
 					"name": "ERROR",
 					"kind": 32,
 					"kindString": "Variable",
@@ -2038,7 +2051,7 @@
 					"defaultValue": " Symbol('ERROR')"
 				},
 				{
-					"id": 87,
+					"id": 141,
 					"name": "INFO",
 					"kind": 32,
 					"kindString": "Variable",
@@ -2062,7 +2075,7 @@
 					"defaultValue": " Symbol('INFO')"
 				},
 				{
-					"id": 88,
+					"id": 142,
 					"name": "WARN",
 					"kind": 32,
 					"kindString": "Variable",
@@ -2086,7 +2099,7 @@
 					"defaultValue": " Symbol('WARN')"
 				},
 				{
-					"id": 97,
+					"id": 151,
 					"name": "defDateFormat",
 					"kind": 32,
 					"kindString": "Variable",
@@ -2110,7 +2123,7 @@
 					"defaultValue": "\"%YYYY%MM%DD %hh:%mm:%ss.%jjj\""
 				},
 				{
-					"id": 99,
+					"id": 153,
 					"name": "gColors",
 					"kind": 32,
 					"kindString": "Variable",
@@ -2134,7 +2147,7 @@
 					"defaultValue": "false"
 				},
 				{
-					"id": 98,
+					"id": 152,
 					"name": "gDateFormat",
 					"kind": 32,
 					"kindString": "Variable",
@@ -2155,7 +2168,7 @@
 					"defaultValue": " defDateFormat"
 				},
 				{
-					"id": 96,
+					"id": 150,
 					"name": "gGlobalLevel",
 					"kind": 32,
 					"kindString": "Variable",
@@ -2180,7 +2193,7 @@
 					"defaultValue": " gLevels[INFO]"
 				},
 				{
-					"id": 90,
+					"id": 144,
 					"name": "gLogFile",
 					"kind": 32,
 					"kindString": "Variable",
@@ -2203,7 +2216,7 @@
 					}
 				},
 				{
-					"id": 171,
+					"id": 170,
 					"name": "log",
 					"kind": 32,
 					"kindString": "Variable",
@@ -2224,26 +2237,26 @@
 					"type": {
 						"type": "reference",
 						"name": "LogType",
-						"id": 107
+						"id": 86
 					},
 					"defaultValue": " create('', \n    (filename:string, msg:string):Promise<string> => Promise.resolve(undefined), \n    /** default implementation for browser usage: don't allow '/' in log file name */\n    (path:string):Promise<boolean> =>Promise.resolve(path.indexOf('/')>=0? false : true)\n)"
 				},
 				{
-					"id": 172,
+					"id": 171,
 					"name": "create",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 173,
+							"id": 172,
 							"name": "create",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 174,
+									"id": 173,
 									"name": "_prefix",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2254,7 +2267,7 @@
 									}
 								},
 								{
-									"id": 175,
+									"id": 174,
 									"name": "logToFile",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2262,11 +2275,11 @@
 									"type": {
 										"type": "reference",
 										"name": "ltfType",
-										"id": 162
+										"id": 161
 									}
 								},
 								{
-									"id": 176,
+									"id": 175,
 									"name": "pathExists",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2274,14 +2287,14 @@
 									"type": {
 										"type": "reference",
 										"name": "peType",
-										"id": 167
+										"id": 166
 									}
 								}
 							],
 							"type": {
 								"type": "reference",
 								"name": "LogType",
-								"id": 107
+								"id": 86
 							}
 						}
 					],
@@ -2294,7 +2307,7 @@
 					]
 				},
 				{
-					"id": 100,
+					"id": 154,
 					"name": "color",
 					"kind": 2097152,
 					"kindString": "Object literal",
@@ -2306,7 +2319,7 @@
 					},
 					"children": [
 						{
-							"id": 103,
+							"id": 157,
 							"name": "blue",
 							"kind": 32,
 							"kindString": "Variable",
@@ -2325,7 +2338,7 @@
 							"defaultValue": "\"\u001b[36m\""
 						},
 						{
-							"id": 105,
+							"id": 159,
 							"name": "bold",
 							"kind": 32,
 							"kindString": "Variable",
@@ -2344,7 +2357,7 @@
 							"defaultValue": "\"\u001b[1m\""
 						},
 						{
-							"id": 106,
+							"id": 160,
 							"name": "clear",
 							"kind": 32,
 							"kindString": "Variable",
@@ -2363,7 +2376,7 @@
 							"defaultValue": "\"\u001b[0m\""
 						},
 						{
-							"id": 104,
+							"id": 158,
 							"name": "green",
 							"kind": 32,
 							"kindString": "Variable",
@@ -2382,7 +2395,7 @@
 							"defaultValue": "\"\u001b[32m\""
 						},
 						{
-							"id": 101,
+							"id": 155,
 							"name": "red",
 							"kind": 32,
 							"kindString": "Variable",
@@ -2401,7 +2414,7 @@
 							"defaultValue": "\"\u001b[31m\""
 						},
 						{
-							"id": 102,
+							"id": 156,
 							"name": "yellow",
 							"kind": 32,
 							"kindString": "Variable",
@@ -2425,12 +2438,12 @@
 							"title": "Variables",
 							"kind": 32,
 							"children": [
-								103,
-								105,
-								106,
-								104,
-								101,
-								102
+								157,
+								159,
+								160,
+								158,
+								155,
+								156
 							]
 						}
 					],
@@ -2447,7 +2460,7 @@
 					}
 				},
 				{
-					"id": 91,
+					"id": 145,
 					"name": "gLevels",
 					"kind": 2097152,
 					"kindString": "Object literal",
@@ -2459,14 +2472,14 @@
 					},
 					"children": [
 						{
-							"id": 92,
+							"id": 146,
 							"name": "__computed",
 							"kind": 2097152,
 							"kindString": "Object literal",
 							"flags": {},
 							"children": [
 								{
-									"id": 95,
+									"id": 149,
 									"name": "desc",
 									"kind": 32,
 									"kindString": "Variable",
@@ -2500,7 +2513,7 @@
 									"defaultValue": "\"ERROR\""
 								},
 								{
-									"id": 93,
+									"id": 147,
 									"name": "importance",
 									"kind": 32,
 									"kindString": "Variable",
@@ -2534,7 +2547,7 @@
 									"defaultValue": "3"
 								},
 								{
-									"id": 94,
+									"id": 148,
 									"name": "sym",
 									"kind": 32,
 									"kindString": "Variable",
@@ -2573,9 +2586,9 @@
 									"title": "Variables",
 									"kind": 32,
 									"children": [
-										95,
-										93,
-										94
+										149,
+										147,
+										148
 									]
 								}
 							],
@@ -2612,7 +2625,7 @@
 							"title": "Object literals",
 							"kind": 2097152,
 							"children": [
-								92
+								146
 							]
 						}
 					],
@@ -2634,47 +2647,47 @@
 					"title": "Interfaces",
 					"kind": 256,
 					"children": [
-						82
+						82,
+						86
 					]
 				},
 				{
 					"title": "Type aliases",
 					"kind": 4194304,
 					"children": [
-						107,
-						162,
-						167
+						161,
+						166
 					]
 				},
 				{
 					"title": "Variables",
 					"kind": 32,
 					"children": [
-						86,
-						89,
-						87,
-						88,
-						97,
-						99,
-						98,
-						96,
-						90,
-						171
+						140,
+						143,
+						141,
+						142,
+						151,
+						153,
+						152,
+						150,
+						144,
+						170
 					]
 				},
 				{
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						172
+						171
 					]
 				},
 				{
 					"title": "Object literals",
 					"kind": 2097152,
 					"children": [
-						100,
-						91
+						154,
+						145
 					]
 				}
 			],
@@ -2687,7 +2700,7 @@
 			]
 		},
 		{
-			"id": 178,
+			"id": 177,
 			"name": "\"overview\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -3386,9 +3399,9 @@
 				1,
 				5,
 				76,
-				177,
+				176,
 				81,
-				178,
+				177,
 				41
 			]
 		}

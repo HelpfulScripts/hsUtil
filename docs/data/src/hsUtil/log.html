@@ -121,7 +121,7 @@
 <p id=98 class="line"><span>&nbsp;&nbsp;98</span><comment>/**</comment></p>
 <p id=99 class="line"><span>&nbsp;&nbsp;99</span><comment>&nbsp;*&nbsp;Type&nbsp;definition&nbsp;for&nbsp;level&nbsp;descriptors</comment></p>
 <p id=100 class="line"><span>&nbsp;100</span><comment>&nbsp;*/</comment></p>
-<p id=101 class="line"><span>&nbsp;101</span>interface&nbsp;LevelDesc&nbsp;{&nbsp;importance:number;&nbsp;sym:symbol;&nbsp;desc:string;&nbsp;};</p>
+<p id=101 class="line"><span>&nbsp;101</span>interface&nbsp;LevelDesc&nbsp;{&nbsp;importance:number;&nbsp;sym:symbol;&nbsp;desc:string;&nbsp;}</p>
 <p id=102 class="line"><span>&nbsp;102</span></p>
 <p id=103 class="line"><span>&nbsp;103</span><comment>/**&nbsp;map&nbsp;of&nbsp;valid&nbsp;reporting&nbsp;levels&nbsp;*/</comment></p>
 <p id=104 class="line"><span>&nbsp;104</span>const&nbsp;gLevels&nbsp;=&nbsp;{</p>
@@ -152,7 +152,7 @@
 <p id=129 class="line"><span>&nbsp;129</span>};</p>
 <p id=130 class="line"><span>&nbsp;130</span></p>
 <p id=131 class="line"><span>&nbsp;131</span></p>
-<p id=132 class="line"><span>&nbsp;132</span>export&nbsp;type&nbsp;LogType&nbsp;=&nbsp;{</p>
+<p id=132 class="line"><span>&nbsp;132</span>export&nbsp;interface&nbsp;LogType&nbsp;{</p>
 <p id=133 class="line"><span>&nbsp;133</span>&nbsp;&nbsp;&nbsp;&nbsp;(_prefix:string,&nbsp;logToFile?:ltfType,&nbsp;pathExists?:peType):&nbsp;LogType;</p>
 <p id=134 class="line"><span>&nbsp;134</span>&nbsp;&nbsp;&nbsp;&nbsp;DEBUG:&nbsp;&nbsp;symbol;</p>
 <p id=135 class="line"><span>&nbsp;135</span>&nbsp;&nbsp;&nbsp;&nbsp;INFO:&nbsp;&nbsp;&nbsp;symbol;</p>
@@ -276,7 +276,7 @@
 <p id=253 class="line"><span>&nbsp;253</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;depth&nbsp;depth&nbsp;of&nbsp;recursion,&nbsp;defaults&nbsp;to&nbsp;1.&nbsp;Use&nbsp;`null`&nbsp;for&nbsp;infinite&nbsp;depth</comment></p>
 <p id=254 class="line"><span>&nbsp;254</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</comment></p>
 <p id=255 class="line"><span>&nbsp;255</span>&nbsp;&nbsp;&nbsp;&nbsp;inspect(msg:any,&nbsp;depth?:number):string;</p>
-<p id=256 class="line"><span>&nbsp;256</span>};</p>
+<p id=256 class="line"><span>&nbsp;256</span>}</p>
 <p id=257 class="line"><span>&nbsp;257</span></p>
 <p id=258 class="line"><span>&nbsp;258</span>type&nbsp;ltfType&nbsp;=&nbsp;(filename:string,&nbsp;msg:string)=>Promise<string>;</p>
 <p id=259 class="line"><span>&nbsp;259</span>type&nbsp;peType&nbsp;&nbsp;=&nbsp;(path:string)=>Promise<boolean>;</p>

@@ -98,7 +98,7 @@ let gLogFile: string;	// initially disabled
 /**
  * Type definition for level descriptors
  */
-interface LevelDesc { importance:number; sym:symbol; desc:string; };
+interface LevelDesc { importance:number; sym:symbol; desc:string; }
 
 /** map of valid reporting levels */
 const gLevels = {
@@ -129,7 +129,7 @@ const color = {
 };
 
 
-export type LogType = {
+export interface LogType {
     (_prefix:string, logToFile?:ltfType, pathExists?:peType): LogType;
     DEBUG:  symbol;
     INFO:   symbol;
@@ -253,7 +253,7 @@ export type LogType = {
      * @param depth depth of recursion, defaults to 1. Use `null` for infinite depth
      */
     inspect(msg:any, depth?:number):string;
-};
+}
 
 type ltfType = (filename:string, msg:string)=>Promise<string>;
 type peType  = (path:string)=>Promise<boolean>;
