@@ -85,7 +85,7 @@ export class Pace {
         const diff = this.waitUntil - addTime;
         this.waitUntil += this.pace + 5;
         this.waitCount++;
-        await delay(diff)()
+        await delay(diff)();
         await new Promise(resolve => {
             const waitLoop = () => {
                 if (this.maxConcurrent < 0 || this.beingCalled < this.maxConcurrent) {
