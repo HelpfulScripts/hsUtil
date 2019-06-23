@@ -79,36 +79,28 @@ export class Pace {
      * @param fn 
      * @return a promise that resolved to the result of the function
      */
-    add(fn: (msSinceAdding:number) => any):Promise<any> {
-// const id = Math.floor(Math.random()*10000);
+    async add(fn: (msSinceAdding:number) => any):Promise<any> {
         const addTime = Date.now();
         if (this.waitUntil < addTime) { this.waitUntil = addTime; }
         const diff = this.waitUntil - addTime;
         this.waitUntil += this.pace + 5;
         this.waitCount++;
-// console.log(`created #${id}: wait:${this.waitCount}, called:${this.beingCalled}`);
-        return delay(diff)()
-        .then(async () => {
-// console.log(`delayed #${id}: wait:${this.waitCount}, called:${this.beingCalled}`);
-            await new Promise(resolve => {
-                const waitLoop = () => {
-                    if (this.maxConcurrent < 0 || this.beingCalled < this.maxConcurrent) {
-                        resolve();
-                    } else {
-                        setTimeout(waitLoop, 10);
-                    }
-                };
-                waitLoop();
-            });
-// console.log(`calling #${id}: wait:${this.waitCount}, called:${this.beingCalled}`);
-            this.waitCount--;
-            this.beingCalled++;
-            return fn(Date.now()-addTime);
-            })
-        .then((ret:any) => {
-            this.beingCalled--;
-            return ret;
+        await delay(diff)()
+        await new Promise(resolve => {
+            const waitLoop = () => {
+                if (this.maxConcurrent < 0 || this.beingCalled < this.maxConcurrent) {
+                    resolve();
+                } else {
+                    setTimeout(waitLoop, 10);
+                }
+            };
+            waitLoop();
         });
+        this.waitCount--;
+        this.beingCalled++;
+        const ret = await fn(Date.now()-addTime);
+        this.beingCalled--;
+        return ret;
     }
 }
 
@@ -119,6 +111,7 @@ export class Pace {
  * Each task can return a result, or a promise for a result.
  * @param tasks an array of task calls to execute in sequence. Each call will pass the array of results for tasks so far executed.
  * @param initialResult optional initial array to collect the task results.
+ * @return an array of results for each task
  */
 export function promiseChain<T>(tasks:((results:T[])=>T|Promise<T>)[], initialResult:T[]=[]): Promise<T[]> {
     return tasks.reduce((chain:Promise<T[]>, task:(result:T[])=>T|Promise<T>): Promise<T[]> =>

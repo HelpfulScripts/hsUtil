@@ -1039,7 +1039,7 @@
 														{
 															"fileName": "TimedPromises.ts",
 															"line": 82,
-															"character": 11
+															"character": 17
 														}
 													]
 												}
@@ -1062,7 +1062,7 @@
 								{
 									"fileName": "TimedPromises.ts",
 									"line": 82,
-									"character": 7
+									"character": 13
 								}
 							]
 						},
@@ -1229,7 +1229,8 @@
 							"kindString": "Call signature",
 							"flags": {},
 							"comment": {
-								"shortText": "Sequentially calls the provided `tasks` in a `.then()` chain of promises,\nguaranteeing the order of execution per index order in the array.\nEach task can return a result, or a promise for a result."
+								"shortText": "Sequentially calls the provided `tasks` in a `.then()` chain of promises,\nguaranteeing the order of execution per index order in the array.\nEach task can return a result, or a promise for a result.",
+								"returns": "an array of results for each task\n"
 							},
 							"typeParameter": [
 								{
@@ -1307,7 +1308,7 @@
 												"sources": [
 													{
 														"fileName": "TimedPromises.ts",
-														"line": 123,
+														"line": 116,
 														"character": 38
 													}
 												]
@@ -1322,7 +1323,7 @@
 									"kindString": "Parameter",
 									"flags": {},
 									"comment": {
-										"text": "optional initial array to collect the task results.\n"
+										"text": "optional initial array to collect the task results."
 									},
 									"type": {
 										"type": "array",
@@ -1352,7 +1353,7 @@
 					"sources": [
 						{
 							"fileName": "TimedPromises.ts",
-							"line": 123,
+							"line": 116,
 							"character": 28
 						}
 					]
