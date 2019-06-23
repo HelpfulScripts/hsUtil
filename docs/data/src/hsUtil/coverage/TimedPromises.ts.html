@@ -260,10 +260,10 @@
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">20x</span>
+<span class="cline-any cline-yes">22x</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-yes">17x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
@@ -384,7 +384,7 @@ export class Pace {
         const diff = this.waitUntil - addTime;
         this.waitUntil += this.pace + 5;
         this.waitCount++;
-        await delay(diff)()
+        await delay(diff)();
         await new Promise(resolve =&gt; {
             const waitLoop = () =&gt; {
                 if (this.maxConcurrent &lt; 0 || this.beingCalled &lt; this.maxConcurrent) {
