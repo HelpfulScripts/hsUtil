@@ -17,5 +17,6 @@ Helpful Scripts utility functions for use in both browser and `node` environment
 - `TimedPromise` functions that provide delays and timeouts for promises.
 - `CheckSum` a quick checksum implementation for small strings
 - `Date` printf-style date formatting function
+- `log` logging utility supporting module-level logging
 
 See [docs](https://helpfulscripts.github.io/hsUtil#!/api/hsUtil/0) for details

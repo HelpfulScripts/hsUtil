@@ -1,6 +1,6 @@
-import { timeout, delay }   from './promises';
-import { Pace }             from './promises';
-import { promiseChain }     from './promises';
+import * as tp   from './TimedPromises';
+// import { Pace }             from './promises';
+// import { promiseChain }     from './promises';
 
 describe('Promise', () => {
 
@@ -11,7 +11,7 @@ describe('Promise', () => {
             const now = Date.now();
 
             // rejects after <wait> ms
-            return timeout(wait)
+            return tp.timeout(wait)
             .then(() => { throw `unexpected 'then' call`; })
             .catch(() => Promise.all([
                 expect(Math.abs(Date.now()-now)).toBeGreaterThanOrEqual(wait-10),
@@ -28,7 +28,7 @@ describe('Promise', () => {
                 const now = Date.now();
 
                 // resolves after <wait> ms
-                return Promise.resolve('abc').then(delay(wait))
+                return Promise.resolve('abc').then(tp.delay(wait))
                 .then(res => Promise.all([
                     expect(Math.abs(Date.now()-now)).toBeGreaterThanOrEqual(wait-2),
                     expect(Math.abs(Date.now()-now)).toBeLessThan(wait+50),
@@ -43,7 +43,7 @@ describe('Promise', () => {
                 const now = Date.now();
 
                 // resolves after <wait> ms
-                return delay(wait)('abc')
+                return tp.delay(wait)('abc')
                 .then(res => Promise.all([
                     expect(Math.abs(Date.now()-now)).toBeGreaterThanOrEqual(wait-2),
                     expect(Math.abs(Date.now()-now)).toBeLessThan(wait+50),
@@ -75,7 +75,7 @@ describe('Promise', () => {
                     internalWait: this.end-this.start, 
                     completedWait: 0,
                     reportedWait: reportedMS};
-                return delay(callBusy)()
+                return tp.delay(callBusy)()
                 .then(() => {
                     result.completedWait = Date.now()-this.start;
                     console.log(`done #${this.id}: internal: ${result.internalWait}ms, reported: ${reportedMS}ms, completed: ${result.completedWait}ms`);                    
@@ -106,7 +106,7 @@ describe('Promise', () => {
            #4: internal 225ms, completed 432ms
         */
     
-        const queue = new Pace(wait, 3); // default is 100
+        const queue = new tp.Pace(wait, 3); // default is 100
         let results:any[];
     
         // add a call for each element in calls, then wait for all to have beed called.
@@ -154,7 +154,7 @@ describe('Promise', () => {
         
         function doDelay(ms:number) {
             return (result:callResult[]): Promise<callResult> => 
-                delay(ms)().then(() => { return {ms:ms, at:Date.now() }; });
+                tp.delay(ms)().then(() => { return {ms:ms, at:Date.now() }; });
         }
         
         const delays = [1000, 10, 1];
@@ -173,7 +173,7 @@ describe('Promise', () => {
         });
         it('should resolve in sequence of array: 1000, 10, 1', () => {
             expect.assertions(6);
-            return promiseChain(delays.map(d => doDelay(d)))  // start from []
+            return tp.promiseChain(delays.map(d => doDelay(d)))  // start from []
                 .then((res:callResult[]) => Promise.all([
                     expect(res[0].ms).toEqual(1000),
                     expect(res[0].at).toBeLessThanOrEqual(res[1].at),
