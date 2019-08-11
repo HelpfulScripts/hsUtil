@@ -2118,12 +2118,12 @@
 									"kindString": "Call signature",
 									"flags": {},
 									"comment": {
-										"shortText": "Simplifies node `util.inspect` call.\nUsage: `log.info(log.inspect(struct, 1))`"
+										"shortText": "returns a string representation of an object literal, similar to the Node `util.inspect` call.\nUsage: `log.info(log.inspect(struct, 1))`\nThe call returns a raw formatted text string, or a HTM formatted string if `colors` is defined."
 									},
 									"parameters": [
 										{
 											"id": 138,
-											"name": "msg",
+											"name": "struct",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
@@ -2196,7 +2196,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 260,
+									"line": 261,
 									"character": 11
 								}
 							]
@@ -2580,7 +2580,7 @@
 					"sources": [
 						{
 							"fileName": "log.ts",
-							"line": 263,
+							"line": 264,
 							"character": 12
 						}
 					],
@@ -2638,7 +2638,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 263,
+									"line": 264,
 									"character": 14
 								}
 							]
@@ -2654,7 +2654,7 @@
 					"sources": [
 						{
 							"fileName": "log.ts",
-							"line": 264,
+							"line": 265,
 							"character": 11
 						}
 					],
@@ -2701,7 +2701,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 264,
+									"line": 265,
 									"character": 14
 								}
 							]
@@ -2936,7 +2936,7 @@
 					"sources": [
 						{
 							"fileName": "log.ts",
-							"line": 267,
+							"line": 268,
 							"character": 16
 						}
 					],
@@ -3007,7 +3007,7 @@
 					"sources": [
 						{
 							"fileName": "log.ts",
-							"line": 273,
+							"line": 274,
 							"character": 15
 						}
 					]

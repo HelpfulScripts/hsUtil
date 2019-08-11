@@ -454,7 +454,8 @@
 409
 410
 411
-412</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+412
+413</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -576,6 +577,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1114,9 +1116,10 @@ export interface LogType {
     config(cfg:{colors?:boolean, format?:string, level?:symbol }):void;
 &nbsp;
     /**
-     * Simplifies node `util.inspect` call.
+     * returns a string representation of an object literal, similar to the Node `util.inspect` call.
      * Usage: `log.info(log.inspect(struct, 1))`
-     * @param msg the object literal to inspect
+     * The call returns a raw formatted text string, or a HTM formatted string if `colors` is defined.
+     * @param struct the object literal to inspect
      * @param depth depth of recursion, defaults to 1. Use `null` for infinite depth
      * @param indent the indent string to use, will accumulate for each level of indentation, defaults to ''
      * @param colors an array of css color values to apply to keywords in the inspected structure;
@@ -1124,7 +1127,7 @@ export interface LogType {
      * (' ') with `&amp;nbsp;`. The color applied to each keyword cycles through the array with each increasing level, 
      * and restarts at index 0 when the level exceeds the length of the array.
      */
-    inspect(msg:any, depth?:number, indent?:string, colors?:string[]):string;
+    inspect(struct:any, depth?:number, indent?:string, colors?:string[]):string;
 }
 &nbsp;
 type ltfType = (filename:string, msg:string)=&gt;Promise&lt;string&gt;;
