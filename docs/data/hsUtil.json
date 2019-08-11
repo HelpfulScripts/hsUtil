@@ -1446,7 +1446,7 @@
 			]
 		},
 		{
-			"id": 176,
+			"id": 178,
 			"name": "\"index\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -1598,7 +1598,7 @@
 									"type": {
 										"type": "reference",
 										"name": "ltfType",
-										"id": 161
+										"id": 163
 									}
 								},
 								{
@@ -1612,7 +1612,7 @@
 									"type": {
 										"type": "reference",
 										"name": "peType",
-										"id": 166
+										"id": 168
 									}
 								}
 							],
@@ -2144,11 +2144,46 @@
 												"isOptional": true
 											},
 											"comment": {
-												"text": "depth of recursion, defaults to 1. Use `null` for infinite depth\n"
+												"text": "depth of recursion, defaults to 1. Use `null` for infinite depth"
 											},
 											"type": {
 												"type": "intrinsic",
 												"name": "number"
+											}
+										},
+										{
+											"id": 140,
+											"name": "indent",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"text": "the indent string to use, will accumulate for each level of indentation, defaults to ''"
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 141,
+											"name": "colors",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"text": "an array of css color values to apply to keywords in the inspected structure;\nif present, `inspect` will generate HTML content instead of raw text, substituting any `space` characters\n(' ') with `&nbsp;`. The color applied to each keyword cycles through the array with each increasing level,\nand restarts at index 0 when the level exceeds the length of the array.\n"
+											},
+											"type": {
+												"type": "array",
+												"elementType": {
+													"type": "intrinsic",
+													"name": "string"
+												}
 											}
 										}
 									],
@@ -2161,7 +2196,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 255,
+									"line": 260,
 									"character": 11
 								}
 							]
@@ -2537,7 +2572,7 @@
 					]
 				},
 				{
-					"id": 161,
+					"id": 163,
 					"name": "ltfType",
 					"kind": 4194304,
 					"kindString": "Type alias",
@@ -2545,28 +2580,28 @@
 					"sources": [
 						{
 							"fileName": "log.ts",
-							"line": 258,
+							"line": 263,
 							"character": 12
 						}
 					],
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 162,
+							"id": 164,
 							"name": "__type",
 							"kind": 65536,
 							"kindString": "Type literal",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 163,
+									"id": 165,
 									"name": "__call",
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
 									"parameters": [
 										{
-											"id": 164,
+											"id": 166,
 											"name": "filename",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2577,7 +2612,7 @@
 											}
 										},
 										{
-											"id": 165,
+											"id": 167,
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2603,7 +2638,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 258,
+									"line": 263,
 									"character": 14
 								}
 							]
@@ -2611,7 +2646,7 @@
 					}
 				},
 				{
-					"id": 166,
+					"id": 168,
 					"name": "peType",
 					"kind": 4194304,
 					"kindString": "Type alias",
@@ -2619,28 +2654,28 @@
 					"sources": [
 						{
 							"fileName": "log.ts",
-							"line": 259,
+							"line": 264,
 							"character": 11
 						}
 					],
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 167,
+							"id": 169,
 							"name": "__type",
 							"kind": 65536,
 							"kindString": "Type literal",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 168,
+									"id": 170,
 									"name": "__call",
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
 									"parameters": [
 										{
-											"id": 169,
+											"id": 171,
 											"name": "path",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2666,7 +2701,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 259,
+									"line": 264,
 									"character": 14
 								}
 							]
@@ -2674,7 +2709,7 @@
 					}
 				},
 				{
-					"id": 140,
+					"id": 142,
 					"name": "DEBUG",
 					"kind": 32,
 					"kindString": "Variable",
@@ -2698,7 +2733,7 @@
 					"defaultValue": " Symbol('DEBUG')"
 				},
 				{
-					"id": 143,
+					"id": 145,
 					"name": "ERROR",
 					"kind": 32,
 					"kindString": "Variable",
@@ -2722,7 +2757,7 @@
 					"defaultValue": " Symbol('ERROR')"
 				},
 				{
-					"id": 141,
+					"id": 143,
 					"name": "INFO",
 					"kind": 32,
 					"kindString": "Variable",
@@ -2746,7 +2781,7 @@
 					"defaultValue": " Symbol('INFO')"
 				},
 				{
-					"id": 142,
+					"id": 144,
 					"name": "WARN",
 					"kind": 32,
 					"kindString": "Variable",
@@ -2770,7 +2805,7 @@
 					"defaultValue": " Symbol('WARN')"
 				},
 				{
-					"id": 151,
+					"id": 153,
 					"name": "defDateFormat",
 					"kind": 32,
 					"kindString": "Variable",
@@ -2794,7 +2829,7 @@
 					"defaultValue": "\"%YYYY%MM%DD %hh:%mm:%ss.%jjj\""
 				},
 				{
-					"id": 153,
+					"id": 155,
 					"name": "gColors",
 					"kind": 32,
 					"kindString": "Variable",
@@ -2818,7 +2853,7 @@
 					"defaultValue": "false"
 				},
 				{
-					"id": 152,
+					"id": 154,
 					"name": "gDateFormat",
 					"kind": 32,
 					"kindString": "Variable",
@@ -2839,7 +2874,7 @@
 					"defaultValue": " defDateFormat"
 				},
 				{
-					"id": 150,
+					"id": 152,
 					"name": "gGlobalLevel",
 					"kind": 32,
 					"kindString": "Variable",
@@ -2864,7 +2899,7 @@
 					"defaultValue": " gLevels[INFO]"
 				},
 				{
-					"id": 144,
+					"id": 146,
 					"name": "gLogFile",
 					"kind": 32,
 					"kindString": "Variable",
@@ -2887,7 +2922,7 @@
 					}
 				},
 				{
-					"id": 170,
+					"id": 172,
 					"name": "log",
 					"kind": 32,
 					"kindString": "Variable",
@@ -2901,7 +2936,7 @@
 					"sources": [
 						{
 							"fileName": "log.ts",
-							"line": 262,
+							"line": 267,
 							"character": 16
 						}
 					],
@@ -2913,21 +2948,21 @@
 					"defaultValue": " create('', \n    (filename:string, msg:string):Promise<string> => Promise.resolve(undefined), \n    /** default implementation for browser usage: don't allow '/' in log file name */\n    (path:string):Promise<boolean> =>Promise.resolve(path.indexOf('/')>=0? false : true)\n)"
 				},
 				{
-					"id": 171,
+					"id": 173,
 					"name": "create",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 172,
+							"id": 174,
 							"name": "create",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 173,
+									"id": 175,
 									"name": "_prefix",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2938,7 +2973,7 @@
 									}
 								},
 								{
-									"id": 174,
+									"id": 176,
 									"name": "logToFile",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2946,11 +2981,11 @@
 									"type": {
 										"type": "reference",
 										"name": "ltfType",
-										"id": 161
+										"id": 163
 									}
 								},
 								{
-									"id": 175,
+									"id": 177,
 									"name": "pathExists",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2958,7 +2993,7 @@
 									"type": {
 										"type": "reference",
 										"name": "peType",
-										"id": 166
+										"id": 168
 									}
 								}
 							],
@@ -2972,13 +3007,13 @@
 					"sources": [
 						{
 							"fileName": "log.ts",
-							"line": 268,
+							"line": 273,
 							"character": 15
 						}
 					]
 				},
 				{
-					"id": 154,
+					"id": 156,
 					"name": "color",
 					"kind": 2097152,
 					"kindString": "Object literal",
@@ -2990,7 +3025,7 @@
 					},
 					"children": [
 						{
-							"id": 157,
+							"id": 159,
 							"name": "blue",
 							"kind": 32,
 							"kindString": "Variable",
@@ -3009,7 +3044,7 @@
 							"defaultValue": "\"\u001b[36m\""
 						},
 						{
-							"id": 159,
+							"id": 161,
 							"name": "bold",
 							"kind": 32,
 							"kindString": "Variable",
@@ -3028,7 +3063,7 @@
 							"defaultValue": "\"\u001b[1m\""
 						},
 						{
-							"id": 160,
+							"id": 162,
 							"name": "clear",
 							"kind": 32,
 							"kindString": "Variable",
@@ -3047,7 +3082,7 @@
 							"defaultValue": "\"\u001b[0m\""
 						},
 						{
-							"id": 158,
+							"id": 160,
 							"name": "green",
 							"kind": 32,
 							"kindString": "Variable",
@@ -3066,7 +3101,7 @@
 							"defaultValue": "\"\u001b[32m\""
 						},
 						{
-							"id": 155,
+							"id": 157,
 							"name": "red",
 							"kind": 32,
 							"kindString": "Variable",
@@ -3085,7 +3120,7 @@
 							"defaultValue": "\"\u001b[31m\""
 						},
 						{
-							"id": 156,
+							"id": 158,
 							"name": "yellow",
 							"kind": 32,
 							"kindString": "Variable",
@@ -3109,12 +3144,12 @@
 							"title": "Variables",
 							"kind": 32,
 							"children": [
-								157,
 								159,
+								161,
+								162,
 								160,
-								158,
-								155,
-								156
+								157,
+								158
 							]
 						}
 					],
@@ -3131,7 +3166,7 @@
 					}
 				},
 				{
-					"id": 145,
+					"id": 147,
 					"name": "gLevels",
 					"kind": 2097152,
 					"kindString": "Object literal",
@@ -3143,14 +3178,14 @@
 					},
 					"children": [
 						{
-							"id": 146,
+							"id": 148,
 							"name": "__computed",
 							"kind": 2097152,
 							"kindString": "Object literal",
 							"flags": {},
 							"children": [
 								{
-									"id": 149,
+									"id": 151,
 									"name": "desc",
 									"kind": 32,
 									"kindString": "Variable",
@@ -3184,7 +3219,7 @@
 									"defaultValue": "\"ERROR\""
 								},
 								{
-									"id": 147,
+									"id": 149,
 									"name": "importance",
 									"kind": 32,
 									"kindString": "Variable",
@@ -3218,7 +3253,7 @@
 									"defaultValue": "3"
 								},
 								{
-									"id": 148,
+									"id": 150,
 									"name": "sym",
 									"kind": 32,
 									"kindString": "Variable",
@@ -3257,9 +3292,9 @@
 									"title": "Variables",
 									"kind": 32,
 									"children": [
+										151,
 										149,
-										147,
-										148
+										150
 									]
 								}
 							],
@@ -3296,7 +3331,7 @@
 							"title": "Object literals",
 							"kind": 2097152,
 							"children": [
-								146
+								148
 							]
 						}
 					],
@@ -3326,39 +3361,39 @@
 					"title": "Type aliases",
 					"kind": 4194304,
 					"children": [
-						161,
-						166
+						163,
+						168
 					]
 				},
 				{
 					"title": "Variables",
 					"kind": 32,
 					"children": [
-						140,
-						143,
-						141,
 						142,
-						151,
-						153,
-						152,
-						150,
+						145,
+						143,
 						144,
-						170
+						153,
+						155,
+						154,
+						152,
+						146,
+						172
 					]
 				},
 				{
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						171
+						173
 					]
 				},
 				{
 					"title": "Object literals",
 					"kind": 2097152,
 					"children": [
-						154,
-						145
+						156,
+						147
 					]
 				}
 			],
@@ -3371,7 +3406,7 @@
 			]
 		},
 		{
-			"id": 177,
+			"id": 179,
 			"name": "\"overview\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -3401,9 +3436,9 @@
 				5,
 				76,
 				41,
-				176,
+				178,
 				81,
-				177
+				179
 			]
 		}
 	]

@@ -183,26 +183,6 @@ describe('log', () => {
 
     describe('inspect', () => {
         const t = {a: 'aa', b: {c:()=>'result'}};
-        it('should inspect at level 0', () => {
-            expect(log.inspect(t, 0)).toEqual("{\n   a: 'aa',\n   b: {...}\n}");
-        });
-        it('should inspect at infinite depth', () => {
-            expect(log.inspect(t, null)).toEqual("{\n   a: 'aa',\n   b: {\n      c: function\n   }\n}");
-        });
-        it('should inspect array at infinite depth', () => {
-            expect(log.inspect([t], null)).toEqual("[{\n   a: 'aa',\n   b: {\n      c: function\n   }\n}]");
-        });
-        it('should inspect undefined', () => {
-            expect(log.inspect(undefined, null)).toEqual("undefined");
-            expect(log.inspect([undefined], null)).toEqual("[]");
-        });
-        it('should inspect null', () => {
-            expect(log.inspect(null, null)).toEqual("null");
-            expect(log.inspect([null], null)).toEqual("[null]");
-        });
-        it('should inspect boolean', () => {
-            expect(log.inspect(true, null)).toEqual("true");
-        });
         it('should inspect via out()', async () => {
             await log.info(t);
             return expect(gMsg).toMatch(/log.jest INFO\s*?/gm);
@@ -221,3 +201,34 @@ describe('log', () => {
         });
     });
 });
+
+describe('inspect', () => {
+    const t = {a: 'aa', b: {c:()=>'result'}};
+    it('should inspect at level 0', () => {
+        expect(log.inspect(t, 0)).toEqual("{\na: 'aa',\nb: {...}\n}");
+    });
+    it('should inspect at level 0 with indents', () => {
+        expect(log.inspect(t, 0, '   ')).toEqual("{\n   a: 'aa',\n   b: {...}\n}");
+    });
+    it('should inspect at infinite depth', () => {
+        expect(log.inspect(t, null)).toEqual("{\na: 'aa',\nb: {\nc: function\n}\n}");
+    });
+    it('should inspect at infinite depth with indents', () => {
+        expect(log.inspect(t, null, '   ')).toEqual("{\n   a: 'aa',\n   b: {\n      c: function\n   }\n}");
+    });
+    it('should inspect array at infinite depth', () => {
+        expect(log.inspect([t], null)).toEqual("[{\na: 'aa',\nb: {\nc: function\n}\n}]");
+    });
+    it('should inspect undefined', () => {
+        expect(log.inspect(undefined, null)).toEqual("undefined");
+        expect(log.inspect([undefined], null)).toEqual("[]");
+    });
+    it('should inspect null', () => {
+        expect(log.inspect(null, null)).toEqual("null");
+        expect(log.inspect([null], null)).toEqual("[null]");
+    });
+    it('should inspect boolean', () => {
+        expect(log.inspect(true, null)).toEqual("true");
+    });
+});    
+

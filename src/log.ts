@@ -247,12 +247,18 @@ export interface LogType {
     config(cfg:{colors?:boolean, format?:string, level?:symbol }):void;
 
     /**
-     * Simplifies node `util.inspect` call.
+     * returns a string representation of an object literal, similar to the Node `util.inspect` call.
      * Usage: `log.info(log.inspect(struct, 1))`
-     * @param msg the object literal to inspect
+     * The call returns a raw formatted text string, or a HTM formatted string if `colors` is defined.
+     * @param struct the object literal to inspect
      * @param depth depth of recursion, defaults to 1. Use `null` for infinite depth
+     * @param indent the indent string to use, will accumulate for each level of indentation, defaults to ''
+     * @param colors an array of css color values to apply to keywords in the inspected structure;
+     * if present, `inspect` will generate HTML content instead of raw text, substituting any `space` characters
+     * (' ') with `&nbsp;`. The color applied to each keyword cycles through the array with each increasing level, 
+     * and restarts at index 0 when the level exceeds the length of the array.
      */
-    inspect(msg:any, depth?:number):string;
+    inspect(struct:any, depth?:number, indent?:string, colors?:string[]):string;
 }
 
 type ltfType = (filename:string, msg:string)=>Promise<string>;
@@ -359,20 +365,28 @@ function create(_prefix:string, logToFile:ltfType, pathExists:peType):LogType {
         if (cfg.level!==undefined)  { level(cfg.level); }       // e.g. INFO
     }
 
-    function inspect(msg:any, depth=1, indent=''):string {
-        if (depth===null)               { depth = 999; }
-        if (msg === null)               { return 'null'; }
-        if (msg === undefined)          { return 'undefined'; }
-        if (typeof msg === 'function')  { return 'function'; }
-        if (typeof msg === 'string')    { return `'${msg}'`; }
-        if (typeof msg === 'object')    {
-            if (depth<0) { return (msg.length===undefined)? '{...}' : '[...]'; }
-            if (msg.length !== undefined) { return `[${msg.map((e:any)=>(e===undefined)?'':inspect(e, depth-1, indent)).join(', ')}]`; }
-            return '{\n' + Object.keys(msg).map(k => `   ${indent}${k}: ${
-                inspect(msg[k], depth-1, indent+'   ')
-            }`).join(',\n') + `\n${indent}}`;
-        } 
-        return msg.toString();
+    function inspect(msg:any, depth=1, indent='', colors?:string[]):string {
+        function _inspect(msg:any, depth:number, level:number, currIndent:string):string {
+            if (msg === null)               { return 'null'; }
+            if (msg === undefined)          { return 'undefined'; }
+            if (typeof msg === 'function')  { return 'function'; }
+            if (typeof msg === 'string')    { return `'${msg}'`; }
+            if (typeof msg === 'object')    {
+                if (depth<0) { return (msg.length===undefined)? '{...}' : '[...]'; }
+                if (msg.length !== undefined) { 
+                    return `[${msg.map((e:any)=>(e===undefined)?'':_inspect(e, depth-1, level+1, currIndent)).join(', ')}]`;
+                 }
+                const c  = colors? `<b><span style='color:${colors[level % colors.length]};'>` : '';
+                const prefix = `${c}${currIndent}${indent}`;
+                const postfix = colors? '</span></b>' : '';
+                return '{\n' + Object.keys(msg).map(k => `${prefix}${k}${postfix}: ${
+                        _inspect(msg[k], depth-1, level+1, currIndent+indent)
+                    }`).join(',\n') + `\n${currIndent}}`;
+            } 
+            return msg.toString();
+        }
+        if (colors) { indent = indent.replace(/ /g, '&nbsp;'); }
+        return _inspect(msg, depth===null? 999 : depth, 0, '');
     }
 
     const newLog:any = function(prefix:string, logToFile:ltfType=context.logToFile, pathExists:peType=context.pathExists) { 
