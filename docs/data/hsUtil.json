@@ -2118,7 +2118,8 @@
 									"kindString": "Call signature",
 									"flags": {},
 									"comment": {
-										"shortText": "returns a string representation of an object literal, similar to the Node `util.inspect` call.\nUsage: `log.info(log.inspect(struct, 1))`\nThe call returns a raw formatted text string, or a HTM formatted string if `colors` is defined."
+										"shortText": "returns a string representation of an object literal, similar to the Node `util.inspect` call.",
+										"text": "Usage: `log.info(log.inspect(struct, 1))`\n\nThe call returns a raw formatted text string, or a HTM formatted string if `colors` is defined."
 									},
 									"parameters": [
 										{
@@ -2196,7 +2197,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 261,
+									"line": 263,
 									"character": 11
 								}
 							]
@@ -2580,7 +2581,7 @@
 					"sources": [
 						{
 							"fileName": "log.ts",
-							"line": 264,
+							"line": 266,
 							"character": 12
 						}
 					],
@@ -2638,7 +2639,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 264,
+									"line": 266,
 									"character": 14
 								}
 							]
@@ -2654,7 +2655,7 @@
 					"sources": [
 						{
 							"fileName": "log.ts",
-							"line": 265,
+							"line": 267,
 							"character": 11
 						}
 					],
@@ -2701,7 +2702,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 265,
+									"line": 267,
 									"character": 14
 								}
 							]
@@ -2936,7 +2937,7 @@
 					"sources": [
 						{
 							"fileName": "log.ts",
-							"line": 268,
+							"line": 270,
 							"character": 16
 						}
 					],
@@ -3007,7 +3008,7 @@
 					"sources": [
 						{
 							"fileName": "log.ts",
-							"line": 274,
+							"line": 276,
 							"character": 15
 						}
 					]
@@ -3407,6 +3408,23 @@
 		},
 		{
 			"id": 179,
+			"name": "\"log2\"",
+			"kind": 1,
+			"kindString": "External module",
+			"flags": {
+				"isExported": true
+			},
+			"originalName": "/Users/sth1pal/Documents/Development/JavaScript/nodejs/ts6/dev/hsLibs/standalone/hsUtil/src/log2.ts",
+			"sources": [
+				{
+					"fileName": "log2.ts",
+					"line": 1,
+					"character": 0
+				}
+			]
+		},
+		{
+			"id": 180,
 			"name": "\"overview\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -3438,7 +3456,8 @@
 				41,
 				178,
 				81,
-				179
+				179,
+				180
 			]
 		}
 	]

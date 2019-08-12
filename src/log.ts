@@ -248,7 +248,9 @@ export interface LogType {
 
     /**
      * returns a string representation of an object literal, similar to the Node `util.inspect` call.
+     * 
      * Usage: `log.info(log.inspect(struct, 1))`
+     * 
      * The call returns a raw formatted text string, or a HTM formatted string if `colors` is defined.
      * @param struct the object literal to inspect
      * @param depth depth of recursion, defaults to 1. Use `null` for infinite depth
@@ -389,9 +391,8 @@ function create(_prefix:string, logToFile:ltfType, pathExists:peType):LogType {
         return _inspect(msg, depth===null? 999 : depth, 0, '');
     }
 
-    const newLog:any = function(prefix:string, logToFile:ltfType=context.logToFile, pathExists:peType=context.pathExists) { 
-        return create(prefix, logToFile, pathExists);
-    };
+    const newLog:any = (prefix:string, logToFile:ltfType=context.logToFile, pathExists:peType=context.pathExists) => create(prefix, logToFile, pathExists);
+  
     newLog.DEBUG    = DEBUG;
     newLog.INFO     = INFO;
     newLog.WARN     = WARN;
