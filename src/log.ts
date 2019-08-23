@@ -367,7 +367,7 @@ function create(_prefix:string, logToFile:ltfType, pathExists:peType):LogType {
         if (cfg.level!==undefined)  { level(cfg.level); }       // e.g. INFO
     }
 
-    function inspect(msg:any, depth=1, indent='   ', colors?:string[]):string {
+    function inspect(msg:any, depth=3, indent='   ', colors?:string[]):string {
         function _inspect(msg:any, depth:number, level:number, currIndent:string):string {
             if (msg === null)               { return 'null'; }
             if (msg === undefined)          { return 'undefined'; }

@@ -1241,7 +1241,7 @@ function create(_prefix:string, logToFile:ltfType, pathExists:peType):LogType {
         if (cfg.level!==undefined)  { level(cfg.level); }       // e.g. INFO
     }
 &nbsp;
-    function inspect(msg:any, depth=<span class="branch-0 cbranch-no" title="branch not covered" >1,</span> indent='   ', colors?:string[]):string {
+    function inspect(msg:any, depth=<span class="branch-0 cbranch-no" title="branch not covered" >3,</span> indent='   ', colors?:string[]):string {
         function _inspect(msg:any, depth:number, level:number, currIndent:string):string {
             if (msg === null)               { return 'null'; }
             if (msg === undefined)          { return 'undefined'; }
