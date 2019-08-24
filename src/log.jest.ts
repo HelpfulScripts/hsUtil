@@ -205,19 +205,19 @@ describe('log', () => {
 describe('inspect', () => {
     const t = {a: 'aa', b: {c:()=>'result'}};
     it('should inspect at level 0', () => {
-        expect(log.inspect(t, 0)).toEqual("{\na: 'aa',\nb: {...}\n}");
+        expect(log.inspect(t, 0)).toEqual("{\n   a: 'aa',\n   b: {...}\n}");
     });
     it('should inspect at level 0 with indents', () => {
         expect(log.inspect(t, 0, '   ')).toEqual("{\n   a: 'aa',\n   b: {...}\n}");
     });
     it('should inspect at infinite depth', () => {
-        expect(log.inspect(t, null)).toEqual("{\na: 'aa',\nb: {\nc: function\n}\n}");
+        expect(log.inspect(t, null)).toEqual("{\n   a: 'aa',\n   b: {\n      c: function\n   }\n}");
     });
     it('should inspect at infinite depth with indents', () => {
         expect(log.inspect(t, null, '   ')).toEqual("{\n   a: 'aa',\n   b: {\n      c: function\n   }\n}");
     });
     it('should inspect array at infinite depth', () => {
-        expect(log.inspect([t], null)).toEqual("[{\na: 'aa',\nb: {\nc: function\n}\n}]");
+        expect(log.inspect([t], null)).toEqual("[{\n   a: 'aa',\n   b: {\n      c: function\n   }\n}]");
     });
     it('should inspect undefined', () => {
         expect(log.inspect(undefined, null)).toEqual("undefined");
