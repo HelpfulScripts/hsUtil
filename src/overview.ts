@@ -1,9 +1,18 @@
 /**
- * # hsUtil
- * 
- * Helpful Scripts utility functions for use in both browser and `node` environments
- * [`[Github page]`](https://github.com/HelpfulScripts/hsUtil)
- * [`[Coverage Info]`](./data/src/hsUtil/coverage/)
+# hsUtil
+ 
+Helpful Scripts utility functions for use in both browser and `node` environments
+[`[Coverage Info]`](./data/src/hsUtil/coverage/)
+
+[![npm version](https://badge.fury.io/js/hsutil.svg)](https://badge.fury.io/js/hsutil)
+[![GitHub](https://img.shields.io/badge/GitHub-hsUtil-blue.svg)](https://github.com/helpfulscripts/hsutil)
+[![docs](https://img.shields.io/badge/hsDocs-hsUtil-blue.svg)](https://helpfulscripts.github.io/hsUtil/#!/api/hsUtil/0)
+[![Build Status](https://travis-ci.org/HelpfulScripts/hsUtil.svg?branch=master)](https://travis-ci.org/HelpfulScripts/hsUtil)
+[![Dependencies Status](https://david-dm.org/helpfulscripts/hsutil.svg)](https://david-dm.org/helpfulscripts/hsutil)
+[![Coverage Status](https://coveralls.io/repos/github/HelpfulScripts/hsUtil/badge.svg)](https://coveralls.io/github/HelpfulScripts/hsUtil)
+[![Known Vulnerabilities](https://snyk.io/test/github/HelpfulScripts/hsUtil/badge.svg?targetFile=package.json)](https://snyk.io/test/github/HelpfulScripts/hsUtil?targetFile=package.json)
+[![NPM License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://www.npmjs.com/package/hsutil) 
+
  * ___
  * 
  * ## Index - no external dependencies:
