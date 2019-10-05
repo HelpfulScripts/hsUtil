@@ -2,7 +2,7 @@
 # hsUtil
  
 Helpful Scripts utility functions for use in both browser and `node` environments
-[`[Coverage Info]`](./data/src/hsUtil/coverage/)
+<a href="./data/src/hsUtil/coverage/" target="_blank">[Coverage Info]</a>
 
 [![npm version](https://badge.fury.io/js/hsutil.svg)](https://badge.fury.io/js/hsutil)
 [![GitHub](https://img.shields.io/badge/GitHub-hsUtil-blue.svg)](https://github.com/helpfulscripts/hsutil)
