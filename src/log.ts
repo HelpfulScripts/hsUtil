@@ -375,7 +375,7 @@ function create(_prefix:string, logToFile:ltfType, pathExists:peType):LogType {
             if (typeof msg === 'string')    { return `'${msg}'`; }
             if (typeof msg === 'object')    {
                 if (depth<0) { return (msg.length===undefined)? '{...}' : '[...]'; }
-                if (msg.length !== undefined) { 
+                if (msg.map !== undefined) { 
                     return `[${msg.map((e:any)=>(e===undefined)?'':_inspect(e, depth-1, level+1, currIndent)).join(', ')}]`;
                  }
                 const c  = colors? `<b><span style='color:${colors[level % colors.length]};'>` : '';
