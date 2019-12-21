@@ -1,6 +1,5 @@
 
 import { log as _log }  from './log';  const log = _log('log.jest');
-import { date }         from './Date';
 
 describe('log', () => {
     let gLog: any;
@@ -12,7 +11,7 @@ describe('log', () => {
     }
     
     // avoid logging of level change
-    function setLevel(level:symbol) {
+    function setLevel(level:string) {
         log.level(level);
         gMsg = undefined;
     }
@@ -89,9 +88,9 @@ describe('log', () => {
         });
         
         it('should print error for invalid level', () => {
-            log.level(Symbol('BOGUS'));
+            log.level('BOGUS');
             expect(log.level()).toBe(log.INFO);
-            return expect(gMsg).toMatch(/ unkown level Symbol\(BOGUS\); log level remains Symbol\(INFO\)/);
+            return expect(gMsg).toMatch(/ unkown level BOGUS; log level remains INFO/);
         });
         
         it('should print error', () => {
@@ -124,32 +123,6 @@ describe('log', () => {
             gMsg = undefined;
             log.info('yes');
             return expect(gMsg).toMatch(/INFO.*yes/);  
-        });
-    });
-
-    describe('logFile', () => {
-        it('should disable logfile', async () => {
-            await log.logFile(null);
-            return expect(await log.logFile()).toBe('invalid');
-        });
-        it('should return current logfile name', async () => {
-            await log.logFile('a.log');
-            return expect(await log.logFile()).toMatch('a.log');
-        });
-        it('should set default logfile name', async () => {
-            const name = date('log-%YYYY-%MM-%DD.txt');
-            await log.logFile('');
-            return expect(await log.logFile()).toMatch(name);
-        });
-        it('should set logfile name', async () => {
-            const name = 'log%D-%M-%YY.log';
-            await log.logFile(name);
-            return expect(await log.logFile()).toMatch(date(name));
-        });
-        it('should disable logfile for invalid path', async () => {
-            const name = './hui/log%D-%M-%Y.log';
-            await log.logFile(name);
-            return expect(await log.logFile()).toMatch('invalid');
         });
     });
     
@@ -194,10 +167,6 @@ describe('log', () => {
         it('should set debug level', () => {
             log.config({level:log.DEBUG});
             return expect(log.level()).toBe(log.DEBUG);
-        });
-        it('should set colors', () => {
-            log.config({colors:true});
-            return expect(log.level()).toBe(log.INFO);
         });
     });
 });

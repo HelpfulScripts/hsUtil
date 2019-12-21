@@ -1446,7 +1446,7 @@
 			]
 		},
 		{
-			"id": 178,
+			"id": 223,
 			"name": "\"index\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -1477,235 +1477,320 @@
 			},
 			"children": [
 				{
-					"id": 82,
-					"name": "LevelDesc",
-					"kind": 256,
-					"kindString": "Interface",
-					"flags": {},
-					"comment": {
-						"shortText": "Type definition for level descriptors"
+					"id": 145,
+					"name": "Log",
+					"kind": 128,
+					"kindString": "Class",
+					"flags": {
+						"isExported": true
 					},
 					"children": [
 						{
-							"id": 85,
-							"name": "desc",
-							"kind": 1024,
-							"kindString": "Property",
-							"flags": {},
+							"id": 160,
+							"name": "constructor",
+							"kind": 512,
+							"kindString": "Constructor",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 161,
+									"name": "new Log",
+									"kind": 16384,
+									"kindString": "Constructor signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 162,
+											"name": "_prefix",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"name": "Log",
+										"id": 145
+									}
+								}
+							],
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 101,
-									"character": 57
+									"line": 139,
+									"character": 25
+								}
+							]
+						},
+						{
+							"id": 158,
+							"name": "reportLevel",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 138,
+									"character": 15
+								}
+							],
+							"type": {
+								"type": "reference",
+								"name": "LevelDesc",
+								"id": 141
+							},
+							"defaultValue": " <LevelDesc>undefined"
+						},
+						{
+							"id": 159,
+							"name": "reportPrefix",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 139,
+									"character": 16
 								}
 							],
 							"type": {
 								"type": "intrinsic",
 								"name": "string"
-							}
+							},
+							"defaultValue": "\"\""
 						},
 						{
-							"id": 83,
-							"name": "importance",
-							"kind": 1024,
-							"kindString": "Property",
-							"flags": {},
-							"sources": [
-								{
-									"fileName": "log.ts",
-									"line": 101,
-									"character": 32
-								}
-							],
-							"type": {
-								"type": "intrinsic",
-								"name": "number"
-							}
-						},
-						{
-							"id": 84,
-							"name": "sym",
-							"kind": 1024,
-							"kindString": "Property",
-							"flags": {},
-							"sources": [
-								{
-									"fileName": "log.ts",
-									"line": 101,
-									"character": 44
-								}
-							],
-							"type": {
-								"type": "intrinsic",
-								"name": "symbol"
-							}
-						}
-					],
-					"groups": [
-						{
-							"title": "Properties",
-							"kind": 1024,
-							"children": [
-								85,
-								83,
-								84
-							]
-						}
-					],
-					"sources": [
-						{
-							"fileName": "log.ts",
-							"line": 101,
-							"character": 19
-						}
-					]
-				},
-				{
-					"id": 86,
-					"name": "LogType",
-					"kind": 256,
-					"kindString": "Interface",
-					"flags": {
-						"isExported": true
-					},
-					"signatures": [
-						{
-							"id": 87,
-							"name": "__call",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"parameters": [
-								{
-									"id": 88,
-									"name": "_prefix",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "intrinsic",
-										"name": "string"
-									}
-								},
-								{
-									"id": 89,
-									"name": "logToFile",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {
-										"isOptional": true
-									},
-									"type": {
-										"type": "reference",
-										"name": "ltfType",
-										"id": 163
-									}
-								},
-								{
-									"id": 90,
-									"name": "pathExists",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {
-										"isOptional": true
-									},
-									"type": {
-										"type": "reference",
-										"name": "peType",
-										"id": 168
-									}
-								}
-							],
-							"type": {
-								"type": "reference",
-								"name": "LogType",
-								"id": 86
-							}
-						}
-					],
-					"children": [
-						{
-							"id": 91,
+							"id": 148,
 							"name": "DEBUG",
 							"kind": 1024,
 							"kindString": "Property",
 							"flags": {
+								"isStatic": true,
 								"isExported": true
+							},
+							"comment": {
+								"shortText": "Debug reporting level with importance 0"
 							},
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 134,
-									"character": 9
+									"line": 116,
+									"character": 16
 								}
 							],
 							"type": {
 								"type": "intrinsic",
-								"name": "symbol"
-							}
+								"name": "string"
+							},
+							"defaultValue": "\"DEBUG\""
 						},
 						{
-							"id": 94,
+							"id": 151,
 							"name": "ERROR",
 							"kind": 1024,
 							"kindString": "Property",
 							"flags": {
+								"isStatic": true,
 								"isExported": true
+							},
+							"comment": {
+								"shortText": "Warning reporting level with importance 3"
 							},
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 137,
-									"character": 9
+									"line": 125,
+									"character": 16
 								}
 							],
 							"type": {
 								"type": "intrinsic",
-								"name": "symbol"
-							}
+								"name": "string"
+							},
+							"defaultValue": "\"ERROR\""
 						},
 						{
-							"id": 92,
+							"id": 149,
 							"name": "INFO",
 							"kind": 1024,
 							"kindString": "Property",
 							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"comment": {
+								"shortText": "Info reporting level with importance 1"
+							},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 119,
+									"character": 15
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							},
+							"defaultValue": "\"INFO\""
+						},
+						{
+							"id": 150,
+							"name": "WARN",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"comment": {
+								"shortText": "Info reporting level with importance 2"
+							},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 122,
+									"character": 15
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							},
+							"defaultValue": "\"WARN\""
+						},
+						{
+							"id": 147,
+							"name": "dateFormat",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isStatic": true,
 								"isExported": true
 							},
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 135,
-									"character": 8
+									"line": 113,
+									"character": 21
 								}
 							],
 							"type": {
 								"type": "intrinsic",
-								"name": "symbol"
-							}
+								"name": "string"
+							},
+							"defaultValue": " Log.defDateFormat"
 						},
 						{
-							"id": 93,
-							"name": "WARN",
+							"id": 146,
+							"name": "defDateFormat",
 							"kind": 1024,
 							"kindString": "Property",
 							"flags": {
+								"isStatic": true,
 								"isExported": true
+							},
+							"comment": {
+								"shortText": "current date format string. See [date module]('_date_.html')"
+							},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 112,
+									"character": 24
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							},
+							"defaultValue": "\"%YYYY%MM%DD %hh:%mm:%ss.%jjj\""
+						},
+						{
+							"id": 157,
+							"name": "globalLevel",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"comment": {
+								"shortText": "current reporting level, same across all modules"
 							},
 							"sources": [
 								{
 									"fileName": "log.ts",
 									"line": 136,
-									"character": 8
+									"character": 22
 								}
 							],
 							"type": {
-								"type": "intrinsic",
-								"name": "symbol"
-							}
+								"type": "reference",
+								"name": "LevelDesc",
+								"id": 141
+							},
+							"defaultValue": " Log.levels[Log.INFO]"
 						},
 						{
-							"id": 129,
+							"id": 219,
+							"name": "addPoperties",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isProtected": true,
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 220,
+									"name": "addPoperties",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 221,
+											"name": "logFn",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"name": "LogFn",
+												"id": 82
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"name": "LogFn",
+										"id": 82
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 331,
+									"character": 26
+								}
+							]
+						},
+						{
+							"id": 199,
 							"name": "config",
 							"kind": 2048,
 							"kindString": "Method",
@@ -1714,7 +1799,7 @@
 							},
 							"signatures": [
 								{
-									"id": 130,
+									"id": 200,
 									"name": "config",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -1724,7 +1809,7 @@
 									},
 									"parameters": [
 										{
-											"id": 131,
+											"id": 201,
 											"name": "cfg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -1735,14 +1820,14 @@
 											"type": {
 												"type": "reflection",
 												"declaration": {
-													"id": 132,
+													"id": 202,
 													"name": "__type",
 													"kind": 65536,
 													"kindString": "Type literal",
 													"flags": {},
 													"children": [
 														{
-															"id": 133,
+															"id": 203,
 															"name": "colors",
 															"kind": 32,
 															"kindString": "Variable",
@@ -1752,7 +1837,7 @@
 															"sources": [
 																{
 																	"fileName": "log.ts",
-																	"line": 247,
+																	"line": 283,
 																	"character": 22
 																}
 															],
@@ -1762,7 +1847,7 @@
 															}
 														},
 														{
-															"id": 134,
+															"id": 204,
 															"name": "format",
 															"kind": 32,
 															"kindString": "Variable",
@@ -1772,7 +1857,7 @@
 															"sources": [
 																{
 																	"fileName": "log.ts",
-																	"line": 247,
+																	"line": 283,
 																	"character": 39
 																}
 															],
@@ -1782,7 +1867,7 @@
 															}
 														},
 														{
-															"id": 135,
+															"id": 205,
 															"name": "level",
 															"kind": 32,
 															"kindString": "Variable",
@@ -1792,13 +1877,13 @@
 															"sources": [
 																{
 																	"fileName": "log.ts",
-																	"line": 247,
+																	"line": 283,
 																	"character": 54
 																}
 															],
 															"type": {
 																"type": "intrinsic",
-																"name": "symbol"
+																"name": "string"
 															}
 														}
 													],
@@ -1807,16 +1892,16 @@
 															"title": "Variables",
 															"kind": 32,
 															"children": [
-																133,
-																134,
-																135
+																203,
+																204,
+																205
 															]
 														}
 													],
 													"sources": [
 														{
 															"fileName": "log.ts",
-															"line": 247,
+															"line": 283,
 															"character": 15
 														}
 													]
@@ -1833,13 +1918,13 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 247,
+									"line": 283,
 									"character": 10
 								}
 							]
 						},
 						{
-							"id": 99,
+							"id": 167,
 							"name": "debug",
 							"kind": 2048,
 							"kindString": "Method",
@@ -1848,7 +1933,7 @@
 							},
 							"signatures": [
 								{
-									"id": 100,
+									"id": 168,
 									"name": "debug",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -1859,7 +1944,7 @@
 									},
 									"parameters": [
 										{
-											"id": 101,
+											"id": 169,
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -1873,20 +1958,16 @@
 											}
 										},
 										{
-											"id": 102,
-											"name": "log",
+											"id": 170,
+											"name": "log2File",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {
-												"isOptional": true
-											},
-											"comment": {
-												"text": "optional flag to enable/suppress logging to file. Defaults to `true`"
-											},
+											"flags": {},
 											"type": {
 												"type": "intrinsic",
 												"name": "boolean"
-											}
+											},
+											"defaultValue": "true"
 										}
 									],
 									"type": {
@@ -1904,13 +1985,13 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 165,
-									"character": 9
+									"line": 186,
+									"character": 15
 								}
 							]
 						},
 						{
-							"id": 111,
+							"id": 179,
 							"name": "error",
 							"kind": 2048,
 							"kindString": "Method",
@@ -1919,7 +2000,7 @@
 							},
 							"signatures": [
 								{
-									"id": 112,
+									"id": 180,
 									"name": "error",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -1930,7 +2011,7 @@
 									},
 									"parameters": [
 										{
-											"id": 113,
+											"id": 181,
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -1944,20 +2025,16 @@
 											}
 										},
 										{
-											"id": 114,
-											"name": "log",
+											"id": 182,
+											"name": "log2File",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {
-												"isOptional": true
-											},
-											"comment": {
-												"text": "optional flag to enable/suppress logging to file. Defaults to `true`"
-											},
+											"flags": {},
 											"type": {
 												"type": "intrinsic",
 												"name": "boolean"
-											}
+											},
+											"defaultValue": "true"
 										}
 									],
 									"type": {
@@ -1975,13 +2052,13 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 194,
-									"character": 9
+									"line": 215,
+									"character": 15
 								}
 							]
 						},
 						{
-							"id": 123,
+							"id": 193,
 							"name": "format",
 							"kind": 2048,
 							"kindString": "Method",
@@ -1990,7 +2067,7 @@
 							},
 							"signatures": [
 								{
-									"id": 124,
+									"id": 194,
 									"name": "format",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2001,7 +2078,7 @@
 									},
 									"parameters": [
 										{
-											"id": 125,
+											"id": 195,
 											"name": "fmtStr",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2026,13 +2103,87 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 230,
+									"line": 259,
 									"character": 10
 								}
 							]
 						},
 						{
-							"id": 103,
+							"id": 211,
+							"name": "getPrePostfix",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isProtected": true,
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 212,
+									"name": "getPrePostfix",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 213,
+											"name": "indent",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 214,
+											"name": "level",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "number"
+											}
+										},
+										{
+											"id": 215,
+											"name": "currIndent",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										}
+									],
+									"type": {
+										"type": "tuple",
+										"elements": [
+											{
+												"type": "intrinsic",
+												"name": "string"
+											},
+											{
+												"type": "intrinsic",
+												"name": "string"
+											}
+										]
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 320,
+									"character": 27
+								}
+							]
+						},
+						{
+							"id": 171,
 							"name": "info",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2041,7 +2192,7 @@
 							},
 							"signatures": [
 								{
-									"id": 104,
+									"id": 172,
 									"name": "info",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2052,7 +2203,7 @@
 									},
 									"parameters": [
 										{
-											"id": 105,
+											"id": 173,
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2066,7 +2217,2276 @@
 											}
 										},
 										{
+											"id": 174,
+											"name": "log2File",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "boolean"
+											},
+											"defaultValue": "true"
+										}
+									],
+									"type": {
+										"type": "reference",
+										"name": "Promise",
+										"typeArguments": [
+											{
+												"type": "intrinsic",
+												"name": "string"
+											}
+										]
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 196,
+									"character": 14
+								}
+							]
+						},
+						{
+							"id": 206,
+							"name": "inspect",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 207,
+									"name": "inspect",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "returns a string representation of an object literal, similar to the Node `util.inspect` call.",
+										"text": "Usage: `log.info(log.inspect(struct, 1))`\n\nThe call returns a raw formatted text string, or a HTM formatted string if `colors` is defined."
+									},
+									"parameters": [
+										{
+											"id": 208,
+											"name": "msg",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "any"
+											}
+										},
+										{
+											"id": 209,
+											"name": "depth",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"comment": {
+												"text": "depth of recursion, defaults to 1. Use `null` for infinite depth"
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "number"
+											},
+											"defaultValue": "3"
+										},
+										{
+											"id": 210,
+											"name": "indent",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"comment": {
+												"text": "the indent string to use, will accumulate for each level of indentation, defaults to ''\n"
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											},
+											"defaultValue": "\"   \""
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 298,
+									"character": 11
+								}
+							]
+						},
+						{
+							"id": 163,
+							"name": "level",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 164,
+									"name": "level",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "sets the reporting level according to `newLevel`.\nValid values are {@link log.DEBUG log.DEBUG}, {@link log.INFO log.INFO},\n{@link log.WARN log.WARN}, {@link log.ERROR log.ERROR}, or `null`.\nSubsequent reporting calls will be filtered such that only calls with an importance\nat least the same as `newLevel` will be written to the log.<br>",
+										"text": "By default, `newLevel` sets the reporting level for the module only, and takes precedence over\nany global level setting. Providing `null` as level value passes precedence back to the global setting.\nThis allows for simple per-module settings, for example in debugging scenarios.",
+										"returns": "the new reporting level (DEBUG, INFO, WARN, ERROR)\n"
+									},
+									"parameters": [
+										{
+											"id": 165,
+											"name": "newLevelSym",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"text": "the new reporting level to set.\nIf omitted, the method returns the currently set reporting level.\nIf set to `null`, the module's local reporting level defaults to the global reporting level; `setGlobalLevel` is ignored."
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 166,
+											"name": "setGlobalLevel",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"text": "defaults to `false`. If `true`, sets the global reporting level for all modules."
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "boolean"
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 160,
+									"character": 9
+								}
+							]
+						},
+						{
+							"id": 187,
+							"name": "makeMessage",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isProtected": true,
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 188,
+									"name": "makeMessage",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "Creates the core format of the reported message. This method is\ncalled within `out` to allow for format extensions of the message printed,\ne.g. by color codes."
+									},
+									"parameters": [
+										{
+											"id": 189,
+											"name": "line",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 190,
+											"name": "lvl",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 191,
+											"name": "dateStr",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 192,
+											"name": "desc",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 245,
+									"character": 25
+								}
+							]
+						},
+						{
+							"id": 183,
+							"name": "out",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 184,
+									"name": "out",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "reports an error message to the log.\nThe message will be reported to the log if `lvl` meets or exceeds the current reporting level.",
+										"returns": "promise to return the message written\n"
+									},
+									"parameters": [
+										{
+											"id": 185,
+											"name": "lvl",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"comment": {
+												"text": "the reporting level of `msg`"
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 186,
+											"name": "msg",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"comment": {
+												"text": "the message to report. If msg is an object literal, a deep inspection will be printed."
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "any"
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"name": "Promise",
+										"typeArguments": [
+											{
+												"type": "intrinsic",
+												"name": "string"
+											}
+										]
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 225,
+									"character": 13
+								}
+							]
+						},
+						{
+							"id": 196,
+							"name": "prefix",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 197,
+									"name": "prefix",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "defines a prefix to be printed for each call to a log function.",
+										"returns": "the new prefix\n"
+									},
+									"parameters": [
+										{
+											"id": 198,
+											"name": "prf",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"text": "the prefix to prepend. Defaults to '';"
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 270,
+									"character": 10
+								}
+							]
+						},
+						{
+							"id": 175,
+							"name": "warn",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 176,
+									"name": "warn",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "reports an warning message to the log.\nThe message will actually be reported to the log only if the current\nreporting level is WARN or lower.",
+										"returns": "promise to return the file written to, or undefined\n"
+									},
+									"parameters": [
+										{
+											"id": 177,
+											"name": "msg",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"comment": {
+												"text": "the message to report. If msg is an object literal, a deep inspection will be printed."
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "any"
+											}
+										},
+										{
+											"id": 178,
+											"name": "log2File",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "boolean"
+											},
+											"defaultValue": "true"
+										}
+									],
+									"type": {
+										"type": "reference",
+										"name": "Promise",
+										"typeArguments": [
+											{
+												"type": "intrinsic",
+												"name": "string"
+											}
+										]
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 206,
+									"character": 14
+								}
+							]
+						},
+						{
+							"id": 216,
+							"name": "makeLogFn",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isPublic": true,
+								"isStatic": true,
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 217,
+									"name": "makeLogFn",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "factory method to create instances of callable `Log`"
+									},
+									"parameters": [
+										{
+											"id": 218,
+											"name": "prefix",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"name": "LogFn",
+										"id": 82
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 325,
+									"character": 27
+								}
+							]
+						},
+						{
+							"id": 152,
+							"name": "levels",
+							"kind": 2097152,
+							"kindString": "Object literal",
+							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"comment": {
+								"shortText": "map of valid reporting levels"
+							},
+							"children": [
+								{
+									"id": 153,
+									"name": "__computed",
+									"kind": 2097152,
+									"kindString": "Object literal",
+									"flags": {
+										"isExported": true
+									},
+									"children": [
+										{
+											"id": 156,
+											"name": "desc",
+											"kind": 32,
+											"kindString": "Variable",
+											"flags": {
+												"isExported": true
+											},
+											"sources": [
+												{
+													"fileName": "log.ts",
+													"line": 129,
+													"character": 60
+												},
+												{
+													"fileName": "log.ts",
+													"line": 130,
+													"character": 60
+												},
+												{
+													"fileName": "log.ts",
+													"line": 131,
+													"character": 60
+												},
+												{
+													"fileName": "log.ts",
+													"line": 132,
+													"character": 60
+												}
+											],
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											},
+											"defaultValue": "\"ERROR\""
+										},
+										{
+											"id": 154,
+											"name": "importance",
+											"kind": 32,
+											"kindString": "Variable",
+											"flags": {
+												"isExported": true
+											},
+											"sources": [
+												{
+													"fileName": "log.ts",
+													"line": 129,
+													"character": 35
+												},
+												{
+													"fileName": "log.ts",
+													"line": 130,
+													"character": 35
+												},
+												{
+													"fileName": "log.ts",
+													"line": 131,
+													"character": 35
+												},
+												{
+													"fileName": "log.ts",
+													"line": 132,
+													"character": 35
+												}
+											],
+											"type": {
+												"type": "intrinsic",
+												"name": "number"
+											},
+											"defaultValue": "3"
+										},
+										{
+											"id": 155,
+											"name": "sym",
+											"kind": 32,
+											"kindString": "Variable",
+											"flags": {
+												"isExported": true
+											},
+											"sources": [
+												{
+													"fileName": "log.ts",
+													"line": 129,
+													"character": 43
+												},
+												{
+													"fileName": "log.ts",
+													"line": 130,
+													"character": 43
+												},
+												{
+													"fileName": "log.ts",
+													"line": 131,
+													"character": 43
+												},
+												{
+													"fileName": "log.ts",
+													"line": 132,
+													"character": 43
+												}
+											],
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											},
+											"defaultValue": " Log.ERROR"
+										}
+									],
+									"groups": [
+										{
+											"title": "Variables",
+											"kind": 32,
+											"children": [
+												156,
+												154,
+												155
+											]
+										}
+									],
+									"sources": [
+										{
+											"fileName": "log.ts",
+											"line": 129,
+											"character": 19
+										},
+										{
+											"fileName": "log.ts",
+											"line": 130,
+											"character": 18
+										},
+										{
+											"fileName": "log.ts",
+											"line": 131,
+											"character": 18
+										},
+										{
+											"fileName": "log.ts",
+											"line": 132,
+											"character": 19
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "object"
+									}
+								}
+							],
+							"groups": [
+								{
+									"title": "Object literals",
+									"kind": 2097152,
+									"children": [
+										153
+									]
+								}
+							],
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 128,
+									"character": 17
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "object"
+							}
+						}
+					],
+					"groups": [
+						{
+							"title": "Constructors",
+							"kind": 512,
+							"children": [
+								160
+							]
+						},
+						{
+							"title": "Properties",
+							"kind": 1024,
+							"children": [
+								158,
+								159,
+								148,
+								151,
+								149,
+								150,
+								147,
+								146,
+								157
+							]
+						},
+						{
+							"title": "Methods",
+							"kind": 2048,
+							"children": [
+								219,
+								199,
+								167,
+								179,
+								193,
+								211,
+								171,
+								206,
+								163,
+								187,
+								183,
+								196,
+								175,
+								216
+							]
+						},
+						{
+							"title": "Object literals",
+							"kind": 2097152,
+							"children": [
+								152
+							]
+						}
+					],
+					"sources": [
+						{
+							"fileName": "log.ts",
+							"line": 110,
+							"character": 16
+						}
+					]
+				},
+				{
+					"id": 141,
+					"name": "LevelDesc",
+					"kind": 256,
+					"kindString": "Interface",
+					"flags": {
+						"isExported": true
+					},
+					"comment": {
+						"shortText": "Type definition for level descriptors"
+					},
+					"children": [
+						{
+							"id": 144,
+							"name": "desc",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 107,
+									"character": 64
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						},
+						{
+							"id": 142,
+							"name": "importance",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 107,
+									"character": 39
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "number"
+							}
+						},
+						{
+							"id": 143,
+							"name": "sym",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 107,
+									"character": 51
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						}
+					],
+					"groups": [
+						{
+							"title": "Properties",
+							"kind": 1024,
+							"children": [
+								144,
+								142,
+								143
+							]
+						}
+					],
+					"sources": [
+						{
+							"fileName": "log.ts",
+							"line": 107,
+							"character": 26
+						}
+					]
+				},
+				{
+					"id": 82,
+					"name": "LogFn",
+					"kind": 256,
+					"kindString": "Interface",
+					"flags": {
+						"isExported": true
+					},
+					"signatures": [
+						{
+							"id": 83,
+							"name": "__call",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 84,
+									"name": "_prefix",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"name": "LogFn",
+								"id": 82
+							}
+						}
+					],
+					"children": [
+						{
+							"id": 85,
+							"name": "DEBUG",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 87,
+									"character": 9
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						},
+						{
+							"id": 88,
+							"name": "ERROR",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 90,
+									"character": 9
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						},
+						{
+							"id": 86,
+							"name": "INFO",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 88,
+									"character": 8
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						},
+						{
+							"id": 87,
+							"name": "WARN",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 89,
+									"character": 8
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						},
+						{
+							"id": 127,
+							"name": "config",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 99,
+									"character": 10
+								}
+							],
+							"type": {
+								"type": "reflection",
+								"declaration": {
+									"id": 128,
+									"name": "__type",
+									"kind": 65536,
+									"kindString": "Type literal",
+									"flags": {},
+									"signatures": [
+										{
+											"id": 129,
+											"name": "__call",
+											"kind": 4096,
+											"kindString": "Call signature",
+											"flags": {},
+											"parameters": [
+												{
+													"id": 130,
+													"name": "cfg",
+													"kind": 32768,
+													"kindString": "Parameter",
+													"flags": {},
+													"type": {
+														"type": "reflection",
+														"declaration": {
+															"id": 131,
+															"name": "__type",
+															"kind": 65536,
+															"kindString": "Type literal",
+															"flags": {},
+															"children": [
+																{
+																	"id": 132,
+																	"name": "colors",
+																	"kind": 32,
+																	"kindString": "Variable",
+																	"flags": {
+																		"isOptional": true
+																	},
+																	"sources": [
+																		{
+																			"fileName": "log.ts",
+																			"line": 99,
+																			"character": 24
+																		}
+																	],
+																	"type": {
+																		"type": "intrinsic",
+																		"name": "boolean"
+																	}
+																},
+																{
+																	"id": 133,
+																	"name": "format",
+																	"kind": 32,
+																	"kindString": "Variable",
+																	"flags": {
+																		"isOptional": true
+																	},
+																	"sources": [
+																		{
+																			"fileName": "log.ts",
+																			"line": 99,
+																			"character": 41
+																		}
+																	],
+																	"type": {
+																		"type": "intrinsic",
+																		"name": "string"
+																	}
+																},
+																{
+																	"id": 134,
+																	"name": "level",
+																	"kind": 32,
+																	"kindString": "Variable",
+																	"flags": {
+																		"isOptional": true
+																	},
+																	"sources": [
+																		{
+																			"fileName": "log.ts",
+																			"line": 99,
+																			"character": 56
+																		}
+																	],
+																	"type": {
+																		"type": "intrinsic",
+																		"name": "string"
+																	}
+																}
+															],
+															"groups": [
+																{
+																	"title": "Variables",
+																	"kind": 32,
+																	"children": [
+																		132,
+																		133,
+																		134
+																	]
+																}
+															],
+															"sources": [
+																{
+																	"fileName": "log.ts",
+																	"line": 99,
+																	"character": 17
+																}
+															]
+														}
+													}
+												}
+											],
+											"type": {
+												"type": "intrinsic",
+												"name": "void"
+											}
+										}
+									],
+									"sources": [
+										{
+											"fileName": "log.ts",
+											"line": 99,
+											"character": 11
+										}
+									]
+								}
+							}
+						},
+						{
+							"id": 94,
+							"name": "debug",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 92,
+									"character": 9
+								}
+							],
+							"type": {
+								"type": "reflection",
+								"declaration": {
+									"id": 95,
+									"name": "__type",
+									"kind": 65536,
+									"kindString": "Type literal",
+									"flags": {},
+									"signatures": [
+										{
+											"id": 96,
+											"name": "__call",
+											"kind": 4096,
+											"kindString": "Call signature",
+											"flags": {},
+											"parameters": [
+												{
+													"id": 97,
+													"name": "msg",
+													"kind": 32768,
+													"kindString": "Parameter",
+													"flags": {},
+													"type": {
+														"type": "intrinsic",
+														"name": "any"
+													}
+												},
+												{
+													"id": 98,
+													"name": "log2File",
+													"kind": 32768,
+													"kindString": "Parameter",
+													"flags": {
+														"isOptional": true
+													},
+													"type": {
+														"type": "intrinsic",
+														"name": "boolean"
+													}
+												}
+											],
+											"type": {
+												"type": "reference",
+												"name": "Promise",
+												"typeArguments": [
+													{
+														"type": "intrinsic",
+														"name": "string"
+													}
+												]
+											}
+										}
+									],
+									"sources": [
+										{
+											"fileName": "log.ts",
+											"line": 92,
+											"character": 10
+										}
+									]
+								}
+							}
+						},
+						{
+							"id": 109,
+							"name": "error",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 95,
+									"character": 9
+								}
+							],
+							"type": {
+								"type": "reflection",
+								"declaration": {
+									"id": 110,
+									"name": "__type",
+									"kind": 65536,
+									"kindString": "Type literal",
+									"flags": {},
+									"signatures": [
+										{
+											"id": 111,
+											"name": "__call",
+											"kind": 4096,
+											"kindString": "Call signature",
+											"flags": {},
+											"parameters": [
+												{
+													"id": 112,
+													"name": "msg",
+													"kind": 32768,
+													"kindString": "Parameter",
+													"flags": {},
+													"type": {
+														"type": "intrinsic",
+														"name": "any"
+													}
+												},
+												{
+													"id": 113,
+													"name": "log2File",
+													"kind": 32768,
+													"kindString": "Parameter",
+													"flags": {
+														"isOptional": true
+													},
+													"type": {
+														"type": "intrinsic",
+														"name": "boolean"
+													}
+												}
+											],
+											"type": {
+												"type": "reference",
+												"name": "Promise",
+												"typeArguments": [
+													{
+														"type": "intrinsic",
+														"name": "string"
+													}
+												]
+											}
+										}
+									],
+									"sources": [
+										{
+											"fileName": "log.ts",
+											"line": 95,
+											"character": 10
+										}
+									]
+								}
+							}
+						},
+						{
+							"id": 114,
+							"name": "format",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 96,
+									"character": 10
+								}
+							],
+							"type": {
+								"type": "reflection",
+								"declaration": {
+									"id": 115,
+									"name": "__type",
+									"kind": 65536,
+									"kindString": "Type literal",
+									"flags": {},
+									"signatures": [
+										{
+											"id": 116,
+											"name": "__call",
+											"kind": 4096,
+											"kindString": "Call signature",
+											"flags": {},
+											"parameters": [
+												{
+													"id": 117,
+													"name": "fmtStr",
+													"kind": 32768,
+													"kindString": "Parameter",
+													"flags": {
+														"isOptional": true
+													},
+													"type": {
+														"type": "intrinsic",
+														"name": "string"
+													}
+												}
+											],
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										}
+									],
+									"sources": [
+										{
+											"fileName": "log.ts",
+											"line": 96,
+											"character": 11
+										}
+									]
+								}
+							}
+						},
+						{
+							"id": 99,
+							"name": "info",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 93,
+									"character": 8
+								}
+							],
+							"type": {
+								"type": "reflection",
+								"declaration": {
+									"id": 100,
+									"name": "__type",
+									"kind": 65536,
+									"kindString": "Type literal",
+									"flags": {},
+									"signatures": [
+										{
+											"id": 101,
+											"name": "__call",
+											"kind": 4096,
+											"kindString": "Call signature",
+											"flags": {},
+											"parameters": [
+												{
+													"id": 102,
+													"name": "msg",
+													"kind": 32768,
+													"kindString": "Parameter",
+													"flags": {},
+													"type": {
+														"type": "intrinsic",
+														"name": "any"
+													}
+												},
+												{
+													"id": 103,
+													"name": "log2File",
+													"kind": 32768,
+													"kindString": "Parameter",
+													"flags": {
+														"isOptional": true
+													},
+													"type": {
+														"type": "intrinsic",
+														"name": "boolean"
+													}
+												}
+											],
+											"type": {
+												"type": "reference",
+												"name": "Promise",
+												"typeArguments": [
+													{
+														"type": "intrinsic",
+														"name": "string"
+													}
+												]
+											}
+										}
+									],
+									"sources": [
+										{
+											"fileName": "log.ts",
+											"line": 93,
+											"character": 9
+										}
+									]
+								}
+							}
+						},
+						{
+							"id": 135,
+							"name": "inspect",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 100,
+									"character": 11
+								}
+							],
+							"type": {
+								"type": "reflection",
+								"declaration": {
+									"id": 136,
+									"name": "__type",
+									"kind": 65536,
+									"kindString": "Type literal",
+									"flags": {},
+									"signatures": [
+										{
+											"id": 137,
+											"name": "__call",
+											"kind": 4096,
+											"kindString": "Call signature",
+											"flags": {},
+											"parameters": [
+												{
+													"id": 138,
+													"name": "msg",
+													"kind": 32768,
+													"kindString": "Parameter",
+													"flags": {},
+													"type": {
+														"type": "intrinsic",
+														"name": "any"
+													}
+												},
+												{
+													"id": 139,
+													"name": "depth",
+													"kind": 32768,
+													"kindString": "Parameter",
+													"flags": {
+														"isOptional": true
+													},
+													"type": {
+														"type": "intrinsic",
+														"name": "number"
+													}
+												},
+												{
+													"id": 140,
+													"name": "indent",
+													"kind": 32768,
+													"kindString": "Parameter",
+													"flags": {
+														"isOptional": true
+													},
+													"type": {
+														"type": "intrinsic",
+														"name": "string"
+													}
+												}
+											],
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										}
+									],
+									"sources": [
+										{
+											"fileName": "log.ts",
+											"line": 100,
+											"character": 12
+										}
+									]
+								}
+							}
+						},
+						{
+							"id": 89,
+							"name": "level",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 91,
+									"character": 9
+								}
+							],
+							"type": {
+								"type": "reflection",
+								"declaration": {
+									"id": 90,
+									"name": "__type",
+									"kind": 65536,
+									"kindString": "Type literal",
+									"flags": {},
+									"signatures": [
+										{
+											"id": 91,
+											"name": "__call",
+											"kind": 4096,
+											"kindString": "Call signature",
+											"flags": {},
+											"parameters": [
+												{
+													"id": 92,
+													"name": "newLevelSym",
+													"kind": 32768,
+													"kindString": "Parameter",
+													"flags": {
+														"isOptional": true
+													},
+													"type": {
+														"type": "intrinsic",
+														"name": "string"
+													}
+												},
+												{
+													"id": 93,
+													"name": "setGlobalLevel",
+													"kind": 32768,
+													"kindString": "Parameter",
+													"flags": {
+														"isOptional": true
+													},
+													"type": {
+														"type": "intrinsic",
+														"name": "boolean"
+													}
+												}
+											],
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										}
+									],
+									"sources": [
+										{
+											"fileName": "log.ts",
+											"line": 91,
+											"character": 10
+										}
+									]
+								}
+							}
+						},
+						{
+							"id": 122,
+							"name": "out",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 98,
+									"character": 7
+								}
+							],
+							"type": {
+								"type": "reflection",
+								"declaration": {
+									"id": 123,
+									"name": "__type",
+									"kind": 65536,
+									"kindString": "Type literal",
+									"flags": {},
+									"signatures": [
+										{
+											"id": 124,
+											"name": "__call",
+											"kind": 4096,
+											"kindString": "Call signature",
+											"flags": {},
+											"parameters": [
+												{
+													"id": 125,
+													"name": "lvl",
+													"kind": 32768,
+													"kindString": "Parameter",
+													"flags": {},
+													"type": {
+														"type": "intrinsic",
+														"name": "string"
+													}
+												},
+												{
+													"id": 126,
+													"name": "msg",
+													"kind": 32768,
+													"kindString": "Parameter",
+													"flags": {},
+													"type": {
+														"type": "intrinsic",
+														"name": "any"
+													}
+												}
+											],
+											"type": {
+												"type": "reference",
+												"name": "Promise",
+												"typeArguments": [
+													{
+														"type": "intrinsic",
+														"name": "string"
+													}
+												]
+											}
+										}
+									],
+									"sources": [
+										{
+											"fileName": "log.ts",
+											"line": 98,
+											"character": 8
+										}
+									]
+								}
+							}
+						},
+						{
+							"id": 118,
+							"name": "prefix",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 97,
+									"character": 10
+								}
+							],
+							"type": {
+								"type": "reflection",
+								"declaration": {
+									"id": 119,
+									"name": "__type",
+									"kind": 65536,
+									"kindString": "Type literal",
+									"flags": {},
+									"signatures": [
+										{
+											"id": 120,
+											"name": "__call",
+											"kind": 4096,
+											"kindString": "Call signature",
+											"flags": {},
+											"parameters": [
+												{
+													"id": 121,
+													"name": "prf",
+													"kind": 32768,
+													"kindString": "Parameter",
+													"flags": {
+														"isOptional": true
+													},
+													"type": {
+														"type": "intrinsic",
+														"name": "string"
+													}
+												}
+											],
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										}
+									],
+									"sources": [
+										{
+											"fileName": "log.ts",
+											"line": 97,
+											"character": 11
+										}
+									]
+								}
+							}
+						},
+						{
+							"id": 104,
+							"name": "warn",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 94,
+									"character": 8
+								}
+							],
+							"type": {
+								"type": "reflection",
+								"declaration": {
+									"id": 105,
+									"name": "__type",
+									"kind": 65536,
+									"kindString": "Type literal",
+									"flags": {},
+									"signatures": [
+										{
 											"id": 106,
+											"name": "__call",
+											"kind": 4096,
+											"kindString": "Call signature",
+											"flags": {},
+											"parameters": [
+												{
+													"id": 107,
+													"name": "msg",
+													"kind": 32768,
+													"kindString": "Parameter",
+													"flags": {},
+													"type": {
+														"type": "intrinsic",
+														"name": "any"
+													}
+												},
+												{
+													"id": 108,
+													"name": "log2File",
+													"kind": 32768,
+													"kindString": "Parameter",
+													"flags": {
+														"isOptional": true
+													},
+													"type": {
+														"type": "intrinsic",
+														"name": "boolean"
+													}
+												}
+											],
+											"type": {
+												"type": "reference",
+												"name": "Promise",
+												"typeArguments": [
+													{
+														"type": "intrinsic",
+														"name": "string"
+													}
+												]
+											}
+										}
+									],
+									"sources": [
+										{
+											"fileName": "log.ts",
+											"line": 94,
+											"character": 9
+										}
+									]
+								}
+							}
+						}
+					],
+					"groups": [
+						{
+							"title": "Properties",
+							"kind": 1024,
+							"children": [
+								85,
+								88,
+								86,
+								87,
+								127,
+								94,
+								109,
+								114,
+								99,
+								135,
+								89,
+								122,
+								118,
+								104
+							]
+						}
+					],
+					"sources": [
+						{
+							"fileName": "log.ts",
+							"line": 85,
+							"character": 22
+						}
+					]
+				},
+				{
+					"id": 222,
+					"name": "log",
+					"kind": 32,
+					"kindString": "Variable",
+					"flags": {
+						"isExported": true,
+						"isConst": true
+					},
+					"sources": [
+						{
+							"fileName": "log.ts",
+							"line": 350,
+							"character": 16
+						}
+					],
+					"type": {
+						"type": "reference",
+						"name": "LogFn",
+						"id": 82
+					},
+					"defaultValue": " Log.makeLogFn('')"
+				}
+			],
+			"groups": [
+				{
+					"title": "Classes",
+					"kind": 128,
+					"children": [
+						145
+					]
+				},
+				{
+					"title": "Interfaces",
+					"kind": 256,
+					"children": [
+						141,
+						82
+					]
+				},
+				{
+					"title": "Variables",
+					"kind": 32,
+					"children": [
+						222
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "log.ts",
+					"line": 1,
+					"character": 0
+				}
+			]
+		},
+		{
+			"id": 224,
+			"name": "\"log2\"",
+			"kind": 1,
+			"kindString": "External module",
+			"flags": {
+				"isExported": true
+			},
+			"originalName": "/Users/sth1pal/Documents/Development/JavaScript/nodejs/ts6/dev/hsLibs/standalone/hsUtil/src/log2.ts",
+			"comment": {
+				"shortText": "Logging convenience functions.\n## Usage",
+				"text": "### Using the global log object\nSettings in `log` are shared across modules\n```\nimport { log } from 'hsutil';\nlog.info('by the way:'); // -> 20160817 09:59:08.032 info by the way:\nlog.error('oh dear!');   // -> 20160817 09:59:08.045 error *** oh dear!\n```\n\n### Using a local log object\nSettings in `log` remain local to the module\n```\nimport { log as gLog } from 'hsutil'; const log = gLog('myModule')\nlog.info('by the way:'); // -> 20160817 09:59:08.032 myModule info by the way:\nlog.error('oh dear!');   // -> 20160817 09:59:08.045 myModule error *** oh dear!\n```\n\n### Using the `format` template:\n```\nlog.format('%MMM %DD %hh%mm%ss');\nlog.info('by the way:');  // -> Aug 17 095908 info by the way:\nlog.error('oh dear!');    // -> Aug 17 095908 error *** oh dear!\n```\n\n### Change the module prefix:\n```\nlog.prefix('Main');\nlog.format('%hh%mm%ss');\nlog.info('by the way:');  // -> 09:59:08.032 Main info by the way:\nlog.error('oh dear!');    // -> 09:59:08.045 Main error *** oh dear!\n```\n\n### Setting the Log level locally for the module\n```\nlog.level(log.WARN);\nlog.info('this will not be reported');\n```\n\n### Setting the Log level globally\nWill be used if no local level is set\n```\nlog.level(log.WARN, true);               // set global log level\nlog.info('this will be reported');       // because local level defaults to INFORM\nlog.level(null);                         // unset the local level\nlog.info('this will not be reported');   // because no local level is defined and global level is set to WARN\n```\n\n### log.inspect utility\nreturns a string representing a deep inspection of `myObj`.\n```\nlog.info(log.inspect(myObj, null));      // prints the structure to inifinite depth\n```\n\n## Reporting Levels:\n- &nbsp; {@link log.DEBUG log.DEBUG}\n- &nbsp; {@link log.INFO  log.INFO}\n- &nbsp; {@link log.WARN  log.WARN}\n- &nbsp; {@link log.ERROR log.ERROR}\n\n## Reporting methods\n- &nbsp; {@link log.LogType.debug log.debug()}\n- &nbsp; {@link log.LogType.info  log.info()}\n- &nbsp; {@link log.LogType.warn  log.warn()}\n- &nbsp; {@link log.LogType.error log.error()}\n\n## Configurations:\n- &nbsp; {@link log.LogType.level   log.level()}\n- &nbsp; {@link log.LogType.format  log.format()}\n- &nbsp; {@link log.LogType.prefix  log.prefix()}\n- &nbsp; {@link log.LogType.logFile log.logFile()}\n\n## Inspection support:\n- &nbsp; {@link log.LogType.inspect log.inspect()}\n"
+			},
+			"children": [
+				{
+					"id": 225,
+					"name": "LevelDesc",
+					"kind": 256,
+					"kindString": "Interface",
+					"flags": {
+						"isExported": true
+					},
+					"comment": {
+						"shortText": "Type definition for level descriptors"
+					},
+					"children": [
+						{
+							"id": 228,
+							"name": "desc",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "log2.ts",
+									"line": 101,
+									"character": 64
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						},
+						{
+							"id": 226,
+							"name": "importance",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "log2.ts",
+									"line": 101,
+									"character": 39
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "number"
+							}
+						},
+						{
+							"id": 227,
+							"name": "sym",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "log2.ts",
+									"line": 101,
+									"character": 51
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "symbol"
+							}
+						}
+					],
+					"groups": [
+						{
+							"title": "Properties",
+							"kind": 1024,
+							"children": [
+								228,
+								226,
+								227
+							]
+						}
+					],
+					"sources": [
+						{
+							"fileName": "log2.ts",
+							"line": 101,
+							"character": 26
+						}
+					]
+				},
+				{
+					"id": 229,
+					"name": "LogType",
+					"kind": 256,
+					"kindString": "Interface",
+					"flags": {
+						"isExported": true
+					},
+					"signatures": [
+						{
+							"id": 230,
+							"name": "__call",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 231,
+									"name": "_prefix",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								},
+								{
+									"id": 232,
+									"name": "logToFile",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {
+										"isOptional": true
+									},
+									"type": {
+										"type": "reference",
+										"name": "ltfType",
+										"id": 306
+									}
+								},
+								{
+									"id": 233,
+									"name": "pathExists",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {
+										"isOptional": true
+									},
+									"type": {
+										"type": "reference",
+										"name": "peType",
+										"id": 311
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"name": "LogType",
+								"id": 229
+							}
+						}
+					],
+					"children": [
+						{
+							"id": 234,
+							"name": "DEBUG",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "log2.ts",
+									"line": 134,
+									"character": 9
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "symbol"
+							}
+						},
+						{
+							"id": 237,
+							"name": "ERROR",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "log2.ts",
+									"line": 137,
+									"character": 9
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "symbol"
+							}
+						},
+						{
+							"id": 235,
+							"name": "INFO",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "log2.ts",
+									"line": 135,
+									"character": 8
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "symbol"
+							}
+						},
+						{
+							"id": 236,
+							"name": "WARN",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "log2.ts",
+									"line": 136,
+									"character": 8
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "symbol"
+							}
+						},
+						{
+							"id": 272,
+							"name": "config",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 273,
+									"name": "config",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "configures the log facility.\n- cfg.colors: boolean, determines if output is colored\n- cfg.logfile: sets the naming template for the logfile. Set logFile=null to disable.\n- cfg.format: sets the format for the timestamp for each log entry\n- cfg.level: sets the reporting level (same as calling log.level())"
+									},
+									"parameters": [
+										{
+											"id": 274,
+											"name": "cfg",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"comment": {
+												"text": "\n"
+											},
+											"type": {
+												"type": "reflection",
+												"declaration": {
+													"id": 275,
+													"name": "__type",
+													"kind": 65536,
+													"kindString": "Type literal",
+													"flags": {},
+													"children": [
+														{
+															"id": 276,
+															"name": "colors",
+															"kind": 32,
+															"kindString": "Variable",
+															"flags": {
+																"isOptional": true
+															},
+															"sources": [
+																{
+																	"fileName": "log2.ts",
+																	"line": 247,
+																	"character": 22
+																}
+															],
+															"type": {
+																"type": "intrinsic",
+																"name": "boolean"
+															}
+														},
+														{
+															"id": 277,
+															"name": "format",
+															"kind": 32,
+															"kindString": "Variable",
+															"flags": {
+																"isOptional": true
+															},
+															"sources": [
+																{
+																	"fileName": "log2.ts",
+																	"line": 247,
+																	"character": 39
+																}
+															],
+															"type": {
+																"type": "intrinsic",
+																"name": "string"
+															}
+														},
+														{
+															"id": 278,
+															"name": "level",
+															"kind": 32,
+															"kindString": "Variable",
+															"flags": {
+																"isOptional": true
+															},
+															"sources": [
+																{
+																	"fileName": "log2.ts",
+																	"line": 247,
+																	"character": 54
+																}
+															],
+															"type": {
+																"type": "intrinsic",
+																"name": "symbol"
+															}
+														}
+													],
+													"groups": [
+														{
+															"title": "Variables",
+															"kind": 32,
+															"children": [
+																276,
+																277,
+																278
+															]
+														}
+													],
+													"sources": [
+														{
+															"fileName": "log2.ts",
+															"line": 247,
+															"character": 15
+														}
+													]
+												}
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "log2.ts",
+									"line": 247,
+									"character": 10
+								}
+							]
+						},
+						{
+							"id": 242,
+							"name": "debug",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 243,
+									"name": "debug",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "reports an debug message to the log.\nThe message will actually be reported to the log only if the current\nreporting level is DEBUG or lower.",
+										"returns": "promise to return the file written to, or undefined\n"
+									},
+									"parameters": [
+										{
+											"id": 244,
+											"name": "msg",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"comment": {
+												"text": "the message to report. If msg is an object literal, a deep inspection will be printed."
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "any"
+											}
+										},
+										{
+											"id": 245,
 											"name": "log",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2096,14 +4516,207 @@
 							],
 							"sources": [
 								{
-									"fileName": "log.ts",
+									"fileName": "log2.ts",
+									"line": 165,
+									"character": 9
+								}
+							]
+						},
+						{
+							"id": 254,
+							"name": "error",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 255,
+									"name": "error",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "reports an error message to the log.\nThe message will always be reported to the log.",
+										"returns": "promise to return the file written to, or undefined\n"
+									},
+									"parameters": [
+										{
+											"id": 256,
+											"name": "msg",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"comment": {
+												"text": "the message to report. If msg is an object literal, a deep inspection will be printed."
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "any"
+											}
+										},
+										{
+											"id": 257,
+											"name": "log",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"text": "optional flag to enable/suppress logging to file. Defaults to `true`"
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "boolean"
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"name": "Promise",
+										"typeArguments": [
+											{
+												"type": "intrinsic",
+												"name": "string"
+											}
+										]
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "log2.ts",
+									"line": 194,
+									"character": 9
+								}
+							]
+						},
+						{
+							"id": 266,
+							"name": "format",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 267,
+									"name": "format",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "sets the format string to use for logging. If no parameter is specified,\nthe function returns the currently set format string. The preset is '%YYYY%MM%DD %hh:%mm:%ss.%jjj'\nFor supported formats see {@link date date}.\nUsage\n- `format(null)` sets the format to `defDateFormat`\n- `format()` returns the current format without changing it.",
+										"returns": "the currently set format string\n"
+									},
+									"parameters": [
+										{
+											"id": 268,
+											"name": "fmtStr",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"text": "optional format string to use;"
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "log2.ts",
+									"line": 230,
+									"character": 10
+								}
+							]
+						},
+						{
+							"id": 246,
+							"name": "info",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 247,
+									"name": "info",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "reports an informational message to the log.\nThe message will actually be reported to the log only if the current\nreporting level is INFO or lower.",
+										"returns": "promise to return the file written to, or undefined\n"
+									},
+									"parameters": [
+										{
+											"id": 248,
+											"name": "msg",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"comment": {
+												"text": "the message to report. If msg is an object literal, a deep inspection will be printed."
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "any"
+											}
+										},
+										{
+											"id": 249,
+											"name": "log",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"text": "optional flag to enable/suppress logging to file. Defaults to `true`"
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "boolean"
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"name": "Promise",
+										"typeArguments": [
+											{
+												"type": "intrinsic",
+												"name": "string"
+											}
+										]
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "log2.ts",
 									"line": 175,
 									"character": 8
 								}
 							]
 						},
 						{
-							"id": 136,
+							"id": 279,
 							"name": "inspect",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2112,7 +4725,7 @@
 							},
 							"signatures": [
 								{
-									"id": 137,
+									"id": 280,
 									"name": "inspect",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2123,7 +4736,7 @@
 									},
 									"parameters": [
 										{
-											"id": 138,
+											"id": 281,
 											"name": "struct",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2137,7 +4750,7 @@
 											}
 										},
 										{
-											"id": 139,
+											"id": 282,
 											"name": "depth",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2153,7 +4766,7 @@
 											}
 										},
 										{
-											"id": 140,
+											"id": 283,
 											"name": "indent",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2169,7 +4782,7 @@
 											}
 										},
 										{
-											"id": 141,
+											"id": 284,
 											"name": "colors",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2196,14 +4809,14 @@
 							],
 							"sources": [
 								{
-									"fileName": "log.ts",
+									"fileName": "log2.ts",
 									"line": 263,
 									"character": 11
 								}
 							]
 						},
 						{
-							"id": 95,
+							"id": 238,
 							"name": "level",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2212,7 +4825,7 @@
 							},
 							"signatures": [
 								{
-									"id": 96,
+									"id": 239,
 									"name": "level",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2224,7 +4837,7 @@
 									},
 									"parameters": [
 										{
-											"id": 97,
+											"id": 240,
 											"name": "newLevelSym",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2240,7 +4853,7 @@
 											}
 										},
 										{
-											"id": 98,
+											"id": 241,
 											"name": "setGlobalLevel",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2264,14 +4877,14 @@
 							],
 							"sources": [
 								{
-									"fileName": "log.ts",
+									"fileName": "log2.ts",
 									"line": 155,
 									"character": 9
 								}
 							]
 						},
 						{
-							"id": 120,
+							"id": 263,
 							"name": "logFile",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2280,7 +4893,7 @@
 							},
 							"signatures": [
 								{
-									"id": 121,
+									"id": 264,
 									"name": "logFile",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2291,7 +4904,7 @@
 									},
 									"parameters": [
 										{
-											"id": 122,
+											"id": 265,
 											"name": "file",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2321,14 +4934,14 @@
 							],
 							"sources": [
 								{
-									"fileName": "log.ts",
+									"fileName": "log2.ts",
 									"line": 218,
 									"character": 11
 								}
 							]
 						},
 						{
-							"id": 115,
+							"id": 258,
 							"name": "out",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2337,7 +4950,7 @@
 							},
 							"signatures": [
 								{
-									"id": 116,
+									"id": 259,
 									"name": "out",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2348,7 +4961,7 @@
 									},
 									"parameters": [
 										{
-											"id": 117,
+											"id": 260,
 											"name": "lvl",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2362,7 +4975,7 @@
 											}
 										},
 										{
-											"id": 118,
+											"id": 261,
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2376,7 +4989,7 @@
 											}
 										},
 										{
-											"id": 119,
+											"id": 262,
 											"name": "log",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2406,14 +5019,14 @@
 							],
 							"sources": [
 								{
-									"fileName": "log.ts",
+									"fileName": "log2.ts",
 									"line": 204,
 									"character": 7
 								}
 							]
 						},
 						{
-							"id": 126,
+							"id": 269,
 							"name": "prefix",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2422,7 +5035,7 @@
 							},
 							"signatures": [
 								{
-									"id": 127,
+									"id": 270,
 									"name": "prefix",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2433,7 +5046,7 @@
 									},
 									"parameters": [
 										{
-											"id": 128,
+											"id": 271,
 											"name": "prf",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2457,14 +5070,14 @@
 							],
 							"sources": [
 								{
-									"fileName": "log.ts",
+									"fileName": "log2.ts",
 									"line": 237,
 									"character": 10
 								}
 							]
 						},
 						{
-							"id": 107,
+							"id": 250,
 							"name": "warn",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2473,7 +5086,7 @@
 							},
 							"signatures": [
 								{
-									"id": 108,
+									"id": 251,
 									"name": "warn",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2484,7 +5097,7 @@
 									},
 									"parameters": [
 										{
-											"id": 109,
+											"id": 252,
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2498,7 +5111,7 @@
 											}
 										},
 										{
-											"id": 110,
+											"id": 253,
 											"name": "log",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2528,7 +5141,7 @@
 							],
 							"sources": [
 								{
-									"fileName": "log.ts",
+									"fileName": "log2.ts",
 									"line": 185,
 									"character": 8
 								}
@@ -2540,47 +5153,47 @@
 							"title": "Properties",
 							"kind": 1024,
 							"children": [
-								91,
-								94,
-								92,
-								93
+								234,
+								237,
+								235,
+								236
 							]
 						},
 						{
 							"title": "Methods",
 							"kind": 2048,
 							"children": [
-								129,
-								99,
-								111,
-								123,
-								103,
-								136,
-								95,
-								120,
-								115,
-								126,
-								107
+								272,
+								242,
+								254,
+								266,
+								246,
+								279,
+								238,
+								263,
+								258,
+								269,
+								250
 							]
 						}
 					],
 					"sources": [
 						{
-							"fileName": "log.ts",
+							"fileName": "log2.ts",
 							"line": 132,
 							"character": 24
 						}
 					]
 				},
 				{
-					"id": 163,
+					"id": 306,
 					"name": "ltfType",
 					"kind": 4194304,
 					"kindString": "Type alias",
 					"flags": {},
 					"sources": [
 						{
-							"fileName": "log.ts",
+							"fileName": "log2.ts",
 							"line": 266,
 							"character": 12
 						}
@@ -2588,21 +5201,21 @@
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 164,
+							"id": 307,
 							"name": "__type",
 							"kind": 65536,
 							"kindString": "Type literal",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 165,
+									"id": 308,
 									"name": "__call",
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
 									"parameters": [
 										{
-											"id": 166,
+											"id": 309,
 											"name": "filename",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2613,7 +5226,7 @@
 											}
 										},
 										{
-											"id": 167,
+											"id": 310,
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2638,7 +5251,7 @@
 							],
 							"sources": [
 								{
-									"fileName": "log.ts",
+									"fileName": "log2.ts",
 									"line": 266,
 									"character": 14
 								}
@@ -2647,14 +5260,14 @@
 					}
 				},
 				{
-					"id": 168,
+					"id": 311,
 					"name": "peType",
 					"kind": 4194304,
 					"kindString": "Type alias",
 					"flags": {},
 					"sources": [
 						{
-							"fileName": "log.ts",
+							"fileName": "log2.ts",
 							"line": 267,
 							"character": 11
 						}
@@ -2662,21 +5275,21 @@
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 169,
+							"id": 312,
 							"name": "__type",
 							"kind": 65536,
 							"kindString": "Type literal",
 							"flags": {},
 							"signatures": [
 								{
-									"id": 170,
+									"id": 313,
 									"name": "__call",
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
 									"parameters": [
 										{
-											"id": 171,
+											"id": 314,
 											"name": "path",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2701,7 +5314,7 @@
 							],
 							"sources": [
 								{
-									"fileName": "log.ts",
+									"fileName": "log2.ts",
 									"line": 267,
 									"character": 14
 								}
@@ -2710,7 +5323,7 @@
 					}
 				},
 				{
-					"id": 142,
+					"id": 285,
 					"name": "DEBUG",
 					"kind": 32,
 					"kindString": "Variable",
@@ -2722,7 +5335,7 @@
 					},
 					"sources": [
 						{
-							"fileName": "log.ts",
+							"fileName": "log2.ts",
 							"line": 83,
 							"character": 11
 						}
@@ -2734,7 +5347,7 @@
 					"defaultValue": " Symbol('DEBUG')"
 				},
 				{
-					"id": 145,
+					"id": 288,
 					"name": "ERROR",
 					"kind": 32,
 					"kindString": "Variable",
@@ -2746,7 +5359,7 @@
 					},
 					"sources": [
 						{
-							"fileName": "log.ts",
+							"fileName": "log2.ts",
 							"line": 92,
 							"character": 11
 						}
@@ -2758,7 +5371,7 @@
 					"defaultValue": " Symbol('ERROR')"
 				},
 				{
-					"id": 143,
+					"id": 286,
 					"name": "INFO",
 					"kind": 32,
 					"kindString": "Variable",
@@ -2770,7 +5383,7 @@
 					},
 					"sources": [
 						{
-							"fileName": "log.ts",
+							"fileName": "log2.ts",
 							"line": 86,
 							"character": 10
 						}
@@ -2782,7 +5395,7 @@
 					"defaultValue": " Symbol('INFO')"
 				},
 				{
-					"id": 144,
+					"id": 287,
 					"name": "WARN",
 					"kind": 32,
 					"kindString": "Variable",
@@ -2794,7 +5407,7 @@
 					},
 					"sources": [
 						{
-							"fileName": "log.ts",
+							"fileName": "log2.ts",
 							"line": 89,
 							"character": 10
 						}
@@ -2806,7 +5419,7 @@
 					"defaultValue": " Symbol('WARN')"
 				},
 				{
-					"id": 153,
+					"id": 296,
 					"name": "defDateFormat",
 					"kind": 32,
 					"kindString": "Variable",
@@ -2818,7 +5431,7 @@
 					},
 					"sources": [
 						{
-							"fileName": "log.ts",
+							"fileName": "log2.ts",
 							"line": 115,
 							"character": 19
 						}
@@ -2830,7 +5443,7 @@
 					"defaultValue": "\"%YYYY%MM%DD %hh:%mm:%ss.%jjj\""
 				},
 				{
-					"id": 155,
+					"id": 298,
 					"name": "gColors",
 					"kind": 32,
 					"kindString": "Variable",
@@ -2842,7 +5455,7 @@
 					},
 					"sources": [
 						{
-							"fileName": "log.ts",
+							"fileName": "log2.ts",
 							"line": 119,
 							"character": 11
 						}
@@ -2854,7 +5467,7 @@
 					"defaultValue": "false"
 				},
 				{
-					"id": 154,
+					"id": 297,
 					"name": "gDateFormat",
 					"kind": 32,
 					"kindString": "Variable",
@@ -2863,7 +5476,7 @@
 					},
 					"sources": [
 						{
-							"fileName": "log.ts",
+							"fileName": "log2.ts",
 							"line": 116,
 							"character": 15
 						}
@@ -2875,7 +5488,7 @@
 					"defaultValue": " defDateFormat"
 				},
 				{
-					"id": 152,
+					"id": 295,
 					"name": "gGlobalLevel",
 					"kind": 32,
 					"kindString": "Variable",
@@ -2887,7 +5500,7 @@
 					},
 					"sources": [
 						{
-							"fileName": "log.ts",
+							"fileName": "log2.ts",
 							"line": 112,
 							"character": 16
 						}
@@ -2895,12 +5508,12 @@
 					"type": {
 						"type": "reference",
 						"name": "LevelDesc",
-						"id": 82
+						"id": 225
 					},
 					"defaultValue": " gLevels[INFO]"
 				},
 				{
-					"id": 146,
+					"id": 289,
 					"name": "gLogFile",
 					"kind": 32,
 					"kindString": "Variable",
@@ -2912,7 +5525,7 @@
 					},
 					"sources": [
 						{
-							"fileName": "log.ts",
+							"fileName": "log2.ts",
 							"line": 95,
 							"character": 12
 						}
@@ -2923,7 +5536,7 @@
 					}
 				},
 				{
-					"id": 172,
+					"id": 315,
 					"name": "log",
 					"kind": 32,
 					"kindString": "Variable",
@@ -2936,7 +5549,7 @@
 					},
 					"sources": [
 						{
-							"fileName": "log.ts",
+							"fileName": "log2.ts",
 							"line": 270,
 							"character": 16
 						}
@@ -2944,26 +5557,26 @@
 					"type": {
 						"type": "reference",
 						"name": "LogType",
-						"id": 86
+						"id": 229
 					},
 					"defaultValue": " create('', \n    (filename:string, msg:string):Promise<string> => Promise.resolve(undefined), \n    /** default implementation for browser usage: don't allow '/' in log file name */\n    (path:string):Promise<boolean> =>Promise.resolve(path.indexOf('/')>=0? false : true)\n)"
 				},
 				{
-					"id": 173,
+					"id": 316,
 					"name": "create",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 174,
+							"id": 317,
 							"name": "create",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 175,
+									"id": 318,
 									"name": "_prefix",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2974,7 +5587,7 @@
 									}
 								},
 								{
-									"id": 176,
+									"id": 319,
 									"name": "logToFile",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2982,11 +5595,11 @@
 									"type": {
 										"type": "reference",
 										"name": "ltfType",
-										"id": 163
+										"id": 306
 									}
 								},
 								{
-									"id": 177,
+									"id": 320,
 									"name": "pathExists",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2994,27 +5607,27 @@
 									"type": {
 										"type": "reference",
 										"name": "peType",
-										"id": 168
+										"id": 311
 									}
 								}
 							],
 							"type": {
 								"type": "reference",
 								"name": "LogType",
-								"id": 86
+								"id": 229
 							}
 						}
 					],
 					"sources": [
 						{
-							"fileName": "log.ts",
+							"fileName": "log2.ts",
 							"line": 276,
 							"character": 15
 						}
 					]
 				},
 				{
-					"id": 156,
+					"id": 299,
 					"name": "color",
 					"kind": 2097152,
 					"kindString": "Object literal",
@@ -3026,14 +5639,14 @@
 					},
 					"children": [
 						{
-							"id": 159,
+							"id": 302,
 							"name": "blue",
 							"kind": 32,
 							"kindString": "Variable",
 							"flags": {},
 							"sources": [
 								{
-									"fileName": "log.ts",
+									"fileName": "log2.ts",
 									"line": 125,
 									"character": 8
 								}
@@ -3045,14 +5658,14 @@
 							"defaultValue": "\"\u001b[36m\""
 						},
 						{
-							"id": 161,
+							"id": 304,
 							"name": "bold",
 							"kind": 32,
 							"kindString": "Variable",
 							"flags": {},
 							"sources": [
 								{
-									"fileName": "log.ts",
+									"fileName": "log2.ts",
 									"line": 127,
 									"character": 8
 								}
@@ -3064,14 +5677,14 @@
 							"defaultValue": "\"\u001b[1m\""
 						},
 						{
-							"id": 162,
+							"id": 305,
 							"name": "clear",
 							"kind": 32,
 							"kindString": "Variable",
 							"flags": {},
 							"sources": [
 								{
-									"fileName": "log.ts",
+									"fileName": "log2.ts",
 									"line": 128,
 									"character": 9
 								}
@@ -3083,14 +5696,14 @@
 							"defaultValue": "\"\u001b[0m\""
 						},
 						{
-							"id": 160,
+							"id": 303,
 							"name": "green",
 							"kind": 32,
 							"kindString": "Variable",
 							"flags": {},
 							"sources": [
 								{
-									"fileName": "log.ts",
+									"fileName": "log2.ts",
 									"line": 126,
 									"character": 9
 								}
@@ -3102,14 +5715,14 @@
 							"defaultValue": "\"\u001b[32m\""
 						},
 						{
-							"id": 157,
+							"id": 300,
 							"name": "red",
 							"kind": 32,
 							"kindString": "Variable",
 							"flags": {},
 							"sources": [
 								{
-									"fileName": "log.ts",
+									"fileName": "log2.ts",
 									"line": 123,
 									"character": 7
 								}
@@ -3121,14 +5734,14 @@
 							"defaultValue": "\"\u001b[31m\""
 						},
 						{
-							"id": 158,
+							"id": 301,
 							"name": "yellow",
 							"kind": 32,
 							"kindString": "Variable",
 							"flags": {},
 							"sources": [
 								{
-									"fileName": "log.ts",
+									"fileName": "log2.ts",
 									"line": 124,
 									"character": 10
 								}
@@ -3145,18 +5758,18 @@
 							"title": "Variables",
 							"kind": 32,
 							"children": [
-								159,
-								161,
-								162,
-								160,
-								157,
-								158
+								302,
+								304,
+								305,
+								303,
+								300,
+								301
 							]
 						}
 					],
 					"sources": [
 						{
-							"fileName": "log.ts",
+							"fileName": "log2.ts",
 							"line": 122,
 							"character": 11
 						}
@@ -3167,7 +5780,7 @@
 					}
 				},
 				{
-					"id": 147,
+					"id": 290,
 					"name": "gLevels",
 					"kind": 2097152,
 					"kindString": "Object literal",
@@ -3179,36 +5792,36 @@
 					},
 					"children": [
 						{
-							"id": 148,
+							"id": 291,
 							"name": "__computed",
 							"kind": 2097152,
 							"kindString": "Object literal",
 							"flags": {},
 							"children": [
 								{
-									"id": 151,
+									"id": 294,
 									"name": "desc",
 									"kind": 32,
 									"kindString": "Variable",
 									"flags": {},
 									"sources": [
 										{
-											"fileName": "log.ts",
+											"fileName": "log2.ts",
 											"line": 105,
 											"character": 48
 										},
 										{
-											"fileName": "log.ts",
+											"fileName": "log2.ts",
 											"line": 106,
 											"character": 48
 										},
 										{
-											"fileName": "log.ts",
+											"fileName": "log2.ts",
 											"line": 107,
 											"character": 48
 										},
 										{
-											"fileName": "log.ts",
+											"fileName": "log2.ts",
 											"line": 108,
 											"character": 48
 										}
@@ -3220,29 +5833,29 @@
 									"defaultValue": "\"ERROR\""
 								},
 								{
-									"id": 149,
+									"id": 292,
 									"name": "importance",
 									"kind": 32,
 									"kindString": "Variable",
 									"flags": {},
 									"sources": [
 										{
-											"fileName": "log.ts",
+											"fileName": "log2.ts",
 											"line": 105,
 											"character": 27
 										},
 										{
-											"fileName": "log.ts",
+											"fileName": "log2.ts",
 											"line": 106,
 											"character": 27
 										},
 										{
-											"fileName": "log.ts",
+											"fileName": "log2.ts",
 											"line": 107,
 											"character": 27
 										},
 										{
-											"fileName": "log.ts",
+											"fileName": "log2.ts",
 											"line": 108,
 											"character": 27
 										}
@@ -3254,29 +5867,29 @@
 									"defaultValue": "3"
 								},
 								{
-									"id": 150,
+									"id": 293,
 									"name": "sym",
 									"kind": 32,
 									"kindString": "Variable",
 									"flags": {},
 									"sources": [
 										{
-											"fileName": "log.ts",
+											"fileName": "log2.ts",
 											"line": 105,
 											"character": 35
 										},
 										{
-											"fileName": "log.ts",
+											"fileName": "log2.ts",
 											"line": 106,
 											"character": 35
 										},
 										{
-											"fileName": "log.ts",
+											"fileName": "log2.ts",
 											"line": 107,
 											"character": 35
 										},
 										{
-											"fileName": "log.ts",
+											"fileName": "log2.ts",
 											"line": 108,
 											"character": 35
 										}
@@ -3293,30 +5906,30 @@
 									"title": "Variables",
 									"kind": 32,
 									"children": [
-										151,
-										149,
-										150
+										294,
+										292,
+										293
 									]
 								}
 							],
 							"sources": [
 								{
-									"fileName": "log.ts",
+									"fileName": "log2.ts",
 									"line": 105,
 									"character": 11
 								},
 								{
-									"fileName": "log.ts",
+									"fileName": "log2.ts",
 									"line": 106,
 									"character": 10
 								},
 								{
-									"fileName": "log.ts",
+									"fileName": "log2.ts",
 									"line": 107,
 									"character": 10
 								},
 								{
-									"fileName": "log.ts",
+									"fileName": "log2.ts",
 									"line": 108,
 									"character": 11
 								}
@@ -3332,13 +5945,13 @@
 							"title": "Object literals",
 							"kind": 2097152,
 							"children": [
-								148
+								291
 							]
 						}
 					],
 					"sources": [
 						{
-							"fileName": "log.ts",
+							"fileName": "log2.ts",
 							"line": 104,
 							"character": 13
 						}
@@ -3354,60 +5967,60 @@
 					"title": "Interfaces",
 					"kind": 256,
 					"children": [
-						82,
-						86
+						225,
+						229
 					]
 				},
 				{
 					"title": "Type aliases",
 					"kind": 4194304,
 					"children": [
-						163,
-						168
+						306,
+						311
 					]
 				},
 				{
 					"title": "Variables",
 					"kind": 32,
 					"children": [
-						142,
-						145,
-						143,
-						144,
-						153,
-						155,
-						154,
-						152,
-						146,
-						172
+						285,
+						288,
+						286,
+						287,
+						296,
+						298,
+						297,
+						295,
+						289,
+						315
 					]
 				},
 				{
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						173
+						316
 					]
 				},
 				{
 					"title": "Object literals",
 					"kind": 2097152,
 					"children": [
-						156,
-						147
+						299,
+						290
 					]
 				}
 			],
 			"sources": [
 				{
-					"fileName": "log.ts",
+					"fileName": "log2.ts",
 					"line": 1,
 					"character": 0
 				}
 			]
 		},
 		{
-			"id": 179,
+			"id": 321,
 			"name": "\"overview\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -3437,9 +6050,10 @@
 				5,
 				76,
 				41,
-				178,
+				223,
 				81,
-				179
+				224,
+				321
 			]
 		}
 	]

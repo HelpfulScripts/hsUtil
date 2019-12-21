@@ -77,64 +77,69 @@
  */
 
 /** importing nodejs file system function; needed to create logfiles */
-import { date }     from './Date';
+import { date } from './Date';
 
-/** Debug reporting level with importance 0 */
-const DEBUG = Symbol('DEBUG');
 
-/** Info reporting level with importance 1 */
-const INFO   = Symbol('INFO');
+// export interface LogFnResult { (_prefix:string): LogFn; }
 
-/** Info reporting level with importance 2 */
-const WARN   = Symbol('WARN');
-
-/** Warning reporting level with importance 3 */
-const ERROR  = Symbol('ERROR');
-
-/** name of the current log file, or undefined */
-let gLogFile: string;	// initially disabled
+export interface LogFn {
+    (_prefix:string): LogFn;
+    DEBUG: string;
+    INFO:  string;
+    WARN:  string;
+    ERROR: string;
+    level:  (newLevelSym?:string, setGlobalLevel?:boolean)=>string;
+    debug:  (msg:any, log2File?:boolean) => Promise<string>;
+    info:   (msg:any, log2File?:boolean) => Promise<string>;
+    warn:   (msg:any, log2File?:boolean) => Promise<string>;
+    error:  (msg:any, log2File?:boolean) => Promise<string>;
+    format: (fmtStr?:string) => string;
+    prefix: (prf?:string) => string;
+    out:    (lvl:string, msg:any) => Promise<string>;
+    config: (cfg:{colors?:boolean, format?:string, level?:string}) => void;
+    inspect:(msg:any, depth?:number, indent?:string) => string;
+}
 
 
 /**
  * Type definition for level descriptors
  */
-interface LevelDesc { importance:number; sym:symbol; desc:string; }
-
-/** map of valid reporting levels */
-const gLevels = {
-    [DEBUG]:    {importance: 0, sym: DEBUG, desc: 'DEBUG'},
-    [INFO]:     {importance: 1, sym: INFO,  desc: 'INFO'},
-    [WARN]:     {importance: 2, sym: WARN,  desc: 'WARN'},
-    [ERROR]:    {importance: 3, sym: ERROR, desc: 'ERROR'}
-};
-
-/** current reporting level, same across all modules */
-let gGlobalLevel:LevelDesc = gLevels[INFO]; 
-
-/** current date format string. See [date module]('_date_.html') */
-const defDateFormat = '%YYYY%MM%DD %hh:%mm:%ss.%jjj';
-let gDateFormat     = defDateFormat;
-
-/** boolean determining if log will be printed in color */
-let gColors = false;
-
-/** shell color escape codes */
-const color = {
-    red:    '\x1b[31m',
-    yellow: '\x1b[33m',
-    blue:   '\x1b[36m',
-    green:  '\x1b[32m',
-    bold:   '\x1b[1m',
-    clear:  '\x1b[0m'
-};
+export interface LevelDesc { importance:number; sym:string; desc:string; }
 
 
-export interface LogType {
-    (_prefix:string, logToFile?:ltfType, pathExists?:peType): LogType;
-    DEBUG:  symbol;
-    INFO:   symbol;
-    WARN:   symbol;
-    ERROR:  symbol;
+export class Log {
+    /** current date format string. See [date module]('_date_.html') */
+    static defDateFormat = '%YYYY%MM%DD %hh:%mm:%ss.%jjj';
+    static dateFormat    = Log.defDateFormat;
+
+    /** Debug reporting level with importance 0 */
+    static DEBUG = 'DEBUG';
+
+    /** Info reporting level with importance 1 */
+    static INFO   = 'INFO';
+
+    /** Info reporting level with importance 2 */
+    static WARN   = 'WARN';
+
+    /** Warning reporting level with importance 3 */
+    static ERROR  = 'ERROR';
+
+    /** map of valid reporting levels */
+    static levels = {
+        [Log.DEBUG]:    {importance: 0, sym: Log.DEBUG, desc: 'DEBUG'},
+        [Log.INFO]:     {importance: 1, sym: Log.INFO,  desc: 'INFO'},
+        [Log.WARN]:     {importance: 2, sym: Log.WARN,  desc: 'WARN'},
+        [Log.ERROR]:    {importance: 3, sym: Log.ERROR, desc: 'ERROR'}
+    };
+
+    /** current reporting level, same across all modules */
+    static globalLevel:LevelDesc = Log.levels[Log.INFO]; 
+
+    reportLevel     = <LevelDesc>undefined;
+    reportPrefix    = '';
+
+    constructor(_prefix:string) {
+    }
 
     /**
      * sets the reporting level according to `newLevel`. 
@@ -152,7 +157,23 @@ export interface LogType {
      * @param setGlobalLevel defaults to `false`. If `true`, sets the global reporting level for all modules. 
      * @return the new reporting level (DEBUG, INFO, WARN, ERROR)
      */
-    level(newLevelSym?:symbol, setGlobalLevel?:boolean):symbol;
+    level(newLevelSym?:string, setGlobalLevel?:boolean):string {
+        let newLevel = Log.levels[newLevelSym] || Log.globalLevel;    // new level is newLevelSym unless undefined
+        let oldLevel = this.reportLevel || Log.globalLevel;        // old level is level unless undefined
+        if (newLevelSym === undefined) {                        // do nothing, return current level
+            newLevel = oldLevel;
+        } else if (newLevelSym === null) {
+            this.reportLevel = undefined;                       // deactivate local level
+        } else if (Log.levels[newLevelSym]) { 
+            if (setGlobalLevel) { Log.globalLevel = newLevel; }    // set new global level
+                           else { this.reportLevel = newLevel; }// set new local level
+            const msg = `new ${setGlobalLevel? 'global' : this.reportPrefix} log level ${newLevel.desc.toUpperCase()} (was ${oldLevel.desc.toUpperCase()})`;
+            this.out((newLevel.sym === oldLevel.sym)?Log.DEBUG : Log.INFO, msg);
+        } else { 
+            this.out(Log.ERROR, `unkown level ${newLevelSym}; log level remains ${oldLevel.sym}`);
+        }
+        return newLevel.sym;
+    }
 
     /**
      * reports an debug message to the log. 
@@ -162,7 +183,7 @@ export interface LogType {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the file written to, or undefined
      */
-    debug(msg:any, log?:boolean):Promise<string>;
+    async debug(msg:any, log2File=true):Promise<string> { return await this.out(Log.DEBUG, msg); }
 
     /**
      * reports an informational message to the log. 
@@ -172,7 +193,7 @@ export interface LogType {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the file written to, or undefined
      */
-    info(msg:any, log?:boolean):Promise<string>;
+    async info(msg:any, log2File=true):Promise<string> { return await this.out(Log.INFO, msg); }
 
     /**
      * reports an warning message to the log. 
@@ -182,7 +203,7 @@ export interface LogType {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the file written to, or undefined
      */
-    warn(msg:any, log?:boolean):Promise<string>;
+    async warn(msg:any, log2File=true):Promise<string> { return await this.out(Log.WARN, msg); }
 
     /**
      * reports an error message to the log. 
@@ -191,7 +212,7 @@ export interface LogType {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the file written to, or undefined
      */
-    error(msg:any, log?:boolean):Promise<string>;
+    async error(msg:any, log2File=true):Promise<string> { return await this.out(Log.ERROR, msg); }
 
     /**
      * reports an error message to the log. 
@@ -199,23 +220,31 @@ export interface LogType {
      * @param lvl the reporting level of `msg`
      * @param msg the message to report. If msg is an object literal, a deep inspection will be printed.
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
-     * @return promise to return the file written to, or undefined
+     * @return promise to return the message written
      */
-    out(lvl:symbol, msg:any, log?:boolean): Promise<string>;	
+    async out(lvl:string, msg:any): Promise<string> {	
+        let desc:LevelDesc = Log.levels[lvl];
+        const filterLevel = this.reportLevel || Log.globalLevel;
+        if (desc.importance >= filterLevel.importance) {
+            const dateStr = date(Log.dateFormat);
+            let line = (typeof msg === 'string')? msg : this.inspect(msg, 0);
+            const logLine = this.makeMessage(line, lvl, dateStr, desc.desc);
+            // const logLine = `${dateStr} ${this.reportPrefix} ${desc.desc} ${line}`;
+            console.log(logLine);
+            if (msg && msg.stack) { console.log(msg.stack); }
+            return Promise.resolve(line);
+        }
+        return undefined;
+    }
 
-    /**
-     * sets a new logfile name template. Logfiles are created using this template 
-     * at the time of each log entry call. If the file exists, the log entry will be appended.
-     * This is a global setting that affects reporting in all modules.
-     * Usage:
-     * - `logFile()`: return the current logfile name
-     * - `logFile(null)`: disable log file
-     * - `logFile('')`: set default log file template `log-%YYYY-%MM-%DD.txt`
-     * - `logFile('log%D/%M/%Y.log')`: set new log file template
-     * @param file a template to use for log file names. Options for calling:
-     * @return promise to return the current logfile, or `undefined` if loggimng is disabled.
+    /** 
+     * Creates the core format of the reported message. This method is 
+     * called within `out` to allow for format extensions of the message printed, 
+     * e.g. by color codes.
      */
-    logFile(file?:string):Promise<string>;
+    protected makeMessage(line:string, lvl:string, dateStr:string, desc:string):string {
+        return `${dateStr} ${this.reportPrefix} ${desc} ${line}`;
+    }
 
     /**
      * sets the format string to use for logging. If no parameter is specified,
@@ -227,14 +256,21 @@ export interface LogType {
      * @param fmtStr optional format string to use; 
      * @return the currently set format string
      */
-    format(fmtStr?:string):string;
+    format(fmtStr?:string):string { 
+        if (fmtStr === null) { Log.dateFormat = Log.defDateFormat; }
+        else if (fmtStr)     { Log.dateFormat = fmtStr; }
+        return Log.dateFormat;
+    }
 
     /**
      * defines a prefix to be printed for each call to a log function. 
      * @param prf the prefix to prepend. Defaults to '';
      * @return the new prefix
      */
-    prefix(prf?:string):string;
+    prefix(prf?:string):string {
+        if (prf) { this.reportPrefix = prf; }
+        return this.reportPrefix;
+    }
 
     /**
      * configures the log facility.
@@ -244,7 +280,10 @@ export interface LogType {
      * - cfg.level: sets the reporting level (same as calling log.level())
      * @param cfg 
      */
-    config(cfg:{colors?:boolean, format?:string, level?:symbol }):void;
+    config(cfg:{colors?:boolean, format?:string, level?:string }) {
+        if (cfg.format!==undefined) { this.format(cfg.format); }     // e.g. '%YYYY%MM%DD %hh:%mm:%ss.%jjj'
+        if (cfg.level!==undefined)  { this.level(cfg.level); }       // e.g. INFO
+    }
 
     /**
      * returns a string representation of an object literal, similar to the Node `util.inspect` call.
@@ -255,119 +294,8 @@ export interface LogType {
      * @param struct the object literal to inspect
      * @param depth depth of recursion, defaults to 1. Use `null` for infinite depth
      * @param indent the indent string to use, will accumulate for each level of indentation, defaults to ''
-     * @param colors an array of css color values to apply to keywords in the inspected structure;
-     * if present, `inspect` will generate HTML content instead of raw text, substituting any `space` characters
-     * (' ') with `&nbsp;`. The color applied to each keyword cycles through the array with each increasing level, 
-     * and restarts at index 0 when the level exceeds the length of the array.
      */
-    inspect(struct:any, depth?:number, indent?:string, colors?:string[]):string;
-}
-
-type ltfType = (filename:string, msg:string)=>Promise<string>;
-type peType  = (path:string)=>Promise<boolean>;
-
-/** the global log object */
-export const log:LogType = create('', 
-    (filename:string, msg:string):Promise<string> => Promise.resolve(undefined), 
-    /** default implementation for browser usage: don't allow '/' in log file name */
-    (path:string):Promise<boolean> =>Promise.resolve(path.indexOf('/')>=0? false : true)
-);
-
-function create(_prefix:string, logToFile:ltfType, pathExists:peType):LogType {
-    const context = {
-        level:      <LevelDesc>undefined,
-        prefix:     _prefix,
-        logToFile:  <ltfType>logToFile,
-        pathExists: <peType>pathExists
-    };
-
-    function level(newLevelSym?:symbol, setGlobalLevel=false):symbol {
-        let newLevel = gLevels[newLevelSym] || gGlobalLevel;    // new level is newLevelSym unless undefined
-        let oldLevel = context.level || gGlobalLevel;           // old level is level unless undefined
-        if (newLevelSym === undefined) {                        // do nothing, return current level
-            newLevel = oldLevel;
-        } else if (newLevelSym === null) {
-            context.level = undefined;                          // deactivate local level
-        } else if (gLevels[newLevelSym]) { 
-            if (setGlobalLevel) { gGlobalLevel = newLevel; }    // set new global level
-                           else { context.level = newLevel; }     // set new local level
-            const msg = `new ${setGlobalLevel? 'global' : context.prefix} log level ${newLevel.desc.toUpperCase()} (was ${oldLevel.desc.toUpperCase()})`;
-            out((newLevel.sym === oldLevel.sym)?DEBUG : INFO, msg);
-        } else { 
-            out(ERROR, `unkown level ${newLevelSym.toString()}; log level remains ${oldLevel.sym.toString()}`);
-        }
-        return newLevel.sym;
-    }
-
-    async function debug(msg:any, log2File=true):Promise<string> { return await out(DEBUG, msg, log2File); }
-    async function info(msg:any, log2File=true):Promise<string> { return await out(INFO, msg, log2File); }
-    async function warn(msg:any, log2File=true):Promise<string> { return await out(WARN, msg, log2File); }
-    async function error(msg:any, log2File=true):Promise<string> { return await out(ERROR, msg, log2File); }
-
-    function format(fmtStr?:string):string { 
-        if (fmtStr === null) { gDateFormat = defDateFormat; }
-        else if (fmtStr)     { gDateFormat = fmtStr; }
-        return gDateFormat;
-    }
-
-    function prefix(prf?:string):string {
-        if (prf) { context.prefix = prf; }
-        return context.prefix;
-    }
-
-    async function out(lvl:symbol, msg:any, log2File=true): Promise<string> {	
-        const colors = { [ERROR]: color.red+color.bold, [WARN]: color.yellow+color.bold, [DEBUG]: color.blue, [INFO]: color.green };
-        let desc = gLevels[lvl];
-        const filterLevel = context.level || gGlobalLevel;
-        if (desc.importance >= filterLevel.importance) {
-            const dateStr = date(gDateFormat);
-            let line = (typeof msg === 'string')? msg : inspect(msg, 0);
-            const logLine   =                    `${dateStr} ${context.prefix} ${desc.desc} ${line}`;
-            const colorLine = `${colors[lvl]||''} ${dateStr} ${context.prefix} ${desc.desc} ${color.clear} ${line}`;
-            console.log(gColors? colorLine : logLine);
-            if (msg && msg.stack) { console.log(msg.stack); }
-            if (gLogFile && log2File) {
-                return await context.logToFile(date(gLogFile), logLine);
-            }
-        }
-        return undefined;
-    }
-
-    async function logFile(file?:string):Promise<string> {
-        if (file === null) {                    // disable logging in file
-            gLogFile = undefined; 
-            return await info("disabling logfile");
-        } else if (file === undefined) {        // leave gLogFile unchanged, return promise for logfile name
-            return date(gLogFile);
-        } else if (file.indexOf('/')>=0) { 
-            return await context.pathExists(file)
-                .then(async (exists:boolean) => { 
-                    if (!exists) {
-                        gLogFile = undefined;
-                        return await warn(`path '${file}' doesn't exists; logfile disabled`);
-                    }
-                    gLogFile = file;
-                    return await info("now logging to file " + date(file));
-                })
-                .catch(async () => { 
-                    gLogFile = undefined; 
-                    return await error(`checking path ${file}; logfile disabled`);
-                });
-        } else if (file === '') {
-            file = 'log-%YYYY-%MM-%DD.txt';
-        } else {
-        }
-        gLogFile=file;
-        return await info(gLogFile? `now logging to file ${date(gLogFile)}` : 'logfile disbaled');
-    }
-
-    function config(cfg:{colors?:boolean, format?:string, level?:symbol }) {
-        if (cfg.colors!==undefined) { gColors = cfg.colors; }   // true / false
-        if (cfg.format!==undefined) { format(cfg.format); }     // e.g. '%YYYY%MM%DD %hh:%mm:%ss.%jjj'
-        if (cfg.level!==undefined)  { level(cfg.level); }       // e.g. INFO
-    }
-
-    function inspect(msg:any, depth=3, indent='   ', colors?:string[]):string {
+    inspect(msg:any, depth=3, indent='   '):string {
         function _inspect(msg:any, depth:number, level:number, currIndent:string):string {
             if (msg === null)               { return 'null'; }
             if (msg === undefined)          { return 'undefined'; }
@@ -378,36 +306,45 @@ function create(_prefix:string, logToFile:ltfType, pathExists:peType):LogType {
                 if (msg.map !== undefined) { 
                     return `[${msg.map((e:any)=>(e===undefined)?'':_inspect(e, depth-1, level+1, currIndent)).join(', ')}]`;
                  }
-                const c  = colors? `<b><span style='color:${colors[level % colors.length]};'>` : '';
-                const prefix = `${c}${currIndent}${indent}`;
-                const postfix = colors? '</span></b>' : '';
+                const [prefix, postfix] = log.getPrePostfix(indent, level, currIndent);
                 return '{\n' + Object.keys(msg).map(k => `${prefix}${k}${postfix}: ${
                         _inspect(msg[k], depth-1, level+1, currIndent+indent)
                     }`).join(',\n') + `\n${currIndent}}`;
             } 
             return msg.toString();
         }
-        if (colors) { indent = indent.replace(/ /g, '&nbsp;'); }
+        const log = this;
         return _inspect(msg, depth===null? 999 : depth, 0, '');
     }
 
-    const newLog:any = (prefix:string, logToFile:ltfType=context.logToFile, pathExists:peType=context.pathExists) => create(prefix, logToFile, pathExists);
-  
-    newLog.DEBUG    = DEBUG;
-    newLog.INFO     = INFO;
-    newLog.WARN     = WARN;
-    newLog.ERROR    = ERROR;
-    newLog.level    = level;
-    newLog.debug    = debug;
-    newLog.info     = info;
-    newLog.warn     = warn;
-    newLog.error    = error;
-    newLog.format   = format;
-    newLog.prefix   = prefix;
-    newLog.out      = out;
-    newLog.logFile  = logFile;
-    newLog.config   = config;
-    newLog.inspect  = inspect;
-    return newLog;
+    protected getPrePostfix(indent:string, level:number, currIndent:string):[string,string] {
+        return [`${currIndent}${indent}`, ''];
+    }
+
+    /** factory method to create instances of callable `Log` */
+    public static makeLogFn(prefix:string):LogFn { 
+        const instance = new Log(prefix);
+        const newLog = <LogFn>((prefix:string) => Log.makeLogFn(prefix));
+        return instance.addPoperties(newLog);
+    }
+
+    protected addPoperties(logFn:LogFn):LogFn {
+        logFn.DEBUG    = Log.DEBUG;
+        logFn.INFO     = Log.INFO;
+        logFn.WARN     = Log.WARN;
+        logFn.ERROR    = Log.ERROR;
+        logFn.level    = this.level.bind(this);
+        logFn.debug    = this.debug.bind(this);
+        logFn.info     = this.info.bind(this);
+        logFn.warn     = this.warn.bind(this);
+        logFn.error    = this.error.bind(this);
+        logFn.format   = this.format.bind(this);
+        logFn.prefix   = this.prefix.bind(this);
+        logFn.out      = this.out.bind(this);
+        logFn.config   = this.config.bind(this);
+        logFn.inspect  = this.inspect.bind(this);
+        return logFn;
+    }
 }
 
+export const log:LogFn = Log.makeLogFn('');

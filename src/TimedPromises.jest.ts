@@ -127,7 +127,7 @@ describe('Promise', () => {
             return Promise.all(
                 results.map(async (result:any) => {
                     const r = await result;
-                    expect(Math.abs(r.reportedWait-r.internalWait)).toBeLessThan(2);
+                    expect(Math.abs(r.reportedWait-r.internalWait)).toBeLessThan(3);
                     if (r.id===0) {
                         expect(r.internalWait).toBeGreaterThanOrEqual(0);
                         expect(r.internalWait).toBeLessThanOrEqual(45);
@@ -137,7 +137,7 @@ describe('Promise', () => {
                         expect(r.internalWait).toBeLessThanOrEqual((r.id+1)*wait+10);
                         expect(r.completedWait).toBeLessThanOrEqual(callBusy+(r.id+1)*wait+20);
                     } else {
-                        expect(r.internalWait).toBeGreaterThanOrEqual(callBusy+15);
+                        expect(r.internalWait).toBeGreaterThanOrEqual(callBusy+10);
                         expect(r.internalWait).toBeLessThanOrEqual(callBusy+100);
                         expect(r.completedWait).toBeLessThanOrEqual(2*callBusy+100);
                     }
