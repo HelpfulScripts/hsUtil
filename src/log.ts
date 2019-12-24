@@ -142,8 +142,7 @@ export class Log {
     protected reportLevel     = <LevelDesc>undefined;
     protected reportPrefix    = '';
 
-    constructor(_prefix:string) {
-    }
+    constructor(prefix:string) { this.reportPrefix = prefix; }
 
     
 
@@ -243,7 +242,6 @@ export class Log {
             const dateStr = date(Log.dateFormat);
             let line = (typeof msg === 'string')? msg : this.inspect(msg, 0);
             const logLine = this.makeMessage(line, lvl, dateStr, desc.desc);
-            // const logLine = `${dateStr} ${this.reportPrefix} ${desc.desc} ${line}`;
             console.log(logLine);
             if (msg && msg.stack) { console.log(msg.stack); }
             return Promise.resolve(line);
