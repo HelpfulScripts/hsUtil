@@ -212,7 +212,15 @@ export class Log {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the file written to, or undefined
      */
-    async error(msg:any, log2File=true):Promise<string> { return await this.out(Log.ERROR, msg); }
+    async error(msg:any, log2File=true):Promise<string> { 
+        if (msg.message) { // special treatment for Errors
+            await this.out(Log.ERROR, msg.message);
+            await this.out(Log.ERROR, msg.stack);
+            return msg.message;
+        } else {
+            return await this.out(Log.ERROR, msg); 
+        } 
+    }
 
     /**
      * reports an error message to the log. 
