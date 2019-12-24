@@ -2,18 +2,19 @@
  * Logging convenience functions.
  * ## Usage
  * 
- * ### Using the global log object 
- * Settings in `log` are shared across modules
+ * ### Using the global `Log` instance 
+ * Settings in `Log.log` are shared across modules
  * ```
- * import { log } from 'hsutil'; 
+ * import { Log } from 'hsutil'; const log = Log.log;
+ * log.level(Log.INFO);     // sets the reporting level on the global instance 
  * log.info('by the way:'); // -> 20160817 09:59:08.032 info by the way:
  * log.error('oh dear!');   // -> 20160817 09:59:08.045 error *** oh dear!
  * ```
  * 
- * ### Using a local log object 
- * Settings in `log` remain local to the module 
+ * ### Using a local `Log` instance 
+ * Create a new `Log` instance to keep changes local to the current module:
  * ```
- * import { log as gLog } from 'hsutil'; const log = gLog('myModule')
+ * import { Log } from 'hsutil'; const log = new Log('myModule')
  * log.info('by the way:'); // -> 20160817 09:59:08.032 myModule info by the way:
  * log.error('oh dear!');   // -> 20160817 09:59:08.045 myModule error *** oh dear!
  * ```
@@ -55,25 +56,24 @@
  * ``` 
  * 
  * ## Reporting Levels:
- * - &nbsp; {@link log.DEBUG log.DEBUG}
- * - &nbsp; {@link log.INFO  log.INFO}
- * - &nbsp; {@link log.WARN  log.WARN}
- * - &nbsp; {@link log.ERROR log.ERROR}
+ * - &nbsp; {@link log.Log.DEBUG Log.DEBUG}
+ * - &nbsp; {@link log.Log.INFO  Log.INFO}
+ * - &nbsp; {@link log.Log.WARN  Log.WARN}
+ * - &nbsp; {@link log.Log.ERROR Log.ERROR}
  * 
  * ## Reporting methods
- * - &nbsp; {@link log.LogType.debug log.debug()}
- * - &nbsp; {@link log.LogType.info  log.info()}
- * - &nbsp; {@link log.LogType.warn  log.warn()}
- * - &nbsp; {@link log.LogType.error log.error()}
+ * - &nbsp; {@link log.Log.debug log.debug()}
+ * - &nbsp; {@link log.Log.info  log.info()}
+ * - &nbsp; {@link log.Log.warn  log.warn()}
+ * - &nbsp; {@link log.Log.error log.error()}
  * 
  * ## Configurations:
- * - &nbsp; {@link log.LogType.level   log.level()}
- * - &nbsp; {@link log.LogType.format  log.format()}
- * - &nbsp; {@link log.LogType.prefix  log.prefix()}
- * - &nbsp; {@link log.LogType.logFile log.logFile()}
+ * - &nbsp; {@link log.Log.level   log.level()}
+ * - &nbsp; {@link log.Log.format  log.format()}
+ * - &nbsp; {@link log.Log.prefix  log.prefix()}
  * 
  * ## Inspection support:
- * - &nbsp; {@link log.LogType.inspect log.inspect()}
+ * - &nbsp; {@link log.Log.inspect log.inspect()}
  */
 
 /** importing nodejs file system function; needed to create logfiles */
@@ -82,23 +82,23 @@ import { date } from './Date';
 
 // export interface LogFnResult { (_prefix:string): LogFn; }
 
-export interface LogFn {
-    (_prefix:string): LogFn;
-    DEBUG: string;
-    INFO:  string;
-    WARN:  string;
-    ERROR: string;
-    level:  (newLevelSym?:string, setGlobalLevel?:boolean)=>string;
-    debug:  (msg:any, log2File?:boolean) => Promise<string>;
-    info:   (msg:any, log2File?:boolean) => Promise<string>;
-    warn:   (msg:any, log2File?:boolean) => Promise<string>;
-    error:  (msg:any, log2File?:boolean) => Promise<string>;
-    format: (fmtStr?:string) => string;
-    prefix: (prf?:string) => string;
-    out:    (lvl:string, msg:any) => Promise<string>;
-    config: (cfg:{colors?:boolean, format?:string, level?:string}) => void;
-    inspect:(msg:any, depth?:number, indent?:string) => string;
-}
+// export interface LogFn {
+//     (_prefix:string): LogFn;
+//     DEBUG: string;
+//     INFO:  string;
+//     WARN:  string;
+//     ERROR: string;
+//     level:  (newLevelSym?:string, setGlobalLevel?:boolean)=>string;
+//     debug:  (msg:any, log2File?:boolean) => Promise<string>;
+//     info:   (msg:any, log2File?:boolean) => Promise<string>;
+//     warn:   (msg:any, log2File?:boolean) => Promise<string>;
+//     error:  (msg:any, log2File?:boolean) => Promise<string>;
+//     format: (fmtStr?:string) => string;
+//     prefix: (prf?:string) => string;
+//     out:    (lvl:string, msg:any) => Promise<string>;
+//     config: (cfg:{colors?:boolean, format?:string, level?:string}) => void;
+//     inspect:(msg:any, depth?:number, indent?:string) => string;
+// }
 
 
 /**
@@ -109,37 +109,43 @@ export interface LevelDesc { importance:number; sym:string; desc:string; }
 
 export class Log {
     /** current date format string. See [date module]('_date_.html') */
-    static defDateFormat = '%YYYY%MM%DD %hh:%mm:%ss.%jjj';
-    static dateFormat    = Log.defDateFormat;
+    protected static defDateFormat = '%YYYY%MM%DD %hh:%mm:%ss.%jjj';
+    protected static dateFormat    = Log.defDateFormat;
 
     /** Debug reporting level with importance 0 */
-    static DEBUG = 'DEBUG';
+    public static DEBUG = 'DEBUG';
 
     /** Info reporting level with importance 1 */
-    static INFO   = 'INFO';
+    public static INFO   = 'INFO';
 
     /** Info reporting level with importance 2 */
-    static WARN   = 'WARN';
+    public static WARN   = 'WARN';
 
     /** Warning reporting level with importance 3 */
-    static ERROR  = 'ERROR';
-
+    public static ERROR  = 'ERROR';
+    
     /** map of valid reporting levels */
-    static levels = {
+    protected static levels = {
         [Log.DEBUG]:    {importance: 0, sym: Log.DEBUG, desc: 'DEBUG'},
         [Log.INFO]:     {importance: 1, sym: Log.INFO,  desc: 'INFO'},
         [Log.WARN]:     {importance: 2, sym: Log.WARN,  desc: 'WARN'},
         [Log.ERROR]:    {importance: 3, sym: Log.ERROR, desc: 'ERROR'}
     };
 
-    /** current reporting level, same across all modules */
-    static globalLevel:LevelDesc = Log.levels[Log.INFO]; 
+    /** the global `log` object. */
+    public static log = new Log('');
 
-    reportLevel     = <LevelDesc>undefined;
-    reportPrefix    = '';
+    /** current reporting level, same across all modules */
+    protected static globalLevel:LevelDesc = Log.levels[Log.INFO]; 
+
+
+    protected reportLevel     = <LevelDesc>undefined;
+    protected reportPrefix    = '';
 
     constructor(_prefix:string) {
     }
+
+    
 
     /**
      * sets the reporting level according to `newLevel`. 
@@ -330,29 +336,28 @@ export class Log {
     }
 
     /** factory method to create instances of callable `Log` */
-    public static makeLogFn(prefix:string):LogFn { 
-        const instance = new Log(prefix);
-        const newLog = <LogFn>((prefix:string) => Log.makeLogFn(prefix));
-        return instance.addPoperties(newLog);
-    }
+    // public static makeLogFn(prefix:string):LogFn { 
+    //     const instance = new Log(prefix);
+    //     const newLog = <LogFn>((prefix:string) => Log.makeLogFn(prefix));
+    //     return instance.addPoperties(newLog);
+    // }
 
-    protected addPoperties(logFn:LogFn):LogFn {
-        logFn.DEBUG    = Log.DEBUG;
-        logFn.INFO     = Log.INFO;
-        logFn.WARN     = Log.WARN;
-        logFn.ERROR    = Log.ERROR;
-        logFn.level    = this.level.bind(this);
-        logFn.debug    = this.debug.bind(this);
-        logFn.info     = this.info.bind(this);
-        logFn.warn     = this.warn.bind(this);
-        logFn.error    = this.error.bind(this);
-        logFn.format   = this.format.bind(this);
-        logFn.prefix   = this.prefix.bind(this);
-        logFn.out      = this.out.bind(this);
-        logFn.config   = this.config.bind(this);
-        logFn.inspect  = this.inspect.bind(this);
-        return logFn;
-    }
+    // protected addPoperties(logFn:LogFn):LogFn {
+    //     logFn.DEBUG    = Log.DEBUG;
+    //     logFn.INFO     = Log.INFO;
+    //     logFn.WARN     = Log.WARN;
+    //     logFn.ERROR    = Log.ERROR;
+    //     logFn.level    = this.level.bind(this);
+    //     logFn.debug    = this.debug.bind(this);
+    //     logFn.info     = this.info.bind(this);
+    //     logFn.warn     = this.warn.bind(this);
+    //     logFn.error    = this.error.bind(this);
+    //     logFn.format   = this.format.bind(this);
+    //     logFn.prefix   = this.prefix.bind(this);
+    //     logFn.out      = this.out.bind(this);
+    //     logFn.config   = this.config.bind(this);
+    //     logFn.inspect  = this.inspect.bind(this);
+    //     return logFn;
+    // }
 }
 
-export const log:LogFn = Log.makeLogFn('');
