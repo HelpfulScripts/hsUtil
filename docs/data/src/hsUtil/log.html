@@ -185,7 +185,7 @@
 <p id=162 class="line"><span>&nbsp;162</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;setGlobalLevel&nbsp;defaults&nbsp;to&nbsp;`false`.&nbsp;If&nbsp;`true`,&nbsp;sets&nbsp;the&nbsp;global&nbsp;reporting&nbsp;level&nbsp;for&nbsp;all&nbsp;modules.&nbsp;</comment></p>
 <p id=163 class="line"><span>&nbsp;163</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;the&nbsp;new&nbsp;reporting&nbsp;level&nbsp;(DEBUG,&nbsp;INFO,&nbsp;WARN,&nbsp;ERROR)</comment></p>
 <p id=164 class="line"><span>&nbsp;164</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</comment></p>
-<p id=165 class="line"><span>&nbsp;165</span>&nbsp;&nbsp;&nbsp;&nbsp;level(newLevelSym?:string,&nbsp;setGlobalLevel?:boolean):string&nbsp;{</p>
+<p id=165 class="line"><span>&nbsp;165</span>&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;level(newLevelSym?:string,&nbsp;setGlobalLevel?:boolean):string&nbsp;{</p>
 <p id=166 class="line"><span>&nbsp;166</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;let&nbsp;newLevel&nbsp;=&nbsp;Log.levels[newLevelSym]&nbsp;||&nbsp;Log.globalLevel;&nbsp;&nbsp;&nbsp;&nbsp;<comment>//&nbsp;new&nbsp;level&nbsp;is&nbsp;newLevelSym&nbsp;unless&nbsp;undefined</comment></p>
 <p id=167 class="line"><span>&nbsp;167</span><comment></comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;let&nbsp;oldLevel&nbsp;=&nbsp;this.reportLevel&nbsp;||&nbsp;Log.globalLevel;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<comment>//&nbsp;old&nbsp;level&nbsp;is&nbsp;level&nbsp;unless&nbsp;undefined</comment></p>
 <p id=168 class="line"><span>&nbsp;168</span><comment></comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(newLevelSym&nbsp;===&nbsp;undefined)&nbsp;{&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<comment>//&nbsp;do&nbsp;nothing,&nbsp;return&nbsp;current&nbsp;level</comment></p>
@@ -211,7 +211,7 @@
 <p id=188 class="line"><span>&nbsp;188</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;log&nbsp;optional&nbsp;flag&nbsp;to&nbsp;enable/suppress&nbsp;logging&nbsp;to&nbsp;file.&nbsp;Defaults&nbsp;to&nbsp;`true`</comment></p>
 <p id=189 class="line"><span>&nbsp;189</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;promise&nbsp;to&nbsp;return&nbsp;the&nbsp;file&nbsp;written&nbsp;to,&nbsp;or&nbsp;undefined</comment></p>
 <p id=190 class="line"><span>&nbsp;190</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</comment></p>
-<p id=191 class="line"><span>&nbsp;191</span>&nbsp;&nbsp;&nbsp;&nbsp;async&nbsp;debug(msg:any,&nbsp;log2File=true):Promise<string>&nbsp;{&nbsp;return&nbsp;await&nbsp;this.out(Log.DEBUG,&nbsp;msg);&nbsp;}</p>
+<p id=191 class="line"><span>&nbsp;191</span>&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;async&nbsp;debug(msg:any,&nbsp;log2File=true):Promise<string>&nbsp;{&nbsp;return&nbsp;await&nbsp;this.out(Log.DEBUG,&nbsp;msg);&nbsp;}</p>
 <p id=192 class="line"><span>&nbsp;192</span></p>
 <p id=193 class="line"><span>&nbsp;193</span>&nbsp;&nbsp;&nbsp;&nbsp;<comment>/**</comment></p>
 <p id=194 class="line"><span>&nbsp;194</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;reports&nbsp;an&nbsp;informational&nbsp;message&nbsp;to&nbsp;the&nbsp;log.&nbsp;</comment></p>
@@ -221,7 +221,7 @@
 <p id=198 class="line"><span>&nbsp;198</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;log&nbsp;optional&nbsp;flag&nbsp;to&nbsp;enable/suppress&nbsp;logging&nbsp;to&nbsp;file.&nbsp;Defaults&nbsp;to&nbsp;`true`</comment></p>
 <p id=199 class="line"><span>&nbsp;199</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;promise&nbsp;to&nbsp;return&nbsp;the&nbsp;file&nbsp;written&nbsp;to,&nbsp;or&nbsp;undefined</comment></p>
 <p id=200 class="line"><span>&nbsp;200</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</comment></p>
-<p id=201 class="line"><span>&nbsp;201</span>&nbsp;&nbsp;&nbsp;&nbsp;async&nbsp;info(msg:any,&nbsp;log2File=true):Promise<string>&nbsp;{&nbsp;return&nbsp;await&nbsp;this.out(Log.INFO,&nbsp;msg);&nbsp;}</p>
+<p id=201 class="line"><span>&nbsp;201</span>&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;async&nbsp;info(msg:any,&nbsp;log2File=true):Promise<string>&nbsp;{&nbsp;return&nbsp;await&nbsp;this.out(Log.INFO,&nbsp;msg);&nbsp;}</p>
 <p id=202 class="line"><span>&nbsp;202</span></p>
 <p id=203 class="line"><span>&nbsp;203</span>&nbsp;&nbsp;&nbsp;&nbsp;<comment>/**</comment></p>
 <p id=204 class="line"><span>&nbsp;204</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;reports&nbsp;an&nbsp;warning&nbsp;message&nbsp;to&nbsp;the&nbsp;log.&nbsp;</comment></p>
@@ -231,7 +231,7 @@
 <p id=208 class="line"><span>&nbsp;208</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;log&nbsp;optional&nbsp;flag&nbsp;to&nbsp;enable/suppress&nbsp;logging&nbsp;to&nbsp;file.&nbsp;Defaults&nbsp;to&nbsp;`true`</comment></p>
 <p id=209 class="line"><span>&nbsp;209</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;promise&nbsp;to&nbsp;return&nbsp;the&nbsp;file&nbsp;written&nbsp;to,&nbsp;or&nbsp;undefined</comment></p>
 <p id=210 class="line"><span>&nbsp;210</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</comment></p>
-<p id=211 class="line"><span>&nbsp;211</span>&nbsp;&nbsp;&nbsp;&nbsp;async&nbsp;warn(msg:any,&nbsp;log2File=true):Promise<string>&nbsp;{&nbsp;return&nbsp;await&nbsp;this.out(Log.WARN,&nbsp;msg);&nbsp;}</p>
+<p id=211 class="line"><span>&nbsp;211</span>&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;async&nbsp;warn(msg:any,&nbsp;log2File=true):Promise<string>&nbsp;{&nbsp;return&nbsp;await&nbsp;this.out(Log.WARN,&nbsp;msg);&nbsp;}</p>
 <p id=212 class="line"><span>&nbsp;212</span></p>
 <p id=213 class="line"><span>&nbsp;213</span>&nbsp;&nbsp;&nbsp;&nbsp;<comment>/**</comment></p>
 <p id=214 class="line"><span>&nbsp;214</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;reports&nbsp;an&nbsp;error&nbsp;message&nbsp;to&nbsp;the&nbsp;log.&nbsp;</comment></p>
@@ -240,7 +240,7 @@
 <p id=217 class="line"><span>&nbsp;217</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;log&nbsp;optional&nbsp;flag&nbsp;to&nbsp;enable/suppress&nbsp;logging&nbsp;to&nbsp;file.&nbsp;Defaults&nbsp;to&nbsp;`true`</comment></p>
 <p id=218 class="line"><span>&nbsp;218</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;promise&nbsp;to&nbsp;return&nbsp;the&nbsp;file&nbsp;written&nbsp;to,&nbsp;or&nbsp;undefined</comment></p>
 <p id=219 class="line"><span>&nbsp;219</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</comment></p>
-<p id=220 class="line"><span>&nbsp;220</span>&nbsp;&nbsp;&nbsp;&nbsp;async&nbsp;error(msg:any,&nbsp;log2File=true):Promise<string>&nbsp;{&nbsp;</p>
+<p id=220 class="line"><span>&nbsp;220</span>&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;async&nbsp;error(msg:any,&nbsp;log2File=true):Promise<string>&nbsp;{&nbsp;</p>
 <p id=221 class="line"><span>&nbsp;221</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(msg.message)&nbsp;{&nbsp;<comment>//&nbsp;special&nbsp;treatment&nbsp;for&nbsp;Errors</comment></p>
 <p id=222 class="line"><span>&nbsp;222</span><comment></comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;await&nbsp;this.out(Log.ERROR,&nbsp;msg.message);</p>
 <p id=223 class="line"><span>&nbsp;223</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;await&nbsp;this.out(Log.ERROR,&nbsp;msg.stack);</p>
@@ -258,7 +258,7 @@
 <p id=235 class="line"><span>&nbsp;235</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;log&nbsp;optional&nbsp;flag&nbsp;to&nbsp;enable/suppress&nbsp;logging&nbsp;to&nbsp;file.&nbsp;Defaults&nbsp;to&nbsp;`true`</comment></p>
 <p id=236 class="line"><span>&nbsp;236</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;promise&nbsp;to&nbsp;return&nbsp;the&nbsp;message&nbsp;written</comment></p>
 <p id=237 class="line"><span>&nbsp;237</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</comment></p>
-<p id=238 class="line"><span>&nbsp;238</span>&nbsp;&nbsp;&nbsp;&nbsp;async&nbsp;out(lvl:string,&nbsp;msg:any):&nbsp;Promise<string>&nbsp;{	</p>
+<p id=238 class="line"><span>&nbsp;238</span>&nbsp;&nbsp;&nbsp;&nbsp;protected&nbsp;async&nbsp;out(lvl:string,&nbsp;msg:any):&nbsp;Promise<string>&nbsp;{	</p>
 <p id=239 class="line"><span>&nbsp;239</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;let&nbsp;desc:LevelDesc&nbsp;=&nbsp;Log.levels[lvl];</p>
 <p id=240 class="line"><span>&nbsp;240</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;filterLevel&nbsp;=&nbsp;this.reportLevel&nbsp;||&nbsp;Log.globalLevel;</p>
 <p id=241 class="line"><span>&nbsp;241</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(desc.importance&nbsp;>=&nbsp;filterLevel.importance)&nbsp;{</p>
@@ -291,7 +291,7 @@
 <p id=268 class="line"><span>&nbsp;268</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;fmtStr&nbsp;optional&nbsp;format&nbsp;string&nbsp;to&nbsp;use;&nbsp;</comment></p>
 <p id=269 class="line"><span>&nbsp;269</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;the&nbsp;currently&nbsp;set&nbsp;format&nbsp;string</comment></p>
 <p id=270 class="line"><span>&nbsp;270</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</comment></p>
-<p id=271 class="line"><span>&nbsp;271</span>&nbsp;&nbsp;&nbsp;&nbsp;format(fmtStr?:string):string&nbsp;{&nbsp;</p>
+<p id=271 class="line"><span>&nbsp;271</span>&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;format(fmtStr?:string):string&nbsp;{&nbsp;</p>
 <p id=272 class="line"><span>&nbsp;272</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(fmtStr&nbsp;===&nbsp;null)&nbsp;{&nbsp;Log.dateFormat&nbsp;=&nbsp;Log.defDateFormat;&nbsp;}</p>
 <p id=273 class="line"><span>&nbsp;273</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else&nbsp;if&nbsp;(fmtStr)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;Log.dateFormat&nbsp;=&nbsp;fmtStr;&nbsp;}</p>
 <p id=274 class="line"><span>&nbsp;274</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;Log.dateFormat;</p>
@@ -302,7 +302,7 @@
 <p id=279 class="line"><span>&nbsp;279</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;prf&nbsp;the&nbsp;prefix&nbsp;to&nbsp;prepend.&nbsp;Defaults&nbsp;to&nbsp;'</quote><quote>';</comment></p>
 <p id=280 class="line"><span>&nbsp;280</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;the&nbsp;new&nbsp;prefix</comment></p>
 <p id=281 class="line"><span>&nbsp;281</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</comment></p>
-<p id=282 class="line"><span>&nbsp;282</span>&nbsp;&nbsp;&nbsp;&nbsp;prefix(prf?:string):string&nbsp;{</p>
+<p id=282 class="line"><span>&nbsp;282</span>&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;prefix(prf?:string):string&nbsp;{</p>
 <p id=283 class="line"><span>&nbsp;283</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(prf)&nbsp;{&nbsp;this.reportPrefix&nbsp;=&nbsp;prf;&nbsp;}</p>
 <p id=284 class="line"><span>&nbsp;284</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;this.reportPrefix;</p>
 <p id=285 class="line"><span>&nbsp;285</span>&nbsp;&nbsp;&nbsp;&nbsp;}</p>
@@ -315,7 +315,7 @@
 <p id=292 class="line"><span>&nbsp;292</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;-&nbsp;cfg.level:&nbsp;sets&nbsp;the&nbsp;reporting&nbsp;level&nbsp;(same&nbsp;as&nbsp;calling&nbsp;log.level())</comment></p>
 <p id=293 class="line"><span>&nbsp;293</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;cfg&nbsp;</comment></p>
 <p id=294 class="line"><span>&nbsp;294</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</comment></p>
-<p id=295 class="line"><span>&nbsp;295</span>&nbsp;&nbsp;&nbsp;&nbsp;config(cfg:{colors?:boolean,&nbsp;format?:string,&nbsp;level?:string&nbsp;})&nbsp;{</p>
+<p id=295 class="line"><span>&nbsp;295</span>&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;config(cfg:{colors?:boolean,&nbsp;format?:string,&nbsp;level?:string&nbsp;})&nbsp;{</p>
 <p id=296 class="line"><span>&nbsp;296</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(cfg.format!==undefined)&nbsp;{&nbsp;this.format(cfg.format);&nbsp;}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<comment>//&nbsp;e.g.&nbsp;'</quote>%YYYY%MM%DD&nbsp;%hh:%mm:%ss.%jjj<quote>'</comment></p>
 <p id=297 class="line"><span>&nbsp;297</span><comment></comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(cfg.level!==undefined)&nbsp;&nbsp;{&nbsp;this.level(cfg.level);&nbsp;}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<comment>//&nbsp;e.g.&nbsp;INFO</comment></p>
 <p id=298 class="line"><span>&nbsp;298</span><comment></comment>&nbsp;&nbsp;&nbsp;&nbsp;}</p>
@@ -330,7 +330,7 @@
 <p id=307 class="line"><span>&nbsp;307</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;depth&nbsp;depth&nbsp;of&nbsp;recursion,&nbsp;defaults&nbsp;to&nbsp;1.&nbsp;Use&nbsp;`null`&nbsp;for&nbsp;infinite&nbsp;depth</comment></p>
 <p id=308 class="line"><span>&nbsp;308</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;indent&nbsp;the&nbsp;indent&nbsp;string&nbsp;to&nbsp;use,&nbsp;will&nbsp;accumulate&nbsp;for&nbsp;each&nbsp;level&nbsp;of&nbsp;indentation,&nbsp;defaults&nbsp;to&nbsp;'</quote><quote>'</comment></p>
 <p id=309 class="line"><span>&nbsp;309</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</comment></p>
-<p id=310 class="line"><span>&nbsp;310</span>&nbsp;&nbsp;&nbsp;&nbsp;inspect(msg:any,&nbsp;depth=3,&nbsp;indent='</quote>&nbsp;&nbsp;&nbsp;<quote>'):string&nbsp;{</p>
+<p id=310 class="line"><span>&nbsp;310</span>&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;inspect(msg:any,&nbsp;depth=3,&nbsp;indent='</quote>&nbsp;&nbsp;&nbsp;<quote>'):string&nbsp;{</p>
 <p id=311 class="line"><span>&nbsp;311</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;function&nbsp;_inspect(msg:any,&nbsp;depth:number,&nbsp;level:number,&nbsp;currIndent:string):string&nbsp;{</p>
 <p id=312 class="line"><span>&nbsp;312</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(msg&nbsp;===&nbsp;null)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;return&nbsp;'</quote>null<quote>';&nbsp;}</p>
 <p id=313 class="line"><span>&nbsp;313</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(msg&nbsp;===&nbsp;undefined)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;return&nbsp;'</quote>undefined<quote>';&nbsp;}</p>
@@ -355,33 +355,8 @@
 <p id=332 class="line"><span>&nbsp;332</span>&nbsp;&nbsp;&nbsp;&nbsp;protected&nbsp;getPrePostfix(indent:string,&nbsp;level:number,&nbsp;currIndent:string):[string,string]&nbsp;{</p>
 <p id=333 class="line"><span>&nbsp;333</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;[`${currIndent}${indent}`,&nbsp;'</quote>'];</p>
 <p id=334 class="line"><span>&nbsp;334</span>&nbsp;&nbsp;&nbsp;&nbsp;}</p>
-<p id=335 class="line"><span>&nbsp;335</span></p>
-<p id=336 class="line"><span>&nbsp;336</span>&nbsp;&nbsp;&nbsp;&nbsp;<comment>/**&nbsp;factory&nbsp;method&nbsp;to&nbsp;create&nbsp;instances&nbsp;of&nbsp;callable&nbsp;`Log`&nbsp;*/</comment></p>
-<p id=337 class="line"><span>&nbsp;337</span>&nbsp;&nbsp;&nbsp;&nbsp;<comment>//&nbsp;public&nbsp;static&nbsp;makeLogFn(prefix:string):LogFn&nbsp;{&nbsp;</comment></p>
-<p id=338 class="line"><span>&nbsp;338</span><comment></comment>&nbsp;&nbsp;&nbsp;&nbsp;<comment>//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;instance&nbsp;=&nbsp;new&nbsp;Log(prefix);</comment></p>
-<p id=339 class="line"><span>&nbsp;339</span><comment></comment>&nbsp;&nbsp;&nbsp;&nbsp;<comment>//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;newLog&nbsp;=&nbsp;<LogFn>((prefix:string)&nbsp;=>&nbsp;Log.makeLogFn(prefix));</comment></p>
-<p id=340 class="line"><span>&nbsp;340</span><comment></comment>&nbsp;&nbsp;&nbsp;&nbsp;<comment>//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;instance.addPoperties(newLog);</comment></p>
-<p id=341 class="line"><span>&nbsp;341</span><comment></comment>&nbsp;&nbsp;&nbsp;&nbsp;<comment>//&nbsp;}</comment></p>
-<p id=342 class="line"><span>&nbsp;342</span><comment></comment></p>
-<p id=343 class="line"><span>&nbsp;343</span>&nbsp;&nbsp;&nbsp;&nbsp;<comment>//&nbsp;protected&nbsp;addPoperties(logFn:LogFn):LogFn&nbsp;{</comment></p>
-<p id=344 class="line"><span>&nbsp;344</span><comment></comment>&nbsp;&nbsp;&nbsp;&nbsp;<comment>//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;logFn.DEBUG&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;Log.DEBUG;</comment></p>
-<p id=345 class="line"><span>&nbsp;345</span><comment></comment>&nbsp;&nbsp;&nbsp;&nbsp;<comment>//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;logFn.INFO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;Log.INFO;</comment></p>
-<p id=346 class="line"><span>&nbsp;346</span><comment></comment>&nbsp;&nbsp;&nbsp;&nbsp;<comment>//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;logFn.WARN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;Log.WARN;</comment></p>
-<p id=347 class="line"><span>&nbsp;347</span><comment></comment>&nbsp;&nbsp;&nbsp;&nbsp;<comment>//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;logFn.ERROR&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;Log.ERROR;</comment></p>
-<p id=348 class="line"><span>&nbsp;348</span><comment></comment>&nbsp;&nbsp;&nbsp;&nbsp;<comment>//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;logFn.level&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;this.level.bind(this);</comment></p>
-<p id=349 class="line"><span>&nbsp;349</span><comment></comment>&nbsp;&nbsp;&nbsp;&nbsp;<comment>//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;logFn.debug&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;this.debug.bind(this);</comment></p>
-<p id=350 class="line"><span>&nbsp;350</span><comment></comment>&nbsp;&nbsp;&nbsp;&nbsp;<comment>//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;logFn.info&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;this.info.bind(this);</comment></p>
-<p id=351 class="line"><span>&nbsp;351</span><comment></comment>&nbsp;&nbsp;&nbsp;&nbsp;<comment>//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;logFn.warn&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;this.warn.bind(this);</comment></p>
-<p id=352 class="line"><span>&nbsp;352</span><comment></comment>&nbsp;&nbsp;&nbsp;&nbsp;<comment>//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;logFn.error&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;this.error.bind(this);</comment></p>
-<p id=353 class="line"><span>&nbsp;353</span><comment></comment>&nbsp;&nbsp;&nbsp;&nbsp;<comment>//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;logFn.format&nbsp;&nbsp;&nbsp;=&nbsp;this.format.bind(this);</comment></p>
-<p id=354 class="line"><span>&nbsp;354</span><comment></comment>&nbsp;&nbsp;&nbsp;&nbsp;<comment>//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;logFn.prefix&nbsp;&nbsp;&nbsp;=&nbsp;this.prefix.bind(this);</comment></p>
-<p id=355 class="line"><span>&nbsp;355</span><comment></comment>&nbsp;&nbsp;&nbsp;&nbsp;<comment>//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;logFn.out&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;this.out.bind(this);</comment></p>
-<p id=356 class="line"><span>&nbsp;356</span><comment></comment>&nbsp;&nbsp;&nbsp;&nbsp;<comment>//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;logFn.config&nbsp;&nbsp;&nbsp;=&nbsp;this.config.bind(this);</comment></p>
-<p id=357 class="line"><span>&nbsp;357</span><comment></comment>&nbsp;&nbsp;&nbsp;&nbsp;<comment>//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;logFn.inspect&nbsp;&nbsp;=&nbsp;this.inspect.bind(this);</comment></p>
-<p id=358 class="line"><span>&nbsp;358</span><comment></comment>&nbsp;&nbsp;&nbsp;&nbsp;<comment>//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;logFn;</comment></p>
-<p id=359 class="line"><span>&nbsp;359</span><comment></comment>&nbsp;&nbsp;&nbsp;&nbsp;<comment>//&nbsp;}</comment></p>
-<p id=360 class="line"><span>&nbsp;360</span><comment></comment>}</p>
-<p id=361 class="line"><span>&nbsp;361</span></p>
-<p id=362 class="line"><span>&nbsp;362</span></p></code></div>
+<p id=335 class="line"><span>&nbsp;335</span>}</p>
+<p id=336 class="line"><span>&nbsp;336</span></p>
+<p id=337 class="line"><span>&nbsp;337</span></p></code></div>
                 </body>
             

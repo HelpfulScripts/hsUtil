@@ -1786,6 +1786,7 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true
 							},
 							"signatures": [
@@ -1829,7 +1830,7 @@
 																{
 																	"fileName": "log.ts",
 																	"line": 295,
-																	"character": 22
+																	"character": 29
 																}
 															],
 															"type": {
@@ -1849,7 +1850,7 @@
 																{
 																	"fileName": "log.ts",
 																	"line": 295,
-																	"character": 39
+																	"character": 46
 																}
 															],
 															"type": {
@@ -1869,7 +1870,7 @@
 																{
 																	"fileName": "log.ts",
 																	"line": 295,
-																	"character": 54
+																	"character": 61
 																}
 															],
 															"type": {
@@ -1893,7 +1894,7 @@
 														{
 															"fileName": "log.ts",
 															"line": 295,
-															"character": 15
+															"character": 22
 														}
 													]
 												}
@@ -1910,7 +1911,7 @@
 								{
 									"fileName": "log.ts",
 									"line": 295,
-									"character": 10
+									"character": 17
 								}
 							]
 						},
@@ -1920,6 +1921,7 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true
 							},
 							"signatures": [
@@ -1977,7 +1979,7 @@
 								{
 									"fileName": "log.ts",
 									"line": 191,
-									"character": 15
+									"character": 22
 								}
 							]
 						},
@@ -1987,6 +1989,7 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true
 							},
 							"signatures": [
@@ -2044,7 +2047,7 @@
 								{
 									"fileName": "log.ts",
 									"line": 220,
-									"character": 15
+									"character": 22
 								}
 							]
 						},
@@ -2054,6 +2057,7 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true
 							},
 							"signatures": [
@@ -2095,7 +2099,7 @@
 								{
 									"fileName": "log.ts",
 									"line": 271,
-									"character": 10
+									"character": 17
 								}
 							]
 						},
@@ -2179,6 +2183,7 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true
 							},
 							"signatures": [
@@ -2236,7 +2241,7 @@
 								{
 									"fileName": "log.ts",
 									"line": 201,
-									"character": 14
+									"character": 21
 								}
 							]
 						},
@@ -2246,6 +2251,7 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true
 							},
 							"signatures": [
@@ -2312,7 +2318,7 @@
 								{
 									"fileName": "log.ts",
 									"line": 310,
-									"character": 11
+									"character": 18
 								}
 							]
 						},
@@ -2322,6 +2328,7 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true
 							},
 							"signatures": [
@@ -2380,7 +2387,7 @@
 								{
 									"fileName": "log.ts",
 									"line": 165,
-									"character": 9
+									"character": 16
 								}
 							]
 						},
@@ -2469,6 +2476,7 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isProtected": true,
 								"isExported": true
 							},
 							"signatures": [
@@ -2528,7 +2536,7 @@
 								{
 									"fileName": "log.ts",
 									"line": 238,
-									"character": 13
+									"character": 23
 								}
 							]
 						},
@@ -2538,6 +2546,7 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true
 							},
 							"signatures": [
@@ -2579,7 +2588,7 @@
 								{
 									"fileName": "log.ts",
 									"line": 282,
-									"character": 10
+									"character": 17
 								}
 							]
 						},
@@ -2589,6 +2598,7 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true
 							},
 							"signatures": [
@@ -2646,7 +2656,7 @@
 								{
 									"fileName": "log.ts",
 									"line": 211,
-									"character": 14
+									"character": 21
 								}
 							]
 						},

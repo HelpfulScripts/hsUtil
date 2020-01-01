@@ -162,7 +162,7 @@ export class Log {
      * @param setGlobalLevel defaults to `false`. If `true`, sets the global reporting level for all modules. 
      * @return the new reporting level (DEBUG, INFO, WARN, ERROR)
      */
-    level(newLevelSym?:string, setGlobalLevel?:boolean):string {
+    public level(newLevelSym?:string, setGlobalLevel?:boolean):string {
         let newLevel = Log.levels[newLevelSym] || Log.globalLevel;    // new level is newLevelSym unless undefined
         let oldLevel = this.reportLevel || Log.globalLevel;        // old level is level unless undefined
         if (newLevelSym === undefined) {                        // do nothing, return current level
@@ -188,7 +188,7 @@ export class Log {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the file written to, or undefined
      */
-    async debug(msg:any, log2File=true):Promise<string> { return await this.out(Log.DEBUG, msg); }
+    public async debug(msg:any, log2File=true):Promise<string> { return await this.out(Log.DEBUG, msg); }
 
     /**
      * reports an informational message to the log. 
@@ -198,7 +198,7 @@ export class Log {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the file written to, or undefined
      */
-    async info(msg:any, log2File=true):Promise<string> { return await this.out(Log.INFO, msg); }
+    public async info(msg:any, log2File=true):Promise<string> { return await this.out(Log.INFO, msg); }
 
     /**
      * reports an warning message to the log. 
@@ -208,7 +208,7 @@ export class Log {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the file written to, or undefined
      */
-    async warn(msg:any, log2File=true):Promise<string> { return await this.out(Log.WARN, msg); }
+    public async warn(msg:any, log2File=true):Promise<string> { return await this.out(Log.WARN, msg); }
 
     /**
      * reports an error message to the log. 
@@ -217,7 +217,7 @@ export class Log {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the file written to, or undefined
      */
-    async error(msg:any, log2File=true):Promise<string> { 
+    public async error(msg:any, log2File=true):Promise<string> { 
         if (msg.message) { // special treatment for Errors
             await this.out(Log.ERROR, msg.message);
             await this.out(Log.ERROR, msg.stack);
@@ -235,7 +235,7 @@ export class Log {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the message written
      */
-    async out(lvl:string, msg:any): Promise<string> {	
+    protected async out(lvl:string, msg:any): Promise<string> {	
         let desc:LevelDesc = Log.levels[lvl];
         const filterLevel = this.reportLevel || Log.globalLevel;
         if (desc.importance >= filterLevel.importance) {
@@ -268,7 +268,7 @@ export class Log {
      * @param fmtStr optional format string to use; 
      * @return the currently set format string
      */
-    format(fmtStr?:string):string { 
+    public format(fmtStr?:string):string { 
         if (fmtStr === null) { Log.dateFormat = Log.defDateFormat; }
         else if (fmtStr)     { Log.dateFormat = fmtStr; }
         return Log.dateFormat;
@@ -279,7 +279,7 @@ export class Log {
      * @param prf the prefix to prepend. Defaults to '';
      * @return the new prefix
      */
-    prefix(prf?:string):string {
+    public prefix(prf?:string):string {
         if (prf) { this.reportPrefix = prf; }
         return this.reportPrefix;
     }
@@ -292,7 +292,7 @@ export class Log {
      * - cfg.level: sets the reporting level (same as calling log.level())
      * @param cfg 
      */
-    config(cfg:{colors?:boolean, format?:string, level?:string }) {
+    public config(cfg:{colors?:boolean, format?:string, level?:string }) {
         if (cfg.format!==undefined) { this.format(cfg.format); }     // e.g. '%YYYY%MM%DD %hh:%mm:%ss.%jjj'
         if (cfg.level!==undefined)  { this.level(cfg.level); }       // e.g. INFO
     }
@@ -307,7 +307,7 @@ export class Log {
      * @param depth depth of recursion, defaults to 1. Use `null` for infinite depth
      * @param indent the indent string to use, will accumulate for each level of indentation, defaults to ''
      */
-    inspect(msg:any, depth=3, indent='   '):string {
+    public inspect(msg:any, depth=3, indent='   '):string {
         function _inspect(msg:any, depth:number, level:number, currIndent:string):string {
             if (msg === null)               { return 'null'; }
             if (msg === undefined)          { return 'undefined'; }
@@ -332,30 +332,5 @@ export class Log {
     protected getPrePostfix(indent:string, level:number, currIndent:string):[string,string] {
         return [`${currIndent}${indent}`, ''];
     }
-
-    /** factory method to create instances of callable `Log` */
-    // public static makeLogFn(prefix:string):LogFn { 
-    //     const instance = new Log(prefix);
-    //     const newLog = <LogFn>((prefix:string) => Log.makeLogFn(prefix));
-    //     return instance.addPoperties(newLog);
-    // }
-
-    // protected addPoperties(logFn:LogFn):LogFn {
-    //     logFn.DEBUG    = Log.DEBUG;
-    //     logFn.INFO     = Log.INFO;
-    //     logFn.WARN     = Log.WARN;
-    //     logFn.ERROR    = Log.ERROR;
-    //     logFn.level    = this.level.bind(this);
-    //     logFn.debug    = this.debug.bind(this);
-    //     logFn.info     = this.info.bind(this);
-    //     logFn.warn     = this.warn.bind(this);
-    //     logFn.error    = this.error.bind(this);
-    //     logFn.format   = this.format.bind(this);
-    //     logFn.prefix   = this.prefix.bind(this);
-    //     logFn.out      = this.out.bind(this);
-    //     logFn.config   = this.config.bind(this);
-    //     logFn.inspect  = this.inspect.bind(this);
-    //     return logFn;
-    // }
 }
 
