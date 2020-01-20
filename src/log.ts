@@ -80,26 +80,7 @@
 import { date } from './Date';
 
 
-// export interface LogFnResult { (_prefix:string): LogFn; }
-
-// export interface LogFn {
-//     (_prefix:string): LogFn;
-//     DEBUG: string;
-//     INFO:  string;
-//     WARN:  string;
-//     ERROR: string;
-//     level:  (newLevelSym?:string, setGlobalLevel?:boolean)=>string;
-//     debug:  (msg:any, log2File?:boolean) => Promise<string>;
-//     info:   (msg:any, log2File?:boolean) => Promise<string>;
-//     warn:   (msg:any, log2File?:boolean) => Promise<string>;
-//     error:  (msg:any, log2File?:boolean) => Promise<string>;
-//     format: (fmtStr?:string) => string;
-//     prefix: (prf?:string) => string;
-//     out:    (lvl:string, msg:any) => Promise<string>;
-//     config: (cfg:{colors?:boolean, format?:string, level?:string}) => void;
-//     inspect:(msg:any, depth?:number, indent?:string) => string;
-// }
-
+const COLORS = ['#008', '#080', '#800', '#066', '#660', '#606'];
 
 /**
  * Type definition for level descriptors
@@ -298,16 +279,17 @@ export class Log {
     }
 
     /**
-     * returns a string representation of an object literal, similar to the Node `util.inspect` call.
-     * 
      * Usage: `log.info(log.inspect(struct, 1))`
-     * 
-     * The call returns a raw formatted text string, or a HTM formatted string if `colors` is defined.
+     * The call returns a raw formatted text string, or a HTML formatted string if `colors` is defined.
      * @param struct the object literal to inspect
-     * @param depth depth of recursion, defaults to 1. Use `null` for infinite depth
-     * @param indent the indent string to use, will accumulate for each level of indentation, defaults to ''
+     * @param depth depth of recursion, defaults to 3. Use `null` for infinite depth
+     * @param indent the indent string to use, will accumulate for each level of indentation, defaults to four spaces.
+     * @param colors an array of `css` color values: if defined, the output will be `HTML` formatted, with indentation 
+     * levels indicated by colors in ascending sequence from the array, restarting at index 0 if the array is shorter than the maximum indentation level.
+     * `colors` defaults to the static `COLORS` array. To disable, provide a value of `null`.
+     * @return a string representation of an object literal, similar to the Node `util.inspect` call
      */
-    public inspect(msg:any, depth=3, indent='   '):string {
+    public inspect(msg:any, depth=3, indent='    ', colors=COLORS):string {
         function _inspect(msg:any, depth:number, level:number, currIndent:string):string {
             if (msg === null)               { return 'null'; }
             if (msg === undefined)          { return 'undefined'; }
@@ -319,13 +301,17 @@ export class Log {
                     return `[${msg.map((e:any)=>(e===undefined)?'':_inspect(e, depth-1, level+1, currIndent)).join(', ')}]`;
                  }
                 const [prefix, postfix] = log.getPrePostfix(indent, level, currIndent);
-                return '{\n' + Object.keys(msg).map(k => `${prefix}${k}${postfix}: ${
+                const cstart  = colors? `<b><span style='color:${colors[level % colors.length]};'>` : ''; 
+                const cstop   = colors? `</span></b>` : ''; 
+                const lf      = colors? '<br>' : '\n';
+                return `{${lf}` + Object.keys(msg).map(k => `${cstart}${prefix}${k}${postfix}${cstop}: ${
                         _inspect(msg[k], depth-1, level+1, currIndent+indent)
-                    }`).join(',\n') + `\n${currIndent}}`;
+                    }`).join(`,${lf}`) + `${lf}${currIndent}}`;
             } 
             return msg.toString();
         }
         const log = this;
+        if (colors) { indent = indent.replace(/ /g, '&nbsp;'); }
         return _inspect(msg, depth===null? 999 : depth, 0, '');
     }
 

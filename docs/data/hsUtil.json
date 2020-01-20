@@ -1446,7 +1446,7 @@
 			]
 		},
 		{
-			"id": 158,
+			"id": 160,
 			"name": "\"index\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -1523,7 +1523,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 143,
+									"line": 124,
 									"character": 35
 								}
 							]
@@ -1540,7 +1540,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 142,
+									"line": 123,
 									"character": 25
 								}
 							],
@@ -1563,7 +1563,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 143,
+									"line": 124,
 									"character": 26
 								}
 							],
@@ -1589,7 +1589,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 116,
+									"line": 97,
 									"character": 23
 								}
 							],
@@ -1615,7 +1615,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 125,
+									"line": 106,
 									"character": 23
 								}
 							],
@@ -1641,7 +1641,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 119,
+									"line": 100,
 									"character": 22
 								}
 							],
@@ -1667,7 +1667,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 122,
+									"line": 103,
 									"character": 22
 								}
 							],
@@ -1690,7 +1690,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 113,
+									"line": 94,
 									"character": 31
 								}
 							],
@@ -1716,7 +1716,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 112,
+									"line": 93,
 									"character": 34
 								}
 							],
@@ -1742,7 +1742,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 139,
+									"line": 120,
 									"character": 32
 								}
 							],
@@ -1769,7 +1769,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 136,
+									"line": 117,
 									"character": 21
 								}
 							],
@@ -1829,7 +1829,7 @@
 															"sources": [
 																{
 																	"fileName": "log.ts",
-																	"line": 295,
+																	"line": 276,
 																	"character": 29
 																}
 															],
@@ -1849,7 +1849,7 @@
 															"sources": [
 																{
 																	"fileName": "log.ts",
-																	"line": 295,
+																	"line": 276,
 																	"character": 46
 																}
 															],
@@ -1869,7 +1869,7 @@
 															"sources": [
 																{
 																	"fileName": "log.ts",
-																	"line": 295,
+																	"line": 276,
 																	"character": 61
 																}
 															],
@@ -1893,7 +1893,7 @@
 													"sources": [
 														{
 															"fileName": "log.ts",
-															"line": 295,
+															"line": 276,
 															"character": 22
 														}
 													]
@@ -1910,7 +1910,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 295,
+									"line": 276,
 									"character": 17
 								}
 							]
@@ -1978,7 +1978,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 191,
+									"line": 172,
 									"character": 22
 								}
 							]
@@ -2046,7 +2046,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 220,
+									"line": 201,
 									"character": 22
 								}
 							]
@@ -2098,13 +2098,13 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 271,
+									"line": 252,
 									"character": 17
 								}
 							]
 						},
 						{
-							"id": 153,
+							"id": 154,
 							"name": "getPrePostfix",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2114,14 +2114,14 @@
 							},
 							"signatures": [
 								{
-									"id": 154,
+									"id": 155,
 									"name": "getPrePostfix",
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
 									"parameters": [
 										{
-											"id": 155,
+											"id": 156,
 											"name": "indent",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2132,7 +2132,7 @@
 											}
 										},
 										{
-											"id": 156,
+											"id": 157,
 											"name": "level",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2143,7 +2143,7 @@
 											}
 										},
 										{
-											"id": 157,
+											"id": 158,
 											"name": "currIndent",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2172,7 +2172,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 332,
+									"line": 318,
 									"character": 27
 								}
 							]
@@ -2240,7 +2240,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 201,
+									"line": 182,
 									"character": 21
 								}
 							]
@@ -2262,8 +2262,8 @@
 									"kindString": "Call signature",
 									"flags": {},
 									"comment": {
-										"shortText": "returns a string representation of an object literal, similar to the Node `util.inspect` call.",
-										"text": "Usage: `log.info(log.inspect(struct, 1))`\n\nThe call returns a raw formatted text string, or a HTM formatted string if `colors` is defined."
+										"shortText": "Usage: `log.info(log.inspect(struct, 1))`\nThe call returns a raw formatted text string, or a HTML formatted string if `colors` is defined.",
+										"returns": "a string representation of an object literal, similar to the Node `util.inspect` call\n"
 									},
 									"parameters": [
 										{
@@ -2284,7 +2284,7 @@
 											"kindString": "Parameter",
 											"flags": {},
 											"comment": {
-												"text": "depth of recursion, defaults to 1. Use `null` for infinite depth"
+												"text": "depth of recursion, defaults to 3. Use `null` for infinite depth"
 											},
 											"type": {
 												"type": "intrinsic",
@@ -2299,13 +2299,31 @@
 											"kindString": "Parameter",
 											"flags": {},
 											"comment": {
-												"text": "the indent string to use, will accumulate for each level of indentation, defaults to ''\n"
+												"text": "the indent string to use, will accumulate for each level of indentation, defaults to four spaces."
 											},
 											"type": {
 												"type": "intrinsic",
 												"name": "string"
 											},
-											"defaultValue": "\"   \""
+											"defaultValue": "\"    \""
+										},
+										{
+											"id": 153,
+											"name": "colors",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"comment": {
+												"text": "an array of `css` color values: if defined, the output will be `HTML` formatted, with indentation\nlevels indicated by colors in ascending sequence from the array, restarting at index 0 if the array is shorter than the maximum indentation level.\n`colors` defaults to the static `COLORS` array. To disable, provide a value of `null`."
+											},
+											"type": {
+												"type": "array",
+												"elementType": {
+													"type": "intrinsic",
+													"name": "string"
+												}
+											},
+											"defaultValue": "COLORS"
 										}
 									],
 									"type": {
@@ -2317,7 +2335,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 310,
+									"line": 292,
 									"character": 18
 								}
 							]
@@ -2386,7 +2404,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 165,
+									"line": 146,
 									"character": 16
 								}
 							]
@@ -2465,7 +2483,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 257,
+									"line": 238,
 									"character": 25
 								}
 							]
@@ -2535,7 +2553,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 238,
+									"line": 219,
 									"character": 23
 								}
 							]
@@ -2587,7 +2605,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 282,
+									"line": 263,
 									"character": 17
 								}
 							]
@@ -2655,7 +2673,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 211,
+									"line": 192,
 									"character": 21
 								}
 							]
@@ -2694,22 +2712,22 @@
 											"sources": [
 												{
 													"fileName": "log.ts",
-													"line": 129,
+													"line": 110,
 													"character": 60
 												},
 												{
 													"fileName": "log.ts",
-													"line": 130,
+													"line": 111,
 													"character": 60
 												},
 												{
 													"fileName": "log.ts",
-													"line": 131,
+													"line": 112,
 													"character": 60
 												},
 												{
 													"fileName": "log.ts",
-													"line": 132,
+													"line": 113,
 													"character": 60
 												}
 											],
@@ -2730,22 +2748,22 @@
 											"sources": [
 												{
 													"fileName": "log.ts",
-													"line": 129,
+													"line": 110,
 													"character": 35
 												},
 												{
 													"fileName": "log.ts",
-													"line": 130,
+													"line": 111,
 													"character": 35
 												},
 												{
 													"fileName": "log.ts",
-													"line": 131,
+													"line": 112,
 													"character": 35
 												},
 												{
 													"fileName": "log.ts",
-													"line": 132,
+													"line": 113,
 													"character": 35
 												}
 											],
@@ -2766,22 +2784,22 @@
 											"sources": [
 												{
 													"fileName": "log.ts",
-													"line": 129,
+													"line": 110,
 													"character": 43
 												},
 												{
 													"fileName": "log.ts",
-													"line": 130,
+													"line": 111,
 													"character": 43
 												},
 												{
 													"fileName": "log.ts",
-													"line": 131,
+													"line": 112,
 													"character": 43
 												},
 												{
 													"fileName": "log.ts",
-													"line": 132,
+													"line": 113,
 													"character": 43
 												}
 											],
@@ -2806,22 +2824,22 @@
 									"sources": [
 										{
 											"fileName": "log.ts",
-											"line": 129,
+											"line": 110,
 											"character": 19
 										},
 										{
 											"fileName": "log.ts",
-											"line": 130,
+											"line": 111,
 											"character": 18
 										},
 										{
 											"fileName": "log.ts",
-											"line": 131,
+											"line": 112,
 											"character": 18
 										},
 										{
 											"fileName": "log.ts",
-											"line": 132,
+											"line": 113,
 											"character": 19
 										}
 									],
@@ -2843,7 +2861,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 128,
+									"line": 109,
 									"character": 27
 								}
 							],
@@ -2885,7 +2903,7 @@
 								109,
 								121,
 								135,
-								153,
+								154,
 								113,
 								148,
 								105,
@@ -2906,7 +2924,7 @@
 					"sources": [
 						{
 							"fileName": "log.ts",
-							"line": 110,
+							"line": 91,
 							"character": 16
 						}
 					]
@@ -2934,7 +2952,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 107,
+									"line": 88,
 									"character": 64
 								}
 							],
@@ -2954,7 +2972,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 107,
+									"line": 88,
 									"character": 39
 								}
 							],
@@ -2974,7 +2992,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 107,
+									"line": 88,
 									"character": 51
 								}
 							],
@@ -2998,10 +3016,34 @@
 					"sources": [
 						{
 							"fileName": "log.ts",
-							"line": 107,
+							"line": 88,
 							"character": 26
 						}
 					]
+				},
+				{
+					"id": 159,
+					"name": "COLORS",
+					"kind": 32,
+					"kindString": "Variable",
+					"flags": {
+						"isConst": true
+					},
+					"sources": [
+						{
+							"fileName": "log.ts",
+							"line": 83,
+							"character": 12
+						}
+					],
+					"type": {
+						"type": "array",
+						"elementType": {
+							"type": "intrinsic",
+							"name": "string"
+						}
+					},
+					"defaultValue": " ['#008', '#080', '#800', '#066', '#660', '#606']"
 				}
 			],
 			"groups": [
@@ -3018,6 +3060,13 @@
 					"children": [
 						82
 					]
+				},
+				{
+					"title": "Variables",
+					"kind": 32,
+					"children": [
+						159
+					]
 				}
 			],
 			"sources": [
@@ -3029,7 +3078,7 @@
 			]
 		},
 		{
-			"id": 159,
+			"id": 161,
 			"name": "\"overview\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -3059,9 +3108,9 @@
 				5,
 				76,
 				41,
-				158,
+				160,
 				81,
-				159
+				161
 			]
 		}
 	]
