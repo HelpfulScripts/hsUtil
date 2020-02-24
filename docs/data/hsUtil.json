@@ -1484,6 +1484,9 @@
 					"flags": {
 						"isExported": true
 					},
+					"comment": {
+						"shortText": "main logging class. See {@link log log overview} for usage."
+					},
 					"children": [
 						{
 							"id": 102,
@@ -1523,7 +1526,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 124,
+									"line": 126,
 									"character": 35
 								}
 							]
@@ -1540,7 +1543,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 123,
+									"line": 125,
 									"character": 25
 								}
 							],
@@ -1563,7 +1566,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 124,
+									"line": 126,
 									"character": 26
 								}
 							],
@@ -1589,7 +1592,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 97,
+									"line": 99,
 									"character": 23
 								}
 							],
@@ -1615,7 +1618,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 106,
+									"line": 108,
 									"character": 23
 								}
 							],
@@ -1641,7 +1644,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 100,
+									"line": 102,
 									"character": 22
 								}
 							],
@@ -1667,7 +1670,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 103,
+									"line": 105,
 									"character": 22
 								}
 							],
@@ -1690,7 +1693,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 94,
+									"line": 96,
 									"character": 31
 								}
 							],
@@ -1716,7 +1719,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 93,
+									"line": 95,
 									"character": 34
 								}
 							],
@@ -1742,7 +1745,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 120,
+									"line": 122,
 									"character": 32
 								}
 							],
@@ -1769,7 +1772,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 117,
+									"line": 119,
 									"character": 21
 								}
 							],
@@ -1829,7 +1832,7 @@
 															"sources": [
 																{
 																	"fileName": "log.ts",
-																	"line": 276,
+																	"line": 278,
 																	"character": 29
 																}
 															],
@@ -1849,7 +1852,7 @@
 															"sources": [
 																{
 																	"fileName": "log.ts",
-																	"line": 276,
+																	"line": 278,
 																	"character": 46
 																}
 															],
@@ -1869,7 +1872,7 @@
 															"sources": [
 																{
 																	"fileName": "log.ts",
-																	"line": 276,
+																	"line": 278,
 																	"character": 61
 																}
 															],
@@ -1893,7 +1896,7 @@
 													"sources": [
 														{
 															"fileName": "log.ts",
-															"line": 276,
+															"line": 278,
 															"character": 22
 														}
 													]
@@ -1910,7 +1913,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 276,
+									"line": 278,
 									"character": 17
 								}
 							]
@@ -1978,7 +1981,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 172,
+									"line": 174,
 									"character": 22
 								}
 							]
@@ -2046,7 +2049,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 201,
+									"line": 203,
 									"character": 22
 								}
 							]
@@ -2098,7 +2101,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 252,
+									"line": 254,
 									"character": 17
 								}
 							]
@@ -2172,7 +2175,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 318,
+									"line": 320,
 									"character": 27
 								}
 							]
@@ -2240,7 +2243,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 182,
+									"line": 184,
 									"character": 21
 								}
 							]
@@ -2335,7 +2338,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 292,
+									"line": 294,
 									"character": 18
 								}
 							]
@@ -2404,7 +2407,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 146,
+									"line": 148,
 									"character": 16
 								}
 							]
@@ -2483,7 +2486,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 238,
+									"line": 240,
 									"character": 25
 								}
 							]
@@ -2553,7 +2556,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 219,
+									"line": 221,
 									"character": 23
 								}
 							]
@@ -2605,7 +2608,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 263,
+									"line": 265,
 									"character": 17
 								}
 							]
@@ -2673,7 +2676,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 192,
+									"line": 194,
 									"character": 21
 								}
 							]
@@ -2712,22 +2715,22 @@
 											"sources": [
 												{
 													"fileName": "log.ts",
-													"line": 110,
-													"character": 60
-												},
-												{
-													"fileName": "log.ts",
-													"line": 111,
-													"character": 60
-												},
-												{
-													"fileName": "log.ts",
 													"line": 112,
 													"character": 60
 												},
 												{
 													"fileName": "log.ts",
 													"line": 113,
+													"character": 60
+												},
+												{
+													"fileName": "log.ts",
+													"line": 114,
+													"character": 60
+												},
+												{
+													"fileName": "log.ts",
+													"line": 115,
 													"character": 60
 												}
 											],
@@ -2748,22 +2751,22 @@
 											"sources": [
 												{
 													"fileName": "log.ts",
-													"line": 110,
-													"character": 35
-												},
-												{
-													"fileName": "log.ts",
-													"line": 111,
-													"character": 35
-												},
-												{
-													"fileName": "log.ts",
 													"line": 112,
 													"character": 35
 												},
 												{
 													"fileName": "log.ts",
 													"line": 113,
+													"character": 35
+												},
+												{
+													"fileName": "log.ts",
+													"line": 114,
+													"character": 35
+												},
+												{
+													"fileName": "log.ts",
+													"line": 115,
 													"character": 35
 												}
 											],
@@ -2784,22 +2787,22 @@
 											"sources": [
 												{
 													"fileName": "log.ts",
-													"line": 110,
-													"character": 43
-												},
-												{
-													"fileName": "log.ts",
-													"line": 111,
-													"character": 43
-												},
-												{
-													"fileName": "log.ts",
 													"line": 112,
 													"character": 43
 												},
 												{
 													"fileName": "log.ts",
 													"line": 113,
+													"character": 43
+												},
+												{
+													"fileName": "log.ts",
+													"line": 114,
+													"character": 43
+												},
+												{
+													"fileName": "log.ts",
+													"line": 115,
 													"character": 43
 												}
 											],
@@ -2824,22 +2827,22 @@
 									"sources": [
 										{
 											"fileName": "log.ts",
-											"line": 110,
+											"line": 112,
 											"character": 19
 										},
 										{
 											"fileName": "log.ts",
-											"line": 111,
-											"character": 18
-										},
-										{
-											"fileName": "log.ts",
-											"line": 112,
-											"character": 18
-										},
-										{
-											"fileName": "log.ts",
 											"line": 113,
+											"character": 18
+										},
+										{
+											"fileName": "log.ts",
+											"line": 114,
+											"character": 18
+										},
+										{
+											"fileName": "log.ts",
+											"line": 115,
 											"character": 19
 										}
 									],
@@ -2861,7 +2864,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 109,
+									"line": 111,
 									"character": 27
 								}
 							],
@@ -2924,7 +2927,7 @@
 					"sources": [
 						{
 							"fileName": "log.ts",
-							"line": 91,
+							"line": 93,
 							"character": 16
 						}
 					]

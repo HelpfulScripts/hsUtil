@@ -87,7 +87,9 @@ const COLORS = ['#008', '#080', '#800', '#066', '#660', '#606'];
  */
 export interface LevelDesc { importance:number; sym:string; desc:string; }
 
-
+/**
+ * main logging class. See {@link log log overview} for usage.
+ */
 export class Log {
     /** current date format string. See [date module]('_date_.html') */
     protected static defDateFormat = '%YYYY%MM%DD %hh:%mm:%ss.%jjj';
