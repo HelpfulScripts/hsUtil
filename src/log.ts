@@ -121,7 +121,6 @@ export class Log {
     /** current reporting level, same across all modules */
     protected static globalLevel:LevelDesc = Log.levels[Log.INFO]; 
 
-
     protected reportLevel     = <LevelDesc>undefined;
     protected reportPrefix    = '';
 

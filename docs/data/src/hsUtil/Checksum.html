@@ -20,7 +20,7 @@
                     height:90%;
             }
             code { padding: 5px 0;}</style></html><body>
-                <h1>src/Checksum.ts</h1>
+                <h1>Checksum.ts</h1>
                 <div class='listing'><code><p id=1 class="line"><span>&nbsp;&nbsp;&nbsp;1</span><comment>/**</comment></p>
 <p id=2 class="line"><span>&nbsp;&nbsp;&nbsp;2</span><comment>&nbsp;*&nbsp;Creates&nbsp;a&nbsp;checksum&nbsp;on&nbsp;a&nbsp;string.</comment></p>
 <p id=3 class="line"><span>&nbsp;&nbsp;&nbsp;3</span><comment>&nbsp;*&nbsp;Adapted&nbsp;from&nbsp;https:<comment>//stackoverflow.com/questions/811195/fast-open-source-checksum-for-small-strings</comment></comment></p>
@@ -30,12 +30,11 @@
 <p id=7 class="line"><span>&nbsp;&nbsp;&nbsp;7</span><comment>&nbsp;&nbsp;*&nbsp;fast&nbsp;implementation&nbsp;for&nbsp;short&nbsp;strings&nbsp;(20-500&nbsp;chars)</comment></p>
 <p id=8 class="line"><span>&nbsp;&nbsp;&nbsp;8</span><comment>&nbsp;&nbsp;*/</comment></p>
 <p id=9 class="line"><span>&nbsp;&nbsp;&nbsp;9</span>&nbsp;export&nbsp;function&nbsp;shortCheckSum(s:string):string&nbsp;{</p>
-<p id=10 class="line"><span>&nbsp;&nbsp;10</span>&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;chk&nbsp;=&nbsp;0x12345678;</p>
-<p id=11 class="line"><span>&nbsp;&nbsp;11</span>&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;len&nbsp;=&nbsp;s.length;</p>
-<p id=12 class="line"><span>&nbsp;&nbsp;12</span>&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;(var&nbsp;i&nbsp;=&nbsp;0;&nbsp;i&nbsp;<&nbsp;len;&nbsp;i++)&nbsp;{</p>
-<p id=13 class="line"><span>&nbsp;&nbsp;13</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;chk&nbsp;+=&nbsp;(s.charCodeAt(i)&nbsp;*&nbsp;(i&nbsp;+&nbsp;1));</p>
-<p id=14 class="line"><span>&nbsp;&nbsp;14</span>&nbsp;&nbsp;&nbsp;&nbsp;}</p>
-<p id=15 class="line"><span>&nbsp;&nbsp;15</span>&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;(chk&nbsp;&&nbsp;0xffffffff).toString(16);&nbsp;</p>
-<p id=16 class="line"><span>&nbsp;&nbsp;16</span>&nbsp;}</p></code></div>
+<p id=10 class="line"><span>&nbsp;&nbsp;10</span>&nbsp;&nbsp;&nbsp;&nbsp;let&nbsp;chk&nbsp;=&nbsp;0x12345678;</p>
+<p id=11 class="line"><span>&nbsp;&nbsp;11</span>&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;(let&nbsp;i=0;&nbsp;i<s.length;&nbsp;i++)&nbsp;{</p>
+<p id=12 class="line"><span>&nbsp;&nbsp;12</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;chk&nbsp;+=&nbsp;(s.charCodeAt(i)&nbsp;*&nbsp;(i&nbsp;+&nbsp;1));</p>
+<p id=13 class="line"><span>&nbsp;&nbsp;13</span>&nbsp;&nbsp;&nbsp;&nbsp;}</p>
+<p id=14 class="line"><span>&nbsp;&nbsp;14</span>&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;(chk&nbsp;&&nbsp;0xffffffff).toString(16);&nbsp;</p>
+<p id=15 class="line"><span>&nbsp;&nbsp;15</span>&nbsp;}</p></code></div>
                 </body>
             

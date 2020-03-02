@@ -23,7 +23,7 @@ const dayStr = [
 
 /** add leading zeros to an integer until `digits` are reached */
 function formatNumber(number:number, digits:number):string {
-    var r = ''+number;
+    let r = ''+number;
     while (r.length < digits) { r = "0" + r; }
     return r;
 }

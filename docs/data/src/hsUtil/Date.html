@@ -20,7 +20,7 @@
                     height:90%;
             }
             code { padding: 5px 0;}</style></html><body>
-                <h1>src/Date.ts</h1>
+                <h1>Date.ts</h1>
                 <div class='listing'><code><p id=1 class="line"><span>&nbsp;&nbsp;&nbsp;1</span><comment>/**</comment></p>
 <p id=2 class="line"><span>&nbsp;&nbsp;&nbsp;2</span><comment>#&nbsp;Date&nbsp;formatting&nbsp;support.&nbsp;</comment></p>
 <p id=3 class="line"><span>&nbsp;&nbsp;&nbsp;3</span><comment>Formats&nbsp;are&nbsp;specified&nbsp;in&nbsp;a&nbsp;printf-style&nbsp;format&nbsp;string.&nbsp;</comment></p>
@@ -46,7 +46,7 @@
 <p id=23 class="line"><span>&nbsp;&nbsp;23</span></p>
 <p id=24 class="line"><span>&nbsp;&nbsp;24</span><comment>/**&nbsp;add&nbsp;leading&nbsp;zeros&nbsp;to&nbsp;an&nbsp;integer&nbsp;until&nbsp;`digits`&nbsp;are&nbsp;reached&nbsp;*/</comment></p>
 <p id=25 class="line"><span>&nbsp;&nbsp;25</span>function&nbsp;formatNumber(number:number,&nbsp;digits:number):string&nbsp;{</p>
-<p id=26 class="line"><span>&nbsp;&nbsp;26</span>&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;r&nbsp;=&nbsp;'</quote><quote>'+number;</p>
+<p id=26 class="line"><span>&nbsp;&nbsp;26</span>&nbsp;&nbsp;&nbsp;&nbsp;let&nbsp;r&nbsp;=&nbsp;'</quote><quote>'+number;</p>
 <p id=27 class="line"><span>&nbsp;&nbsp;27</span>&nbsp;&nbsp;&nbsp;&nbsp;while&nbsp;(r.length&nbsp;<&nbsp;digits)&nbsp;{&nbsp;r&nbsp;=&nbsp;<quote>"0"</quote>&nbsp;+&nbsp;r;&nbsp;}</p>
 <p id=28 class="line"><span>&nbsp;&nbsp;28</span>&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;r;</p>
 <p id=29 class="line"><span>&nbsp;&nbsp;29</span>}</p>
