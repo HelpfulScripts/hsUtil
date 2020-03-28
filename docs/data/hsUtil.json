@@ -31,7 +31,9 @@
 							"name": "shortCheckSum",
 							"kind": 4096,
 							"kindString": "Call signature",
-							"flags": {},
+							"flags": {
+								"isExported": true
+							},
 							"comment": {
 								"shortText": "fast implementation for short strings (20-500 chars)"
 							},
@@ -41,7 +43,9 @@
 									"name": "s",
 									"kind": 32768,
 									"kindString": "Parameter",
-									"flags": {},
+									"flags": {
+										"isExported": true
+									},
 									"type": {
 										"type": "intrinsic",
 										"name": "string"
@@ -121,7 +125,7 @@
 							}
 						}
 					},
-					"defaultValue": " [\n    ['Sun', 'Sunday'],['Mon', 'Monday'],['Tue', 'Tuesday'],['Wed', 'Wednesday'],['Thu', 'Thursday'],['Fri', 'Friday'],['Sat', 'Saturday']]"
+					"defaultValue": "[\n    ['Sun', 'Sunday'],['Mon', 'Monday'],['Tue', 'Tuesday'],['Wed', 'Wednesday'],['Thu', 'Thursday'],['Fri', 'Friday'],['Sat', 'Saturday']]"
 				},
 				{
 					"id": 6,
@@ -151,7 +155,7 @@
 							}
 						}
 					},
-					"defaultValue": " [\n    ['Jan', 'January'], ['Feb', 'February'], ['Mar', 'March'], ['Apr', 'April'], ['May', 'May'], ['Jun', 'June'],\n    ['Jul', 'July'], ['Aug', 'August'], ['Sep', 'September'], ['Oct', 'October'], ['Nov', 'November'], ['Dec', 'December']]"
+					"defaultValue": "[\n    ['Jan', 'January'], ['Feb', 'February'], ['Mar', 'March'], ['Apr', 'April'], ['May', 'May'], ['Jun', 'June'],\n    ['Jul', 'July'], ['Aug', 'August'], ['Sep', 'September'], ['Oct', 'October'], ['Nov', 'November'], ['Dec', 'December']]"
 				},
 				{
 					"id": 12,
@@ -167,7 +171,9 @@
 							"name": "date",
 							"kind": 4096,
 							"kindString": "Call signature",
-							"flags": {},
+							"flags": {
+								"isExported": true
+							},
 							"comment": {
 								"shortText": "## Example:\n<pre>\ndate('%MM/%DD/%YY');           // -> 08/17/16 (using current date)\nlet d = new Date('7/4/2010');\ndate('%DDDD, %MM/%DD/%YY', d); // -> Sunday, 07/04/10\n</pre>",
 								"returns": "a copy of `formatString` where all supported patterns are replaced by the respective values from `date`.\n"
@@ -178,7 +184,9 @@
 									"name": "formatString",
 									"kind": 32768,
 									"kindString": "Parameter",
-									"flags": {},
+									"flags": {
+										"isExported": true
+									},
 									"comment": {
 										"text": "the format string to use."
 									},
@@ -192,7 +200,9 @@
 									"name": "date",
 									"kind": 32768,
 									"kindString": "Parameter",
-									"flags": {},
+									"flags": {
+										"isExported": true
+									},
 									"type": {
 										"type": "reference",
 										"name": "Date"
@@ -295,14 +305,18 @@
 									"name": "fromDays",
 									"kind": 4096,
 									"kindString": "Call signature",
-									"flags": {},
+									"flags": {
+										"isExported": true
+									},
 									"parameters": [
 										{
 											"id": 25,
 											"name": "d",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {},
+											"flags": {
+												"isExported": true
+											},
 											"type": {
 												"type": "intrinsic",
 												"name": "number"
@@ -337,14 +351,18 @@
 									"name": "fromHours",
 									"kind": 4096,
 									"kindString": "Call signature",
-									"flags": {},
+									"flags": {
+										"isExported": true
+									},
 									"parameters": [
 										{
 											"id": 22,
 											"name": "h",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {},
+											"flags": {
+												"isExported": true
+											},
 											"type": {
 												"type": "intrinsic",
 												"name": "number"
@@ -379,14 +397,18 @@
 									"name": "fromMinutes",
 									"kind": 4096,
 									"kindString": "Call signature",
-									"flags": {},
+									"flags": {
+										"isExported": true
+									},
 									"parameters": [
 										{
 											"id": 19,
 											"name": "min",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {},
+											"flags": {
+												"isExported": true
+											},
 											"type": {
 												"type": "intrinsic",
 												"name": "number"
@@ -421,14 +443,18 @@
 									"name": "fromWeeks",
 									"kind": 4096,
 									"kindString": "Call signature",
-									"flags": {},
+									"flags": {
+										"isExported": true
+									},
 									"parameters": [
 										{
 											"id": 28,
 											"name": "w",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {},
+											"flags": {
+												"isExported": true
+											},
 											"type": {
 												"type": "intrinsic",
 												"name": "number"
@@ -463,14 +489,18 @@
 									"name": "toDays",
 									"kind": 4096,
 									"kindString": "Call signature",
-									"flags": {},
+									"flags": {
+										"isExported": true
+									},
 									"parameters": [
 										{
 											"id": 37,
 											"name": "ms",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {},
+											"flags": {
+												"isExported": true
+											},
 											"type": {
 												"type": "intrinsic",
 												"name": "number"
@@ -505,14 +535,18 @@
 									"name": "toHours",
 									"kind": 4096,
 									"kindString": "Call signature",
-									"flags": {},
+									"flags": {
+										"isExported": true
+									},
 									"parameters": [
 										{
 											"id": 34,
 											"name": "ms",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {},
+											"flags": {
+												"isExported": true
+											},
 											"type": {
 												"type": "intrinsic",
 												"name": "number"
@@ -547,14 +581,18 @@
 									"name": "toMinutes",
 									"kind": 4096,
 									"kindString": "Call signature",
-									"flags": {},
+									"flags": {
+										"isExported": true
+									},
 									"parameters": [
 										{
 											"id": 31,
 											"name": "ms",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {},
+											"flags": {
+												"isExported": true
+											},
 											"type": {
 												"type": "intrinsic",
 												"name": "number"
@@ -589,14 +627,18 @@
 									"name": "toWeeks",
 									"kind": 4096,
 									"kindString": "Call signature",
-									"flags": {},
+									"flags": {
+										"isExported": true
+									},
 									"parameters": [
 										{
 											"id": 40,
 											"name": "ms",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {},
+											"flags": {
+												"isExported": true
+											},
 											"type": {
 												"type": "intrinsic",
 												"name": "number"
@@ -707,7 +749,9 @@
 							"name": "round",
 							"kind": 4096,
 							"kindString": "Call signature",
-							"flags": {},
+							"flags": {
+								"isExported": true
+							},
 							"comment": {
 								"shortText": "rounds a number `n` to the specified `d` decimals and returns a string"
 							},
@@ -717,7 +761,9 @@
 									"name": "n",
 									"kind": 32768,
 									"kindString": "Parameter",
-									"flags": {},
+									"flags": {
+										"isExported": true
+									},
 									"comment": {
 										"text": "the number to round"
 									},
@@ -731,7 +777,9 @@
 									"name": "d",
 									"kind": 32768,
 									"kindString": "Parameter",
-									"flags": {},
+									"flags": {
+										"isExported": true
+									},
 									"comment": {
 										"text": "the number of decimal digits to round to; defaults to 0\n"
 									},
@@ -819,7 +867,9 @@
 									"name": "new Pace",
 									"kind": 16384,
 									"kindString": "Constructor signature",
-									"flags": {},
+									"flags": {
+										"isExported": true
+									},
 									"comment": {},
 									"parameters": [
 										{
@@ -827,7 +877,9 @@
 											"name": "pace",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {},
+											"flags": {
+												"isExported": true
+											},
 											"type": {
 												"type": "intrinsic",
 												"name": "number"
@@ -839,7 +891,9 @@
 											"name": "maxConcurrent",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {},
+											"flags": {
+												"isExported": true
+											},
 											"comment": {
 												"shortText": "the maximum number of concurrent execution calls; defaults to -1 (no limit)\n"
 											},
@@ -852,8 +906,8 @@
 									],
 									"type": {
 										"type": "reference",
-										"name": "Pace",
-										"id": 42
+										"id": 42,
+										"name": "Pace"
 									}
 								}
 							],
@@ -907,7 +961,7 @@
 								"type": "intrinsic",
 								"name": "number"
 							},
-							"defaultValue": " -1"
+							"defaultValue": "-1"
 						},
 						{
 							"id": 44,
@@ -988,7 +1042,9 @@
 									"name": "add",
 									"kind": 4096,
 									"kindString": "Call signature",
-									"flags": {},
+									"flags": {
+										"isExported": true
+									},
 									"comment": {
 										"shortText": "adds the function to the queue. After an appropriate time has passed,\nthe function will be called with the delay in ms as parameter.",
 										"returns": "a promise that resolved to the result of the function\n"
@@ -999,7 +1055,9 @@
 											"name": "fn",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {},
+											"flags": {
+												"isExported": true
+											},
 											"comment": {},
 											"type": {
 												"type": "reflection",
@@ -1008,21 +1066,27 @@
 													"name": "__type",
 													"kind": 65536,
 													"kindString": "Type literal",
-													"flags": {},
+													"flags": {
+														"isExported": true
+													},
 													"signatures": [
 														{
 															"id": 60,
 															"name": "__call",
 															"kind": 4096,
 															"kindString": "Call signature",
-															"flags": {},
+															"flags": {
+																"isExported": true
+															},
 															"parameters": [
 																{
 																	"id": 61,
 																	"name": "msSinceAdding",
 																	"kind": 32768,
 																	"kindString": "Parameter",
-																	"flags": {},
+																	"flags": {
+																		"isExported": true
+																	},
 																	"type": {
 																		"type": "intrinsic",
 																		"name": "number"
@@ -1048,13 +1112,13 @@
 									],
 									"type": {
 										"type": "reference",
-										"name": "Promise",
 										"typeArguments": [
 											{
 												"type": "intrinsic",
 												"name": "any"
 											}
-										]
+										],
+										"name": "Promise"
 									}
 								}
 							],
@@ -1080,7 +1144,9 @@
 									"name": "getCallingCount",
 									"kind": 4096,
 									"kindString": "Call signature",
-									"flags": {},
+									"flags": {
+										"isExported": true
+									},
 									"type": {
 										"type": "intrinsic",
 										"name": "number"
@@ -1109,7 +1175,9 @@
 									"name": "getWaitCount",
 									"kind": 4096,
 									"kindString": "Call signature",
-									"flags": {},
+									"flags": {
+										"isExported": true
+									},
 									"type": {
 										"type": "intrinsic",
 										"name": "number"
@@ -1176,7 +1244,9 @@
 							"name": "delay",
 							"kind": 4096,
 							"kindString": "Call signature",
-							"flags": {},
+							"flags": {
+								"isExported": true
+							},
 							"comment": {
 								"returns": "a `Promise` that resolves after `ms`\n",
 								"tags": [
@@ -1192,7 +1262,9 @@
 									"name": "ms",
 									"kind": 32768,
 									"kindString": "Parameter",
-									"flags": {},
+									"flags": {
+										"isExported": true
+									},
 									"type": {
 										"type": "intrinsic",
 										"name": "number"
@@ -1227,7 +1299,9 @@
 							"name": "promiseChain",
 							"kind": 4096,
 							"kindString": "Call signature",
-							"flags": {},
+							"flags": {
+								"isExported": true
+							},
 							"comment": {
 								"shortText": "Sequentially calls the provided `tasks` in a `.then()` chain of promises,\nguaranteeing the order of execution per index order in the array.\nEach task can return a result, or a promise for a result.",
 								"returns": "an array of results for each task\n"
@@ -1238,7 +1312,9 @@
 									"name": "T",
 									"kind": 131072,
 									"kindString": "Type parameter",
-									"flags": {}
+									"flags": {
+										"isExported": true
+									}
 								}
 							],
 							"parameters": [
@@ -1247,7 +1323,9 @@
 									"name": "tasks",
 									"kind": 32768,
 									"kindString": "Parameter",
-									"flags": {},
+									"flags": {
+										"isExported": true
+									},
 									"comment": {
 										"text": "an array of task calls to execute in sequence. Each call will pass the array of results for tasks so far executed."
 									},
@@ -1260,21 +1338,27 @@
 												"name": "__type",
 												"kind": 65536,
 												"kindString": "Type literal",
-												"flags": {},
+												"flags": {
+													"isExported": true
+												},
 												"signatures": [
 													{
 														"id": 73,
 														"name": "__call",
 														"kind": 4096,
 														"kindString": "Call signature",
-														"flags": {},
+														"flags": {
+															"isExported": true
+														},
 														"parameters": [
 															{
 																"id": 74,
 																"name": "results",
 																"kind": 32768,
 																"kindString": "Parameter",
-																"flags": {},
+																"flags": {
+																	"isExported": true
+																},
 																"type": {
 																	"type": "array",
 																	"elementType": {
@@ -1293,13 +1377,13 @@
 																},
 																{
 																	"type": "reference",
-																	"name": "Promise",
 																	"typeArguments": [
 																		{
 																			"type": "typeParameter",
 																			"name": "T"
 																		}
-																	]
+																	],
+																	"name": "Promise"
 																}
 															]
 														}
@@ -1321,7 +1405,9 @@
 									"name": "initialResult",
 									"kind": 32768,
 									"kindString": "Parameter",
-									"flags": {},
+									"flags": {
+										"isExported": true
+									},
 									"comment": {
 										"text": "optional initial array to collect the task results."
 									},
@@ -1337,7 +1423,6 @@
 							],
 							"type": {
 								"type": "reference",
-								"name": "Promise",
 								"typeArguments": [
 									{
 										"type": "array",
@@ -1346,7 +1431,8 @@
 											"name": "T"
 										}
 									}
-								]
+								],
+								"name": "Promise"
 							}
 						}
 					],
@@ -1372,7 +1458,9 @@
 							"name": "timeout",
 							"kind": 4096,
 							"kindString": "Call signature",
-							"flags": {},
+							"flags": {
+								"isExported": true
+							},
 							"comment": {
 								"returns": "a Promise that rejects after `ms`\n",
 								"tags": [
@@ -1388,7 +1476,9 @@
 									"name": "ms",
 									"kind": 32768,
 									"kindString": "Parameter",
-									"flags": {},
+									"flags": {
+										"isExported": true
+									},
 									"comment": {
 										"text": "the milliseconds to wait before rejecting"
 									},
@@ -1400,13 +1490,13 @@
 							],
 							"type": {
 								"type": "reference",
-								"name": "Promise",
 								"typeArguments": [
 									{
 										"type": "intrinsic",
 										"name": "void"
 									}
-								]
+								],
+								"name": "Promise"
 							}
 						}
 					],
@@ -1454,6 +1544,115 @@
 				"isExported": true
 			},
 			"originalName": "/Users/sth1pal/Documents/Development/JavaScript/nodejs/ts6/dev/hsLibs/standalone/hsUtil/src/index.ts",
+			"children": [
+				{
+					"id": 169,
+					"name": "Log",
+					"kind": 16777216,
+					"kindString": "Reference",
+					"flags": {
+						"isExported": true
+					},
+					"target": 86
+				},
+				{
+					"id": 163,
+					"name": "Pace",
+					"kind": 16777216,
+					"kindString": "Reference",
+					"flags": {
+						"isExported": true
+					},
+					"target": 42
+				},
+				{
+					"id": 166,
+					"name": "date",
+					"kind": 16777216,
+					"kindString": "Reference",
+					"flags": {
+						"isExported": true
+					},
+					"target": 12
+				},
+				{
+					"id": 162,
+					"name": "delay",
+					"kind": 16777216,
+					"kindString": "Reference",
+					"flags": {
+						"isExported": true
+					},
+					"target": 65
+				},
+				{
+					"id": 167,
+					"name": "ms",
+					"kind": 16777216,
+					"kindString": "Reference",
+					"flags": {
+						"isExported": true
+					},
+					"target": 16
+				},
+				{
+					"id": 164,
+					"name": "promiseChain",
+					"kind": 16777216,
+					"kindString": "Reference",
+					"flags": {
+						"isExported": true
+					},
+					"target": 68
+				},
+				{
+					"id": 168,
+					"name": "round",
+					"kind": 16777216,
+					"kindString": "Reference",
+					"flags": {
+						"isExported": true
+					},
+					"target": 77
+				},
+				{
+					"id": 165,
+					"name": "shortCheckSum",
+					"kind": 16777216,
+					"kindString": "Reference",
+					"flags": {
+						"isExported": true
+					},
+					"target": 2
+				},
+				{
+					"id": 161,
+					"name": "timeout",
+					"kind": 16777216,
+					"kindString": "Reference",
+					"flags": {
+						"isExported": true
+					},
+					"target": 62
+				}
+			],
+			"groups": [
+				{
+					"title": "References",
+					"kind": 16777216,
+					"children": [
+						169,
+						163,
+						166,
+						162,
+						167,
+						164,
+						168,
+						165,
+						161
+					]
+				}
+			],
 			"sources": [
 				{
 					"fileName": "index.ts",
@@ -1502,14 +1701,18 @@
 									"name": "new Log",
 									"kind": 16384,
 									"kindString": "Constructor signature",
-									"flags": {},
+									"flags": {
+										"isExported": true
+									},
 									"parameters": [
 										{
 											"id": 104,
 											"name": "prefix",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {},
+											"flags": {
+												"isExported": true
+											},
 											"type": {
 												"type": "intrinsic",
 												"name": "string"
@@ -1518,8 +1721,8 @@
 									],
 									"type": {
 										"type": "reference",
-										"name": "Log",
-										"id": 86
+										"id": 86,
+										"name": "Log"
 									}
 								}
 							],
@@ -1549,10 +1752,10 @@
 							],
 							"type": {
 								"type": "reference",
-								"name": "LevelDesc",
-								"id": 82
+								"id": 82,
+								"name": "LevelDesc"
 							},
-							"defaultValue": " <LevelDesc>undefined"
+							"defaultValue": "<LevelDesc>undefined"
 						},
 						{
 							"id": 101,
@@ -1701,7 +1904,7 @@
 								"type": "intrinsic",
 								"name": "string"
 							},
-							"defaultValue": " Log.defDateFormat"
+							"defaultValue": "Log.defDateFormat"
 						},
 						{
 							"id": 87,
@@ -1751,10 +1954,10 @@
 							],
 							"type": {
 								"type": "reference",
-								"name": "LevelDesc",
-								"id": 82
+								"id": 82,
+								"name": "LevelDesc"
 							},
-							"defaultValue": " Log.levels[Log.INFO]"
+							"defaultValue": "Log.levels[Log.INFO]"
 						},
 						{
 							"id": 98,
@@ -1778,10 +1981,10 @@
 							],
 							"type": {
 								"type": "reference",
-								"name": "Log",
-								"id": 86
+								"id": 86,
+								"name": "Log"
 							},
-							"defaultValue": " new Log('')"
+							"defaultValue": "new Log('')"
 						},
 						{
 							"id": 141,
@@ -1798,7 +2001,9 @@
 									"name": "config",
 									"kind": 4096,
 									"kindString": "Call signature",
-									"flags": {},
+									"flags": {
+										"isExported": true
+									},
 									"comment": {
 										"shortText": "configures the log facility.\n- cfg.colors: boolean, determines if output is colored\n- cfg.logfile: sets the naming template for the logfile. Set logFile=null to disable.\n- cfg.format: sets the format for the timestamp for each log entry\n- cfg.level: sets the reporting level (same as calling log.level())"
 									},
@@ -1808,7 +2013,9 @@
 											"name": "cfg",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {},
+											"flags": {
+												"isExported": true
+											},
 											"comment": {
 												"text": "\n"
 											},
@@ -1819,7 +2026,9 @@
 													"name": "__type",
 													"kind": 65536,
 													"kindString": "Type literal",
-													"flags": {},
+													"flags": {
+														"isExported": true
+													},
 													"children": [
 														{
 															"id": 145,
@@ -1827,6 +2036,7 @@
 															"kind": 32,
 															"kindString": "Variable",
 															"flags": {
+																"isExported": true,
 																"isOptional": true
 															},
 															"sources": [
@@ -1847,6 +2057,7 @@
 															"kind": 32,
 															"kindString": "Variable",
 															"flags": {
+																"isExported": true,
 																"isOptional": true
 															},
 															"sources": [
@@ -1867,6 +2078,7 @@
 															"kind": 32,
 															"kindString": "Variable",
 															"flags": {
+																"isExported": true,
 																"isOptional": true
 															},
 															"sources": [
@@ -1933,7 +2145,9 @@
 									"name": "debug",
 									"kind": 4096,
 									"kindString": "Call signature",
-									"flags": {},
+									"flags": {
+										"isExported": true
+									},
 									"comment": {
 										"shortText": "reports an debug message to the log.\nThe message will actually be reported to the log only if the current\nreporting level is DEBUG or lower.",
 										"returns": "promise to return the file written to, or undefined\n"
@@ -1944,7 +2158,9 @@
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {},
+											"flags": {
+												"isExported": true
+											},
 											"comment": {
 												"text": "the message to report. If msg is an object literal, a deep inspection will be printed."
 											},
@@ -1958,7 +2174,9 @@
 											"name": "log2File",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {},
+											"flags": {
+												"isExported": true
+											},
 											"type": {
 												"type": "intrinsic",
 												"name": "boolean"
@@ -1968,13 +2186,13 @@
 									],
 									"type": {
 										"type": "reference",
-										"name": "Promise",
 										"typeArguments": [
 											{
 												"type": "intrinsic",
 												"name": "string"
 											}
-										]
+										],
+										"name": "Promise"
 									}
 								}
 							],
@@ -2001,7 +2219,9 @@
 									"name": "error",
 									"kind": 4096,
 									"kindString": "Call signature",
-									"flags": {},
+									"flags": {
+										"isExported": true
+									},
 									"comment": {
 										"shortText": "reports an error message to the log.\nThe message will always be reported to the log.",
 										"returns": "promise to return the file written to, or undefined\n"
@@ -2012,7 +2232,9 @@
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {},
+											"flags": {
+												"isExported": true
+											},
 											"comment": {
 												"text": "the message to report. If msg is an object literal, a deep inspection will be printed."
 											},
@@ -2026,7 +2248,9 @@
 											"name": "log2File",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {},
+											"flags": {
+												"isExported": true
+											},
 											"type": {
 												"type": "intrinsic",
 												"name": "boolean"
@@ -2036,13 +2260,13 @@
 									],
 									"type": {
 										"type": "reference",
-										"name": "Promise",
 										"typeArguments": [
 											{
 												"type": "intrinsic",
 												"name": "string"
 											}
-										]
+										],
+										"name": "Promise"
 									}
 								}
 							],
@@ -2069,7 +2293,9 @@
 									"name": "format",
 									"kind": 4096,
 									"kindString": "Call signature",
-									"flags": {},
+									"flags": {
+										"isExported": true
+									},
 									"comment": {
 										"shortText": "sets the format string to use for logging. If no parameter is specified,\nthe function returns the currently set format string. The preset is '%YYYY%MM%DD %hh:%mm:%ss.%jjj'\nFor supported formats see {@link date date}.\nUsage\n- `format(null)` sets the format to `defDateFormat`\n- `format()` returns the current format without changing it.",
 										"returns": "the currently set format string\n"
@@ -2081,6 +2307,7 @@
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {
+												"isExported": true,
 												"isOptional": true
 											},
 											"comment": {
@@ -2121,14 +2348,18 @@
 									"name": "getPrePostfix",
 									"kind": 4096,
 									"kindString": "Call signature",
-									"flags": {},
+									"flags": {
+										"isExported": true
+									},
 									"parameters": [
 										{
 											"id": 156,
 											"name": "indent",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {},
+											"flags": {
+												"isExported": true
+											},
 											"type": {
 												"type": "intrinsic",
 												"name": "string"
@@ -2139,7 +2370,9 @@
 											"name": "level",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {},
+											"flags": {
+												"isExported": true
+											},
 											"type": {
 												"type": "intrinsic",
 												"name": "number"
@@ -2150,7 +2383,9 @@
 											"name": "currIndent",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {},
+											"flags": {
+												"isExported": true
+											},
 											"type": {
 												"type": "intrinsic",
 												"name": "string"
@@ -2195,7 +2430,9 @@
 									"name": "info",
 									"kind": 4096,
 									"kindString": "Call signature",
-									"flags": {},
+									"flags": {
+										"isExported": true
+									},
 									"comment": {
 										"shortText": "reports an informational message to the log.\nThe message will actually be reported to the log only if the current\nreporting level is INFO or lower.",
 										"returns": "promise to return the file written to, or undefined\n"
@@ -2206,7 +2443,9 @@
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {},
+											"flags": {
+												"isExported": true
+											},
 											"comment": {
 												"text": "the message to report. If msg is an object literal, a deep inspection will be printed."
 											},
@@ -2220,7 +2459,9 @@
 											"name": "log2File",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {},
+											"flags": {
+												"isExported": true
+											},
 											"type": {
 												"type": "intrinsic",
 												"name": "boolean"
@@ -2230,13 +2471,13 @@
 									],
 									"type": {
 										"type": "reference",
-										"name": "Promise",
 										"typeArguments": [
 											{
 												"type": "intrinsic",
 												"name": "string"
 											}
-										]
+										],
+										"name": "Promise"
 									}
 								}
 							],
@@ -2263,7 +2504,9 @@
 									"name": "inspect",
 									"kind": 4096,
 									"kindString": "Call signature",
-									"flags": {},
+									"flags": {
+										"isExported": true
+									},
 									"comment": {
 										"shortText": "Usage: `log.info(log.inspect(struct, 1))`\nThe call returns a raw formatted text string, or a HTML formatted string if `colors` is defined.",
 										"returns": "a string representation of an object literal, similar to the Node `util.inspect` call\n"
@@ -2274,7 +2517,9 @@
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {},
+											"flags": {
+												"isExported": true
+											},
 											"type": {
 												"type": "intrinsic",
 												"name": "any"
@@ -2285,7 +2530,9 @@
 											"name": "depth",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {},
+											"flags": {
+												"isExported": true
+											},
 											"comment": {
 												"text": "depth of recursion, defaults to 3. Use `null` for infinite depth"
 											},
@@ -2300,7 +2547,9 @@
 											"name": "indent",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {},
+											"flags": {
+												"isExported": true
+											},
 											"comment": {
 												"text": "the indent string to use, will accumulate for each level of indentation, defaults to four spaces."
 											},
@@ -2315,7 +2564,9 @@
 											"name": "colors",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {},
+											"flags": {
+												"isExported": true
+											},
 											"comment": {
 												"text": "an array of `css` color values: if defined, the output will be `HTML` formatted, with indentation\nlevels indicated by colors in ascending sequence from the array, restarting at index 0 if the array is shorter than the maximum indentation level.\n`colors` defaults to the static `COLORS` array. To disable, provide a value of `null`."
 											},
@@ -2358,7 +2609,9 @@
 									"name": "level",
 									"kind": 4096,
 									"kindString": "Call signature",
-									"flags": {},
+									"flags": {
+										"isExported": true
+									},
 									"comment": {
 										"shortText": "sets the reporting level according to `newLevel`.\nValid values are {@link log.DEBUG log.DEBUG}, {@link log.INFO log.INFO},\n{@link log.WARN log.WARN}, {@link log.ERROR log.ERROR}, or `null`.\nSubsequent reporting calls will be filtered such that only calls with an importance\nat least the same as `newLevel` will be written to the log.<br>",
 										"text": "By default, `newLevel` sets the reporting level for the module only, and takes precedence over\nany global level setting. Providing `null` as level value passes precedence back to the global setting.\nThis allows for simple per-module settings, for example in debugging scenarios.",
@@ -2371,6 +2624,7 @@
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {
+												"isExported": true,
 												"isOptional": true
 											},
 											"comment": {
@@ -2387,6 +2641,7 @@
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {
+												"isExported": true,
 												"isOptional": true
 											},
 											"comment": {
@@ -2427,7 +2682,9 @@
 									"name": "makeMessage",
 									"kind": 4096,
 									"kindString": "Call signature",
-									"flags": {},
+									"flags": {
+										"isExported": true
+									},
 									"comment": {
 										"shortText": "Creates the core format of the reported message. This method is\ncalled within `out` to allow for format extensions of the message printed,\ne.g. by color codes."
 									},
@@ -2437,7 +2694,9 @@
 											"name": "line",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {},
+											"flags": {
+												"isExported": true
+											},
 											"type": {
 												"type": "intrinsic",
 												"name": "string"
@@ -2448,7 +2707,9 @@
 											"name": "lvl",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {},
+											"flags": {
+												"isExported": true
+											},
 											"type": {
 												"type": "intrinsic",
 												"name": "string"
@@ -2459,7 +2720,9 @@
 											"name": "dateStr",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {},
+											"flags": {
+												"isExported": true
+											},
 											"type": {
 												"type": "intrinsic",
 												"name": "string"
@@ -2470,7 +2733,9 @@
 											"name": "desc",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {},
+											"flags": {
+												"isExported": true
+											},
 											"type": {
 												"type": "intrinsic",
 												"name": "string"
@@ -2506,7 +2771,9 @@
 									"name": "out",
 									"kind": 4096,
 									"kindString": "Call signature",
-									"flags": {},
+									"flags": {
+										"isExported": true
+									},
 									"comment": {
 										"shortText": "reports an error message to the log.\nThe message will be reported to the log if `lvl` meets or exceeds the current reporting level.",
 										"returns": "promise to return the message written\n"
@@ -2517,7 +2784,9 @@
 											"name": "lvl",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {},
+											"flags": {
+												"isExported": true
+											},
 											"comment": {
 												"text": "the reporting level of `msg`"
 											},
@@ -2531,7 +2800,9 @@
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {},
+											"flags": {
+												"isExported": true
+											},
 											"comment": {
 												"text": "the message to report. If msg is an object literal, a deep inspection will be printed."
 											},
@@ -2543,13 +2814,13 @@
 									],
 									"type": {
 										"type": "reference",
-										"name": "Promise",
 										"typeArguments": [
 											{
 												"type": "intrinsic",
 												"name": "string"
 											}
-										]
+										],
+										"name": "Promise"
 									}
 								}
 							],
@@ -2576,7 +2847,9 @@
 									"name": "prefix",
 									"kind": 4096,
 									"kindString": "Call signature",
-									"flags": {},
+									"flags": {
+										"isExported": true
+									},
 									"comment": {
 										"shortText": "defines a prefix to be printed for each call to a log function.",
 										"returns": "the new prefix\n"
@@ -2588,6 +2861,7 @@
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {
+												"isExported": true,
 												"isOptional": true
 											},
 											"comment": {
@@ -2628,7 +2902,9 @@
 									"name": "warn",
 									"kind": 4096,
 									"kindString": "Call signature",
-									"flags": {},
+									"flags": {
+										"isExported": true
+									},
 									"comment": {
 										"shortText": "reports an warning message to the log.\nThe message will actually be reported to the log only if the current\nreporting level is WARN or lower.",
 										"returns": "promise to return the file written to, or undefined\n"
@@ -2639,7 +2915,9 @@
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {},
+											"flags": {
+												"isExported": true
+											},
 											"comment": {
 												"text": "the message to report. If msg is an object literal, a deep inspection will be printed."
 											},
@@ -2653,7 +2931,9 @@
 											"name": "log2File",
 											"kind": 32768,
 											"kindString": "Parameter",
-											"flags": {},
+											"flags": {
+												"isExported": true
+											},
 											"type": {
 												"type": "intrinsic",
 												"name": "boolean"
@@ -2663,13 +2943,13 @@
 									],
 									"type": {
 										"type": "reference",
-										"name": "Promise",
 										"typeArguments": [
 											{
 												"type": "intrinsic",
 												"name": "string"
 											}
-										]
+										],
+										"name": "Promise"
 									}
 								}
 							],
@@ -2810,7 +3090,7 @@
 												"type": "intrinsic",
 												"name": "string"
 											},
-											"defaultValue": " Log.ERROR"
+											"defaultValue": "Log.ERROR"
 										}
 									],
 									"groups": [
@@ -3046,7 +3326,7 @@
 							"name": "string"
 						}
 					},
-					"defaultValue": " ['#008', '#080', '#800', '#066', '#660', '#606']"
+					"defaultValue": "['#008', '#080', '#800', '#066', '#660', '#606']"
 				}
 			],
 			"groups": [
@@ -3081,7 +3361,7 @@
 			]
 		},
 		{
-			"id": 161,
+			"id": 170,
 			"name": "\"overview\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -3113,7 +3393,7 @@
 				41,
 				160,
 				81,
-				161
+				170
 			]
 		}
 	]
