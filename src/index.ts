@@ -5,3 +5,4 @@ export { shortCheckSum }    from './Checksum';
 export { date, ms }         from './Date';
 export { round }            from './Number';
 export { Log }              from "./log";
+export *                    from "./Array";
