@@ -14,8 +14,7 @@
 			},
 			"originalName": "/Users/sth1pal/Documents/Development/JavaScript/nodejs/ts6/dev/hsLibs/standalone/hsUtil/src/Array.ts",
 			"comment": {
-				"shortText": "Array extensions.",
-				"text": "##\n"
+				"shortText": "### Array extensions."
 			},
 			"children": [
 				{
@@ -37,7 +36,8 @@
 							},
 							"comment": {
 								"shortText": "takes an `array` of elements of object literal type `<T>`, then sorts out any duplicate elements\nwith respect to a `key`. If `key` is `undefined`,\n### Example: object literals of type `<T>`\n```\nconst Values = [\n   {id: 1, b: 'first element'},\n   {id: 2, b: 'second element'},\n   {id: 3, b: 'third element'},\n   {id: 1, b: 'first element'},\n];",
-								"text": "const u = uniquefy(Values, 'id');\n//=> [{id: 1, b: 'first element'}, {id: 2, b: 'second element'}, {id: 3, b: 'third element'}]\n\n### Example: array of `string` or `number`\n```\nconst Values = [0, 1, 2, 0, 3, 2, 4];\n\nconst u = uniquefy(Values);\n//=> [0, 1, 2, 3, 4]\n```\n@param array an array of elements of type `T`, some of which may be duplicates.\n@param key the field in the element object to use as key. `T[key]` must be a `string` or `number`.\n@return an array containing only unique elements of the original `array`\n"
+								"text": "const u = uniquefy(Values, 'id');\n//=> [{id: 1, b: 'first element'}, {id: 2, b: 'second element'}, {id: 3, b: 'third element'}]\n```\n\n### Example: array of `string` or `number`\n```\nconst Values = [0, 1, 2, 0, 3, 2, 4];\n\nconst u = uniquefy(Values);\n//=> [0, 1, 2, 3, 4]\n```",
+								"returns": "an array containing only unique elements of the original `array`\n"
 							},
 							"typeParameter": [
 								{
@@ -59,6 +59,9 @@
 									"flags": {
 										"isExported": true
 									},
+									"comment": {
+										"text": "an array of elements of type `T`, some of which may be duplicates."
+									},
 									"type": {
 										"type": "array",
 										"elementType": {
@@ -75,6 +78,9 @@
 									"flags": {
 										"isExported": true,
 										"isOptional": true
+									},
+									"comment": {
+										"text": "the field in the element object to use as key. `T[key]` must be a `string` or `number`."
 									},
 									"type": {
 										"type": "union",

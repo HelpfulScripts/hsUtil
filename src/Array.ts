@@ -1,7 +1,6 @@
 /**
- * Array extensions.
+ * ### Array extensions.
  * 
- * ## 
  */
 
 /**
@@ -18,6 +17,7 @@
  * 
  * const u = uniquefy(Values, 'id');
  * //=> [{id: 1, b: 'first element'}, {id: 2, b: 'second element'}, {id: 3, b: 'third element'}]
+ * ```
  * 
  * ### Example: array of `string` or `number`
  * ```
