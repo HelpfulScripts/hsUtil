@@ -9,7 +9,7 @@ Helpful Scripts utility functions for use in both browser and `node` environment
 [![docs](https://img.shields.io/badge/hsDocs-hsUtil-blue.svg)](https://helpfulscripts.github.io/hsUtil/#!/api/hsUtil/0)
 [![Build Status](https://travis-ci.org/HelpfulScripts/hsUtil.svg?branch=master)](https://travis-ci.org/HelpfulScripts/hsUtil)
 [![Dependencies Status](https://david-dm.org/helpfulscripts/hsutil.svg)](https://david-dm.org/helpfulscripts/hsutil)
-[![Coverage Status](https://coveralls.io/repos/github/HelpfulScripts/hsUtil/badge.svg)](https://coveralls.io/github/HelpfulScripts/hsUtil)
+[![codecov](https://codecov.io/gh/HelpfulScripts/hsUtil/branch/master/graph/badge.svg)](https://codecov.io/gh/HelpfulScripts/hsUtil)
 [![Known Vulnerabilities](https://snyk.io/test/github/HelpfulScripts/hsUtil/badge.svg?targetFile=package.json)](https://snyk.io/test/github/HelpfulScripts/hsUtil?targetFile=package.json)
 [![NPM License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://www.npmjs.com/package/hsutil) 
 

@@ -5,7 +5,7 @@
 
 /**
  * takes an `array` of elements of object literal type `<T>`, then sorts out any duplicate elements 
- * with respect to a `key`. If `key` is `undefined`, 
+ * with respect to a `key`. For an `array` od primitive type (`string`, `number`), `key` is ignored. 
  * ### Example: object literals of type `<T>`
  * ```
  * const Values = [
