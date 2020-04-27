@@ -170,7 +170,7 @@ export class Log {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the file written to, or undefined
      */
-    public async debug(msg:any, log2File=true):Promise<string> { return await this.out(Log.DEBUG, msg); }
+    public debug(msg:any):string { return this.out(Log.DEBUG, msg); }
 
     /**
      * reports an informational message to the log. 
@@ -180,7 +180,17 @@ export class Log {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the file written to, or undefined
      */
-    public async info(msg:any, log2File=true):Promise<string> { return await this.out(Log.INFO, msg); }
+    public progress(msg:any):string { return this.out(Log.INFO, msg, ); }
+
+    /**
+     * reports an informational message to the log. 
+     * The message will actually be reported to the log only if the current 
+     * reporting level is INFO or lower.
+     * @param msg the message to report. If msg is an object literal, a deep inspection will be printed.
+     * @param log optional flag to enable/suppress logging to file. Defaults to `true`
+     * @return promise to return the file written to, or undefined
+     */
+    public info(msg:any):string { return this.out(Log.INFO, msg); }
 
     /**
      * reports an warning message to the log. 
@@ -190,7 +200,7 @@ export class Log {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the file written to, or undefined
      */
-    public async warn(msg:any, log2File=true):Promise<string> { return await this.out(Log.WARN, msg); }
+    public warn(msg:any):string { return this.out(Log.WARN, msg); }
 
     /**
      * reports an error message to the log. 
@@ -199,13 +209,13 @@ export class Log {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the file written to, or undefined
      */
-    public async error(msg:any, log2File=true):Promise<string> { 
+    public error(msg:any):string { 
         if (msg.message) { // special treatment for Errors
-            await this.out(Log.ERROR, msg.message);
-            await this.out(Log.ERROR, msg.stack);
+            this.out(Log.ERROR, msg.message);
+            this.out(Log.ERROR, msg.stack);
             return msg.message;
         } else {
-            return await this.out(Log.ERROR, msg); 
+            return this.out(Log.ERROR, msg); 
         } 
     }
 
@@ -217,7 +227,7 @@ export class Log {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the message written
      */
-    protected async out(lvl:string, msg:any): Promise<string> {	
+    protected out(lvl:string, msg:any): string {	
         let desc:LevelDesc = Log.levels[lvl];
         const filterLevel = this.reportLevel || Log.globalLevel;
         if (desc.importance >= filterLevel.importance) {
@@ -226,7 +236,7 @@ export class Log {
             const logLine = this.makeMessage(line, lvl, dateStr, desc.desc);
             console.log(logLine);
             if (msg && msg.stack) { console.log(msg.stack); }
-            return Promise.resolve(line);
+            return line;
         }
         return undefined;
     }

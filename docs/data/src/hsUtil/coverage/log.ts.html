@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">95.56% </span>
+        <span class="strong">94.32% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>86/90</span>
+        <span class='fraction'>83/88</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">94.2% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>65/69</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">94.12% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>16/17</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">94.52% </span>
-        <span class="quiet">Branches</span>
-        <span class='fraction'>69/73</span>
-      </div>
-      <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
-        <span class="quiet">Functions</span>
-        <span class='fraction'>19/19</span>
-      </div>
-      <div class='fl pad1y space-right2'>
-        <span class="strong">95.83% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>69/72</span>
+        <span class='fraction'>69/73</span>
       </div>
     </div>
     <p class="quiet">
@@ -369,7 +369,17 @@
 <a name='L321'></a><a href='#L321'>321</a>
 <a name='L322'></a><a href='#L322'>322</a>
 <a name='L323'></a><a href='#L323'>323</a>
-<a name='L324'></a><a href='#L324'>324</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L324'></a><a href='#L324'>324</a>
+<a name='L325'></a><a href='#L325'>325</a>
+<a name='L326'></a><a href='#L326'>326</a>
+<a name='L327'></a><a href='#L327'>327</a>
+<a name='L328'></a><a href='#L328'>328</a>
+<a name='L329'></a><a href='#L329'>329</a>
+<a name='L330'></a><a href='#L330'>330</a>
+<a name='L331'></a><a href='#L331'>331</a>
+<a name='L332'></a><a href='#L332'>332</a>
+<a name='L333'></a><a href='#L333'>333</a>
+<a name='L334'></a><a href='#L334'>334</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -542,6 +552,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -864,7 +884,7 @@ export class Log {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the file written to, or undefined
      */
-    public async debug(msg:any, log2File=true):Promise&lt;string&gt; { return await this.out(Log.DEBUG, msg); }
+    public debug(msg:any):string { return this.out(Log.DEBUG, msg); }
 &nbsp;
     /**
      * reports an informational message to the log. 
@@ -874,7 +894,17 @@ export class Log {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the file written to, or undefined
      */
-    public async info(msg:any, log2File=true):Promise&lt;string&gt; { return await this.out(Log.INFO, msg); }
+    public <span class="fstat-no" title="function not covered" >progress(</span>msg:any):string { <span class="cstat-no" title="statement not covered" >return this.out(Log.INFO, msg, ); </span>}
+&nbsp;
+    /**
+     * reports an informational message to the log. 
+     * The message will actually be reported to the log only if the current 
+     * reporting level is INFO or lower.
+     * @param msg the message to report. If msg is an object literal, a deep inspection will be printed.
+     * @param log optional flag to enable/suppress logging to file. Defaults to `true`
+     * @return promise to return the file written to, or undefined
+     */
+    public info(msg:any):string { return this.out(Log.INFO, msg); }
 &nbsp;
     /**
      * reports an warning message to the log. 
@@ -884,7 +914,7 @@ export class Log {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the file written to, or undefined
      */
-    public async warn(msg:any, log2File=true):Promise&lt;string&gt; { return await this.out(Log.WARN, msg); }
+    public warn(msg:any):string { return this.out(Log.WARN, msg); }
 &nbsp;
     /**
      * reports an error message to the log. 
@@ -893,13 +923,13 @@ export class Log {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the file written to, or undefined
      */
-    public async error(msg:any, log2File=true):Promise&lt;string&gt; { 
+    public error(msg:any):string { 
         <span class="missing-if-branch" title="if path not taken" >I</span>if (msg.message) { // special treatment for Errors
-<span class="cstat-no" title="statement not covered" >            await this.out(Log.ERROR, msg.message);</span>
-<span class="cstat-no" title="statement not covered" >            await this.out(Log.ERROR, msg.stack);</span>
+<span class="cstat-no" title="statement not covered" >            this.out(Log.ERROR, msg.message);</span>
+<span class="cstat-no" title="statement not covered" >            this.out(Log.ERROR, msg.stack);</span>
 <span class="cstat-no" title="statement not covered" >            return msg.message;</span>
         } else {
-            return await this.out(Log.ERROR, msg); 
+            return this.out(Log.ERROR, msg); 
         } 
     }
 &nbsp;
@@ -911,7 +941,7 @@ export class Log {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the message written
      */
-    protected async out(lvl:string, msg:any): Promise&lt;string&gt; {	
+    protected out(lvl:string, msg:any): string {	
         let desc:LevelDesc = Log.levels[lvl];
         const filterLevel = this.reportLevel || Log.globalLevel;
         if (desc.importance &gt;= filterLevel.importance) {
@@ -920,7 +950,7 @@ export class Log {
             const logLine = this.makeMessage(line, lvl, dateStr, desc.desc);
             console.log(logLine);
             <span class="missing-if-branch" title="if path not taken" >I</span>if (msg &amp;&amp; msg.stack) { <span class="cstat-no" title="statement not covered" >console.log(msg.stack); </span>}
-            return Promise.resolve(line);
+            return line;
         }
         return undefined;
     }

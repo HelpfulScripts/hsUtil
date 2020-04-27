@@ -61,7 +61,7 @@ export class Pace {
     private beingCalled     = 0;  // registered functiuons that have been called , but have not resolved yet.
 
     /**
-     * @param delay the minimum number of milliseconds between executions of 
+     * @param pace the minimum number of milliseconds between executions of 
      * two registered functions; defaults to 100;
      * @param maxConcurrent the maximum number of concurrent execution calls; defaults to -1 (no limit)
      */

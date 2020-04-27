@@ -37,32 +37,29 @@ describe('log', () => {
     );
     
     describe('reporting functions', () => {
-        it('should print default info', () =>
-            log.info("global").then(() => { 
-                expect(log.level()).toBe(Log.INFO);
-                expect(gMsg).toMatch(/INFO.*global/); 
-            }) 
-        );
+        it('should print default info', () => {
+            log.info("global");
+            expect(log.level()).toBe(Log.INFO);
+            expect(gMsg).toMatch(/INFO.*global/); 
+        });
         
-        it('should print info', () =>
-            log.info("yes").then(() => { 
-                expect(log.level()).toBe(Log.INFO);
-                expect(gMsg).toMatch(/INFO.*yes/); 
-            }) 
-        );
+        it('should print info', () => {
+            log.info("yes");
+            expect(log.level()).toBe(Log.INFO);
+            expect(gMsg).toMatch(/INFO.*yes/); 
+        });
         
-        it('should print warning', () => 
-            log.warn("alert").then(() => { 
-                expect(log.level()).toBe(Log.INFO);
-                expect(gMsg).toMatch(/WARN.*alert/);  
-            })
-        );
+        it('should print warning', () => {
+            log.warn("alert"); 
+            expect(log.level()).toBe(Log.INFO);
+            expect(gMsg).toMatch(/WARN.*alert/);  
+
+        });
         
         it('should not print debug at INFO level', () => {
             setLevel(Log.INFO);
-            return log.debug('yes').then(() => 
-                expect(gMsg).toBe(undefined)
-            );
+            log.debug('yes');
+            expect(gMsg).toBe(undefined);
         });
         
         it('should set DEBUG level', () => {
