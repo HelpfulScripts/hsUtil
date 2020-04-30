@@ -234,7 +234,8 @@ export class Log {
             const dateStr = date(Log.dateFormat);
             let line = (typeof msg === 'string')? msg : this.inspect(msg, 0);
             const logLine = this.makeMessage(line, lvl, dateStr, desc.desc);
-            console.log(logLine);
+            if (logLine.slice(-1)==='\r') { process.stdout.write(logLine); }
+            else { console.log(logLine); }
             if (msg && msg.stack) { console.log(msg.stack); }
             return line;
         }
