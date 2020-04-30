@@ -25,6 +25,17 @@ export function timeout(ms:number):Promise<void> {
  *    .then(...)
  *    .catch(...)
  * ```
+ * or 
+ * ```
+ * try {
+ *    await <PromiseLike>
+ *    ...
+ *    await delay(10)
+ *    ...
+ * } catch(e) {
+ *    ...
+ * }
+ * ```
  * **Usage 2:** an initial delay
  * ```
  * delay(10)()
@@ -54,11 +65,16 @@ export function delay(ms:number)   {
  * ```
  */
 export class Pace {
-    private maxConcurrent   = -1;   // max number of concurrent requests being called
-    private pace:number;      // the pace of calls in ms
-    private waitUntil       = 0;  // the earliest time for the next call
-    private waitCount       = 0;  // number of calls currently in queue waiting
-    private beingCalled     = 0;  // registered functiuons that have been called , but have not resolved yet.
+    /** max number of concurrent requests being called */
+    private maxConcurrent   = -1;
+    /** the pace of calls in ms */
+    private pace            = 0;      
+    /** the earliest time for the next call */
+    private waitUntil       = 0;  
+    /** number of calls currently waiting in queue */
+    private waiting         = 0;  
+    /** functions that have been called, but have not resolved yet. */
+    private started         = 0;  
 
     /**
      * @param pace the minimum number of milliseconds between executions of 
@@ -70,8 +86,14 @@ export class Pace {
         this.maxConcurrent = maxConcurrent;
     }
 
-    getWaitCount()    { return this.waitCount; }
-    getCallingCount() { return this.beingCalled; }
+    /** the pace of calls in ms */
+    setPace(ms:number):void { this.pace = ms; }
+    /** max number of concurrent requests being called */
+    setMaxConcurrent(maxConcurrent:number):void { this.maxConcurrent = maxConcurrent; }
+    /** number of functions currently waiting in queue */
+    inQueue():number    { return this.waiting; }
+    /** functions that have been called, but have not resolved yet. */
+    inProgress():number { return this.started; }
 
     /**
      * adds the function to the queue. After an appropriate time has passed, 
@@ -82,24 +104,19 @@ export class Pace {
     async add(fn: (msSinceAdding:number) => any):Promise<any> {
         const addTime = Date.now();
         if (this.waitUntil < addTime) { this.waitUntil = addTime; }
-        const diff = this.waitUntil - addTime;
+        const diff = Math.max(0, this.waitUntil - addTime);
         this.waitUntil += this.pace + 5;
-        this.waitCount++;
+        this.waiting++;
         await delay(diff)();
         await new Promise(resolve => {
-            const waitLoop = () => {
-                if (this.maxConcurrent < 0 || this.beingCalled < this.maxConcurrent) {
-                    resolve();
-                } else {
-                    setTimeout(waitLoop, 10);
-                }
-            };
+            const waitLoop = () => (this.maxConcurrent < 0 || this.started < this.maxConcurrent)?
+                    resolve() : setTimeout(waitLoop, 10);
             waitLoop();
         });
-        this.waitCount--;
-        this.beingCalled++;
+        this.waiting--;
+        this.started++;
         const ret = await fn(Date.now()-addTime);
-        this.beingCalled--;
+        this.started--;
         return ret;
     }
 }

@@ -116,11 +116,11 @@ describe('Promise', () => {
             })
         );
     
-        test(`calling count`, () => {
-            expect(queue.getCallingCount()).toBe(0);
+        test(`in progress`, () => {
+            expect(queue.inProgress()).toBe(0);
         });
-        test(`wait count`, () => {
-            expect(queue.getWaitCount()).toBe(calls.length);
+        test(`waiting`, () => {
+            expect(queue.inQueue()).toBe(calls.length);
         });
         test(`check results`, () => {
             expect.assertions(4*calls.length);

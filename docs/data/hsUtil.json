@@ -851,7 +851,7 @@
 			]
 		},
 		{
-			"id": 82,
+			"id": 88,
 			"name": "\"Number\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -864,7 +864,7 @@
 			},
 			"children": [
 				{
-					"id": 83,
+					"id": 89,
 					"name": "round",
 					"kind": 64,
 					"kindString": "Function",
@@ -873,7 +873,7 @@
 					},
 					"signatures": [
 						{
-							"id": 84,
+							"id": 90,
 							"name": "round",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -885,7 +885,7 @@
 							},
 							"parameters": [
 								{
-									"id": 85,
+									"id": 91,
 									"name": "n",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -901,7 +901,7 @@
 									}
 								},
 								{
-									"id": 86,
+									"id": 92,
 									"name": "d",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -938,7 +938,7 @@
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						83
+						89
 					]
 				}
 			],
@@ -1045,32 +1045,10 @@
 							"sources": [
 								{
 									"fileName": "TimedPromises.ts",
-									"line": 61,
+									"line": 77,
 									"character": 32
 								}
 							]
-						},
-						{
-							"id": 53,
-							"name": "beingCalled",
-							"kind": 1024,
-							"kindString": "Property",
-							"flags": {
-								"isPrivate": true,
-								"isExported": true
-							},
-							"sources": [
-								{
-									"fileName": "TimedPromises.ts",
-									"line": 61,
-									"character": 23
-								}
-							],
-							"type": {
-								"type": "intrinsic",
-								"name": "number"
-							},
-							"defaultValue": "0"
 						},
 						{
 							"id": 49,
@@ -1081,10 +1059,13 @@
 								"isPrivate": true,
 								"isExported": true
 							},
+							"comment": {
+								"shortText": "max number of concurrent requests being called"
+							},
 							"sources": [
 								{
 									"fileName": "TimedPromises.ts",
-									"line": 57,
+									"line": 69,
 									"character": 25
 								}
 							],
@@ -1103,32 +1084,39 @@
 								"isPrivate": true,
 								"isExported": true
 							},
+							"comment": {
+								"shortText": "the pace of calls in ms"
+							},
 							"sources": [
 								{
 									"fileName": "TimedPromises.ts",
-									"line": 58,
+									"line": 71,
 									"character": 16
 								}
 							],
 							"type": {
 								"type": "intrinsic",
 								"name": "number"
-							}
+							},
+							"defaultValue": "0"
 						},
 						{
-							"id": 52,
-							"name": "waitCount",
+							"id": 53,
+							"name": "started",
 							"kind": 1024,
 							"kindString": "Property",
 							"flags": {
 								"isPrivate": true,
 								"isExported": true
 							},
+							"comment": {
+								"shortText": "functions that have been called, but have not resolved yet."
+							},
 							"sources": [
 								{
 									"fileName": "TimedPromises.ts",
-									"line": 60,
-									"character": 21
+									"line": 77,
+									"character": 19
 								}
 							],
 							"type": {
@@ -1146,10 +1134,13 @@
 								"isPrivate": true,
 								"isExported": true
 							},
+							"comment": {
+								"shortText": "the earliest time for the next call"
+							},
 							"sources": [
 								{
 									"fileName": "TimedPromises.ts",
-									"line": 59,
+									"line": 73,
 									"character": 21
 								}
 							],
@@ -1160,7 +1151,32 @@
 							"defaultValue": "0"
 						},
 						{
-							"id": 62,
+							"id": 52,
+							"name": "waiting",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isPrivate": true,
+								"isExported": true
+							},
+							"comment": {
+								"shortText": "number of calls currently waiting in queue"
+							},
+							"sources": [
+								{
+									"fileName": "TimedPromises.ts",
+									"line": 75,
+									"character": 19
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "number"
+							},
+							"defaultValue": "0"
+						},
+						{
+							"id": 68,
 							"name": "add",
 							"kind": 2048,
 							"kindString": "Method",
@@ -1169,7 +1185,7 @@
 							},
 							"signatures": [
 								{
-									"id": 63,
+									"id": 69,
 									"name": "add",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -1182,7 +1198,7 @@
 									},
 									"parameters": [
 										{
-											"id": 64,
+											"id": 70,
 											"name": "fn",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -1193,7 +1209,7 @@
 											"type": {
 												"type": "reflection",
 												"declaration": {
-													"id": 65,
+													"id": 71,
 													"name": "__type",
 													"kind": 65536,
 													"kindString": "Type literal",
@@ -1202,7 +1218,7 @@
 													},
 													"signatures": [
 														{
-															"id": 66,
+															"id": 72,
 															"name": "__call",
 															"kind": 4096,
 															"kindString": "Call signature",
@@ -1211,7 +1227,7 @@
 															},
 															"parameters": [
 																{
-																	"id": 67,
+																	"id": 73,
 																	"name": "msSinceAdding",
 																	"kind": 32768,
 																	"kindString": "Parameter",
@@ -1233,7 +1249,7 @@
 													"sources": [
 														{
 															"fileName": "TimedPromises.ts",
-															"line": 82,
+															"line": 104,
 															"character": 17
 														}
 													]
@@ -1256,14 +1272,14 @@
 							"sources": [
 								{
 									"fileName": "TimedPromises.ts",
-									"line": 82,
+									"line": 104,
 									"character": 13
 								}
 							]
 						},
 						{
-							"id": 60,
-							"name": "getCallingCount",
+							"id": 66,
+							"name": "inProgress",
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
@@ -1271,12 +1287,15 @@
 							},
 							"signatures": [
 								{
-									"id": 61,
-									"name": "getCallingCount",
+									"id": 67,
+									"name": "inProgress",
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {
 										"isExported": true
+									},
+									"comment": {
+										"shortText": "functions that have been called, but have not resolved yet."
 									},
 									"type": {
 										"type": "intrinsic",
@@ -1287,14 +1306,97 @@
 							"sources": [
 								{
 									"fileName": "TimedPromises.ts",
-									"line": 74,
-									"character": 19
+									"line": 96,
+									"character": 14
+								}
+							]
+						},
+						{
+							"id": 64,
+							"name": "inQueue",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 65,
+									"name": "inQueue",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {
+										"isExported": true
+									},
+									"comment": {
+										"shortText": "number of functions currently waiting in queue"
+									},
+									"type": {
+										"type": "intrinsic",
+										"name": "number"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "TimedPromises.ts",
+									"line": 94,
+									"character": 11
+								}
+							]
+						},
+						{
+							"id": 61,
+							"name": "setMaxConcurrent",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 62,
+									"name": "setMaxConcurrent",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {
+										"isExported": true
+									},
+									"comment": {
+										"shortText": "max number of concurrent requests being called"
+									},
+									"parameters": [
+										{
+											"id": 63,
+											"name": "maxConcurrent",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {
+												"isExported": true
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "number"
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "TimedPromises.ts",
+									"line": 92,
+									"character": 20
 								}
 							]
 						},
 						{
 							"id": 58,
-							"name": "getWaitCount",
+							"name": "setPace",
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
@@ -1303,23 +1405,41 @@
 							"signatures": [
 								{
 									"id": 59,
-									"name": "getWaitCount",
+									"name": "setPace",
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {
 										"isExported": true
 									},
+									"comment": {
+										"shortText": "the pace of calls in ms"
+									},
+									"parameters": [
+										{
+											"id": 60,
+											"name": "ms",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {
+												"isExported": true
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "number"
+											}
+										}
+									],
 									"type": {
 										"type": "intrinsic",
-										"name": "number"
+										"name": "void"
 									}
 								}
 							],
 							"sources": [
 								{
 									"fileName": "TimedPromises.ts",
-									"line": 73,
-									"character": 16
+									"line": 90,
+									"character": 11
 								}
 							]
 						}
@@ -1336,19 +1456,21 @@
 							"title": "Properties",
 							"kind": 1024,
 							"children": [
-								53,
 								49,
 								50,
-								52,
-								51
+								53,
+								51,
+								52
 							]
 						},
 						{
 							"title": "Methods",
 							"kind": 2048,
 							"children": [
-								62,
-								60,
+								68,
+								66,
+								64,
+								61,
 								58
 							]
 						}
@@ -1356,13 +1478,13 @@
 					"sources": [
 						{
 							"fileName": "TimedPromises.ts",
-							"line": 56,
+							"line": 67,
 							"character": 17
 						}
 					]
 				},
 				{
-					"id": 71,
+					"id": 77,
 					"name": "delay",
 					"kind": 64,
 					"kindString": "Function",
@@ -1371,7 +1493,7 @@
 					},
 					"signatures": [
 						{
-							"id": 72,
+							"id": 78,
 							"name": "delay",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -1383,13 +1505,13 @@
 								"tags": [
 									{
 										"tag": "description",
-										"text": "delays a promise, passing the parameter\nreceived from the calling promise down to the resolving promise.\n\n**Usage 1:** a delay within the `then` chain:\n```\n<PromiseLike>\n   .then(...)\n   .then(delay(10))\n   .then(...)\n   .catch(...)\n```\n**Usage 2:** an initial delay\n```\ndelay(10)()\n   .then(...)\n   .catch(...)\n```"
+										"text": "delays a promise, passing the parameter\nreceived from the calling promise down to the resolving promise.\n\n**Usage 1:** a delay within the `then` chain:\n```\n<PromiseLike>\n   .then(...)\n   .then(delay(10))\n   .then(...)\n   .catch(...)\n```\nor\n```\ntry {\n   await <PromiseLike>\n   ...\n   await delay(10)\n   ...\n} catch(e) {\n   ...\n}\n```\n**Usage 2:** an initial delay\n```\ndelay(10)()\n   .then(...)\n   .catch(...)\n```"
 									}
 								]
 							},
 							"parameters": [
 								{
-									"id": 73,
+									"id": 79,
 									"name": "ms",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -1411,13 +1533,13 @@
 					"sources": [
 						{
 							"fileName": "TimedPromises.ts",
-							"line": 37,
+							"line": 48,
 							"character": 21
 						}
 					]
 				},
 				{
-					"id": 74,
+					"id": 80,
 					"name": "promiseChain",
 					"kind": 64,
 					"kindString": "Function",
@@ -1426,7 +1548,7 @@
 					},
 					"signatures": [
 						{
-							"id": 75,
+							"id": 81,
 							"name": "promiseChain",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -1439,7 +1561,7 @@
 							},
 							"typeParameter": [
 								{
-									"id": 76,
+									"id": 82,
 									"name": "T",
 									"kind": 131072,
 									"kindString": "Type parameter",
@@ -1450,7 +1572,7 @@
 							],
 							"parameters": [
 								{
-									"id": 77,
+									"id": 83,
 									"name": "tasks",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -1465,7 +1587,7 @@
 										"elementType": {
 											"type": "reflection",
 											"declaration": {
-												"id": 78,
+												"id": 84,
 												"name": "__type",
 												"kind": 65536,
 												"kindString": "Type literal",
@@ -1474,7 +1596,7 @@
 												},
 												"signatures": [
 													{
-														"id": 79,
+														"id": 85,
 														"name": "__call",
 														"kind": 4096,
 														"kindString": "Call signature",
@@ -1483,7 +1605,7 @@
 														},
 														"parameters": [
 															{
-																"id": 80,
+																"id": 86,
 																"name": "results",
 																"kind": 32768,
 																"kindString": "Parameter",
@@ -1523,7 +1645,7 @@
 												"sources": [
 													{
 														"fileName": "TimedPromises.ts",
-														"line": 116,
+														"line": 133,
 														"character": 38
 													}
 												]
@@ -1532,7 +1654,7 @@
 									}
 								},
 								{
-									"id": 81,
+									"id": 87,
 									"name": "initialResult",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -1570,13 +1692,13 @@
 					"sources": [
 						{
 							"fileName": "TimedPromises.ts",
-							"line": 116,
+							"line": 133,
 							"character": 28
 						}
 					]
 				},
 				{
-					"id": 68,
+					"id": 74,
 					"name": "timeout",
 					"kind": 64,
 					"kindString": "Function",
@@ -1585,7 +1707,7 @@
 					},
 					"signatures": [
 						{
-							"id": 69,
+							"id": 75,
 							"name": "timeout",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -1603,7 +1725,7 @@
 							},
 							"parameters": [
 								{
-									"id": 70,
+									"id": 76,
 									"name": "ms",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -1652,9 +1774,9 @@
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						71,
-						74,
-						68
+						77,
+						80,
+						74
 					]
 				}
 			],
@@ -1667,7 +1789,7 @@
 			]
 		},
 		{
-			"id": 165,
+			"id": 171,
 			"name": "\"index\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -1677,17 +1799,17 @@
 			"originalName": "/Users/sth1pal/Documents/Development/JavaScript/nodejs/ts6/dev/hsLibs/standalone/hsUtil/src/index.ts",
 			"children": [
 				{
-					"id": 174,
+					"id": 180,
 					"name": "Log",
 					"kind": 16777216,
 					"kindString": "Reference",
 					"flags": {
 						"isExported": true
 					},
-					"target": 92
+					"target": 98
 				},
 				{
-					"id": 168,
+					"id": 174,
 					"name": "Pace",
 					"kind": 16777216,
 					"kindString": "Reference",
@@ -1697,7 +1819,7 @@
 					"target": 48
 				},
 				{
-					"id": 171,
+					"id": 177,
 					"name": "date",
 					"kind": 16777216,
 					"kindString": "Reference",
@@ -1707,17 +1829,17 @@
 					"target": 18
 				},
 				{
-					"id": 167,
+					"id": 173,
 					"name": "delay",
 					"kind": 16777216,
 					"kindString": "Reference",
 					"flags": {
 						"isExported": true
 					},
-					"target": 71
+					"target": 77
 				},
 				{
-					"id": 172,
+					"id": 178,
 					"name": "ms",
 					"kind": 16777216,
 					"kindString": "Reference",
@@ -1727,27 +1849,27 @@
 					"target": 22
 				},
 				{
-					"id": 169,
+					"id": 175,
 					"name": "promiseChain",
 					"kind": 16777216,
 					"kindString": "Reference",
 					"flags": {
 						"isExported": true
 					},
-					"target": 74
+					"target": 80
 				},
 				{
-					"id": 173,
+					"id": 179,
 					"name": "round",
 					"kind": 16777216,
 					"kindString": "Reference",
 					"flags": {
 						"isExported": true
 					},
-					"target": 83
+					"target": 89
 				},
 				{
-					"id": 170,
+					"id": 176,
 					"name": "shortCheckSum",
 					"kind": 16777216,
 					"kindString": "Reference",
@@ -1757,17 +1879,17 @@
 					"target": 8
 				},
 				{
-					"id": 166,
+					"id": 172,
 					"name": "timeout",
 					"kind": 16777216,
 					"kindString": "Reference",
 					"flags": {
 						"isExported": true
 					},
-					"target": 68
+					"target": 74
 				},
 				{
-					"id": 175,
+					"id": 181,
 					"name": "uniquefy",
 					"kind": 16777216,
 					"kindString": "Reference",
@@ -1782,16 +1904,16 @@
 					"title": "References",
 					"kind": 16777216,
 					"children": [
+						180,
 						174,
-						168,
-						171,
-						167,
-						172,
-						169,
+						177,
 						173,
-						170,
-						166,
-						175
+						178,
+						175,
+						179,
+						176,
+						172,
+						181
 					]
 				}
 			],
@@ -1804,7 +1926,7 @@
 			]
 		},
 		{
-			"id": 87,
+			"id": 93,
 			"name": "\"log\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -1818,7 +1940,7 @@
 			},
 			"children": [
 				{
-					"id": 92,
+					"id": 98,
 					"name": "Log",
 					"kind": 128,
 					"kindString": "Class",
@@ -1830,7 +1952,7 @@
 					},
 					"children": [
 						{
-							"id": 108,
+							"id": 114,
 							"name": "constructor",
 							"kind": 512,
 							"kindString": "Constructor",
@@ -1839,7 +1961,7 @@
 							},
 							"signatures": [
 								{
-									"id": 109,
+									"id": 115,
 									"name": "new Log",
 									"kind": 16384,
 									"kindString": "Constructor signature",
@@ -1848,7 +1970,7 @@
 									},
 									"parameters": [
 										{
-											"id": 110,
+											"id": 116,
 											"name": "prefix",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -1863,7 +1985,7 @@
 									],
 									"type": {
 										"type": "reference",
-										"id": 92,
+										"id": 98,
 										"name": "Log"
 									}
 								}
@@ -1877,7 +1999,7 @@
 							]
 						},
 						{
-							"id": 106,
+							"id": 112,
 							"name": "reportLevel",
 							"kind": 1024,
 							"kindString": "Property",
@@ -1894,13 +2016,13 @@
 							],
 							"type": {
 								"type": "reference",
-								"id": 88,
+								"id": 94,
 								"name": "LevelDesc"
 							},
 							"defaultValue": "<LevelDesc>undefined"
 						},
 						{
-							"id": 107,
+							"id": 113,
 							"name": "reportPrefix",
 							"kind": 1024,
 							"kindString": "Property",
@@ -1922,7 +2044,7 @@
 							"defaultValue": "\"\""
 						},
 						{
-							"id": 95,
+							"id": 101,
 							"name": "DEBUG",
 							"kind": 1024,
 							"kindString": "Property",
@@ -1948,7 +2070,7 @@
 							"defaultValue": "\"DEBUG\""
 						},
 						{
-							"id": 98,
+							"id": 104,
 							"name": "ERROR",
 							"kind": 1024,
 							"kindString": "Property",
@@ -1974,7 +2096,7 @@
 							"defaultValue": "\"ERROR\""
 						},
 						{
-							"id": 96,
+							"id": 102,
 							"name": "INFO",
 							"kind": 1024,
 							"kindString": "Property",
@@ -2000,7 +2122,7 @@
 							"defaultValue": "\"INFO\""
 						},
 						{
-							"id": 97,
+							"id": 103,
 							"name": "WARN",
 							"kind": 1024,
 							"kindString": "Property",
@@ -2026,7 +2148,7 @@
 							"defaultValue": "\"WARN\""
 						},
 						{
-							"id": 94,
+							"id": 100,
 							"name": "dateFormat",
 							"kind": 1024,
 							"kindString": "Property",
@@ -2049,7 +2171,7 @@
 							"defaultValue": "Log.defDateFormat"
 						},
 						{
-							"id": 93,
+							"id": 99,
 							"name": "defDateFormat",
 							"kind": 1024,
 							"kindString": "Property",
@@ -2075,7 +2197,7 @@
 							"defaultValue": "\"%YYYY%MM%DD %hh:%mm:%ss.%jjj\""
 						},
 						{
-							"id": 105,
+							"id": 111,
 							"name": "globalLevel",
 							"kind": 1024,
 							"kindString": "Property",
@@ -2096,13 +2218,13 @@
 							],
 							"type": {
 								"type": "reference",
-								"id": 88,
+								"id": 94,
 								"name": "LevelDesc"
 							},
 							"defaultValue": "Log.levels[Log.INFO]"
 						},
 						{
-							"id": 104,
+							"id": 110,
 							"name": "log",
 							"kind": 1024,
 							"kindString": "Property",
@@ -2123,13 +2245,13 @@
 							],
 							"type": {
 								"type": "reference",
-								"id": 92,
+								"id": 98,
 								"name": "Log"
 							},
 							"defaultValue": "new Log('')"
 						},
 						{
-							"id": 146,
+							"id": 152,
 							"name": "config",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2139,7 +2261,7 @@
 							},
 							"signatures": [
 								{
-									"id": 147,
+									"id": 153,
 									"name": "config",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2151,7 +2273,7 @@
 									},
 									"parameters": [
 										{
-											"id": 148,
+											"id": 154,
 											"name": "cfg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2164,7 +2286,7 @@
 											"type": {
 												"type": "reflection",
 												"declaration": {
-													"id": 149,
+													"id": 155,
 													"name": "__type",
 													"kind": 65536,
 													"kindString": "Type literal",
@@ -2173,7 +2295,7 @@
 													},
 													"children": [
 														{
-															"id": 150,
+															"id": 156,
 															"name": "colors",
 															"kind": 32,
 															"kindString": "Variable",
@@ -2184,7 +2306,7 @@
 															"sources": [
 																{
 																	"fileName": "log.ts",
-																	"line": 287,
+																	"line": 288,
 																	"character": 29
 																}
 															],
@@ -2194,7 +2316,7 @@
 															}
 														},
 														{
-															"id": 151,
+															"id": 157,
 															"name": "format",
 															"kind": 32,
 															"kindString": "Variable",
@@ -2205,7 +2327,7 @@
 															"sources": [
 																{
 																	"fileName": "log.ts",
-																	"line": 287,
+																	"line": 288,
 																	"character": 46
 																}
 															],
@@ -2215,7 +2337,7 @@
 															}
 														},
 														{
-															"id": 152,
+															"id": 158,
 															"name": "level",
 															"kind": 32,
 															"kindString": "Variable",
@@ -2226,7 +2348,7 @@
 															"sources": [
 																{
 																	"fileName": "log.ts",
-																	"line": 287,
+																	"line": 288,
 																	"character": 61
 																}
 															],
@@ -2241,16 +2363,16 @@
 															"title": "Variables",
 															"kind": 32,
 															"children": [
-																150,
-																151,
-																152
+																156,
+																157,
+																158
 															]
 														}
 													],
 													"sources": [
 														{
 															"fileName": "log.ts",
-															"line": 287,
+															"line": 288,
 															"character": 22
 														}
 													]
@@ -2267,13 +2389,13 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 287,
+									"line": 288,
 									"character": 17
 								}
 							]
 						},
 						{
-							"id": 115,
+							"id": 121,
 							"name": "debug",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2283,7 +2405,7 @@
 							},
 							"signatures": [
 								{
-									"id": 116,
+									"id": 122,
 									"name": "debug",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2296,7 +2418,7 @@
 									},
 									"parameters": [
 										{
-											"id": 117,
+											"id": 123,
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2327,7 +2449,7 @@
 							]
 						},
 						{
-							"id": 127,
+							"id": 133,
 							"name": "error",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2337,7 +2459,7 @@
 							},
 							"signatures": [
 								{
-									"id": 128,
+									"id": 134,
 									"name": "error",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2350,7 +2472,7 @@
 									},
 									"parameters": [
 										{
-											"id": 129,
+											"id": 135,
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2381,7 +2503,7 @@
 							]
 						},
 						{
-							"id": 140,
+							"id": 146,
 							"name": "format",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2391,7 +2513,7 @@
 							},
 							"signatures": [
 								{
-									"id": 141,
+									"id": 147,
 									"name": "format",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2404,7 +2526,7 @@
 									},
 									"parameters": [
 										{
-											"id": 142,
+											"id": 148,
 											"name": "fmtStr",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2430,13 +2552,13 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 263,
+									"line": 264,
 									"character": 17
 								}
 							]
 						},
 						{
-							"id": 159,
+							"id": 165,
 							"name": "getPrePostfix",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2446,7 +2568,7 @@
 							},
 							"signatures": [
 								{
-									"id": 160,
+									"id": 166,
 									"name": "getPrePostfix",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2455,7 +2577,7 @@
 									},
 									"parameters": [
 										{
-											"id": 161,
+											"id": 167,
 											"name": "indent",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2468,7 +2590,7 @@
 											}
 										},
 										{
-											"id": 162,
+											"id": 168,
 											"name": "level",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2481,7 +2603,7 @@
 											}
 										},
 										{
-											"id": 163,
+											"id": 169,
 											"name": "currIndent",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2512,13 +2634,13 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 329,
+									"line": 330,
 									"character": 27
 								}
 							]
 						},
 						{
-							"id": 121,
+							"id": 127,
 							"name": "info",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2528,7 +2650,7 @@
 							},
 							"signatures": [
 								{
-									"id": 122,
+									"id": 128,
 									"name": "info",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2541,7 +2663,7 @@
 									},
 									"parameters": [
 										{
-											"id": 123,
+											"id": 129,
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2572,7 +2694,7 @@
 							]
 						},
 						{
-							"id": 153,
+							"id": 159,
 							"name": "inspect",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2582,7 +2704,7 @@
 							},
 							"signatures": [
 								{
-									"id": 154,
+									"id": 160,
 									"name": "inspect",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2595,7 +2717,7 @@
 									},
 									"parameters": [
 										{
-											"id": 155,
+											"id": 161,
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2608,7 +2730,7 @@
 											}
 										},
 										{
-											"id": 156,
+											"id": 162,
 											"name": "depth",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2625,7 +2747,7 @@
 											"defaultValue": "3"
 										},
 										{
-											"id": 157,
+											"id": 163,
 											"name": "indent",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2642,7 +2764,7 @@
 											"defaultValue": "\"    \""
 										},
 										{
-											"id": 158,
+											"id": 164,
 											"name": "colors",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2671,13 +2793,13 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 303,
+									"line": 304,
 									"character": 18
 								}
 							]
 						},
 						{
-							"id": 111,
+							"id": 117,
 							"name": "level",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2687,7 +2809,7 @@
 							},
 							"signatures": [
 								{
-									"id": 112,
+									"id": 118,
 									"name": "level",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2701,7 +2823,7 @@
 									},
 									"parameters": [
 										{
-											"id": 113,
+											"id": 119,
 											"name": "newLevelSym",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2718,7 +2840,7 @@
 											}
 										},
 										{
-											"id": 114,
+											"id": 120,
 											"name": "setGlobalLevel",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2750,7 +2872,7 @@
 							]
 						},
 						{
-							"id": 134,
+							"id": 140,
 							"name": "makeMessage",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2760,7 +2882,7 @@
 							},
 							"signatures": [
 								{
-									"id": 135,
+									"id": 141,
 									"name": "makeMessage",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2772,7 +2894,7 @@
 									},
 									"parameters": [
 										{
-											"id": 136,
+											"id": 142,
 											"name": "line",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2785,7 +2907,7 @@
 											}
 										},
 										{
-											"id": 137,
+											"id": 143,
 											"name": "lvl",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2798,7 +2920,7 @@
 											}
 										},
 										{
-											"id": 138,
+											"id": 144,
 											"name": "dateStr",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2811,7 +2933,7 @@
 											}
 										},
 										{
-											"id": 139,
+											"id": 145,
 											"name": "desc",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2833,13 +2955,13 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 249,
+									"line": 250,
 									"character": 25
 								}
 							]
 						},
 						{
-							"id": 130,
+							"id": 136,
 							"name": "out",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2849,7 +2971,7 @@
 							},
 							"signatures": [
 								{
-									"id": 131,
+									"id": 137,
 									"name": "out",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2862,7 +2984,7 @@
 									},
 									"parameters": [
 										{
-											"id": 132,
+											"id": 138,
 											"name": "lvl",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2878,7 +3000,7 @@
 											}
 										},
 										{
-											"id": 133,
+											"id": 139,
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2909,7 +3031,7 @@
 							]
 						},
 						{
-							"id": 143,
+							"id": 149,
 							"name": "prefix",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2919,7 +3041,7 @@
 							},
 							"signatures": [
 								{
-									"id": 144,
+									"id": 150,
 									"name": "prefix",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2932,7 +3054,7 @@
 									},
 									"parameters": [
 										{
-											"id": 145,
+											"id": 151,
 											"name": "prf",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2958,13 +3080,13 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 274,
+									"line": 275,
 									"character": 17
 								}
 							]
 						},
 						{
-							"id": 118,
+							"id": 124,
 							"name": "progress",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2974,7 +3096,7 @@
 							},
 							"signatures": [
 								{
-									"id": 119,
+									"id": 125,
 									"name": "progress",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2987,7 +3109,7 @@
 									},
 									"parameters": [
 										{
-											"id": 120,
+											"id": 126,
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -3018,7 +3140,7 @@
 							]
 						},
 						{
-							"id": 124,
+							"id": 130,
 							"name": "warn",
 							"kind": 2048,
 							"kindString": "Method",
@@ -3028,7 +3150,7 @@
 							},
 							"signatures": [
 								{
-									"id": 125,
+									"id": 131,
 									"name": "warn",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -3041,7 +3163,7 @@
 									},
 									"parameters": [
 										{
-											"id": 126,
+											"id": 132,
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -3072,7 +3194,7 @@
 							]
 						},
 						{
-							"id": 99,
+							"id": 105,
 							"name": "levels",
 							"kind": 2097152,
 							"kindString": "Object literal",
@@ -3086,7 +3208,7 @@
 							},
 							"children": [
 								{
-									"id": 100,
+									"id": 106,
 									"name": "__computed",
 									"kind": 2097152,
 									"kindString": "Object literal",
@@ -3095,7 +3217,7 @@
 									},
 									"children": [
 										{
-											"id": 103,
+											"id": 109,
 											"name": "desc",
 											"kind": 32,
 											"kindString": "Variable",
@@ -3131,7 +3253,7 @@
 											"defaultValue": "\"ERROR\""
 										},
 										{
-											"id": 101,
+											"id": 107,
 											"name": "importance",
 											"kind": 32,
 											"kindString": "Variable",
@@ -3167,7 +3289,7 @@
 											"defaultValue": "3"
 										},
 										{
-											"id": 102,
+											"id": 108,
 											"name": "sym",
 											"kind": 32,
 											"kindString": "Variable",
@@ -3208,9 +3330,9 @@
 											"title": "Variables",
 											"kind": 32,
 											"children": [
-												103,
-												101,
-												102
+												109,
+												107,
+												108
 											]
 										}
 									],
@@ -3247,7 +3369,7 @@
 									"title": "Object literals",
 									"kind": 2097152,
 									"children": [
-										100
+										106
 									]
 								}
 							],
@@ -3269,49 +3391,49 @@
 							"title": "Constructors",
 							"kind": 512,
 							"children": [
-								108
+								114
 							]
 						},
 						{
 							"title": "Properties",
 							"kind": 1024,
 							"children": [
-								106,
-								107,
-								95,
-								98,
-								96,
-								97,
-								94,
-								93,
-								105,
-								104
+								112,
+								113,
+								101,
+								104,
+								102,
+								103,
+								100,
+								99,
+								111,
+								110
 							]
 						},
 						{
 							"title": "Methods",
 							"kind": 2048,
 							"children": [
-								146,
-								115,
-								127,
-								140,
-								159,
+								152,
 								121,
-								153,
-								111,
-								134,
-								130,
-								143,
-								118,
-								124
+								133,
+								146,
+								165,
+								127,
+								159,
+								117,
+								140,
+								136,
+								149,
+								124,
+								130
 							]
 						},
 						{
 							"title": "Object literals",
 							"kind": 2097152,
 							"children": [
-								99
+								105
 							]
 						}
 					],
@@ -3324,7 +3446,7 @@
 					]
 				},
 				{
-					"id": 88,
+					"id": 94,
 					"name": "LevelDesc",
 					"kind": 256,
 					"kindString": "Interface",
@@ -3336,7 +3458,7 @@
 					},
 					"children": [
 						{
-							"id": 91,
+							"id": 97,
 							"name": "desc",
 							"kind": 1024,
 							"kindString": "Property",
@@ -3356,7 +3478,7 @@
 							}
 						},
 						{
-							"id": 89,
+							"id": 95,
 							"name": "importance",
 							"kind": 1024,
 							"kindString": "Property",
@@ -3376,7 +3498,7 @@
 							}
 						},
 						{
-							"id": 90,
+							"id": 96,
 							"name": "sym",
 							"kind": 1024,
 							"kindString": "Property",
@@ -3401,9 +3523,9 @@
 							"title": "Properties",
 							"kind": 1024,
 							"children": [
-								91,
-								89,
-								90
+								97,
+								95,
+								96
 							]
 						}
 					],
@@ -3416,7 +3538,7 @@
 					]
 				},
 				{
-					"id": 164,
+					"id": 170,
 					"name": "COLORS",
 					"kind": 32,
 					"kindString": "Variable",
@@ -3445,21 +3567,21 @@
 					"title": "Classes",
 					"kind": 128,
 					"children": [
-						92
+						98
 					]
 				},
 				{
 					"title": "Interfaces",
 					"kind": 256,
 					"children": [
-						88
+						94
 					]
 				},
 				{
 					"title": "Variables",
 					"kind": 32,
 					"children": [
-						164
+						170
 					]
 				}
 			],
@@ -3472,7 +3594,7 @@
 			]
 		},
 		{
-			"id": 176,
+			"id": 182,
 			"name": "\"overview\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -3501,11 +3623,11 @@
 				1,
 				7,
 				11,
-				82,
+				88,
 				47,
-				165,
-				87,
-				176
+				171,
+				93,
+				182
 			]
 		}
 	]

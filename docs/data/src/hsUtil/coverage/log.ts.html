@@ -20,14 +20,14 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">94.32% </span>
+        <span class="strong">93.33% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>83/88</span>
+        <span class='fraction'>84/90</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">94.2% </span>
+        <span class="strong">92.96% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>65/69</span>
+        <span class='fraction'>66/71</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">94.12% </span>
@@ -35,9 +35,9 @@
         <span class='fraction'>16/17</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">94.52% </span>
+        <span class="strong">94.59% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>69/73</span>
+        <span class='fraction'>70/74</span>
       </div>
     </div>
     <p class="quiet">
@@ -379,7 +379,8 @@
 <a name='L331'></a><a href='#L331'>331</a>
 <a name='L332'></a><a href='#L332'>332</a>
 <a name='L333'></a><a href='#L333'>333</a>
-<a name='L334'></a><a href='#L334'>334</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L334'></a><a href='#L334'>334</a>
+<a name='L335'></a><a href='#L335'>335</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -612,6 +613,7 @@
 <span class="cline-any cline-yes">44x</span>
 <span class="cline-any cline-yes">44x</span>
 <span class="cline-any cline-yes">44x</span>
+<span class="cline-any cline-yes">27x</span>
 <span class="cline-any cline-yes">27x</span>
 <span class="cline-any cline-yes">27x</span>
 <span class="cline-any cline-yes">27x</span>
@@ -948,7 +950,8 @@ export class Log {
             const dateStr = date(Log.dateFormat);
             let line = (typeof msg === 'string')? msg : this.inspect(msg, 0);
             const logLine = this.makeMessage(line, lvl, dateStr, desc.desc);
-            console.log(logLine);
+            <span class="missing-if-branch" title="if path not taken" >I</span>if (logLine.slice(-1)==='\r') { <span class="cstat-no" title="statement not covered" >process.stdout.write(logLine); </span>}
+            else { console.log(logLine); }
             <span class="missing-if-branch" title="if path not taken" >I</span>if (msg &amp;&amp; msg.stack) { <span class="cstat-no" title="statement not covered" >console.log(msg.stack); </span>}
             return line;
         }
