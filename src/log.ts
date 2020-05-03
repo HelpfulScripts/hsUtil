@@ -231,6 +231,7 @@ export class Log {
         let desc:LevelDesc = Log.levels[lvl];
         const filterLevel = this.reportLevel || Log.globalLevel;
         if (desc.importance >= filterLevel.importance) {
+            if (typeof msg === 'function') { msg = msg(); }
             const dateStr = date(Log.dateFormat);
             let line = (typeof msg === 'string')? msg : this.inspect(msg, 0);
             const logLine = this.makeMessage(line, lvl, dateStr, desc.desc);
