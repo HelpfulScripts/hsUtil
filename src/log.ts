@@ -6,9 +6,10 @@
  * Settings in `Log.log` are shared across modules
  * ```
  * import { Log } from 'hsutil'; const log = Log.log;
- * log.level(Log.INFO);     // sets the reporting level on the global instance 
- * log.info('by the way:'); // -> 20160817 09:59:08.032 info by the way:
- * log.error('oh dear!');   // -> 20160817 09:59:08.045 error *** oh dear!
+ * log.level(Log.INFO);         // sets the reporting level on the global instance 
+ * log.info('by the way:');     // -> 20160817 09:59:08.032 info by the way:
+ * log.info(()=>'by the way:'); // -> 20160817 09:59:08.032 info by the way:
+ * log.error('oh dear!');       // -> 20160817 09:59:08.045 error *** oh dear!
  * ```
  * 
  * ### Using a local `Log` instance 
@@ -53,6 +54,7 @@
  * returns a string representing a deep inspection of `myObj`.
  * ```
  * log.info(log.inspect(myObj, null));      // prints the structure to inifinite depth
+ * log.info(myObj);                         // prints the structure to first level
  * ``` 
  * 
  * ## Reporting Levels:
@@ -234,7 +236,11 @@ export class Log {
      * reports an error message to the log. 
      * The message will be reported to the log if `lvl` meets or exceeds the current reporting level.
      * @param lvl the reporting level of `msg`
-     * @param msg the message to report. If msg is an object literal, a deep inspection will be printed.
+     * @param msg the message to report. If `msg` is an object literal, a deep inspection will be printed. 
+     * Else if `msg` is a function, it will be called to return the string to print or object to inspect. This 
+     * avoids constructing a potentially expensive message string if the level is below the current reporting level.
+     * Finally, if `msg` is a string, it will be printed with appropriate decoration, e.g. a date string and 
+     * prefix.
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the message written
      */
