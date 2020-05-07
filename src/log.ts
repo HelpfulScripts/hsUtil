@@ -123,9 +123,20 @@ export class Log {
 
     protected reportLevel     = <LevelDesc>undefined;
     protected reportPrefix    = '';
+    protected maxLength       = -1;
 
     constructor(prefix:string) { this.reportPrefix = prefix; }
 
+    /** 
+     * sets the maximum length of a message. 
+     * If messages exceed this length, the middle of the message will be replaced by ellipses (...) such that the 
+     * overall message does not exceed this length
+     * Negative values avoid shortening.
+     * */
+    public set messageLength(max:number) { this.maxLength = max; }
+    
+    /** gets the current maximum length of a message */
+    public get messageLength() { return this.maxLength; }
     
 
     /**
@@ -234,6 +245,9 @@ export class Log {
             if (typeof msg === 'function') { msg = msg(); }
             const dateStr = date(Log.dateFormat);
             let line = (typeof msg === 'string')? msg : this.inspect(msg, 0);
+            if (line.length > this.maxLength && this.maxLength>0) { 
+                line = `${line.slice(0, this.maxLength/2-2)}...${line.slice(-this.maxLength/2+2)}`
+            }
             const logLine = this.makeMessage(line, lvl, dateStr, desc.desc);
             if (logLine.slice(-1)==='\r') { process.stdout.write(logLine); }
             else { console.log(logLine); }

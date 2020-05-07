@@ -94,6 +94,12 @@ describe('log', () => {
             log.error('yes');
             return expect(gMsg).toMatch(/ERROR.*yes/);
         });
+        
+        it('should print long lines', () => {
+            log.messageLength = 50;
+            log.info('farg faega ar faweawg gfWE ewf weG eGERG EGwew Eegw Gerwgw weg EWGwe gEG');
+            return expect(gMsg).toMatch(/log\.jest INFO farg faega ar faweawg g\.\.\.gw Gerwgw weg EWGwe gEG/);
+        });
     });
 
     describe('global levels', () => {
