@@ -87,7 +87,7 @@ describe('log', () => {
         it('should print error for invalid level', () => {
             log.level('BOGUS');
             expect(log.level()).toBe(Log.INFO);
-            return expect(gMsg).toMatch(/ unkown level BOGUS; log level remains INFO/);
+            return expect(gMsg).toMatch(/unkown level BOGUS; log level remains INFO/);
         });
         
         it('should print error', () => {
@@ -98,7 +98,7 @@ describe('log', () => {
         it('should print long lines', () => {
             log.messageLength = 50;
             log.info('farg faega ar faweawg gfWE ewf weG eGERG EGwew Eegw Gerwgw weg EWGwe gEG');
-            return expect(gMsg).toMatch(/log\.jest INFO farg faega ar faweawg g\.\.\.gw Gerwgw weg EWGwe gEG/);
+            return expect(gMsg).toMatch(/farg faega ar faweawg g\.\.\.gw Gerwgw weg EWGwe gEG/);
         });
     });
 
@@ -159,8 +159,8 @@ describe('log', () => {
 
     describe('inspect', () => {
         const t = {a: 'aa', b: {c:()=>'result'}};
-        it('should inspect via out()', async () => {
-            await log.info(t);
+        it('should inspect via out()', () => {
+            log.info(t);
             return expect(gMsg).toMatch(/log.jest INFO\s*?/gm);
 //            return expect(gMsg).toMatch(/log\.jest INFO  {\s*a: 'aa',\s*b: {...}\s*}/gm);
         });
@@ -176,31 +176,37 @@ describe('log', () => {
 
 describe('inspect', () => {
     const t = {a: 'aa', b: {c:()=>'result'}};
-    it('should inspect at level 0 with indents', () => {
-        expect(log.inspect(t, 0, '   ', null)).toEqual("{\n   a: 'aa',\n   b: {...}\n}");
+    it('should inspect at level 0 with indents, implicit', () => {
+        expect(log.inspect(t)).toEqual("{\n   a: 'aa',\n   b: {...}\n}");
+    });
+    it('should inspect at level 0 with indents, explicit', () => {
+        expect(log.inspect(t, {depth:0, indent:'   ', colors:null})).toEqual("{\n   a: 'aa',\n   b: {...}\n}");
     });
     it('should inspect at level 0 with indents and color', () => {
-        expect(log.inspect(t, 0, '   ')).toEqual("{<br><b><span style='color:#008;'>&nbsp;&nbsp;&nbsp;a</span></b>: 'aa',<br><b><span style='color:#008;'>&nbsp;&nbsp;&nbsp;b</span></b>: {...}<br>}");
+        expect(log.inspect(t, {depth:0, indent:'   '})).toEqual("{<br>&nbsp;&nbsp;&nbsp;<b><span style='color:#008;'>a</span></b>: 'aa',<br>&nbsp;&nbsp;&nbsp;<b><span style='color:#008;'>b</span></b>: {...}<br>}");
     });
-    it('should inspect at infinite depth', () => {
-        expect(log.inspect(t, null, '   ', null)).toEqual("{\n   a: 'aa',\n   b: {\n      c: function\n   }\n}");
+    it('should inspect at infinite depth null', () => {
+        expect(log.inspect(t, {depth:null, colors: null})).toEqual("{\n   a: 'aa',\n   b: {\n      c: function\n   }\n}");
+    });
+    it('should inspect at infinite depth -1', () => {
+        expect(log.inspect(t, {depth:-1, colors: null})).toEqual("{\n   a: 'aa',\n   b: {\n      c: function\n   }\n}");
     });
     it('should inspect at infinite depth with indents', () => {
-        expect(log.inspect(t, null, '   ', null)).toEqual("{\n   a: 'aa',\n   b: {\n      c: function\n   }\n}");
+        expect(log.inspect(t, {depth:null, indent:'   ', colors:null})).toEqual("{\n   a: 'aa',\n   b: {\n      c: function\n   }\n}");
     });
     it('should inspect array at infinite depth', () => {
-        expect(log.inspect([t], null, '   ', null)).toEqual("[{\n   a: 'aa',\n   b: {\n      c: function\n   }\n}]");
+        expect(log.inspect([t],{depth:-1, colors:null})).toEqual("[{\n   a: 'aa',\n   b: {\n      c: function\n   }\n}]");
     });
     it('should inspect undefined', () => {
-        expect(log.inspect(undefined, null)).toEqual("undefined");
-        expect(log.inspect([undefined], null)).toEqual("[]");
+        expect(log.inspect(undefined)).toEqual("undefined");
+        expect(log.inspect([undefined])).toEqual("[]");
     });
     it('should inspect null', () => {
-        expect(log.inspect(null, null)).toEqual("null");
-        expect(log.inspect([null], null)).toEqual("[null]");
+        expect(log.inspect(null)).toEqual("null");
+        expect(log.inspect([null])).toEqual("[null]");
     });
     it('should inspect boolean', () => {
-        expect(log.inspect(true, null)).toEqual("true");
+        expect(log.inspect(true)).toEqual("true");
     });
 });    
 

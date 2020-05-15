@@ -1789,7 +1789,7 @@
 			]
 		},
 		{
-			"id": 176,
+			"id": 213,
 			"name": "\"index\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -1799,17 +1799,17 @@
 			"originalName": "/Users/sth1pal/Documents/Development/JavaScript/nodejs/ts6/dev/hsLibs/standalone/hsUtil/src/index.ts",
 			"children": [
 				{
-					"id": 185,
+					"id": 222,
 					"name": "Log",
 					"kind": 16777216,
 					"kindString": "Reference",
 					"flags": {
 						"isExported": true
 					},
-					"target": 98
+					"target": 101
 				},
 				{
-					"id": 179,
+					"id": 216,
 					"name": "Pace",
 					"kind": 16777216,
 					"kindString": "Reference",
@@ -1819,7 +1819,7 @@
 					"target": 48
 				},
 				{
-					"id": 182,
+					"id": 219,
 					"name": "date",
 					"kind": 16777216,
 					"kindString": "Reference",
@@ -1829,7 +1829,7 @@
 					"target": 18
 				},
 				{
-					"id": 178,
+					"id": 215,
 					"name": "delay",
 					"kind": 16777216,
 					"kindString": "Reference",
@@ -1839,7 +1839,7 @@
 					"target": 77
 				},
 				{
-					"id": 183,
+					"id": 220,
 					"name": "ms",
 					"kind": 16777216,
 					"kindString": "Reference",
@@ -1849,7 +1849,7 @@
 					"target": 22
 				},
 				{
-					"id": 180,
+					"id": 217,
 					"name": "promiseChain",
 					"kind": 16777216,
 					"kindString": "Reference",
@@ -1859,7 +1859,7 @@
 					"target": 80
 				},
 				{
-					"id": 184,
+					"id": 221,
 					"name": "round",
 					"kind": 16777216,
 					"kindString": "Reference",
@@ -1869,7 +1869,7 @@
 					"target": 89
 				},
 				{
-					"id": 181,
+					"id": 218,
 					"name": "shortCheckSum",
 					"kind": 16777216,
 					"kindString": "Reference",
@@ -1879,7 +1879,7 @@
 					"target": 8
 				},
 				{
-					"id": 177,
+					"id": 214,
 					"name": "timeout",
 					"kind": 16777216,
 					"kindString": "Reference",
@@ -1889,7 +1889,7 @@
 					"target": 74
 				},
 				{
-					"id": 186,
+					"id": 223,
 					"name": "uniquefy",
 					"kind": 16777216,
 					"kindString": "Reference",
@@ -1904,16 +1904,16 @@
 					"title": "References",
 					"kind": 16777216,
 					"children": [
-						185,
-						179,
-						182,
-						178,
-						183,
-						180,
-						184,
-						181,
-						177,
-						186
+						222,
+						216,
+						219,
+						215,
+						220,
+						217,
+						221,
+						218,
+						214,
+						223
 					]
 				}
 			],
@@ -1940,7 +1940,7 @@
 			},
 			"children": [
 				{
-					"id": 98,
+					"id": 101,
 					"name": "Log",
 					"kind": 128,
 					"kindString": "Class",
@@ -1952,7 +1952,7 @@
 					},
 					"children": [
 						{
-							"id": 115,
+							"id": 120,
 							"name": "constructor",
 							"kind": 512,
 							"kindString": "Constructor",
@@ -1961,7 +1961,7 @@
 							},
 							"signatures": [
 								{
-									"id": 116,
+									"id": 121,
 									"name": "new Log",
 									"kind": 16384,
 									"kindString": "Constructor signature",
@@ -1970,7 +1970,7 @@
 									},
 									"parameters": [
 										{
-											"id": 117,
+											"id": 122,
 											"name": "prefix",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -1985,7 +1985,7 @@
 									],
 									"type": {
 										"type": "reference",
-										"id": 98,
+										"id": 101,
 										"name": "Log"
 									}
 								}
@@ -1993,13 +1993,35 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 128,
+									"line": 171,
 									"character": 35
 								}
 							]
 						},
 						{
-							"id": 114,
+							"id": 119,
+							"name": "colors",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isProtected": true,
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 171,
+									"character": 20
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "boolean"
+							},
+							"defaultValue": "true"
+						},
+						{
+							"id": 118,
 							"name": "maxLength",
 							"kind": 1024,
 							"kindString": "Property",
@@ -2010,7 +2032,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 128,
+									"line": 170,
 									"character": 23
 								}
 							],
@@ -2021,7 +2043,7 @@
 							"defaultValue": "-1"
 						},
 						{
-							"id": 112,
+							"id": 116,
 							"name": "reportLevel",
 							"kind": 1024,
 							"kindString": "Property",
@@ -2032,7 +2054,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 126,
+									"line": 168,
 									"character": 25
 								}
 							],
@@ -2044,7 +2066,7 @@
 							"defaultValue": "<LevelDesc>undefined"
 						},
 						{
-							"id": 113,
+							"id": 117,
 							"name": "reportPrefix",
 							"kind": 1024,
 							"kindString": "Property",
@@ -2055,7 +2077,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 127,
+									"line": 169,
 									"character": 26
 								}
 							],
@@ -2066,7 +2088,7 @@
 							"defaultValue": "\"\""
 						},
 						{
-							"id": 101,
+							"id": 105,
 							"name": "DEBUG",
 							"kind": 1024,
 							"kindString": "Property",
@@ -2081,7 +2103,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 101,
+									"line": 143,
 									"character": 23
 								}
 							],
@@ -2092,7 +2114,7 @@
 							"defaultValue": "\"DEBUG\""
 						},
 						{
-							"id": 104,
+							"id": 108,
 							"name": "ERROR",
 							"kind": 1024,
 							"kindString": "Property",
@@ -2107,7 +2129,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 110,
+									"line": 152,
 									"character": 23
 								}
 							],
@@ -2119,6 +2141,32 @@
 						},
 						{
 							"id": 102,
+							"name": "INDENT_COLORS",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isProtected": true,
+								"isStatic": true,
+								"isExported": true
+							},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 137,
+									"character": 34
+								}
+							],
+							"type": {
+								"type": "array",
+								"elementType": {
+									"type": "intrinsic",
+									"name": "string"
+								}
+							},
+							"defaultValue": "['darkblue', 'darkgreen', 'darkred', 'darkcyan', 'darkyellow', 'darkmagenta']"
+						},
+						{
+							"id": 106,
 							"name": "INFO",
 							"kind": 1024,
 							"kindString": "Property",
@@ -2133,7 +2181,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 104,
+									"line": 146,
 									"character": 22
 								}
 							],
@@ -2144,7 +2192,7 @@
 							"defaultValue": "\"INFO\""
 						},
 						{
-							"id": 103,
+							"id": 107,
 							"name": "WARN",
 							"kind": 1024,
 							"kindString": "Property",
@@ -2159,7 +2207,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 107,
+									"line": 149,
 									"character": 22
 								}
 							],
@@ -2170,7 +2218,7 @@
 							"defaultValue": "\"WARN\""
 						},
 						{
-							"id": 100,
+							"id": 104,
 							"name": "dateFormat",
 							"kind": 1024,
 							"kindString": "Property",
@@ -2182,7 +2230,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 98,
+									"line": 140,
 									"character": 31
 								}
 							],
@@ -2193,7 +2241,7 @@
 							"defaultValue": "Log.defDateFormat"
 						},
 						{
-							"id": 99,
+							"id": 103,
 							"name": "defDateFormat",
 							"kind": 1024,
 							"kindString": "Property",
@@ -2208,7 +2256,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 97,
+									"line": 139,
 									"character": 34
 								}
 							],
@@ -2219,7 +2267,7 @@
 							"defaultValue": "\"%YYYY%MM%DD %hh:%mm:%ss.%jjj\""
 						},
 						{
-							"id": 111,
+							"id": 115,
 							"name": "globalLevel",
 							"kind": 1024,
 							"kindString": "Property",
@@ -2234,7 +2282,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 124,
+									"line": 166,
 									"character": 32
 								}
 							],
@@ -2246,7 +2294,7 @@
 							"defaultValue": "Log.levels[Log.INFO]"
 						},
 						{
-							"id": 110,
+							"id": 114,
 							"name": "log",
 							"kind": 1024,
 							"kindString": "Property",
@@ -2261,19 +2309,19 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 121,
+									"line": 163,
 									"character": 21
 								}
 							],
 							"type": {
 								"type": "reference",
-								"id": 98,
+								"id": 101,
 								"name": "Log"
 							},
 							"defaultValue": "new Log('')"
 						},
 						{
-							"id": 118,
+							"id": 123,
 							"name": "messageLength",
 							"kind": 262144,
 							"kindString": "Accessor",
@@ -2286,7 +2334,7 @@
 							},
 							"getSignature": [
 								{
-									"id": 121,
+									"id": 126,
 									"name": "__get",
 									"kind": 524288,
 									"kindString": "Get signature",
@@ -2304,7 +2352,7 @@
 							],
 							"setSignature": [
 								{
-									"id": 119,
+									"id": 124,
 									"name": "__set",
 									"kind": 1048576,
 									"kindString": "Set signature",
@@ -2316,7 +2364,7 @@
 									},
 									"parameters": [
 										{
-											"id": 120,
+											"id": 125,
 											"name": "max",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2338,18 +2386,18 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 138,
+									"line": 181,
 									"character": 28
 								},
 								{
 									"fileName": "log.ts",
-									"line": 141,
+									"line": 184,
 									"character": 28
 								}
 							]
 						},
 						{
-							"id": 157,
+							"id": 161,
 							"name": "config",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2359,7 +2407,7 @@
 							},
 							"signatures": [
 								{
-									"id": 158,
+									"id": 162,
 									"name": "config",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2371,7 +2419,7 @@
 									},
 									"parameters": [
 										{
-											"id": 159,
+											"id": 163,
 											"name": "cfg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2384,7 +2432,7 @@
 											"type": {
 												"type": "reflection",
 												"declaration": {
-													"id": 160,
+													"id": 164,
 													"name": "__type",
 													"kind": 65536,
 													"kindString": "Type literal",
@@ -2393,7 +2441,7 @@
 													},
 													"children": [
 														{
-															"id": 161,
+															"id": 165,
 															"name": "colors",
 															"kind": 32,
 															"kindString": "Variable",
@@ -2404,7 +2452,7 @@
 															"sources": [
 																{
 																	"fileName": "log.ts",
-																	"line": 309,
+																	"line": 354,
 																	"character": 29
 																}
 															],
@@ -2414,7 +2462,7 @@
 															}
 														},
 														{
-															"id": 162,
+															"id": 166,
 															"name": "format",
 															"kind": 32,
 															"kindString": "Variable",
@@ -2425,7 +2473,7 @@
 															"sources": [
 																{
 																	"fileName": "log.ts",
-																	"line": 309,
+																	"line": 354,
 																	"character": 46
 																}
 															],
@@ -2435,7 +2483,7 @@
 															}
 														},
 														{
-															"id": 163,
+															"id": 167,
 															"name": "level",
 															"kind": 32,
 															"kindString": "Variable",
@@ -2446,7 +2494,7 @@
 															"sources": [
 																{
 																	"fileName": "log.ts",
-																	"line": 309,
+																	"line": 354,
 																	"character": 61
 																}
 															],
@@ -2461,16 +2509,16 @@
 															"title": "Variables",
 															"kind": 32,
 															"children": [
-																161,
-																162,
-																163
+																165,
+																166,
+																167
 															]
 														}
 													],
 													"sources": [
 														{
 															"fileName": "log.ts",
-															"line": 309,
+															"line": 354,
 															"character": 22
 														}
 													]
@@ -2487,13 +2535,13 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 309,
+									"line": 354,
 									"character": 17
 								}
 							]
 						},
 						{
-							"id": 126,
+							"id": 131,
 							"name": "debug",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2503,7 +2551,7 @@
 							},
 							"signatures": [
 								{
-									"id": 127,
+									"id": 132,
 									"name": "debug",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2516,7 +2564,7 @@
 									},
 									"parameters": [
 										{
-											"id": 128,
+											"id": 133,
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2541,13 +2589,13 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 186,
+									"line": 229,
 									"character": 16
 								}
 							]
 						},
 						{
-							"id": 138,
+							"id": 143,
 							"name": "error",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2557,7 +2605,7 @@
 							},
 							"signatures": [
 								{
-									"id": 139,
+									"id": 144,
 									"name": "error",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2570,7 +2618,7 @@
 									},
 									"parameters": [
 										{
-											"id": 140,
+											"id": 145,
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2595,13 +2643,13 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 225,
+									"line": 268,
 									"character": 16
 								}
 							]
 						},
 						{
-							"id": 151,
+							"id": 155,
 							"name": "format",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2611,7 +2659,7 @@
 							},
 							"signatures": [
 								{
-									"id": 152,
+									"id": 156,
 									"name": "format",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2624,7 +2672,7 @@
 									},
 									"parameters": [
 										{
-											"id": 153,
+											"id": 157,
 											"name": "fmtStr",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2650,13 +2698,13 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 285,
+									"line": 330,
 									"character": 17
 								}
 							]
 						},
 						{
-							"id": 170,
+							"id": 176,
 							"name": "getPrePostfix",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2666,7 +2714,7 @@
 							},
 							"signatures": [
 								{
-									"id": 171,
+									"id": 177,
 									"name": "getPrePostfix",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2675,7 +2723,7 @@
 									},
 									"parameters": [
 										{
-											"id": 172,
+											"id": 178,
 											"name": "indent",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2688,7 +2736,7 @@
 											}
 										},
 										{
-											"id": 173,
+											"id": 179,
 											"name": "level",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2701,7 +2749,7 @@
 											}
 										},
 										{
-											"id": 174,
+											"id": 180,
 											"name": "currIndent",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2712,11 +2760,35 @@
 												"type": "intrinsic",
 												"name": "string"
 											}
+										},
+										{
+											"id": 181,
+											"name": "colors",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {
+												"isExported": true
+											},
+											"type": {
+												"type": "array",
+												"elementType": {
+													"type": "intrinsic",
+													"name": "string"
+												}
+											}
 										}
 									],
 									"type": {
 										"type": "tuple",
 										"elements": [
+											{
+												"type": "intrinsic",
+												"name": "string"
+											},
+											{
+												"type": "intrinsic",
+												"name": "string"
+											},
 											{
 												"type": "intrinsic",
 												"name": "string"
@@ -2732,13 +2804,13 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 351,
+									"line": 399,
 									"character": 27
 								}
 							]
 						},
 						{
-							"id": 132,
+							"id": 137,
 							"name": "info",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2748,7 +2820,7 @@
 							},
 							"signatures": [
 								{
-									"id": 133,
+									"id": 138,
 									"name": "info",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2761,7 +2833,7 @@
 									},
 									"parameters": [
 										{
-											"id": 134,
+											"id": 139,
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2786,13 +2858,13 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 206,
+									"line": 249,
 									"character": 15
 								}
 							]
 						},
 						{
-							"id": 164,
+							"id": 168,
 							"name": "inspect",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2802,7 +2874,7 @@
 							},
 							"signatures": [
 								{
-									"id": 165,
+									"id": 169,
 									"name": "inspect",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2810,12 +2882,13 @@
 										"isExported": true
 									},
 									"comment": {
-										"shortText": "Usage: `log.info(log.inspect(struct, 1))`\nThe call returns a raw formatted text string, or a HTML formatted string if `colors` is defined.",
+										"shortText": "Usage:\n- `log.info(log.inspect(struct))`     -> depth=0, indent='   ', no colors\n- `log.info(log.inspect(struct, {}))` -> depth=inf, indent='   ', with html-coded colors",
+										"text": "The call returns a raw formatted text string, or a HTML formatted string if `colors` is defined.",
 										"returns": "a string representation of an object literal, similar to the Node `util.inspect` call\n"
 									},
 									"parameters": [
 										{
-											"id": 166,
+											"id": 170,
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2828,58 +2901,122 @@
 											}
 										},
 										{
-											"id": 167,
-											"name": "depth",
+											"id": 171,
+											"name": "__namedParameters",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {
 												"isExported": true
 											},
-											"comment": {
-												"text": "depth of recursion, defaults to 3. Use `null` for infinite depth"
-											},
+											"originalName": "__1",
 											"type": {
-												"type": "intrinsic",
-												"name": "number"
-											},
-											"defaultValue": "3"
-										},
-										{
-											"id": 168,
-											"name": "indent",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {
-												"isExported": true
-											},
-											"comment": {
-												"text": "the indent string to use, will accumulate for each level of indentation, defaults to four spaces."
-											},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											},
-											"defaultValue": "\"    \""
-										},
-										{
-											"id": 169,
-											"name": "colors",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {
-												"isExported": true
-											},
-											"comment": {
-												"text": "an array of `css` color values: if defined, the output will be `HTML` formatted, with indentation\nlevels indicated by colors in ascending sequence from the array, restarting at index 0 if the array is shorter than the maximum indentation level.\n`colors` defaults to the static `COLORS` array. To disable, provide a value of `null`."
-											},
-											"type": {
-												"type": "array",
-												"elementType": {
-													"type": "intrinsic",
-													"name": "string"
+												"type": "reflection",
+												"declaration": {
+													"id": 172,
+													"name": "__type",
+													"kind": 65536,
+													"kindString": "Type literal",
+													"flags": {
+														"isExported": true
+													},
+													"children": [
+														{
+															"id": 175,
+															"name": "colors",
+															"kind": 32,
+															"kindString": "Variable",
+															"flags": {
+																"isExported": true
+															},
+															"comment": {
+																"text": "an array of `css` color values: if defined, the output will be `HTML` formatted, with indentation\nlevels indicated by colors in ascending sequence from the array, restarting at index 0 if the array is shorter than the maximum indentation level.\n`colors` defaults to the static `COLORS` array. To disable, provide a value of `null`."
+															},
+															"sources": [
+																{
+																	"fileName": "log.ts",
+																	"line": 374,
+																	"character": 59
+																}
+															],
+															"type": {
+																"type": "array",
+																"elementType": {
+																	"type": "intrinsic",
+																	"name": "string"
+																}
+															},
+															"defaultValue": "Log.INDENT_COLORS"
+														},
+														{
+															"id": 173,
+															"name": "depth",
+															"kind": 32,
+															"kindString": "Variable",
+															"flags": {
+																"isExported": true
+															},
+															"comment": {
+																"text": "depth of recursion, defaults to 3. Use `null` or negative values for infinite depth"
+															},
+															"sources": [
+																{
+																	"fileName": "log.ts",
+																	"line": 374,
+																	"character": 34
+																}
+															],
+															"type": {
+																"type": "intrinsic",
+																"name": "number"
+															},
+															"defaultValue": "-1"
+														},
+														{
+															"id": 174,
+															"name": "indent",
+															"kind": 32,
+															"kindString": "Variable",
+															"flags": {
+																"isExported": true
+															},
+															"comment": {
+																"text": "the indent string to use, will accumulate for each level of indentation, defaults to four spaces."
+															},
+															"sources": [
+																{
+																	"fileName": "log.ts",
+																	"line": 374,
+																	"character": 45
+																}
+															],
+															"type": {
+																"type": "intrinsic",
+																"name": "string"
+															},
+															"defaultValue": "\"   \""
+														}
+													],
+													"groups": [
+														{
+															"title": "Variables",
+															"kind": 32,
+															"children": [
+																175,
+																173,
+																174
+															]
+														}
+													],
+													"sources": [
+														{
+															"fileName": "log.ts",
+															"line": 374,
+															"character": 27
+														}
+													]
 												}
 											},
-											"defaultValue": "COLORS"
+											"defaultValue": "{depth:0, indent:'   ', colors:<string[]>null}"
 										}
 									],
 									"type": {
@@ -2891,13 +3028,13 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 325,
+									"line": 374,
 									"character": 18
 								}
 							]
 						},
 						{
-							"id": 122,
+							"id": 127,
 							"name": "level",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2907,7 +3044,7 @@
 							},
 							"signatures": [
 								{
-									"id": 123,
+									"id": 128,
 									"name": "level",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2921,7 +3058,7 @@
 									},
 									"parameters": [
 										{
-											"id": 124,
+											"id": 129,
 											"name": "newLevelSym",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2938,7 +3075,7 @@
 											}
 										},
 										{
-											"id": 125,
+											"id": 130,
 											"name": "setGlobalLevel",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2964,102 +3101,13 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 160,
+									"line": 203,
 									"character": 16
 								}
 							]
 						},
 						{
-							"id": 145,
-							"name": "makeMessage",
-							"kind": 2048,
-							"kindString": "Method",
-							"flags": {
-								"isProtected": true,
-								"isExported": true
-							},
-							"signatures": [
-								{
-									"id": 146,
-									"name": "makeMessage",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {
-										"isExported": true
-									},
-									"comment": {
-										"shortText": "Creates the core format of the reported message. This method is\ncalled within `out` to allow for format extensions of the message printed,\ne.g. by color codes."
-									},
-									"parameters": [
-										{
-											"id": 147,
-											"name": "line",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {
-												"isExported": true
-											},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 148,
-											"name": "lvl",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {
-												"isExported": true
-											},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 149,
-											"name": "dateStr",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {
-												"isExported": true
-											},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 150,
-											"name": "desc",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {
-												"isExported": true
-											},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										}
-									],
-									"type": {
-										"type": "intrinsic",
-										"name": "string"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "log.ts",
-									"line": 271,
-									"character": 25
-								}
-							]
-						},
-						{
-							"id": 141,
+							"id": 146,
 							"name": "out",
 							"kind": 2048,
 							"kindString": "Method",
@@ -3069,7 +3117,7 @@
 							},
 							"signatures": [
 								{
-									"id": 142,
+									"id": 147,
 									"name": "out",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -3078,11 +3126,11 @@
 									},
 									"comment": {
 										"shortText": "reports an error message to the log.\nThe message will be reported to the log if `lvl` meets or exceeds the current reporting level.",
-										"returns": "promise to return the message written\n"
+										"returns": "the message written\n"
 									},
 									"parameters": [
 										{
-											"id": 143,
+											"id": 148,
 											"name": "lvl",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -3098,7 +3146,7 @@
 											}
 										},
 										{
-											"id": 144,
+											"id": 149,
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -3109,8 +3157,9 @@
 												"text": "the message to report. If `msg` is an object literal, a deep inspection will be printed.\nElse if `msg` is a function, it will be called to return the string to print or object to inspect. This\navoids constructing a potentially expensive message string if the level is below the current reporting level.\nFinally, if `msg` is a string, it will be printed with appropriate decoration, e.g. a date string and\nprefix."
 											},
 											"type": {
-												"type": "intrinsic",
-												"name": "any"
+												"type": "reference",
+												"id": 98,
+												"name": "Msg"
 											}
 										}
 									],
@@ -3123,13 +3172,87 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 247,
+									"line": 291,
 									"character": 17
 								}
 							]
 						},
 						{
-							"id": 154,
+							"id": 150,
+							"name": "output",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isProtected": true,
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 151,
+									"name": "output",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {
+										"isExported": true
+									},
+									"comment": {},
+									"parameters": [
+										{
+											"id": 152,
+											"name": "color",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {
+												"isExported": true
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 153,
+											"name": "header",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {
+												"isExported": true
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 154,
+											"name": "line",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {
+												"isExported": true
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 316,
+									"character": 20
+								}
+							]
+						},
+						{
+							"id": 158,
 							"name": "prefix",
 							"kind": 2048,
 							"kindString": "Method",
@@ -3139,7 +3262,7 @@
 							},
 							"signatures": [
 								{
-									"id": 155,
+									"id": 159,
 									"name": "prefix",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -3152,7 +3275,7 @@
 									},
 									"parameters": [
 										{
-											"id": 156,
+											"id": 160,
 											"name": "prf",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -3178,13 +3301,13 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 296,
+									"line": 341,
 									"character": 17
 								}
 							]
 						},
 						{
-							"id": 129,
+							"id": 134,
 							"name": "progress",
 							"kind": 2048,
 							"kindString": "Method",
@@ -3194,7 +3317,7 @@
 							},
 							"signatures": [
 								{
-									"id": 130,
+									"id": 135,
 									"name": "progress",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -3207,7 +3330,7 @@
 									},
 									"parameters": [
 										{
-											"id": 131,
+											"id": 136,
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -3232,13 +3355,13 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 196,
+									"line": 239,
 									"character": 19
 								}
 							]
 						},
 						{
-							"id": 135,
+							"id": 140,
 							"name": "warn",
 							"kind": 2048,
 							"kindString": "Method",
@@ -3248,7 +3371,7 @@
 							},
 							"signatures": [
 								{
-									"id": 136,
+									"id": 141,
 									"name": "warn",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -3261,7 +3384,7 @@
 									},
 									"parameters": [
 										{
-											"id": 137,
+											"id": 142,
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -3286,13 +3409,13 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 216,
+									"line": 259,
 									"character": 15
 								}
 							]
 						},
 						{
-							"id": 105,
+							"id": 109,
 							"name": "levels",
 							"kind": 2097152,
 							"kindString": "Object literal",
@@ -3306,7 +3429,7 @@
 							},
 							"children": [
 								{
-									"id": 106,
+									"id": 110,
 									"name": "__computed",
 									"kind": 2097152,
 									"kindString": "Object literal",
@@ -3315,7 +3438,7 @@
 									},
 									"children": [
 										{
-											"id": 109,
+											"id": 113,
 											"name": "desc",
 											"kind": 32,
 											"kindString": "Variable",
@@ -3325,22 +3448,22 @@
 											"sources": [
 												{
 													"fileName": "log.ts",
-													"line": 114,
+													"line": 156,
 													"character": 60
 												},
 												{
 													"fileName": "log.ts",
-													"line": 115,
+													"line": 157,
 													"character": 60
 												},
 												{
 													"fileName": "log.ts",
-													"line": 116,
+													"line": 158,
 													"character": 60
 												},
 												{
 													"fileName": "log.ts",
-													"line": 117,
+													"line": 159,
 													"character": 60
 												}
 											],
@@ -3351,7 +3474,7 @@
 											"defaultValue": "\"ERROR\""
 										},
 										{
-											"id": 107,
+											"id": 111,
 											"name": "importance",
 											"kind": 32,
 											"kindString": "Variable",
@@ -3361,22 +3484,22 @@
 											"sources": [
 												{
 													"fileName": "log.ts",
-													"line": 114,
+													"line": 156,
 													"character": 35
 												},
 												{
 													"fileName": "log.ts",
-													"line": 115,
+													"line": 157,
 													"character": 35
 												},
 												{
 													"fileName": "log.ts",
-													"line": 116,
+													"line": 158,
 													"character": 35
 												},
 												{
 													"fileName": "log.ts",
-													"line": 117,
+													"line": 159,
 													"character": 35
 												}
 											],
@@ -3387,7 +3510,7 @@
 											"defaultValue": "3"
 										},
 										{
-											"id": 108,
+											"id": 112,
 											"name": "sym",
 											"kind": 32,
 											"kindString": "Variable",
@@ -3397,22 +3520,22 @@
 											"sources": [
 												{
 													"fileName": "log.ts",
-													"line": 114,
+													"line": 156,
 													"character": 43
 												},
 												{
 													"fileName": "log.ts",
-													"line": 115,
+													"line": 157,
 													"character": 43
 												},
 												{
 													"fileName": "log.ts",
-													"line": 116,
+													"line": 158,
 													"character": 43
 												},
 												{
 													"fileName": "log.ts",
-													"line": 117,
+													"line": 159,
 													"character": 43
 												}
 											],
@@ -3428,31 +3551,31 @@
 											"title": "Variables",
 											"kind": 32,
 											"children": [
-												109,
-												107,
-												108
+												113,
+												111,
+												112
 											]
 										}
 									],
 									"sources": [
 										{
 											"fileName": "log.ts",
-											"line": 114,
+											"line": 156,
 											"character": 19
 										},
 										{
 											"fileName": "log.ts",
-											"line": 115,
+											"line": 157,
 											"character": 18
 										},
 										{
 											"fileName": "log.ts",
-											"line": 116,
+											"line": 158,
 											"character": 18
 										},
 										{
 											"fileName": "log.ts",
-											"line": 117,
+											"line": 159,
 											"character": 19
 										}
 									],
@@ -3467,14 +3590,14 @@
 									"title": "Object literals",
 									"kind": 2097152,
 									"children": [
-										106
+										110
 									]
 								}
 							],
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 113,
+									"line": 155,
 									"character": 27
 								}
 							],
@@ -3489,64 +3612,66 @@
 							"title": "Constructors",
 							"kind": 512,
 							"children": [
-								115
+								120
 							]
 						},
 						{
 							"title": "Properties",
 							"kind": 1024,
 							"children": [
-								114,
-								112,
-								113,
-								101,
-								104,
+								119,
+								118,
+								116,
+								117,
+								105,
+								108,
 								102,
+								106,
+								107,
+								104,
 								103,
-								100,
-								99,
-								111,
-								110
+								115,
+								114
 							]
 						},
 						{
 							"title": "Accessors",
 							"kind": 262144,
 							"children": [
-								118
+								123
 							]
 						},
 						{
 							"title": "Methods",
 							"kind": 2048,
 							"children": [
-								157,
-								126,
-								138,
-								151,
-								170,
-								132,
-								164,
-								122,
-								145,
-								141,
-								154,
-								129,
-								135
+								161,
+								131,
+								143,
+								155,
+								176,
+								137,
+								168,
+								127,
+								146,
+								150,
+								158,
+								134,
+								140
 							]
 						},
 						{
 							"title": "Object literals",
 							"kind": 2097152,
 							"children": [
-								105
+								109
 							]
 						}
 					],
 					"sources": [
 						{
 							"fileName": "log.ts",
-							"line": 95,
+							"line": 136,
 							"character": 16
 						}
 					]
@@ -3574,7 +3699,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 90,
+									"line": 126,
 									"character": 64
 								}
 							],
@@ -3594,7 +3719,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 90,
+									"line": 126,
 									"character": 39
 								}
 							],
@@ -3614,7 +3739,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 90,
+									"line": 126,
 									"character": 51
 								}
 							],
@@ -3638,34 +3763,702 @@
 					"sources": [
 						{
 							"fileName": "log.ts",
-							"line": 90,
+							"line": 126,
 							"character": 26
 						}
 					]
 				},
 				{
-					"id": 175,
-					"name": "COLORS",
-					"kind": 32,
-					"kindString": "Variable",
-					"flags": {
-						"isConst": true
-					},
+					"id": 98,
+					"name": "Msg",
+					"kind": 256,
+					"kindString": "Interface",
+					"flags": {},
+					"children": [
+						{
+							"id": 99,
+							"name": "color",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 129,
+									"character": 9
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						},
+						{
+							"id": 100,
+							"name": "msg",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 130,
+									"character": 7
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "any"
+							}
+						}
+					],
+					"groups": [
+						{
+							"title": "Properties",
+							"kind": 1024,
+							"children": [
+								99,
+								100
+							]
+						}
+					],
 					"sources": [
 						{
 							"fileName": "log.ts",
-							"line": 85,
-							"character": 12
+							"line": 128,
+							"character": 13
+						}
+					]
+				},
+				{
+					"id": 182,
+					"name": "COLOR",
+					"kind": 2097152,
+					"kindString": "Object literal",
+					"flags": {
+						"isConst": true
+					},
+					"children": [
+						{
+							"id": 205,
+							"name": "bgBlack",
+							"kind": 32,
+							"kindString": "Variable",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 113,
+									"character": 11
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							},
+							"defaultValue": "\"background-color:#000;\""
+						},
+						{
+							"id": 209,
+							"name": "bgBlue",
+							"kind": 32,
+							"kindString": "Variable",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 117,
+									"character": 10
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							},
+							"defaultValue": "\"background-color:#00f;\""
+						},
+						{
+							"id": 211,
+							"name": "bgCyan",
+							"kind": 32,
+							"kindString": "Variable",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 119,
+									"character": 10
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							},
+							"defaultValue": "\"background-color:#0ff;\""
+						},
+						{
+							"id": 207,
+							"name": "bgGreen",
+							"kind": 32,
+							"kindString": "Variable",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 115,
+									"character": 11
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							},
+							"defaultValue": "\"background-color:#0f0;\""
+						},
+						{
+							"id": 210,
+							"name": "bgMagenta",
+							"kind": 32,
+							"kindString": "Variable",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 118,
+									"character": 13
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							},
+							"defaultValue": "\"background-color:#f0f;\""
+						},
+						{
+							"id": 206,
+							"name": "bgRed",
+							"kind": 32,
+							"kindString": "Variable",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 114,
+									"character": 9
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							},
+							"defaultValue": "\"background-color:#f00;\""
+						},
+						{
+							"id": 212,
+							"name": "bgWhite",
+							"kind": 32,
+							"kindString": "Variable",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 120,
+									"character": 11
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							},
+							"defaultValue": "\"background-color:#fff;\""
+						},
+						{
+							"id": 208,
+							"name": "bgYellow",
+							"kind": 32,
+							"kindString": "Variable",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 116,
+									"character": 12
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							},
+							"defaultValue": "\"background-color:#ff0;\""
+						},
+						{
+							"id": 190,
+							"name": "black",
+							"kind": 32,
+							"kindString": "Variable",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 96,
+									"character": 9
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							},
+							"defaultValue": "\"color:#000;\""
+						},
+						{
+							"id": 187,
+							"name": "blink",
+							"kind": 32,
+							"kindString": "Variable",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 92,
+									"character": 9
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							},
+							"defaultValue": "\"\""
+						},
+						{
+							"id": 194,
+							"name": "blue",
+							"kind": 32,
+							"kindString": "Variable",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 100,
+									"character": 8
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							},
+							"defaultValue": "\"color:#00f;\""
+						},
+						{
+							"id": 184,
+							"name": "bold",
+							"kind": 32,
+							"kindString": "Variable",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 89,
+									"character": 8
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							},
+							"defaultValue": "\"font-weight:bold;\""
+						},
+						{
+							"id": 183,
+							"name": "clear",
+							"kind": 32,
+							"kindString": "Variable",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 87,
+									"character": 9
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							},
+							"defaultValue": "\"color:#000; background-color:inherit; font-weight:normal;\""
+						},
+						{
+							"id": 196,
+							"name": "cyan",
+							"kind": 32,
+							"kindString": "Variable",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 102,
+									"character": 8
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							},
+							"defaultValue": "\"color:#0ff;\""
+						},
+						{
+							"id": 201,
+							"name": "darkblue",
+							"kind": 32,
+							"kindString": "Variable",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 108,
+									"character": 12
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							},
+							"defaultValue": "\"color:#008;\""
+						},
+						{
+							"id": 203,
+							"name": "darkcyan",
+							"kind": 32,
+							"kindString": "Variable",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 110,
+									"character": 12
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							},
+							"defaultValue": "\"color:#088;\""
+						},
+						{
+							"id": 199,
+							"name": "darkgreen",
+							"kind": 32,
+							"kindString": "Variable",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 106,
+									"character": 13
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							},
+							"defaultValue": "\"color:#080;\""
+						},
+						{
+							"id": 202,
+							"name": "darkmagenta",
+							"kind": 32,
+							"kindString": "Variable",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 109,
+									"character": 15
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							},
+							"defaultValue": "\"color:#808;\""
+						},
+						{
+							"id": 198,
+							"name": "darkred",
+							"kind": 32,
+							"kindString": "Variable",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 105,
+									"character": 11
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							},
+							"defaultValue": "\"color:#800;\""
+						},
+						{
+							"id": 200,
+							"name": "darkyellow",
+							"kind": 32,
+							"kindString": "Variable",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 107,
+									"character": 14
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							},
+							"defaultValue": "\"color:#880;\""
+						},
+						{
+							"id": 185,
+							"name": "dim",
+							"kind": 32,
+							"kindString": "Variable",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 90,
+									"character": 7
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							},
+							"defaultValue": "\"\""
+						},
+						{
+							"id": 204,
+							"name": "gray",
+							"kind": 32,
+							"kindString": "Variable",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 111,
+									"character": 8
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							},
+							"defaultValue": "\"color:#888;\""
+						},
+						{
+							"id": 192,
+							"name": "green",
+							"kind": 32,
+							"kindString": "Variable",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 98,
+									"character": 9
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							},
+							"defaultValue": "\"color:#0f0;\""
+						},
+						{
+							"id": 189,
+							"name": "hidden",
+							"kind": 32,
+							"kindString": "Variable",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 94,
+									"character": 10
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							},
+							"defaultValue": "\"\""
+						},
+						{
+							"id": 195,
+							"name": "magenta",
+							"kind": 32,
+							"kindString": "Variable",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 101,
+									"character": 11
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							},
+							"defaultValue": "\"color:#f0f;\""
+						},
+						{
+							"id": 191,
+							"name": "red",
+							"kind": 32,
+							"kindString": "Variable",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 97,
+									"character": 7
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							},
+							"defaultValue": "\"color:#f00;\""
+						},
+						{
+							"id": 188,
+							"name": "reverse",
+							"kind": 32,
+							"kindString": "Variable",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 93,
+									"character": 11
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							},
+							"defaultValue": "\"\""
+						},
+						{
+							"id": 186,
+							"name": "underscore",
+							"kind": 32,
+							"kindString": "Variable",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 91,
+									"character": 14
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							},
+							"defaultValue": "\"\""
+						},
+						{
+							"id": 197,
+							"name": "white",
+							"kind": 32,
+							"kindString": "Variable",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 103,
+									"character": 9
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							},
+							"defaultValue": "\"color:#fff;\""
+						},
+						{
+							"id": 193,
+							"name": "yellow",
+							"kind": 32,
+							"kindString": "Variable",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "log.ts",
+									"line": 99,
+									"character": 10
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							},
+							"defaultValue": "\"color:#ff0;\""
+						}
+					],
+					"groups": [
+						{
+							"title": "Variables",
+							"kind": 32,
+							"children": [
+								205,
+								209,
+								211,
+								207,
+								210,
+								206,
+								212,
+								208,
+								190,
+								187,
+								194,
+								184,
+								183,
+								196,
+								201,
+								203,
+								199,
+								202,
+								198,
+								200,
+								185,
+								204,
+								192,
+								189,
+								195,
+								191,
+								188,
+								186,
+								197,
+								193
+							]
+						}
+					],
+					"sources": [
+						{
+							"fileName": "log.ts",
+							"line": 86,
+							"character": 11
 						}
 					],
 					"type": {
-						"type": "array",
-						"elementType": {
-							"type": "intrinsic",
-							"name": "string"
-						}
-					},
-					"defaultValue": "['#008', '#080', '#800', '#066', '#660', '#606']"
+						"type": "intrinsic",
+						"name": "object"
+					}
 				}
 			],
 			"groups": [
@@ -3673,21 +4466,22 @@
 					"title": "Classes",
 					"kind": 128,
 					"children": [
-						98
+						101
 					]
 				},
 				{
 					"title": "Interfaces",
 					"kind": 256,
 					"children": [
-						94
+						94,
+						98
 					]
 				},
 				{
-					"title": "Variables",
-					"kind": 32,
+					"title": "Object literals",
+					"kind": 2097152,
 					"children": [
-						175
+						182
 					]
 				}
 			],
@@ -3700,7 +4494,7 @@
 			]
 		},
 		{
-			"id": 187,
+			"id": 224,
 			"name": "\"overview\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -3731,9 +4525,9 @@
 				11,
 				88,
 				47,
-				176,
+				213,
 				93,
-				187
+				224
 			]
 		}
 	]

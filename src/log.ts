@@ -82,17 +82,59 @@
 import { date } from './Date';
 
 
-const COLORS = ['#008', '#080', '#800', '#066', '#660', '#606'];
+
+const COLOR = {
+    clear:      'color:#000; background-color:inherit; font-weight:normal;',
+
+    bold:       'font-weight:bold;',
+    dim:        '',
+    underscore: '',
+    blink:      '',
+    reverse:    '',
+    hidden:     '',
+
+    black:      'color:#000;',
+    red:        'color:#f00;',
+    green:      'color:#0f0;',
+    yellow:     'color:#ff0;',    
+    blue:       'color:#00f;',
+    magenta:    'color:#f0f;',
+    cyan:       'color:#0ff;',
+    white:      'color:#fff;',
+    
+    darkred:    'color:#800;',
+    darkgreen:  'color:#080;',
+    darkyellow: 'color:#880;',    
+    darkblue:   'color:#008;',
+    darkmagenta:'color:#808;',
+    darkcyan:   'color:#088;',
+    gray:       'color:#888;',
+    
+    bgBlack:    'background-color:#000;',
+    bgRed:      'background-color:#f00;',
+    bgGreen:    'background-color:#0f0;',
+    bgYellow:   'background-color:#ff0;',
+    bgBlue:     'background-color:#00f;',
+    bgMagenta:  'background-color:#f0f;',
+    bgCyan:     'background-color:#0ff;',
+    bgWhite:    'background-color:#fff;'
+};
 
 /**
  * Type definition for level descriptors
  */
 export interface LevelDesc { importance:number; sym:string; desc:string; }
 
+interface Msg {
+    color: string;
+    msg:   any;
+}
+
 /**
  * main logging class. See {@link log log overview} for usage.
  */
 export class Log {
+    protected static INDENT_COLORS = ['darkblue', 'darkgreen', 'darkred', 'darkcyan', 'darkyellow', 'darkmagenta'];
     /** current date format string. See [date module]('_date_.html') */
     protected static defDateFormat = '%YYYY%MM%DD %hh:%mm:%ss.%jjj';
     protected static dateFormat    = Log.defDateFormat;
@@ -123,9 +165,10 @@ export class Log {
     /** current reporting level, same across all modules */
     protected static globalLevel:LevelDesc = Log.levels[Log.INFO]; 
 
-    protected reportLevel     = <LevelDesc>undefined;
-    protected reportPrefix    = '';
-    protected maxLength       = -1;
+    protected reportLevel   = <LevelDesc>undefined;
+    protected reportPrefix  = '';
+    protected maxLength     = -1;
+    protected colors        = true;
 
     constructor(prefix:string) { this.reportPrefix = prefix; }
 
@@ -158,19 +201,19 @@ export class Log {
      * @return the new reporting level (DEBUG, INFO, WARN, ERROR)
      */
     public level(newLevelSym?:string, setGlobalLevel?:boolean):string {
-        let newLevel = Log.levels[newLevelSym] || Log.globalLevel;    // new level is newLevelSym unless undefined
-        let oldLevel = this.reportLevel || Log.globalLevel;        // old level is level unless undefined
-        if (newLevelSym === undefined) {                        // do nothing, return current level
+        let newLevel = Log.levels[newLevelSym] || Log.globalLevel;  // new level is newLevelSym unless undefined
+        let oldLevel = this.reportLevel || Log.globalLevel;         // old level is level unless undefined
+        if (newLevelSym === undefined) {                            // do nothing, return current level
             newLevel = oldLevel;
         } else if (newLevelSym === null) {
-            this.reportLevel = undefined;                       // deactivate local level
+            this.reportLevel = undefined;                           // deactivate local level
         } else if (Log.levels[newLevelSym]) { 
-            if (setGlobalLevel) { Log.globalLevel = newLevel; }    // set new global level
-                           else { this.reportLevel = newLevel; }// set new local level
+            if (setGlobalLevel) { Log.globalLevel = newLevel; }     // set new global level
+                           else { this.reportLevel = newLevel; }    // set new local level
             const msg = `new ${setGlobalLevel? 'global' : this.reportPrefix} log level ${newLevel.desc.toUpperCase()} (was ${oldLevel.desc.toUpperCase()})`;
-            this.out((newLevel.sym === oldLevel.sym)?Log.DEBUG : Log.INFO, msg);
+            (newLevel.sym === oldLevel.sym)? this.debug(msg) : this.info(msg);
         } else { 
-            this.out(Log.ERROR, `unkown level ${newLevelSym}; log level remains ${oldLevel.sym}`);
+            this.error(`unkown level ${newLevelSym}; log level remains ${oldLevel.sym}`);
         }
         return newLevel.sym;
     }
@@ -183,7 +226,7 @@ export class Log {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the file written to, or undefined
      */
-    public debug(msg:any):string { return this.out(Log.DEBUG, msg); }
+    public debug(msg:any):string { return this.out(Log.DEBUG, { color: 'gray', msg:msg }); }
 
     /**
      * reports an informational message to the log. 
@@ -193,7 +236,7 @@ export class Log {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the file written to, or undefined
      */
-    public progress(msg:any):string { return this.out(Log.INFO, msg, ); }
+    public progress(msg:any):string { return this.out(Log.INFO, { color: 'darkblue', msg:msg }); }
 
     /**
      * reports an informational message to the log. 
@@ -203,7 +246,7 @@ export class Log {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the file written to, or undefined
      */
-    public info(msg:any):string { return this.out(Log.INFO, msg); }
+    public info(msg:any):string { return this.out(Log.INFO, { color: 'darkgreen', msg:msg }); }
 
     /**
      * reports an warning message to the log. 
@@ -213,7 +256,7 @@ export class Log {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the file written to, or undefined
      */
-    public warn(msg:any):string { return this.out(Log.WARN, msg); }
+    public warn(msg:any):string { return this.out(Log.WARN, { color: 'darkyellow', msg:msg }); }
 
     /**
      * reports an error message to the log. 
@@ -223,12 +266,13 @@ export class Log {
      * @return promise to return the file written to, or undefined
      */
     public error(msg:any):string { 
+        const color = 'darkred';
         if (msg.message) { // special treatment for Errors
-            this.out(Log.ERROR, msg.message);
-            this.out(Log.ERROR, msg.stack);
+            this.out(Log.ERROR, { color: color, msg:msg.message });
+            this.out(Log.ERROR, { color: color, msg:msg.stack });
             return msg.message;
         } else {
-            return this.out(Log.ERROR, msg); 
+            return this.out(Log.ERROR, { color: color, msg:msg }); 
         } 
     }
 
@@ -242,34 +286,35 @@ export class Log {
      * Finally, if `msg` is a string, it will be printed with appropriate decoration, e.g. a date string and 
      * prefix.
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
-     * @return promise to return the message written
+     * @return the message written
      */
-    protected out(lvl:string, msg:any): string {	
+    protected out(lvl:string, msg:Msg): string {	
         let desc:LevelDesc = Log.levels[lvl];
         const filterLevel = this.reportLevel || Log.globalLevel;
         if (desc.importance >= filterLevel.importance) {
-            if (typeof msg === 'function') { msg = msg(); }
+            let line;
+            switch(typeof msg.msg) {
+                case 'function': line = msg.msg(); break;
+                case 'string':   line = msg.msg; break;
+                case 'object':
+                default: line = this.inspect(msg.msg, {depth:0}); 
+            }
             const dateStr = date(Log.dateFormat);
-            let line = (typeof msg === 'string')? msg : this.inspect(msg, 0);
             if (line.length > this.maxLength && this.maxLength>0) { 
                 line = `${line.slice(0, this.maxLength/2-2)}...${line.slice(-this.maxLength/2+2)}`
             }
-            const logLine = this.makeMessage(line, lvl, dateStr, desc.desc);
-            if (logLine.slice(-1)==='\r') { process.stdout.write(logLine); }
-            else { console.log(logLine); }
-            if (msg && msg.stack) { console.log(msg.stack); }
+            if (msg && msg.msg.stack) { line = `${line}\n${msg.msg.stack}`; }
+            const header = `${dateStr} ${this.reportPrefix} ${desc.desc}`;
+            this.output(msg.color, header, line);
             return line;
         }
         return undefined;
     }
 
     /** 
-     * Creates the core format of the reported message. This method is 
-     * called within `out` to allow for format extensions of the message printed, 
-     * e.g. by color codes.
      */
-    protected makeMessage(line:string, lvl:string, dateStr:string, desc:string):string {
-        return `${dateStr} ${this.reportPrefix} ${desc} ${line}`;
+    protected output(color:string, header:string, line:string) {
+        console.log(`%c${header}%c ${line}`, COLOR[color], COLOR['clear']);
     }
 
     /**
@@ -307,49 +352,62 @@ export class Log {
      * @param cfg 
      */
     public config(cfg:{colors?:boolean, format?:string, level?:string }) {
-        if (cfg.format!==undefined) { this.format(cfg.format); }     // e.g. '%YYYY%MM%DD %hh:%mm:%ss.%jjj'
-        if (cfg.level!==undefined)  { this.level(cfg.level); }       // e.g. INFO
+        if (cfg.format!==undefined) { this.format(cfg.format); }    // e.g. '%YYYY%MM%DD %hh:%mm:%ss.%jjj'
+        if (cfg.level!==undefined)  { this.level(cfg.level); }      // e.g. INFO
+        if (cfg.colors!==undefined) { this.colors = cfg.colors; }   // true / false
     }
 
     /**
-     * Usage: `log.info(log.inspect(struct, 1))`
+     * Usage: 
+     * - `log.info(log.inspect(struct))`     -> depth=0, indent='   ', no colors
+     * - `log.info(log.inspect(struct, {}))` -> depth=inf, indent='   ', with html-coded colors
+     * 
      * The call returns a raw formatted text string, or a HTML formatted string if `colors` is defined.
      * @param struct the object literal to inspect
-     * @param depth depth of recursion, defaults to 3. Use `null` for infinite depth
+     * @param depth depth of recursion, defaults to 3. Use `null` or negative values for infinite depth
      * @param indent the indent string to use, will accumulate for each level of indentation, defaults to four spaces.
      * @param colors an array of `css` color values: if defined, the output will be `HTML` formatted, with indentation 
      * levels indicated by colors in ascending sequence from the array, restarting at index 0 if the array is shorter than the maximum indentation level.
      * `colors` defaults to the static `COLORS` array. To disable, provide a value of `null`.
      * @return a string representation of an object literal, similar to the Node `util.inspect` call
      */
-    public inspect(msg:any, depth=3, indent='    ', colors=COLORS):string {
+    public inspect(msg:any, {depth=-1, indent='   ', colors=Log.INDENT_COLORS}={depth:0, indent:'   ', colors:<string[]>null}):string {
         function _inspect(msg:any, depth:number, level:number, currIndent:string):string {
             if (msg === null)               { return 'null'; }
             if (msg === undefined)          { return 'undefined'; }
             if (typeof msg === 'function')  { return 'function'; }
             if (typeof msg === 'string')    { return `'${msg}'`; }
             if (typeof msg === 'object')    {
-                if (depth<0) { return (msg.length===undefined)? '{...}' : '[...]'; }
-                if (msg.map !== undefined) { 
+                if (depth<0) { 
+                    return (msg.length===undefined)? '{...}' : '[...]'; 
+                }
+                if (msg.map !== undefined) { // --> an array
                     return `[${msg.map((e:any)=>(e===undefined)?'':_inspect(e, depth-1, level+1, currIndent)).join(', ')}]`;
-                 }
-                const [prefix, postfix] = log.getPrePostfix(indent, level, currIndent);
-                const cstart  = colors? `<b><span style='color:${colors[level % colors.length]};'>` : ''; 
-                const cstop   = colors? `</span></b>` : ''; 
-                const lf      = colors? '<br>' : '\n';
-                return `{${lf}` + Object.keys(msg).map(k => `${cstart}${prefix}${k}${postfix}${cstop}: ${
-                        _inspect(msg[k], depth-1, level+1, currIndent+indent)
-                    }`).join(`,${lf}`) + `${lf}${currIndent}}`;
+                }
+                const [prefix, postfix, lf, postIndent] = log.getPrePostfix(indent, level, currIndent, colors);
+                return `{${lf}` + Object.keys(msg).map(k => `${prefix}${k}${postfix}: ${
+                    _inspect(msg[k], depth-1, level+1, currIndent+indent)
+                }`).join(`,${lf}`) + `${lf}${postIndent}}`;
             } 
             return msg.toString();
         }
         const log = this;
-        if (colors) { indent = indent.replace(/ /g, '&nbsp;'); }
-        return _inspect(msg, depth===null? 999 : depth, 0, '');
+        // if (colors) { indent = indent.replace(/ /g, '&nbsp;'); }
+        return _inspect(msg, (depth!==undefined && depth!==null && depth>=0) ? depth : 999, 0, '');
     }
 
-    protected getPrePostfix(indent:string, level:number, currIndent:string):[string,string] {
-        return [`${currIndent}${indent}`, ''];
+    protected getPrePostfix(indent:string, level:number, currIndent:string, colors:string[]):[string,string,string,string] {
+        let cstart = '', cstop = '', lf = '\n';
+        if (colors) {
+            indent = indent.replace(/ /g, '&nbsp;');
+            currIndent = currIndent.replace(/ /g, '&nbsp;');
+            // try <color name> first, then assume '#...' code
+            const color = COLOR[colors[level % colors.length]] || colors[level % colors.length];
+            cstart  = `<b><span style='${color}'>`; 
+            cstop   = `</span></b>`; 
+            lf      = '<br>';
+        }
+        return [`${currIndent}${indent}${cstart}`, `${cstop}`, colors? '<br>' : '\n', currIndent];
     }
 }
 
