@@ -365,7 +365,7 @@ export class Log {
      * - `log.info(log.inspect(struct))`     -> `depth=0`, `indent='   '`, with html-coded colors
      * - `log.info(log.inspect(struct, {}))` -> `depth=-1` (inf), `indent='   '`, with html-coded colors
      * - `log.info(log.inspect(struct, {colors:null}))` -> no colors
-     * 
+     * <p>
      * The call returns a raw formatted text string, or a HTML formatted string if `colors` is defined.
      * @param struct the object literal to inspect
      * @param depth depth of recursion, defaults to 3. Use `null` or negative values for infinite depth
