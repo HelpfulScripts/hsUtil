@@ -1,4 +1,4 @@
-import * as tp   from './TimedPromises';
+import * as tp   from './Pacing';
 // import { Pace }             from './promises';
 // import { promiseChain }     from './promises';
 
@@ -143,45 +143,6 @@ describe('Promise', () => {
                     }
                 }) 
             );
-        });
-    });
-
-    describe('promiseChain', () => {
-        type callResult = {
-            ms: number,
-            at: number
-        };
-        
-        function doDelay(ms:number) {
-            return (result:callResult[]): Promise<callResult> => 
-                tp.delay(ms)().then(() => { return {ms:ms, at:Date.now() }; });
-        }
-        
-        const delays = [1000, 10, 1];
-        
-        it('should not resolve in sequence of array: 1000, 10, 1', () => {
-            expect.assertions(6);
-            return Promise.all(delays.map(d => doDelay(d)([])))
-                .then((res:callResult[]) => Promise.all([
-                    expect(res[0].ms).toEqual(1000),
-                    expect(res[0].at).toBeGreaterThan(res[1].at),
-                    expect(res[0].at).toBeGreaterThan(res[2].at),
-                    expect(res[1].ms).toEqual(10),
-                    expect(res[1].at).toBeGreaterThan(res[2].at),
-                    expect(res[2].ms).toEqual(1),
-                ]));
-        });
-        it('should resolve in sequence of array: 1000, 10, 1', () => {
-            expect.assertions(6);
-            return tp.promiseChain(delays.map(d => doDelay(d)))  // start from []
-                .then((res:callResult[]) => Promise.all([
-                    expect(res[0].ms).toEqual(1000),
-                    expect(res[0].at).toBeLessThanOrEqual(res[1].at),
-                    expect(res[0].at).toBeLessThanOrEqual(res[2].at),
-                    expect(res[1].ms).toEqual(10),
-                    expect(res[1].at).toBeLessThanOrEqual(res[2].at),
-                    expect(res[2].ms).toEqual(1),
-                ]));
         });
     });
 });
