@@ -20,15 +20,13 @@ Helpful Scripts utility functions for use in both browser and `node` environment
     - provide delays and timeouts for promises.
 - `CheckSum` a quick checksum implementation for small strings
 - `Date` printf-style date formatting function
+- `uniquefy` removes duplicates from arrays, as defined by a selectable key
 - `log` console.log - style logging utility supporting 
-    - module-level logging and configurstion of module IDs and time stamp format<br>
+    - module-level logging and configuration of module IDs and time stamp format<br>
       `log.inform('passed');    // -> 20200516 11:21:54 myModule INFO passed`
-    - global and module-level filtering of the severity of log outputs: 
-      <span style="color:#888">debug</span>, 
-      <span style="color:#080">inform</span>, 
-      <span style="color:#880">warn</span>, 
-      <span style="color:#800">error</span>
-    - optional functional call type to avoid compiling messages that will be filtered
+    - global and module-level filtering of the severity of log outputs: debug, inform, warn, error
+    - optional functional call type to avoid compiling messages that will be filtered <br>
+      `log,inform(()=>`passed`);`
     - colored log messages, by severity
     - colored inspect output, by indentation level
 

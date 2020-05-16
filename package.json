@@ -4,9 +4,7 @@
     "main": "./index.js",
     "types": "./index.d.ts",
     "keywords": [
-        "es6",
-        "showdown",
-        "date-printf"
+        "es6", "logging", "pacing", "uniquefy", "date-printf"
     ],
     "license": "MIT",
     "description": "Helpful Scripts cross-framework libraries ",
