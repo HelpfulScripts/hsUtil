@@ -24,11 +24,10 @@ Helpful Scripts utility functions for use in both browser and `node` environment
     - module-level logging and configurstion of module IDs and time stamp format
       `log.inform('passed');    // -> 20200516 11:21:54 myModule INFO passed
     - global and module-level filtering of the severity of log outputs: 
-      <style>color:'#888'</style>debug, 
-      <style>color:'#080'</style>inform, 
-      <style>color:'#880'</style>warm, 
-      <style>color:'#800'</style>error
-      <style>color:'#000'</style>
+      <span style="color:'#888'">debug</span>, 
+      <span style="color:'#080'">inform</span>, 
+      <span style="color:'#880'">warm</span>, 
+      <span style="color:'#800'">error</span>
     - optional functional call type to avoid compiling messages that will be filtered
     - colored log messages, by severity
     - colored inspect output, by indentation level
