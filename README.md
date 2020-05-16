@@ -21,13 +21,13 @@ Helpful Scripts utility functions for use in both browser and `node` environment
 - `CheckSum` a quick checksum implementation for small strings
 - `Date` printf-style date formatting function
 - `log` console.log - style logging utility supporting 
-    - module-level logging and configurstion of module IDs and time stamp format
+    - module-level logging and configurstion of module IDs and time stamp format<br>
       `log.inform('passed');    // -> 20200516 11:21:54 myModule INFO passed`
     - global and module-level filtering of the severity of log outputs: 
-      <span style="color:#888;">debug</span>, 
-      <span style="color:#080;">inform</span>, 
-      <span style="color:#880;">warm</span>, 
-      <span style="color:#800;">error</span>
+      <span style="color:#888">debug</span>, 
+      <span style="color:#080">inform</span>, 
+      <span style="color:#880">warn</span>, 
+      <span style="color:#800">error</span>
     - optional functional call type to avoid compiling messages that will be filtered
     - colored log messages, by severity
     - colored inspect output, by indentation level
