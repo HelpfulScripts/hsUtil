@@ -22,7 +22,7 @@ Helpful Scripts utility functions for use in both browser and `node` environment
 - `Date` printf-style date formatting function
 - `log` console.log - style logging utility supporting 
     - module-level logging and configurstion of module IDs and time stamp format
-      `log.inform('passed');    // -> 20200516 11:21:54 myModule INFO passed
+      `log.inform('passed');    // -> 20200516 11:21:54 myModule INFO passed`
     - global and module-level filtering of the severity of log outputs: 
       <span style="color:#888;">debug</span>, 
       <span style="color:#080;">inform</span>, 
