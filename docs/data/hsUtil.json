@@ -851,114 +851,14 @@
 			]
 		},
 		{
-			"id": 88,
-			"name": "\"Number\"",
-			"kind": 1,
-			"kindString": "External module",
-			"flags": {
-				"isExported": true
-			},
-			"originalName": "/Users/sth1pal/Documents/Development/JavaScript/nodejs/ts6/dev/hsLibs/standalone/hsUtil/src/Number.ts",
-			"comment": {
-				"shortText": "# Number Formatting Support."
-			},
-			"children": [
-				{
-					"id": 89,
-					"name": "round",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {
-						"isExported": true
-					},
-					"signatures": [
-						{
-							"id": 90,
-							"name": "round",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {
-								"isExported": true
-							},
-							"comment": {
-								"shortText": "rounds a number `n` to the specified `d` decimals and returns a string"
-							},
-							"parameters": [
-								{
-									"id": 91,
-									"name": "n",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {
-										"isExported": true
-									},
-									"comment": {
-										"text": "the number to round"
-									},
-									"type": {
-										"type": "intrinsic",
-										"name": "number"
-									}
-								},
-								{
-									"id": 92,
-									"name": "d",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {
-										"isExported": true
-									},
-									"comment": {
-										"text": "the number of decimal digits to round to; defaults to 0\n"
-									},
-									"type": {
-										"type": "intrinsic",
-										"name": "number"
-									},
-									"defaultValue": "0"
-								}
-							],
-							"type": {
-								"type": "intrinsic",
-								"name": "string"
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "Number.ts",
-							"line": 12,
-							"character": 22
-						}
-					]
-				}
-			],
-			"groups": [
-				{
-					"title": "Functions",
-					"kind": 64,
-					"children": [
-						89
-					]
-				}
-			],
-			"sources": [
-				{
-					"fileName": "Number.ts",
-					"line": 1,
-					"character": 0
-				}
-			]
-		},
-		{
 			"id": 47,
-			"name": "\"TimedPromises\"",
+			"name": "\"Pacing\"",
 			"kind": 1,
 			"kindString": "External module",
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "/Users/sth1pal/Documents/Development/JavaScript/nodejs/ts6/dev/hsLibs/standalone/hsUtil/src/TimedPromises.ts",
+			"originalName": "/Users/sth1pal/Documents/Development/JavaScript/nodejs/ts6/dev/hsLibs/standalone/hsUtil/src/Pacing.ts",
 			"comment": {
 				"shortText": "## Helpful Script Timing Support\nProvides convenience functions that don't depend on specific frameworks or libraries"
 			},
@@ -972,12 +872,8 @@
 						"isExported": true
 					},
 					"comment": {
-						"tags": [
-							{
-								"tag": "description",
-								"text": "ensures that function calls in a sequence are not executed faster than a preset minimum delay.\n\n**Usage:**\n```\nconst q = new PacingQueue(100); // 100ms between calls\n...\nq.add((ms) => `I have been called after ${ms}ms`;})\n   .then((result) => console.log(result));     // prints: I have been called after ***ms`\n```\n"
-							}
-						]
+						"shortText": "paces a series of similar function calls to\n- not occur faster than a preset rate\n- not issue more unresolved calls then a preset limit",
+						"text": "**Usage:**\n```\nconst q = new PacingQueue(100, 10); // 100ms between calls, at most 10 unresolved\n...\nconst result = await q.add((ms) => `I have been called after ${ms}ms`;})\nconsole.log(result));     // prints: I have been called after 105ms`\n```\n"
 					},
 					"children": [
 						{
@@ -1044,7 +940,7 @@
 							],
 							"sources": [
 								{
-									"fileName": "TimedPromises.ts",
+									"fileName": "Pacing.ts",
 									"line": 77,
 									"character": 32
 								}
@@ -1064,7 +960,7 @@
 							},
 							"sources": [
 								{
-									"fileName": "TimedPromises.ts",
+									"fileName": "Pacing.ts",
 									"line": 69,
 									"character": 25
 								}
@@ -1089,7 +985,7 @@
 							},
 							"sources": [
 								{
-									"fileName": "TimedPromises.ts",
+									"fileName": "Pacing.ts",
 									"line": 71,
 									"character": 16
 								}
@@ -1114,7 +1010,7 @@
 							},
 							"sources": [
 								{
-									"fileName": "TimedPromises.ts",
+									"fileName": "Pacing.ts",
 									"line": 77,
 									"character": 19
 								}
@@ -1139,7 +1035,7 @@
 							},
 							"sources": [
 								{
-									"fileName": "TimedPromises.ts",
+									"fileName": "Pacing.ts",
 									"line": 73,
 									"character": 21
 								}
@@ -1164,7 +1060,7 @@
 							},
 							"sources": [
 								{
-									"fileName": "TimedPromises.ts",
+									"fileName": "Pacing.ts",
 									"line": 75,
 									"character": 19
 								}
@@ -1248,7 +1144,7 @@
 													],
 													"sources": [
 														{
-															"fileName": "TimedPromises.ts",
+															"fileName": "Pacing.ts",
 															"line": 104,
 															"character": 17
 														}
@@ -1271,7 +1167,7 @@
 							],
 							"sources": [
 								{
-									"fileName": "TimedPromises.ts",
+									"fileName": "Pacing.ts",
 									"line": 104,
 									"character": 13
 								}
@@ -1305,7 +1201,7 @@
 							],
 							"sources": [
 								{
-									"fileName": "TimedPromises.ts",
+									"fileName": "Pacing.ts",
 									"line": 96,
 									"character": 14
 								}
@@ -1339,7 +1235,7 @@
 							],
 							"sources": [
 								{
-									"fileName": "TimedPromises.ts",
+									"fileName": "Pacing.ts",
 									"line": 94,
 									"character": 11
 								}
@@ -1388,7 +1284,7 @@
 							],
 							"sources": [
 								{
-									"fileName": "TimedPromises.ts",
+									"fileName": "Pacing.ts",
 									"line": 92,
 									"character": 20
 								}
@@ -1437,7 +1333,7 @@
 							],
 							"sources": [
 								{
-									"fileName": "TimedPromises.ts",
+									"fileName": "Pacing.ts",
 									"line": 90,
 									"character": 11
 								}
@@ -1477,7 +1373,7 @@
 					],
 					"sources": [
 						{
-							"fileName": "TimedPromises.ts",
+							"fileName": "Pacing.ts",
 							"line": 67,
 							"character": 17
 						}
@@ -1501,13 +1397,8 @@
 								"isExported": true
 							},
 							"comment": {
-								"returns": "a `Promise` that resolves after `ms`\n",
-								"tags": [
-									{
-										"tag": "description",
-										"text": "delays a promise, passing the parameter\nreceived from the calling promise down to the resolving promise.\n\n**Usage 1:** a delay within the `then` chain:\n```\n<PromiseLike>\n   .then(...)\n   .then(delay(10))\n   .then(...)\n   .catch(...)\n```\nor\n```\ntry {\n   await <PromiseLike>\n   ...\n   await delay(10)\n   ...\n} catch(e) {\n   ...\n}\n```\n**Usage 2:** an initial delay\n```\ndelay(10)()\n   .then(...)\n   .catch(...)\n```"
-									}
-								]
+								"shortText": "promise-based delay function. Delays execution in a promise chain, passing the parameter\nreceived from the calling promise down to the resolving promise.\n```\ndelay(10)(param)\n   .then(param => {...})\n   .catch(...)\n```\nor: insert delay within the `then` chain:\n```\n<PromiseLike>\n   .then(a => { ... return b; })\n   .then(delay(10))\n   .then(b => { ... })\n   .catch(...)\n```\nor as an async/await pattern:\n```\ntry {\n   await <PromiseLike>\n   ...\n   await delay(10)\n   ...\n} catch(e) {\n   ...\n}\n```",
+								"returns": "a `Promise` that resolves after `ms`\n"
 							},
 							"parameters": [
 								{
@@ -1532,168 +1423,9 @@
 					],
 					"sources": [
 						{
-							"fileName": "TimedPromises.ts",
-							"line": 48,
+							"fileName": "Pacing.ts",
+							"line": 46,
 							"character": 21
-						}
-					]
-				},
-				{
-					"id": 80,
-					"name": "promiseChain",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {
-						"isExported": true
-					},
-					"signatures": [
-						{
-							"id": 81,
-							"name": "promiseChain",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {
-								"isExported": true
-							},
-							"comment": {
-								"shortText": "Sequentially calls the provided `tasks` in a `.then()` chain of promises,\nguaranteeing the order of execution per index order in the array.\nEach task can return a result, or a promise for a result.",
-								"returns": "an array of results for each task\n"
-							},
-							"typeParameter": [
-								{
-									"id": 82,
-									"name": "T",
-									"kind": 131072,
-									"kindString": "Type parameter",
-									"flags": {
-										"isExported": true
-									}
-								}
-							],
-							"parameters": [
-								{
-									"id": 83,
-									"name": "tasks",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {
-										"isExported": true
-									},
-									"comment": {
-										"text": "an array of task calls to execute in sequence. Each call will pass the array of results for tasks so far executed."
-									},
-									"type": {
-										"type": "array",
-										"elementType": {
-											"type": "reflection",
-											"declaration": {
-												"id": 84,
-												"name": "__type",
-												"kind": 65536,
-												"kindString": "Type literal",
-												"flags": {
-													"isExported": true
-												},
-												"signatures": [
-													{
-														"id": 85,
-														"name": "__call",
-														"kind": 4096,
-														"kindString": "Call signature",
-														"flags": {
-															"isExported": true
-														},
-														"parameters": [
-															{
-																"id": 86,
-																"name": "results",
-																"kind": 32768,
-																"kindString": "Parameter",
-																"flags": {
-																	"isExported": true
-																},
-																"type": {
-																	"type": "array",
-																	"elementType": {
-																		"type": "typeParameter",
-																		"name": "T"
-																	}
-																}
-															}
-														],
-														"type": {
-															"type": "union",
-															"types": [
-																{
-																	"type": "typeParameter",
-																	"name": "T"
-																},
-																{
-																	"type": "reference",
-																	"typeArguments": [
-																		{
-																			"type": "typeParameter",
-																			"name": "T"
-																		}
-																	],
-																	"name": "Promise"
-																}
-															]
-														}
-													}
-												],
-												"sources": [
-													{
-														"fileName": "TimedPromises.ts",
-														"line": 133,
-														"character": 38
-													}
-												]
-											}
-										}
-									}
-								},
-								{
-									"id": 87,
-									"name": "initialResult",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {
-										"isExported": true
-									},
-									"comment": {
-										"text": "optional initial array to collect the task results."
-									},
-									"type": {
-										"type": "array",
-										"elementType": {
-											"type": "typeParameter",
-											"name": "T"
-										}
-									},
-									"defaultValue": "[]"
-								}
-							],
-							"type": {
-								"type": "reference",
-								"typeArguments": [
-									{
-										"type": "array",
-										"elementType": {
-											"type": "typeParameter",
-											"name": "T"
-										}
-									}
-								],
-								"name": "Promise"
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "TimedPromises.ts",
-							"line": 133,
-							"character": 28
 						}
 					]
 				},
@@ -1715,13 +1447,8 @@
 								"isExported": true
 							},
 							"comment": {
-								"returns": "a Promise that rejects after `ms`\n",
-								"tags": [
-									{
-										"tag": "description",
-										"text": "timeout promise for use in `Promise.race()`."
-									}
-								]
+								"shortText": "timeout promise for use in `Promise.race()`.",
+								"returns": "a Promise that rejects after `ms`\n"
 							},
 							"parameters": [
 								{
@@ -1755,7 +1482,7 @@
 					],
 					"sources": [
 						{
-							"fileName": "TimedPromises.ts",
+							"fileName": "Pacing.ts",
 							"line": 12,
 							"character": 23
 						}
@@ -1775,21 +1502,20 @@
 					"kind": 64,
 					"children": [
 						77,
-						80,
 						74
 					]
 				}
 			],
 			"sources": [
 				{
-					"fileName": "TimedPromises.ts",
+					"fileName": "Pacing.ts",
 					"line": 1,
 					"character": 0
 				}
 			]
 		},
 		{
-			"id": 213,
+			"id": 200,
 			"name": "\"index\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -1799,17 +1525,17 @@
 			"originalName": "/Users/sth1pal/Documents/Development/JavaScript/nodejs/ts6/dev/hsLibs/standalone/hsUtil/src/index.ts",
 			"children": [
 				{
-					"id": 222,
+					"id": 207,
 					"name": "Log",
 					"kind": 16777216,
 					"kindString": "Reference",
 					"flags": {
 						"isExported": true
 					},
-					"target": 101
+					"target": 88
 				},
 				{
-					"id": 216,
+					"id": 203,
 					"name": "Pace",
 					"kind": 16777216,
 					"kindString": "Reference",
@@ -1819,7 +1545,7 @@
 					"target": 48
 				},
 				{
-					"id": 219,
+					"id": 205,
 					"name": "date",
 					"kind": 16777216,
 					"kindString": "Reference",
@@ -1829,7 +1555,7 @@
 					"target": 18
 				},
 				{
-					"id": 215,
+					"id": 202,
 					"name": "delay",
 					"kind": 16777216,
 					"kindString": "Reference",
@@ -1839,7 +1565,7 @@
 					"target": 77
 				},
 				{
-					"id": 220,
+					"id": 206,
 					"name": "ms",
 					"kind": 16777216,
 					"kindString": "Reference",
@@ -1849,27 +1575,7 @@
 					"target": 22
 				},
 				{
-					"id": 217,
-					"name": "promiseChain",
-					"kind": 16777216,
-					"kindString": "Reference",
-					"flags": {
-						"isExported": true
-					},
-					"target": 80
-				},
-				{
-					"id": 221,
-					"name": "round",
-					"kind": 16777216,
-					"kindString": "Reference",
-					"flags": {
-						"isExported": true
-					},
-					"target": 89
-				},
-				{
-					"id": 218,
+					"id": 204,
 					"name": "shortCheckSum",
 					"kind": 16777216,
 					"kindString": "Reference",
@@ -1879,7 +1585,7 @@
 					"target": 8
 				},
 				{
-					"id": 214,
+					"id": 201,
 					"name": "timeout",
 					"kind": 16777216,
 					"kindString": "Reference",
@@ -1889,7 +1595,7 @@
 					"target": 74
 				},
 				{
-					"id": 223,
+					"id": 208,
 					"name": "uniquefy",
 					"kind": 16777216,
 					"kindString": "Reference",
@@ -1904,16 +1610,14 @@
 					"title": "References",
 					"kind": 16777216,
 					"children": [
-						222,
-						216,
-						219,
-						215,
-						220,
-						217,
-						221,
-						218,
-						214,
-						223
+						207,
+						203,
+						205,
+						202,
+						206,
+						204,
+						201,
+						208
 					]
 				}
 			],
@@ -1926,7 +1630,7 @@
 			]
 		},
 		{
-			"id": 93,
+			"id": 80,
 			"name": "\"log\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -1940,7 +1644,7 @@
 			},
 			"children": [
 				{
-					"id": 101,
+					"id": 88,
 					"name": "Log",
 					"kind": 128,
 					"kindString": "Class",
@@ -1952,7 +1656,7 @@
 					},
 					"children": [
 						{
-							"id": 120,
+							"id": 107,
 							"name": "constructor",
 							"kind": 512,
 							"kindString": "Constructor",
@@ -1961,7 +1665,7 @@
 							},
 							"signatures": [
 								{
-									"id": 121,
+									"id": 108,
 									"name": "new Log",
 									"kind": 16384,
 									"kindString": "Constructor signature",
@@ -1970,7 +1674,7 @@
 									},
 									"parameters": [
 										{
-											"id": 122,
+											"id": 109,
 											"name": "prefix",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -1985,7 +1689,7 @@
 									],
 									"type": {
 										"type": "reference",
-										"id": 101,
+										"id": 88,
 										"name": "Log"
 									}
 								}
@@ -1999,7 +1703,7 @@
 							]
 						},
 						{
-							"id": 119,
+							"id": 106,
 							"name": "colors",
 							"kind": 1024,
 							"kindString": "Property",
@@ -2021,7 +1725,7 @@
 							"defaultValue": "true"
 						},
 						{
-							"id": 118,
+							"id": 105,
 							"name": "maxLength",
 							"kind": 1024,
 							"kindString": "Property",
@@ -2043,7 +1747,7 @@
 							"defaultValue": "-1"
 						},
 						{
-							"id": 116,
+							"id": 103,
 							"name": "reportLevel",
 							"kind": 1024,
 							"kindString": "Property",
@@ -2060,13 +1764,13 @@
 							],
 							"type": {
 								"type": "reference",
-								"id": 94,
+								"id": 81,
 								"name": "LevelDesc"
 							},
 							"defaultValue": "<LevelDesc>undefined"
 						},
 						{
-							"id": 117,
+							"id": 104,
 							"name": "reportPrefix",
 							"kind": 1024,
 							"kindString": "Property",
@@ -2088,7 +1792,7 @@
 							"defaultValue": "\"\""
 						},
 						{
-							"id": 105,
+							"id": 92,
 							"name": "DEBUG",
 							"kind": 1024,
 							"kindString": "Property",
@@ -2114,7 +1818,7 @@
 							"defaultValue": "\"DEBUG\""
 						},
 						{
-							"id": 108,
+							"id": 95,
 							"name": "ERROR",
 							"kind": 1024,
 							"kindString": "Property",
@@ -2140,7 +1844,7 @@
 							"defaultValue": "\"ERROR\""
 						},
 						{
-							"id": 102,
+							"id": 89,
 							"name": "INDENT_COLORS",
 							"kind": 1024,
 							"kindString": "Property",
@@ -2166,7 +1870,7 @@
 							"defaultValue": "['darkblue', 'darkgreen', 'darkred', 'darkcyan', 'darkyellow', 'darkmagenta']"
 						},
 						{
-							"id": 106,
+							"id": 93,
 							"name": "INFO",
 							"kind": 1024,
 							"kindString": "Property",
@@ -2192,7 +1896,7 @@
 							"defaultValue": "\"INFO\""
 						},
 						{
-							"id": 107,
+							"id": 94,
 							"name": "WARN",
 							"kind": 1024,
 							"kindString": "Property",
@@ -2218,7 +1922,7 @@
 							"defaultValue": "\"WARN\""
 						},
 						{
-							"id": 104,
+							"id": 91,
 							"name": "dateFormat",
 							"kind": 1024,
 							"kindString": "Property",
@@ -2241,7 +1945,7 @@
 							"defaultValue": "Log.defDateFormat"
 						},
 						{
-							"id": 103,
+							"id": 90,
 							"name": "defDateFormat",
 							"kind": 1024,
 							"kindString": "Property",
@@ -2267,7 +1971,7 @@
 							"defaultValue": "\"%YYYY%MM%DD %hh:%mm:%ss.%jjj\""
 						},
 						{
-							"id": 115,
+							"id": 102,
 							"name": "globalLevel",
 							"kind": 1024,
 							"kindString": "Property",
@@ -2288,13 +1992,13 @@
 							],
 							"type": {
 								"type": "reference",
-								"id": 94,
+								"id": 81,
 								"name": "LevelDesc"
 							},
 							"defaultValue": "Log.levels[Log.INFO]"
 						},
 						{
-							"id": 114,
+							"id": 101,
 							"name": "log",
 							"kind": 1024,
 							"kindString": "Property",
@@ -2315,13 +2019,13 @@
 							],
 							"type": {
 								"type": "reference",
-								"id": 101,
+								"id": 88,
 								"name": "Log"
 							},
 							"defaultValue": "new Log('')"
 						},
 						{
-							"id": 123,
+							"id": 110,
 							"name": "messageLength",
 							"kind": 262144,
 							"kindString": "Accessor",
@@ -2334,7 +2038,7 @@
 							},
 							"getSignature": [
 								{
-									"id": 126,
+									"id": 113,
 									"name": "__get",
 									"kind": 524288,
 									"kindString": "Get signature",
@@ -2352,7 +2056,7 @@
 							],
 							"setSignature": [
 								{
-									"id": 124,
+									"id": 111,
 									"name": "__set",
 									"kind": 1048576,
 									"kindString": "Set signature",
@@ -2364,7 +2068,7 @@
 									},
 									"parameters": [
 										{
-											"id": 125,
+											"id": 112,
 											"name": "max",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2397,7 +2101,7 @@
 							]
 						},
 						{
-							"id": 161,
+							"id": 148,
 							"name": "config",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2407,7 +2111,7 @@
 							},
 							"signatures": [
 								{
-									"id": 162,
+									"id": 149,
 									"name": "config",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2419,7 +2123,7 @@
 									},
 									"parameters": [
 										{
-											"id": 163,
+											"id": 150,
 											"name": "cfg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2432,7 +2136,7 @@
 											"type": {
 												"type": "reflection",
 												"declaration": {
-													"id": 164,
+													"id": 151,
 													"name": "__type",
 													"kind": 65536,
 													"kindString": "Type literal",
@@ -2441,7 +2145,7 @@
 													},
 													"children": [
 														{
-															"id": 165,
+															"id": 152,
 															"name": "colors",
 															"kind": 32,
 															"kindString": "Variable",
@@ -2462,7 +2166,7 @@
 															}
 														},
 														{
-															"id": 166,
+															"id": 153,
 															"name": "format",
 															"kind": 32,
 															"kindString": "Variable",
@@ -2483,7 +2187,7 @@
 															}
 														},
 														{
-															"id": 167,
+															"id": 154,
 															"name": "level",
 															"kind": 32,
 															"kindString": "Variable",
@@ -2509,9 +2213,9 @@
 															"title": "Variables",
 															"kind": 32,
 															"children": [
-																165,
-																166,
-																167
+																152,
+																153,
+																154
 															]
 														}
 													],
@@ -2541,7 +2245,7 @@
 							]
 						},
 						{
-							"id": 131,
+							"id": 118,
 							"name": "debug",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2551,7 +2255,7 @@
 							},
 							"signatures": [
 								{
-									"id": 132,
+									"id": 119,
 									"name": "debug",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2564,7 +2268,7 @@
 									},
 									"parameters": [
 										{
-											"id": 133,
+											"id": 120,
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2595,7 +2299,7 @@
 							]
 						},
 						{
-							"id": 143,
+							"id": 130,
 							"name": "error",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2605,7 +2309,7 @@
 							},
 							"signatures": [
 								{
-									"id": 144,
+									"id": 131,
 									"name": "error",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2618,7 +2322,7 @@
 									},
 									"parameters": [
 										{
-											"id": 145,
+											"id": 132,
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2649,7 +2353,7 @@
 							]
 						},
 						{
-							"id": 155,
+							"id": 142,
 							"name": "format",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2659,7 +2363,7 @@
 							},
 							"signatures": [
 								{
-									"id": 156,
+									"id": 143,
 									"name": "format",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2672,7 +2376,7 @@
 									},
 									"parameters": [
 										{
-											"id": 157,
+											"id": 144,
 											"name": "fmtStr",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2704,7 +2408,7 @@
 							]
 						},
 						{
-							"id": 176,
+							"id": 163,
 							"name": "getPrePostfix",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2714,7 +2418,7 @@
 							},
 							"signatures": [
 								{
-									"id": 177,
+									"id": 164,
 									"name": "getPrePostfix",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2723,7 +2427,7 @@
 									},
 									"parameters": [
 										{
-											"id": 178,
+											"id": 165,
 											"name": "indent",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2736,7 +2440,7 @@
 											}
 										},
 										{
-											"id": 179,
+											"id": 166,
 											"name": "level",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2749,7 +2453,7 @@
 											}
 										},
 										{
-											"id": 180,
+											"id": 167,
 											"name": "currIndent",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2762,7 +2466,7 @@
 											}
 										},
 										{
-											"id": 181,
+											"id": 168,
 											"name": "colors",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2810,7 +2514,7 @@
 							]
 						},
 						{
-							"id": 137,
+							"id": 124,
 							"name": "info",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2820,7 +2524,7 @@
 							},
 							"signatures": [
 								{
-									"id": 138,
+									"id": 125,
 									"name": "info",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2833,7 +2537,7 @@
 									},
 									"parameters": [
 										{
-											"id": 139,
+											"id": 126,
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2864,7 +2568,7 @@
 							]
 						},
 						{
-							"id": 168,
+							"id": 155,
 							"name": "inspect",
 							"kind": 2048,
 							"kindString": "Method",
@@ -2874,7 +2578,7 @@
 							},
 							"signatures": [
 								{
-									"id": 169,
+									"id": 156,
 									"name": "inspect",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -2888,7 +2592,7 @@
 									},
 									"parameters": [
 										{
-											"id": 170,
+											"id": 157,
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2901,7 +2605,7 @@
 											}
 										},
 										{
-											"id": 171,
+											"id": 158,
 											"name": "__namedParameters",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -2912,7 +2616,7 @@
 											"type": {
 												"type": "reflection",
 												"declaration": {
-													"id": 172,
+													"id": 159,
 													"name": "__type",
 													"kind": 65536,
 													"kindString": "Type literal",
@@ -2921,7 +2625,7 @@
 													},
 													"children": [
 														{
-															"id": 175,
+															"id": 162,
 															"name": "colors",
 															"kind": 32,
 															"kindString": "Variable",
@@ -2948,7 +2652,7 @@
 															"defaultValue": "Log.INDENT_COLORS"
 														},
 														{
-															"id": 173,
+															"id": 160,
 															"name": "depth",
 															"kind": 32,
 															"kindString": "Variable",
@@ -2972,7 +2676,7 @@
 															"defaultValue": "-1"
 														},
 														{
-															"id": 174,
+															"id": 161,
 															"name": "indent",
 															"kind": 32,
 															"kindString": "Variable",
@@ -3001,9 +2705,9 @@
 															"title": "Variables",
 															"kind": 32,
 															"children": [
-																175,
-																173,
-																174
+																162,
+																160,
+																161
 															]
 														}
 													],
@@ -3034,7 +2738,7 @@
 							]
 						},
 						{
-							"id": 127,
+							"id": 114,
 							"name": "level",
 							"kind": 2048,
 							"kindString": "Method",
@@ -3044,7 +2748,7 @@
 							},
 							"signatures": [
 								{
-									"id": 128,
+									"id": 115,
 									"name": "level",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -3058,7 +2762,7 @@
 									},
 									"parameters": [
 										{
-											"id": 129,
+											"id": 116,
 											"name": "newLevelSym",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -3075,7 +2779,7 @@
 											}
 										},
 										{
-											"id": 130,
+											"id": 117,
 											"name": "setGlobalLevel",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -3107,7 +2811,7 @@
 							]
 						},
 						{
-							"id": 146,
+							"id": 133,
 							"name": "out",
 							"kind": 2048,
 							"kindString": "Method",
@@ -3117,7 +2821,7 @@
 							},
 							"signatures": [
 								{
-									"id": 147,
+									"id": 134,
 									"name": "out",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -3130,7 +2834,7 @@
 									},
 									"parameters": [
 										{
-											"id": 148,
+											"id": 135,
 											"name": "lvl",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -3146,7 +2850,7 @@
 											}
 										},
 										{
-											"id": 149,
+											"id": 136,
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -3158,7 +2862,7 @@
 											},
 											"type": {
 												"type": "reference",
-												"id": 98,
+												"id": 85,
 												"name": "Msg"
 											}
 										}
@@ -3178,7 +2882,7 @@
 							]
 						},
 						{
-							"id": 150,
+							"id": 137,
 							"name": "output",
 							"kind": 2048,
 							"kindString": "Method",
@@ -3188,7 +2892,7 @@
 							},
 							"signatures": [
 								{
-									"id": 151,
+									"id": 138,
 									"name": "output",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -3198,7 +2902,7 @@
 									"comment": {},
 									"parameters": [
 										{
-											"id": 152,
+											"id": 139,
 											"name": "color",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -3211,7 +2915,7 @@
 											}
 										},
 										{
-											"id": 153,
+											"id": 140,
 											"name": "header",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -3224,7 +2928,7 @@
 											}
 										},
 										{
-											"id": 154,
+											"id": 141,
 											"name": "line",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -3252,7 +2956,7 @@
 							]
 						},
 						{
-							"id": 158,
+							"id": 145,
 							"name": "prefix",
 							"kind": 2048,
 							"kindString": "Method",
@@ -3262,7 +2966,7 @@
 							},
 							"signatures": [
 								{
-									"id": 159,
+									"id": 146,
 									"name": "prefix",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -3275,7 +2979,7 @@
 									},
 									"parameters": [
 										{
-											"id": 160,
+											"id": 147,
 											"name": "prf",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -3307,7 +3011,7 @@
 							]
 						},
 						{
-							"id": 134,
+							"id": 121,
 							"name": "progress",
 							"kind": 2048,
 							"kindString": "Method",
@@ -3317,7 +3021,7 @@
 							},
 							"signatures": [
 								{
-									"id": 135,
+									"id": 122,
 									"name": "progress",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -3330,7 +3034,7 @@
 									},
 									"parameters": [
 										{
-											"id": 136,
+											"id": 123,
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -3361,7 +3065,7 @@
 							]
 						},
 						{
-							"id": 140,
+							"id": 127,
 							"name": "warn",
 							"kind": 2048,
 							"kindString": "Method",
@@ -3371,7 +3075,7 @@
 							},
 							"signatures": [
 								{
-									"id": 141,
+									"id": 128,
 									"name": "warn",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -3384,7 +3088,7 @@
 									},
 									"parameters": [
 										{
-											"id": 142,
+											"id": 129,
 											"name": "msg",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -3415,7 +3119,7 @@
 							]
 						},
 						{
-							"id": 109,
+							"id": 96,
 							"name": "levels",
 							"kind": 2097152,
 							"kindString": "Object literal",
@@ -3429,7 +3133,7 @@
 							},
 							"children": [
 								{
-									"id": 110,
+									"id": 97,
 									"name": "__computed",
 									"kind": 2097152,
 									"kindString": "Object literal",
@@ -3438,7 +3142,7 @@
 									},
 									"children": [
 										{
-											"id": 113,
+											"id": 100,
 											"name": "desc",
 											"kind": 32,
 											"kindString": "Variable",
@@ -3474,7 +3178,7 @@
 											"defaultValue": "\"ERROR\""
 										},
 										{
-											"id": 111,
+											"id": 98,
 											"name": "importance",
 											"kind": 32,
 											"kindString": "Variable",
@@ -3510,7 +3214,7 @@
 											"defaultValue": "3"
 										},
 										{
-											"id": 112,
+											"id": 99,
 											"name": "sym",
 											"kind": 32,
 											"kindString": "Variable",
@@ -3551,9 +3255,9 @@
 											"title": "Variables",
 											"kind": 32,
 											"children": [
-												113,
-												111,
-												112
+												100,
+												98,
+												99
 											]
 										}
 									],
@@ -3590,7 +3294,7 @@
 									"title": "Object literals",
 									"kind": 2097152,
 									"children": [
-										110
+										97
 									]
 								}
 							],
@@ -3612,59 +3316,59 @@
 							"title": "Constructors",
 							"kind": 512,
 							"children": [
-								120
+								107
 							]
 						},
 						{
 							"title": "Properties",
 							"kind": 1024,
 							"children": [
-								119,
-								118,
-								116,
-								117,
-								105,
-								108,
-								102,
 								106,
-								107,
-								104,
+								105,
 								103,
-								115,
-								114
+								104,
+								92,
+								95,
+								89,
+								93,
+								94,
+								91,
+								90,
+								102,
+								101
 							]
 						},
 						{
 							"title": "Accessors",
 							"kind": 262144,
 							"children": [
-								123
+								110
 							]
 						},
 						{
 							"title": "Methods",
 							"kind": 2048,
 							"children": [
-								161,
-								131,
-								143,
+								148,
+								118,
+								130,
+								142,
+								163,
+								124,
 								155,
-								176,
+								114,
+								133,
 								137,
-								168,
-								127,
-								146,
-								150,
-								158,
-								134,
-								140
+								145,
+								121,
+								127
 							]
 						},
 						{
 							"title": "Object literals",
 							"kind": 2097152,
 							"children": [
-								109
+								96
 							]
 						}
 					],
@@ -3677,7 +3381,7 @@
 					]
 				},
 				{
-					"id": 94,
+					"id": 81,
 					"name": "LevelDesc",
 					"kind": 256,
 					"kindString": "Interface",
@@ -3689,7 +3393,7 @@
 					},
 					"children": [
 						{
-							"id": 97,
+							"id": 84,
 							"name": "desc",
 							"kind": 1024,
 							"kindString": "Property",
@@ -3709,7 +3413,7 @@
 							}
 						},
 						{
-							"id": 95,
+							"id": 82,
 							"name": "importance",
 							"kind": 1024,
 							"kindString": "Property",
@@ -3729,7 +3433,7 @@
 							}
 						},
 						{
-							"id": 96,
+							"id": 83,
 							"name": "sym",
 							"kind": 1024,
 							"kindString": "Property",
@@ -3754,9 +3458,9 @@
 							"title": "Properties",
 							"kind": 1024,
 							"children": [
-								97,
-								95,
-								96
+								84,
+								82,
+								83
 							]
 						}
 					],
@@ -3769,14 +3473,14 @@
 					]
 				},
 				{
-					"id": 98,
+					"id": 85,
 					"name": "Msg",
 					"kind": 256,
 					"kindString": "Interface",
 					"flags": {},
 					"children": [
 						{
-							"id": 99,
+							"id": 86,
 							"name": "color",
 							"kind": 1024,
 							"kindString": "Property",
@@ -3794,7 +3498,7 @@
 							}
 						},
 						{
-							"id": 100,
+							"id": 87,
 							"name": "msg",
 							"kind": 1024,
 							"kindString": "Property",
@@ -3817,8 +3521,8 @@
 							"title": "Properties",
 							"kind": 1024,
 							"children": [
-								99,
-								100
+								86,
+								87
 							]
 						}
 					],
@@ -3831,7 +3535,7 @@
 					]
 				},
 				{
-					"id": 182,
+					"id": 169,
 					"name": "COLOR",
 					"kind": 2097152,
 					"kindString": "Object literal",
@@ -3840,7 +3544,7 @@
 					},
 					"children": [
 						{
-							"id": 205,
+							"id": 192,
 							"name": "bgBlack",
 							"kind": 32,
 							"kindString": "Variable",
@@ -3859,7 +3563,7 @@
 							"defaultValue": "\"background-color:#000;\""
 						},
 						{
-							"id": 209,
+							"id": 196,
 							"name": "bgBlue",
 							"kind": 32,
 							"kindString": "Variable",
@@ -3878,7 +3582,7 @@
 							"defaultValue": "\"background-color:#00f;\""
 						},
 						{
-							"id": 211,
+							"id": 198,
 							"name": "bgCyan",
 							"kind": 32,
 							"kindString": "Variable",
@@ -3897,7 +3601,7 @@
 							"defaultValue": "\"background-color:#0ff;\""
 						},
 						{
-							"id": 207,
+							"id": 194,
 							"name": "bgGreen",
 							"kind": 32,
 							"kindString": "Variable",
@@ -3916,7 +3620,7 @@
 							"defaultValue": "\"background-color:#0f0;\""
 						},
 						{
-							"id": 210,
+							"id": 197,
 							"name": "bgMagenta",
 							"kind": 32,
 							"kindString": "Variable",
@@ -3935,7 +3639,7 @@
 							"defaultValue": "\"background-color:#f0f;\""
 						},
 						{
-							"id": 206,
+							"id": 193,
 							"name": "bgRed",
 							"kind": 32,
 							"kindString": "Variable",
@@ -3954,7 +3658,7 @@
 							"defaultValue": "\"background-color:#f00;\""
 						},
 						{
-							"id": 212,
+							"id": 199,
 							"name": "bgWhite",
 							"kind": 32,
 							"kindString": "Variable",
@@ -3973,7 +3677,7 @@
 							"defaultValue": "\"background-color:#fff;\""
 						},
 						{
-							"id": 208,
+							"id": 195,
 							"name": "bgYellow",
 							"kind": 32,
 							"kindString": "Variable",
@@ -3992,7 +3696,7 @@
 							"defaultValue": "\"background-color:#ff0;\""
 						},
 						{
-							"id": 190,
+							"id": 177,
 							"name": "black",
 							"kind": 32,
 							"kindString": "Variable",
@@ -4011,7 +3715,7 @@
 							"defaultValue": "\"color:#000;\""
 						},
 						{
-							"id": 187,
+							"id": 174,
 							"name": "blink",
 							"kind": 32,
 							"kindString": "Variable",
@@ -4030,7 +3734,7 @@
 							"defaultValue": "\"\""
 						},
 						{
-							"id": 194,
+							"id": 181,
 							"name": "blue",
 							"kind": 32,
 							"kindString": "Variable",
@@ -4049,7 +3753,7 @@
 							"defaultValue": "\"color:#00f;\""
 						},
 						{
-							"id": 184,
+							"id": 171,
 							"name": "bold",
 							"kind": 32,
 							"kindString": "Variable",
@@ -4068,7 +3772,7 @@
 							"defaultValue": "\"font-weight:bold;\""
 						},
 						{
-							"id": 183,
+							"id": 170,
 							"name": "clear",
 							"kind": 32,
 							"kindString": "Variable",
@@ -4087,7 +3791,7 @@
 							"defaultValue": "\"color:#000; background-color:inherit; font-weight:normal;\""
 						},
 						{
-							"id": 196,
+							"id": 183,
 							"name": "cyan",
 							"kind": 32,
 							"kindString": "Variable",
@@ -4106,7 +3810,7 @@
 							"defaultValue": "\"color:#0ff;\""
 						},
 						{
-							"id": 201,
+							"id": 188,
 							"name": "darkblue",
 							"kind": 32,
 							"kindString": "Variable",
@@ -4125,7 +3829,7 @@
 							"defaultValue": "\"color:#008;\""
 						},
 						{
-							"id": 203,
+							"id": 190,
 							"name": "darkcyan",
 							"kind": 32,
 							"kindString": "Variable",
@@ -4144,7 +3848,7 @@
 							"defaultValue": "\"color:#088;\""
 						},
 						{
-							"id": 199,
+							"id": 186,
 							"name": "darkgreen",
 							"kind": 32,
 							"kindString": "Variable",
@@ -4163,7 +3867,7 @@
 							"defaultValue": "\"color:#080;\""
 						},
 						{
-							"id": 202,
+							"id": 189,
 							"name": "darkmagenta",
 							"kind": 32,
 							"kindString": "Variable",
@@ -4182,7 +3886,7 @@
 							"defaultValue": "\"color:#808;\""
 						},
 						{
-							"id": 198,
+							"id": 185,
 							"name": "darkred",
 							"kind": 32,
 							"kindString": "Variable",
@@ -4201,7 +3905,7 @@
 							"defaultValue": "\"color:#800;\""
 						},
 						{
-							"id": 200,
+							"id": 187,
 							"name": "darkyellow",
 							"kind": 32,
 							"kindString": "Variable",
@@ -4220,7 +3924,7 @@
 							"defaultValue": "\"color:#880;\""
 						},
 						{
-							"id": 185,
+							"id": 172,
 							"name": "dim",
 							"kind": 32,
 							"kindString": "Variable",
@@ -4239,7 +3943,7 @@
 							"defaultValue": "\"\""
 						},
 						{
-							"id": 204,
+							"id": 191,
 							"name": "gray",
 							"kind": 32,
 							"kindString": "Variable",
@@ -4258,7 +3962,7 @@
 							"defaultValue": "\"color:#888;\""
 						},
 						{
-							"id": 192,
+							"id": 179,
 							"name": "green",
 							"kind": 32,
 							"kindString": "Variable",
@@ -4277,7 +3981,7 @@
 							"defaultValue": "\"color:#0f0;\""
 						},
 						{
-							"id": 189,
+							"id": 176,
 							"name": "hidden",
 							"kind": 32,
 							"kindString": "Variable",
@@ -4296,7 +4000,7 @@
 							"defaultValue": "\"\""
 						},
 						{
-							"id": 195,
+							"id": 182,
 							"name": "magenta",
 							"kind": 32,
 							"kindString": "Variable",
@@ -4315,7 +4019,7 @@
 							"defaultValue": "\"color:#f0f;\""
 						},
 						{
-							"id": 191,
+							"id": 178,
 							"name": "red",
 							"kind": 32,
 							"kindString": "Variable",
@@ -4334,7 +4038,7 @@
 							"defaultValue": "\"color:#f00;\""
 						},
 						{
-							"id": 188,
+							"id": 175,
 							"name": "reverse",
 							"kind": 32,
 							"kindString": "Variable",
@@ -4353,7 +4057,7 @@
 							"defaultValue": "\"\""
 						},
 						{
-							"id": 186,
+							"id": 173,
 							"name": "underscore",
 							"kind": 32,
 							"kindString": "Variable",
@@ -4372,7 +4076,7 @@
 							"defaultValue": "\"\""
 						},
 						{
-							"id": 197,
+							"id": 184,
 							"name": "white",
 							"kind": 32,
 							"kindString": "Variable",
@@ -4391,7 +4095,7 @@
 							"defaultValue": "\"color:#fff;\""
 						},
 						{
-							"id": 193,
+							"id": 180,
 							"name": "yellow",
 							"kind": 32,
 							"kindString": "Variable",
@@ -4415,36 +4119,36 @@
 							"title": "Variables",
 							"kind": 32,
 							"children": [
-								205,
-								209,
-								211,
-								207,
-								210,
-								206,
-								212,
-								208,
-								190,
-								187,
-								194,
-								184,
-								183,
-								196,
-								201,
-								203,
-								199,
-								202,
-								198,
-								200,
-								185,
-								204,
 								192,
-								189,
-								195,
-								191,
-								188,
-								186,
+								196,
+								198,
+								194,
 								197,
-								193
+								193,
+								199,
+								195,
+								177,
+								174,
+								181,
+								171,
+								170,
+								183,
+								188,
+								190,
+								186,
+								189,
+								185,
+								187,
+								172,
+								191,
+								179,
+								176,
+								182,
+								178,
+								175,
+								173,
+								184,
+								180
 							]
 						}
 					],
@@ -4466,22 +4170,22 @@
 					"title": "Classes",
 					"kind": 128,
 					"children": [
-						101
+						88
 					]
 				},
 				{
 					"title": "Interfaces",
 					"kind": 256,
 					"children": [
-						94,
-						98
+						81,
+						85
 					]
 				},
 				{
 					"title": "Object literals",
 					"kind": 2097152,
 					"children": [
-						182
+						169
 					]
 				}
 			],
@@ -4494,7 +4198,7 @@
 			]
 		},
 		{
-			"id": 224,
+			"id": 209,
 			"name": "\"overview\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -4504,7 +4208,7 @@
 			"originalName": "/Users/sth1pal/Documents/Development/JavaScript/nodejs/ts6/dev/hsLibs/standalone/hsUtil/src/overview.ts",
 			"comment": {
 				"shortText": "# hsUtil",
-				"text": "Helpful Scripts utility functions for use in both browser and `node` environments\n<a href=\"./data/src/hsUtil/coverage/\" target=\"_blank\">[Coverage Info]</a>\n\n[![npm version](https://badge.fury.io/js/hsutil.svg)](https://badge.fury.io/js/hsutil)\n[![GitHub](https://img.shields.io/badge/GitHub-hsUtil-blue.svg)](https://github.com/helpfulscripts/hsutil)\n[![docs](https://img.shields.io/badge/hsDocs-hsUtil-blue.svg)](https://helpfulscripts.github.io/hsUtil/#!/api/hsUtil/0)\n[![Build Status](https://travis-ci.org/HelpfulScripts/hsUtil.svg?branch=master)](https://travis-ci.org/HelpfulScripts/hsUtil)\n[![Dependencies Status](https://david-dm.org/helpfulscripts/hsutil.svg)](https://david-dm.org/helpfulscripts/hsutil)\n[![codecov](https://codecov.io/gh/HelpfulScripts/hsUtil/branch/master/graph/badge.svg)](https://codecov.io/gh/HelpfulScripts/hsUtil)\n[![Known Vulnerabilities](https://snyk.io/test/github/HelpfulScripts/hsUtil/badge.svg?targetFile=package.json)](https://snyk.io/test/github/HelpfulScripts/hsUtil?targetFile=package.json)\n[![NPM License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://www.npmjs.com/package/hsutil)\n\n___\n\n## Index - no external dependencies:\n- &nbsp; {@link TimedPromises TimedPromises} functions that provide delays and timeouts for promises.\n- &nbsp; {@link Checksum Checksum} a quick checksum implementation for small strings\n- &nbsp; {@link Date Date} printf-style date formatting function\n- &nbsp; {@link round Number.round} rounding to n digits\n- &nbsp; {@link log Log} module-level logging\n"
+				"text": "Helpful Scripts utility functions for use in both browser and `node` environments\n<a href=\"./data/src/hsUtil/coverage/\" target=\"_blank\">[Coverage Info]</a>\n\n[![npm version](https://badge.fury.io/js/hsutil.svg)](https://badge.fury.io/js/hsutil)\n[![GitHub](https://img.shields.io/badge/GitHub-hsUtil-blue.svg)](https://github.com/helpfulscripts/hsutil)\n[![docs](https://img.shields.io/badge/hsDocs-hsUtil-blue.svg)](https://helpfulscripts.github.io/hsUtil/#!/api/hsUtil/0)\n[![Build Status](https://travis-ci.org/HelpfulScripts/hsUtil.svg?branch=master)](https://travis-ci.org/HelpfulScripts/hsUtil)\n[![Dependencies Status](https://david-dm.org/helpfulscripts/hsutil.svg)](https://david-dm.org/helpfulscripts/hsutil)\n[![codecov](https://codecov.io/gh/HelpfulScripts/hsUtil/branch/master/graph/badge.svg)](https://codecov.io/gh/HelpfulScripts/hsUtil)\n[![Known Vulnerabilities](https://snyk.io/test/github/HelpfulScripts/hsUtil/badge.svg?targetFile=package.json)](https://snyk.io/test/github/HelpfulScripts/hsUtil?targetFile=package.json)\n[![NPM License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://www.npmjs.com/package/hsutil)\n\n___\n\n## Index - no external dependencies:\n- &nbsp; {@link Log Log} module-level logging\n- &nbsp; {@link Pacing Pacing} functions that provide delays and timeouts for promises.\n- &nbsp; {@link Date Date} printf-style date formatting function\n- &nbsp; {@link Checksum Checksum} a quick checksum implementation for small strings\n"
 			},
 			"sources": [
 				{
@@ -4523,11 +4227,10 @@
 				1,
 				7,
 				11,
-				88,
 				47,
-				213,
-				93,
-				224
+				200,
+				80,
+				209
 			]
 		}
 	]
