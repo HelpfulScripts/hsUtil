@@ -126,7 +126,7 @@ const COLOR = {
 export interface LevelDesc { importance:number; sym:string; desc:string; }
 
 interface Msg {
-    color: string;
+    color: string[];
     msg:   any;
 }
 
@@ -226,7 +226,7 @@ export class Log {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the file written to, or undefined
      */
-    public debug(msg:any):string { return this.out(Log.DEBUG, { color: 'gray', msg:msg }); }
+    public debug(msg:any):string { return this.out(Log.DEBUG, { color: ['gray'], msg:msg }); }
 
     /**
      * reports an informational message to the log. 
@@ -236,7 +236,7 @@ export class Log {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the file written to, or undefined
      */
-    public progress(msg:any):string { return this.out(Log.INFO, { color: 'darkblue', msg:msg }); }
+    public progress(msg:any):string { return this.out(Log.INFO, { color: ['darkblue'], msg:msg }); }
 
     /**
      * reports an informational message to the log. 
@@ -246,7 +246,7 @@ export class Log {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the file written to, or undefined
      */
-    public info(msg:any):string { return this.out(Log.INFO, { color: 'darkgreen', msg:msg }); }
+    public info(msg:any):string { return this.out(Log.INFO, { color: ['darkgreen'], msg:msg }); }
 
     /**
      * reports an warning message to the log. 
@@ -256,7 +256,7 @@ export class Log {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the file written to, or undefined
      */
-    public warn(msg:any):string { return this.out(Log.WARN, { color: 'darkyellow', msg:msg }); }
+    public warn(msg:any):string { return this.out(Log.WARN, { color: ['darkyellow', 'bold'], msg:msg }); }
 
     /**
      * reports an error message to the log. 
@@ -266,7 +266,7 @@ export class Log {
      * @return promise to return the file written to, or undefined
      */
     public error(msg:any):string { 
-        const color = 'darkred';
+        const color = ['darkred', 'bold'];
         if (msg.message) { // special treatment for Errors
             this.out(Log.ERROR, { color: color, msg:msg.message });
             this.out(Log.ERROR, { color: color, msg:msg.stack });
@@ -313,8 +313,8 @@ export class Log {
 
     /** 
      */
-    protected output(color:string, header:string, line:string) {
-        console.log(`%c${header}%c ${line}`, COLOR[color], COLOR['clear']);
+    protected output(color:string[], header:string, line:string) {
+        console.log(`%c${header}%c ${line}`, color.map(c =>COLOR[c]).join(' '), COLOR['clear']);
     }
 
     /**

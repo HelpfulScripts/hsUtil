@@ -16,7 +16,7 @@ Helpful Scripts utility functions for use in both browser and `node` environment
  * ___
  * 
  * ## Index - no external dependencies:
- * - &nbsp; {@link Log Log} module-level logging
+ * - &nbsp; {@link log log} module-level logging
  * - &nbsp; {@link Pacing Pacing} functions that provide delays and timeouts for promises.
  * - &nbsp; {@link Date Date} printf-style date formatting function
  * - &nbsp; {@link Checksum Checksum} a quick checksum implementation for small strings

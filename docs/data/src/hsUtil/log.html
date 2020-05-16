@@ -149,7 +149,7 @@
 <p id=126 class="line"><span>&nbsp;126</span>export&nbsp;interface&nbsp;LevelDesc&nbsp;{&nbsp;importance:number;&nbsp;sym:string;&nbsp;desc:string;&nbsp;}</p>
 <p id=127 class="line"><span>&nbsp;127</span></p>
 <p id=128 class="line"><span>&nbsp;128</span>interface&nbsp;Msg&nbsp;{</p>
-<p id=129 class="line"><span>&nbsp;129</span>&nbsp;&nbsp;&nbsp;&nbsp;color:&nbsp;string;</p>
+<p id=129 class="line"><span>&nbsp;129</span>&nbsp;&nbsp;&nbsp;&nbsp;color:&nbsp;string[];</p>
 <p id=130 class="line"><span>&nbsp;130</span>&nbsp;&nbsp;&nbsp;&nbsp;msg:&nbsp;&nbsp;&nbsp;any;</p>
 <p id=131 class="line"><span>&nbsp;131</span>}</p>
 <p id=132 class="line"><span>&nbsp;132</span></p>
@@ -249,7 +249,7 @@
 <p id=226 class="line"><span>&nbsp;226</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;log&nbsp;optional&nbsp;flag&nbsp;to&nbsp;enable/suppress&nbsp;logging&nbsp;to&nbsp;file.&nbsp;Defaults&nbsp;to&nbsp;`true`</comment></p>
 <p id=227 class="line"><span>&nbsp;227</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;promise&nbsp;to&nbsp;return&nbsp;the&nbsp;file&nbsp;written&nbsp;to,&nbsp;or&nbsp;undefined</comment></p>
 <p id=228 class="line"><span>&nbsp;228</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</comment></p>
-<p id=229 class="line"><span>&nbsp;229</span>&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;debug(msg:any):string&nbsp;{&nbsp;return&nbsp;this.out(Log.DEBUG,&nbsp;{&nbsp;color:&nbsp;'</quote>gray<quote>',&nbsp;msg:msg&nbsp;});&nbsp;}</p>
+<p id=229 class="line"><span>&nbsp;229</span>&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;debug(msg:any):string&nbsp;{&nbsp;return&nbsp;this.out(Log.DEBUG,&nbsp;{&nbsp;color:&nbsp;['</quote>gray<quote>'],&nbsp;msg:msg&nbsp;});&nbsp;}</p>
 <p id=230 class="line"><span>&nbsp;230</span></p>
 <p id=231 class="line"><span>&nbsp;231</span>&nbsp;&nbsp;&nbsp;&nbsp;<comment>/**</comment></p>
 <p id=232 class="line"><span>&nbsp;232</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;reports&nbsp;an&nbsp;informational&nbsp;message&nbsp;to&nbsp;the&nbsp;log.&nbsp;</comment></p>
@@ -259,7 +259,7 @@
 <p id=236 class="line"><span>&nbsp;236</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;log&nbsp;optional&nbsp;flag&nbsp;to&nbsp;enable/suppress&nbsp;logging&nbsp;to&nbsp;file.&nbsp;Defaults&nbsp;to&nbsp;`true`</comment></p>
 <p id=237 class="line"><span>&nbsp;237</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;promise&nbsp;to&nbsp;return&nbsp;the&nbsp;file&nbsp;written&nbsp;to,&nbsp;or&nbsp;undefined</comment></p>
 <p id=238 class="line"><span>&nbsp;238</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</comment></p>
-<p id=239 class="line"><span>&nbsp;239</span>&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;progress(msg:any):string&nbsp;{&nbsp;return&nbsp;this.out(Log.INFO,&nbsp;{&nbsp;color:&nbsp;'</quote>darkblue<quote>',&nbsp;msg:msg&nbsp;});&nbsp;}</p>
+<p id=239 class="line"><span>&nbsp;239</span>&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;progress(msg:any):string&nbsp;{&nbsp;return&nbsp;this.out(Log.INFO,&nbsp;{&nbsp;color:&nbsp;['</quote>darkblue<quote>'],&nbsp;msg:msg&nbsp;});&nbsp;}</p>
 <p id=240 class="line"><span>&nbsp;240</span></p>
 <p id=241 class="line"><span>&nbsp;241</span>&nbsp;&nbsp;&nbsp;&nbsp;<comment>/**</comment></p>
 <p id=242 class="line"><span>&nbsp;242</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;reports&nbsp;an&nbsp;informational&nbsp;message&nbsp;to&nbsp;the&nbsp;log.&nbsp;</comment></p>
@@ -269,7 +269,7 @@
 <p id=246 class="line"><span>&nbsp;246</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;log&nbsp;optional&nbsp;flag&nbsp;to&nbsp;enable/suppress&nbsp;logging&nbsp;to&nbsp;file.&nbsp;Defaults&nbsp;to&nbsp;`true`</comment></p>
 <p id=247 class="line"><span>&nbsp;247</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;promise&nbsp;to&nbsp;return&nbsp;the&nbsp;file&nbsp;written&nbsp;to,&nbsp;or&nbsp;undefined</comment></p>
 <p id=248 class="line"><span>&nbsp;248</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</comment></p>
-<p id=249 class="line"><span>&nbsp;249</span>&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;info(msg:any):string&nbsp;{&nbsp;return&nbsp;this.out(Log.INFO,&nbsp;{&nbsp;color:&nbsp;'</quote>darkgreen<quote>',&nbsp;msg:msg&nbsp;});&nbsp;}</p>
+<p id=249 class="line"><span>&nbsp;249</span>&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;info(msg:any):string&nbsp;{&nbsp;return&nbsp;this.out(Log.INFO,&nbsp;{&nbsp;color:&nbsp;['</quote>darkgreen<quote>'],&nbsp;msg:msg&nbsp;});&nbsp;}</p>
 <p id=250 class="line"><span>&nbsp;250</span></p>
 <p id=251 class="line"><span>&nbsp;251</span>&nbsp;&nbsp;&nbsp;&nbsp;<comment>/**</comment></p>
 <p id=252 class="line"><span>&nbsp;252</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;reports&nbsp;an&nbsp;warning&nbsp;message&nbsp;to&nbsp;the&nbsp;log.&nbsp;</comment></p>
@@ -279,7 +279,7 @@
 <p id=256 class="line"><span>&nbsp;256</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;log&nbsp;optional&nbsp;flag&nbsp;to&nbsp;enable/suppress&nbsp;logging&nbsp;to&nbsp;file.&nbsp;Defaults&nbsp;to&nbsp;`true`</comment></p>
 <p id=257 class="line"><span>&nbsp;257</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;promise&nbsp;to&nbsp;return&nbsp;the&nbsp;file&nbsp;written&nbsp;to,&nbsp;or&nbsp;undefined</comment></p>
 <p id=258 class="line"><span>&nbsp;258</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</comment></p>
-<p id=259 class="line"><span>&nbsp;259</span>&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;warn(msg:any):string&nbsp;{&nbsp;return&nbsp;this.out(Log.WARN,&nbsp;{&nbsp;color:&nbsp;'</quote>darkyellow<quote>',&nbsp;msg:msg&nbsp;});&nbsp;}</p>
+<p id=259 class="line"><span>&nbsp;259</span>&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;warn(msg:any):string&nbsp;{&nbsp;return&nbsp;this.out(Log.WARN,&nbsp;{&nbsp;color:&nbsp;['</quote>darkyellow<quote>',&nbsp;'</quote>bold<quote>'],&nbsp;msg:msg&nbsp;});&nbsp;}</p>
 <p id=260 class="line"><span>&nbsp;260</span></p>
 <p id=261 class="line"><span>&nbsp;261</span>&nbsp;&nbsp;&nbsp;&nbsp;<comment>/**</comment></p>
 <p id=262 class="line"><span>&nbsp;262</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;reports&nbsp;an&nbsp;error&nbsp;message&nbsp;to&nbsp;the&nbsp;log.&nbsp;</comment></p>
@@ -289,7 +289,7 @@
 <p id=266 class="line"><span>&nbsp;266</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;promise&nbsp;to&nbsp;return&nbsp;the&nbsp;file&nbsp;written&nbsp;to,&nbsp;or&nbsp;undefined</comment></p>
 <p id=267 class="line"><span>&nbsp;267</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</comment></p>
 <p id=268 class="line"><span>&nbsp;268</span>&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;error(msg:any):string&nbsp;{&nbsp;</p>
-<p id=269 class="line"><span>&nbsp;269</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;color&nbsp;=&nbsp;'</quote>darkred<quote>';</p>
+<p id=269 class="line"><span>&nbsp;269</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;color&nbsp;=&nbsp;['</quote>darkred<quote>',&nbsp;'</quote>bold<quote>'];</p>
 <p id=270 class="line"><span>&nbsp;270</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(msg.message)&nbsp;{&nbsp;<comment>//&nbsp;special&nbsp;treatment&nbsp;for&nbsp;Errors</comment></p>
 <p id=271 class="line"><span>&nbsp;271</span><comment></comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.out(Log.ERROR,&nbsp;{&nbsp;color:&nbsp;color,&nbsp;msg:msg.message&nbsp;});</p>
 <p id=272 class="line"><span>&nbsp;272</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.out(Log.ERROR,&nbsp;{&nbsp;color:&nbsp;color,&nbsp;msg:msg.stack&nbsp;});</p>
@@ -336,8 +336,8 @@
 <p id=313 class="line"><span>&nbsp;313</span></p>
 <p id=314 class="line"><span>&nbsp;314</span>&nbsp;&nbsp;&nbsp;&nbsp;<comment>/**&nbsp;</comment></p>
 <p id=315 class="line"><span>&nbsp;315</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</comment></p>
-<p id=316 class="line"><span>&nbsp;316</span>&nbsp;&nbsp;&nbsp;&nbsp;protected&nbsp;output(color:string,&nbsp;header:string,&nbsp;line:string)&nbsp;{</p>
-<p id=317 class="line"><span>&nbsp;317</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(`%c${header}%c&nbsp;${line}`,&nbsp;COLOR[color],&nbsp;COLOR['</quote>clear<quote>']);</p>
+<p id=316 class="line"><span>&nbsp;316</span>&nbsp;&nbsp;&nbsp;&nbsp;protected&nbsp;output(color:string[],&nbsp;header:string,&nbsp;line:string)&nbsp;{</p>
+<p id=317 class="line"><span>&nbsp;317</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(`%c${header}%c&nbsp;${line}`,&nbsp;color.map(c&nbsp;=>COLOR[c]).join('</quote>&nbsp;<quote>'),&nbsp;COLOR['</quote>clear<quote>']);</p>
 <p id=318 class="line"><span>&nbsp;318</span>&nbsp;&nbsp;&nbsp;&nbsp;}</p>
 <p id=319 class="line"><span>&nbsp;319</span></p>
 <p id=320 class="line"><span>&nbsp;320</span>&nbsp;&nbsp;&nbsp;&nbsp;<comment>/**</comment></p>

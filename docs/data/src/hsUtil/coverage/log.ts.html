@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">91.67% </span>
+                <span class="strong">91.74% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>99/108</span>
+                <span class='fraction'>100/109</span>
             </div>
         
             
@@ -37,9 +37,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">89.47% </span>
+                <span class="strong">90% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>17/19</span>
+                <span class='fraction'>18/20</span>
             </div>
         
             
@@ -786,7 +786,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">28x</span>
+<span class="cline-any cline-yes">32x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1011,7 +1011,7 @@ const COLOR = {
 export interface LevelDesc { importance:number; sym:string; desc:string; }
 &nbsp;
 interface Msg {
-    color: string;
+    color: string[];
     msg:   any;
 }
 &nbsp;
@@ -1111,7 +1111,7 @@ export class Log {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the file written to, or undefined
      */
-    public debug(msg:any):string { return this.out(Log.DEBUG, { color: 'gray', msg:msg }); }
+    public debug(msg:any):string { return this.out(Log.DEBUG, { color: ['gray'], msg:msg }); }
 &nbsp;
     /**
      * reports an informational message to the log. 
@@ -1121,7 +1121,7 @@ export class Log {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the file written to, or undefined
      */
-    public <span class="fstat-no" title="function not covered" >progress(</span>msg:any):string { <span class="cstat-no" title="statement not covered" >return this.out(Log.INFO, { color: 'darkblue', msg:msg }); </span>}
+    public <span class="fstat-no" title="function not covered" >progress(</span>msg:any):string { <span class="cstat-no" title="statement not covered" >return this.out(Log.INFO, { color: ['darkblue'], msg:msg }); </span>}
 &nbsp;
     /**
      * reports an informational message to the log. 
@@ -1131,7 +1131,7 @@ export class Log {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the file written to, or undefined
      */
-    public info(msg:any):string { return this.out(Log.INFO, { color: 'darkgreen', msg:msg }); }
+    public info(msg:any):string { return this.out(Log.INFO, { color: ['darkgreen'], msg:msg }); }
 &nbsp;
     /**
      * reports an warning message to the log. 
@@ -1141,7 +1141,7 @@ export class Log {
      * @param log optional flag to enable/suppress logging to file. Defaults to `true`
      * @return promise to return the file written to, or undefined
      */
-    public warn(msg:any):string { return this.out(Log.WARN, { color: 'darkyellow', msg:msg }); }
+    public warn(msg:any):string { return this.out(Log.WARN, { color: ['darkyellow', 'bold'], msg:msg }); }
 &nbsp;
     /**
      * reports an error message to the log. 
@@ -1151,7 +1151,7 @@ export class Log {
      * @return promise to return the file written to, or undefined
      */
     public error(msg:any):string { 
-        const color = 'darkred';
+        const color = ['darkred', 'bold'];
         <span class="missing-if-branch" title="if path not taken" >I</span>if (msg.message) { // special treatment for Errors
 <span class="cstat-no" title="statement not covered" >            this.out(Log.ERROR, { color: color, msg:msg.message });</span>
 <span class="cstat-no" title="statement not covered" >            this.out(Log.ERROR, { color: color, msg:msg.stack });</span>
@@ -1198,8 +1198,8 @@ export class Log {
 &nbsp;
     /** 
      */
-    protected output(color:string, header:string, line:string) {
-        console.log(`%c${header}%c ${line}`, COLOR[color], COLOR['clear']);
+    protected output(color:string[], header:string, line:string) {
+        console.log(`%c${header}%c ${line}`, color.map(c =&gt;COLOR[c]).join(' '), COLOR['clear']);
     }
 &nbsp;
     /**
