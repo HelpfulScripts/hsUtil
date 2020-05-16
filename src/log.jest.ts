@@ -177,7 +177,7 @@ describe('log', () => {
 describe('inspect', () => {
     const t = {a: 'aa', b: {c:()=>'result'}};
     it('should inspect at level 0 with indents, implicit', () => {
-        expect(log.inspect(t)).toEqual("{\n   a: 'aa',\n   b: {...}\n}");
+        expect(log.inspect(t)).toEqual("{<br>&nbsp;&nbsp;&nbsp;<b><span style='color:#008;'>a</span></b>: 'aa',<br>&nbsp;&nbsp;&nbsp;<b><span style='color:#008;'>b</span></b>: {...}<br>}");
     });
     it('should inspect at level 0 with indents, explicit', () => {
         expect(log.inspect(t, {depth:0, indent:'   ', colors:null})).toEqual("{\n   a: 'aa',\n   b: {...}\n}");

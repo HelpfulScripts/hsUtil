@@ -15,7 +15,8 @@
  * ### Using a local `Log` instance 
  * Create a new `Log` instance to keep changes local to the current module:
  * ```
- * import { Log } from 'hsutil'; const log = new Log('myModule')
+ * import { Log } from 'hsutil'; 
+ * const log = new Log('myModule');
  * log.info('by the way:'); // -> 20160817 09:59:08.032 myModule info by the way:
  * log.error('oh dear!');   // -> 20160817 09:59:08.045 myModule error *** oh dear!
  * ```
@@ -53,8 +54,10 @@
  * ### log.inspect utility
  * returns a string representing a deep inspection of `myObj`.
  * ```
- * log.info(log.inspect(myObj, null));      // prints the structure to inifinite depth
- * log.info(myObj);                         // prints the structure to first level
+ * log.info(log.inspect(myObj));                    // prints the structure to first depth
+ * log.info(log.inspect(myObj), {});                // prints the structure to inifinite depth
+ * log.info(log.inspect(myObj), {colors:null});     // prints the structure without colors
+ * log.info(myObj);                                 // equivalent to `log.info(log.inspect(myObj));`
  * ``` 
  * 
  * ## Reporting Levels:
@@ -297,7 +300,7 @@ export class Log {
                 case 'function': line = msg.msg(); break;
                 case 'string':   line = msg.msg; break;
                 case 'object':
-                default: line = this.inspect(msg.msg, {depth:0}); 
+                default: line = this.inspect(msg.msg); 
             }
             const dateStr = date(Log.dateFormat);
             if (line.length > this.maxLength && this.maxLength>0) { 
@@ -359,8 +362,9 @@ export class Log {
 
     /**
      * Usage: 
-     * - `log.info(log.inspect(struct))`     -> depth=0, indent='   ', no colors
-     * - `log.info(log.inspect(struct, {}))` -> depth=inf, indent='   ', with html-coded colors
+     * - `log.info(log.inspect(struct))`     -> `depth=0`, `indent='   '`, with html-coded colors
+     * - `log.info(log.inspect(struct, {}))` -> `depth=-1` (inf), `indent='   '`, with html-coded colors
+     * - `log.info(log.inspect(struct, {colors:null}))` -> no colors
      * 
      * The call returns a raw formatted text string, or a HTML formatted string if `colors` is defined.
      * @param struct the object literal to inspect
@@ -371,7 +375,7 @@ export class Log {
      * `colors` defaults to the static `COLORS` array. To disable, provide a value of `null`.
      * @return a string representation of an object literal, similar to the Node `util.inspect` call
      */
-    public inspect(msg:any, {depth=-1, indent='   ', colors=Log.INDENT_COLORS}={depth:0, indent:'   ', colors:<string[]>null}):string {
+    public inspect(msg:any, {depth=-1, indent='   ', colors=Log.INDENT_COLORS}={depth:0, indent:'   ', colors:Log.INDENT_COLORS}):string {
         function _inspect(msg:any, depth:number, level:number, currIndent:string):string {
             if (msg === null)               { return 'null'; }
             if (msg === undefined)          { return 'undefined'; }

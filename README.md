@@ -29,5 +29,6 @@ Helpful Scripts utility functions for use in both browser and `node` environment
       `log,inform(()=>`passed`);`
     - colored log messages, by severity
     - colored inspect output, by indentation level
+    - configurable message-middle truncating to limit maximum message length
 
 See [docs](https://helpfulscripts.github.io/hsUtil#!/api/hsUtil/0) for details
