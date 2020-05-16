@@ -15,9 +15,22 @@ Helpful Scripts utility functions for use in both browser and `node` environment
 `npm i hsutil`
 
 ## Provided Functions - no external dependencies:
-- `TimedPromise` functions that provide delays and timeouts for promises.
+- `Pacing` functions that 
+    - paces a series of function calls to not occur faster than a preset rate not issue more unresolved calls then a preset limit.
+    - provide delays and timeouts for promises.
 - `CheckSum` a quick checksum implementation for small strings
 - `Date` printf-style date formatting function
-- `log` logging utility supporting module-level logging
+- `log` console.log - style logging utility supporting 
+    - module-level logging and configurstion of module IDs and time stamp format
+      `log.inform('passed');    // -> 20200516 11:21:54 myModule INFO passed
+    - global and module-level filtering of the severity of log outputs: 
+      <style>color:'#888'</style>debug, 
+      <style>color:'#080'</style>inform, 
+      <style>color:'#880'</style>warm, 
+      <style>color:'#800'</style>error
+      <style>color:'#000'</style>
+    - optional functional call type to avoid compiling messages that will be filtered
+    - colored log messages, by severity
+    - colored inspect output, by indentation level
 
 See [docs](https://helpfulscripts.github.io/hsUtil#!/api/hsUtil/0) for details

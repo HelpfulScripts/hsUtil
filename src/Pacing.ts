@@ -5,7 +5,7 @@
 
 
 /**
- * @description timeout promise for use in `Promise.race()`.
+ * timeout promise for use in `Promise.race()`.
  * @param {number} ms the milliseconds to wait before rejecting
  * @return {Promise} a Promise that rejects after `ms` 
  */
@@ -14,18 +14,22 @@ export function timeout(ms:number):Promise<void> {
 }
 
 /**
- * @description delays a promise, passing the parameter 
+ * promise-based delay function. Delays execution in a promise chain, passing the parameter 
  * received from the calling promise down to the resolving promise.
- * 
- * **Usage 1:** a delay within the `then` chain:
  * ```
- * <PromiseLike>
- *    .then(...)
- *    .then(delay(10))
- *    .then(...)
+ * delay(10)(param)
+ *    .then(param => {...})
  *    .catch(...)
  * ```
- * or 
+ * or: insert delay within the `then` chain:
+ * ```
+ * <PromiseLike>
+ *    .then(a => { ... return b; })
+ *    .then(delay(10))
+ *    .then(b => { ... })
+ *    .catch(...)
+ * ```
+ * or as an async/await pattern:
  * ```
  * try {
  *    await <PromiseLike>
@@ -35,12 +39,6 @@ export function timeout(ms:number):Promise<void> {
  * } catch(e) {
  *    ...
  * }
- * ```
- * **Usage 2:** an initial delay
- * ```
- * delay(10)()
- *    .then(...)
- *    .catch(...)
  * ```
  * @param number ms the milliseconds to wait before resolving
  * @return a `Promise` that resolves after `ms` 
@@ -54,14 +52,16 @@ export function delay(ms:number)   {
 }
 
 /**
- * @description ensures that function calls in a sequence are not executed faster than a preset minimum delay.
+ * paces a series of similar function calls to
+ * - not occur faster than a preset rate
+ * - not issue more unresolved calls then a preset limit
  * 
  * **Usage:** 
  * ```
- * const q = new PacingQueue(100); // 100ms between calls
+ * const q = new PacingQueue(100, 10); // 100ms between calls, at most 10 unresolved
  * ...
- * q.add((ms) => `I have been called after ${ms}ms`;})
- *    .then((result) => console.log(result));     // prints: I have been called after ***ms`
+ * const result = await q.add((ms) => `I have been called after ${ms}ms`;})
+ * console.log(result));     // prints: I have been called after 105ms`
  * ```
  */
 export class Pace {
@@ -119,26 +119,5 @@ export class Pace {
         this.started--;
         return ret;
     }
-}
-
-
-/**
- * Sequentially calls the provided `tasks` in a `.then()` chain of promises, 
- * guaranteeing the order of execution per index order in the array. 
- * Each task can return a result, or a promise for a result.
- * @param tasks an array of task calls to execute in sequence. Each call will pass the array of results for tasks so far executed.
- * @param initialResult optional initial array to collect the task results.
- * @return an array of results for each task
- */
-export function promiseChain<T>(tasks:((results:T[])=>T|Promise<T>)[], initialResult:T[]=[]): Promise<T[]> {
-    return tasks.reduce((chain:Promise<T[]>, task:(result:T[])=>T|Promise<T>): Promise<T[]> =>
-        // execute a task by chaining it to the previous ones via `.then()`
-        chain.then((_results:T[]) => Promise.resolve(task(_results)).then((r:T) => {
-            // add the task's result to the `results` array
-            _results.push(r);
-            return _results;
-        })), 
-        Promise.resolve(initialResult)
-    );
 }
 

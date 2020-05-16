@@ -1,8 +1,6 @@
-export { timeout, delay }   from './TimedPromises';
-export { Pace }             from './TimedPromises';
-export { promiseChain }     from './TimedPromises';
+export { timeout, delay }   from './Pacing';
+export { Pace }             from './Pacing';
 export { shortCheckSum }    from './Checksum';
 export { date, ms }         from './Date';
-export { round }            from './Number';
 export { Log }              from "./log";
 export *                    from "./Array";

@@ -16,11 +16,10 @@ Helpful Scripts utility functions for use in both browser and `node` environment
  * ___
  * 
  * ## Index - no external dependencies:
- * - &nbsp; {@link TimedPromises TimedPromises} functions that provide delays and timeouts for promises.
- * - &nbsp; {@link Checksum Checksum} a quick checksum implementation for small strings
+ * - &nbsp; {@link Log Log} module-level logging
+ * - &nbsp; {@link Pacing Pacing} functions that provide delays and timeouts for promises.
  * - &nbsp; {@link Date Date} printf-style date formatting function
- * - &nbsp; {@link round Number.round} rounding to n digits
- * - &nbsp; {@link log Log} module-level logging
+ * - &nbsp; {@link Checksum Checksum} a quick checksum implementation for small strings
  */
 
  /** */
