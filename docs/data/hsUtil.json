@@ -872,8 +872,7 @@
 						"isExported": true
 					},
 					"comment": {
-						"shortText": "paces a series of similar function calls to\n- not occur faster than a preset rate\n- not issue more unresolved calls then a preset limit",
-						"text": "**Usage:**\n```\nconst q = new PacingQueue(100, 10); // 100ms between calls, at most 10 unresolved\n...\nconst result = await q.add((ms) => `I have been called after ${ms}ms`;})\nconsole.log(result));     // prints: I have been called after 105ms`\n```\n"
+						"shortText": "paces a series of similar function calls to\n- not occur faster than a preset rate\n- not issue more unresolved calls then a preset limit\n<p>\n**Usage:**\n```\nconst q = new PacingQueue(100, 10); // 100ms between calls, at most 10 unresolved\n...\nconst result = await q.add((ms) => `I have been called after ${ms}ms`;})\nconsole.log(result));     // prints: I have been called after 105ms`\n```"
 					},
 					"children": [
 						{
