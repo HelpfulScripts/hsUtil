@@ -225,9 +225,8 @@ export class Log {
      * reports an debug message to the log. 
      * The message will actually be reported to the log only if the current 
      * reporting level is DEBUG or lower.
-     * @param msg the message to report. If msg is an object literal, a deep inspection will be printed.
-     * @param log optional flag to enable/suppress logging to file. Defaults to `true`
-     * @return promise to return the file written to, or undefined
+     * @param msg the message to report. For msg types, refer to {@link Log.info `info()`}.
+     * @return the message printed
      */
     public debug(msg:any):string { return this.out(Log.DEBUG, { color: ['gray'], msg:msg }); }
 
@@ -235,9 +234,8 @@ export class Log {
      * reports an informational message to the log. 
      * The message will actually be reported to the log only if the current 
      * reporting level is INFO or lower.
-     * @param msg the message to report. If msg is an object literal, a deep inspection will be printed.
-     * @param log optional flag to enable/suppress logging to file. Defaults to `true`
-     * @return promise to return the file written to, or undefined
+     * @param msg the message to report. For msg types, refer to {@link Log.info `info()`}.
+     * @return the message printed
      */
     public progress(msg:any):string { return this.out(Log.INFO, { color: ['darkblue'], msg:msg }); }
 
@@ -245,9 +243,12 @@ export class Log {
      * reports an informational message to the log. 
      * The message will actually be reported to the log only if the current 
      * reporting level is INFO or lower.
-     * @param msg the message to report. If msg is an object literal, a deep inspection will be printed.
-     * @param log optional flag to enable/suppress logging to file. Defaults to `true`
-     * @return promise to return the file written to, or undefined
+     * @param msg the message to report. The following types are supported:
+     * - `string` - `'...'`: prints the string
+     * - `function` - `() => '...'`: if the message level is above the threshold level, calls the function 
+     *    to produce the string to be printed
+     * - `object literal` - `{...}`:  prints a deep inspection of the object.
+     * @return the message printed
      */
     public info(msg:any):string { return this.out(Log.INFO, { color: ['darkgreen'], msg:msg }); }
 
@@ -255,18 +256,18 @@ export class Log {
      * reports an warning message to the log. 
      * The message will actually be reported to the log only if the current 
      * reporting level is WARN or lower.
-     * @param msg the message to report. If msg is an object literal, a deep inspection will be printed.
-     * @param log optional flag to enable/suppress logging to file. Defaults to `true`
-     * @return promise to return the file written to, or undefined
+     * @param msg the message to report. For msg types, refer to {@link Log.info `info()`}.
+     * @return the message printed
      */
     public warn(msg:any):string { return this.out(Log.WARN, { color: ['darkyellow', 'bold'], msg:msg }); }
 
     /**
      * reports an error message to the log. 
      * The message will always be reported to the log.
-     * @param msg the message to report. If msg is an object literal, a deep inspection will be printed.
-     * @param log optional flag to enable/suppress logging to file. Defaults to `true`
-     * @return promise to return the file written to, or undefined
+     * @param msg the message to report. For msg types, For msg types, refer to {@link Log.info `info()`}. 
+     * In addition:
+     * - `Error` - if msg is an Error (e.g. from a catch statement), prints the error message as well as a stack trace.
+     * @return the message printed
      */
     public error(msg:any):string { 
         const color = ['darkred', 'bold'];
@@ -288,8 +289,7 @@ export class Log {
      * avoids constructing a potentially expensive message string if the level is below the current reporting level.
      * Finally, if `msg` is a string, it will be printed with appropriate decoration, e.g. a date string and 
      * prefix.
-     * @param log optional flag to enable/suppress logging to file. Defaults to `true`
-     * @return the message written
+     * @return the message printed
      */
     protected out(lvl:string, msg:Msg): string {	
         let desc:LevelDesc = Log.levels[lvl];
