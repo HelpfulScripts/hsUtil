@@ -78,7 +78,7 @@ describe('Promise', () => {
                 return tp.delay(callBusy)()
                 .then(() => {
                     result.completedWait = Date.now()-this.start;
-                    console.log(`done #${this.id}: internal: ${result.internalWait}ms, reported: ${reportedMS}ms, completed: ${result.completedWait}ms`);                    
+                    // console.log(`done #${this.id}: internal: ${result.internalWait}ms, reported: ${reportedMS}ms, completed: ${result.completedWait}ms`);                    
                     return result;
                 });
             }
@@ -106,7 +106,7 @@ describe('Promise', () => {
            #4: internal 225ms, completed 432ms
         */
     
-        const queue = new tp.Pace(wait, 3); // default is 100
+        const queue = new tp.Pace({pace:wait, maxConcurrent:3});
         let results:any[];
     
         // add a call for each element in calls, then wait for all to have beed called.
@@ -137,7 +137,7 @@ describe('Promise', () => {
                         expect(r.internalWait).toBeLessThanOrEqual((r.id+1)*wait+10);
                         expect(r.completedWait).toBeLessThanOrEqual(callBusy+(r.id+1)*wait+20);
                     } else {
-                        expect(r.internalWait).toBeGreaterThanOrEqual(callBusy+10);
+                        expect(r.internalWait).toBeGreaterThanOrEqual(callBusy);
                         expect(r.internalWait).toBeLessThanOrEqual(callBusy+100);
                         expect(r.completedWait).toBeLessThanOrEqual(2*callBusy+100);
                     }

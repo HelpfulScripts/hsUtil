@@ -231,6 +231,15 @@ export class Log {
     public debug(msg:any):string { return this.out(Log.DEBUG, { color: ['gray'], msg:msg }); }
 
     /**
+     * reports an debug message to the log. 
+     * The message will actually be reported to the log only if the current 
+     * reporting level is DEBUG or lower.
+     * @param msg the message to report. For msg types, refer to {@link Log.info `info()`}.
+     * @return the message printed
+     */
+    public transient(msg:any):string { return this.out(Log.INFO, { color: ['darkgreen'], msg:msg+'\r' }); }
+
+    /**
      * reports an informational message to the log. 
      * The message will actually be reported to the log only if the current 
      * reporting level is INFO or lower.

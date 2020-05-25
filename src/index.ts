@@ -1,6 +1,6 @@
-export { timeout, delay }   from './Pacing';
-export { Pace }             from './Pacing';
-export { shortCheckSum }    from './Checksum';
-export { date, ms }         from './Date';
-export { Log }              from "./log";
-export *                    from "./Array";
+export *    from './Pacing';
+export *    from './Request';
+export *    from './Checksum';
+export *    from './Date';
+export *    from "./log";
+export *    from "./Array";
