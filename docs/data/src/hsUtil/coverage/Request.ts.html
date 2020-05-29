@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">74.4% </span>
+                <span class="strong">74.22% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>93/125</span>
+                <span class='fraction'>95/128</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">53.16% </span>
+                <span class="strong">53.09% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>42/79</span>
+                <span class='fraction'>43/81</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">77.98% </span>
+                <span class="strong">77.27% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>85/109</span>
+                <span class='fraction'>85/110</span>
             </div>
         
             
@@ -451,33 +451,7 @@
 <a name='L392'></a><a href='#L392'>392</a>
 <a name='L393'></a><a href='#L393'>393</a>
 <a name='L394'></a><a href='#L394'>394</a>
-<a name='L395'></a><a href='#L395'>395</a>
-<a name='L396'></a><a href='#L396'>396</a>
-<a name='L397'></a><a href='#L397'>397</a>
-<a name='L398'></a><a href='#L398'>398</a>
-<a name='L399'></a><a href='#L399'>399</a>
-<a name='L400'></a><a href='#L400'>400</a>
-<a name='L401'></a><a href='#L401'>401</a>
-<a name='L402'></a><a href='#L402'>402</a>
-<a name='L403'></a><a href='#L403'>403</a>
-<a name='L404'></a><a href='#L404'>404</a>
-<a name='L405'></a><a href='#L405'>405</a>
-<a name='L406'></a><a href='#L406'>406</a>
-<a name='L407'></a><a href='#L407'>407</a>
-<a name='L408'></a><a href='#L408'>408</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L395'></a><a href='#L395'>395</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -667,8 +641,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -749,6 +727,8 @@
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
@@ -865,18 +845,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
- * Utility functions for HTTP and HTTPS GET and POST. The module wraps the respective `Node` calls in async/await patterns
- * and provides support for
+ * Utility functions for HTTP and HTTPS GET, PUT, and POST. The module wraps a standard `XMLHttpRequest` and provides support for
  * - simple authentication methods, 
- * - local caching,  
- * - decoding of received comntent.
+ * - decoding of received content.
  * - request pacing
  * 
  * ### Authentication
@@ -885,17 +857,6 @@
  * The following authentication schemes are currently supported:
  * - Basic
  * - Digest
- * 
- * ### Caching
- * If caching is enabled, `GET` requests will attempt to return an available cached content
- * before issuing the request to the server.
- * Caching is disabled by default and can be enabled by setting a caching directory location before any `GET` call
- * `request.cache = './data'`.
- * Once set, individual `request.get(url)` requests will by default use caching. This can be 
- * disabled on a per call basis by providing `false` as a second parameter:
- * `request.get(url, false)` behaves as if `cache` is undefined.
- * Likewise, to disable all caching on future `GET` calls, set 
- * `request.cache = undefined`.
  * 
  * ### Decoding
  * Content received from a server or a cache can be decoded before returning the result. 
@@ -990,7 +951,7 @@ export interface Decoder {
 &nbsp;
 &nbsp;
 export class Request {
-    public static decoders = {
+    public static decoders:{[fn:string]: (data:string) =&gt; any} = {
         str2json:  (data:string) =&gt; { try {return JSON.parse(data)} catch(e) { <span class="cstat-no" title="statement not covered" >return {}}}</span>,
     };
 &nbsp;
@@ -1060,7 +1021,7 @@ export class Request {
      * @param url the address to fetch from
      * @param useCached optional, defaults to `true`. Set to `false` to avoid using 
      * the cache for this call in case caching is enabled.
-     * @return a promise that resolves to a {@link Response Response} if the reuqest is successful
+     * @return a promise that resolves to a `Response` if the reuqest is successful
      * and that rejects with an error message if not.
      */
     public async get(url:string|URL, useCached=true):Promise&lt;Response&gt; {
@@ -1072,6 +1033,8 @@ export class Request {
      * posts the content in `postData` to the server at the address specified by `url`.
      * @param url the address to post to
      * @param postData the data to post
+     * @return a promise that resolves to a `Response` if the reuqest is successful
+     * and that rejects with an error message if not.
      */
     public async <span class="fstat-no" title="function not covered" >put(</span>url:string|URL, postData:any):Promise&lt;Response&gt; {
         const options = <span class="cstat-no" title="statement not covered" >this.getOptions(url, 'PUT');</span>
@@ -1082,6 +1045,8 @@ export class Request {
      * posts the content in `postData` to the server at the address specified by `url`.
      * @param url the address to post to
      * @param postData the data to post
+     * @return a promise that resolves to a `Response` if the reuqest is successful
+     * and that rejects with an error message if not.
      */
     public async <span class="fstat-no" title="function not covered" >post(</span>url:string|URL, postData:any):Promise&lt;Response&gt; {
         const options = <span class="cstat-no" title="statement not covered" >this.getOptions(url, 'POST');</span>
@@ -1152,15 +1117,17 @@ export class Request {
 <span class="cstat-no" title="statement not covered" >            if (result !== undefined) { <span class="cstat-no" title="statement not covered" >return result; </span>}</span>
         }
 &nbsp;
-        let response: Response;
-        this.log.info(`(${this.pace.inQueue()} | ${this.pace.inProgress()}) requesting ${options.url}`); 
-        const request = this.pace? 
-            this.pace.add(() =&gt; this.request(options, postData), `${options.method} ${options.url}`) : 
-<span class="branch-1 cbranch-no" title="branch not covered" >            this.request(options, postData);</span>
-        this.log.debug(<span class="fstat-no" title="function not covered" >()=</span>&gt;<span class="cstat-no" title="statement not covered" >`requesting ${options.method} ${options.url}`)</span>; 
-        response = await request;
-        this.log.transient(`(${this.pace.inQueue()} | ${this.pace.inProgress()}) received ${options.url} `); 
-        this.log.debug(<span class="fstat-no" title="function not covered" >()=</span>&gt;<span class="cstat-no" title="statement not covered" >`received ${response.response.statusMessage} ${options.method} ${options.url}`)</span>; 
+        let request: Promise&lt;Response&gt;;
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (this.pace) {
+            this.log.info(`(${this.pace.inQueue()} | ${this.pace.inProgress()}) ${options.method}-ing ${options.url}`); 
+            request = this.pace.add(() =&gt; this.request(options, postData), `${options.method} ${options.url}`);
+        } else {
+<span class="cstat-no" title="statement not covered" >            request = this.request(options, postData);</span>
+        }
+        this.log.debug(<span class="fstat-no" title="function not covered" >()=</span>&gt;<span class="cstat-no" title="statement not covered" >`${options.method}-ing ${options.url}`)</span>; 
+        const response = await request;
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (this.pace) { this.log.transient(`(${this.pace.inQueue()} | ${this.pace.inProgress()}) received ${options.method} ${options.url} `); }
+        this.log.debug(<span class="fstat-no" title="function not covered" >()=</span>&gt;<span class="cstat-no" title="statement not covered" >`received ${options.method} ${response.response.statusMessage} ${options.method} ${options.url}`)</span>; 
 &nbsp;
         const code = response.response.statusCode||<span class="branch-1 cbranch-no" title="branch not covered" >response.response.status;</span>
         <span class="missing-if-branch" title="else path not taken" >E</span>if(code &gt;= 200 &amp;&amp; code &lt; 300) {
@@ -1271,12 +1238,6 @@ export class Request {
         return ['json', 'txt', 'html'].some(ext =&gt; pathName.indexOf(ext) &gt;= 0);
     }
 }
-&nbsp;
-&nbsp;
-&nbsp;
-&nbsp;
-//----------- Local functions ------------------------------
-&nbsp;
 &nbsp;
 &nbsp;</pre></td></tr></table></pre>
 

@@ -20,6 +20,8 @@ Helpful Scripts utility functions for use in both browser and `node` environment
  * - &nbsp; {@link Pacing Pacing} functions that provide delays and timeouts for promises.
  * - &nbsp; {@link Date Date} printf-style date formatting function
  * - &nbsp; {@link Checksum Checksum} a quick checksum implementation for small strings
+ * - &nbsp; {@link Request Request} a wrapper for HTTP and HTTPS requests with optional authentication, pacing, and decoding
+ * 
  */
 
  /** */

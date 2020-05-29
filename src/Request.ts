@@ -1,9 +1,7 @@
 /**
- * Utility functions for HTTP and HTTPS GET and POST. The module wraps the respective `Node` calls in async/await patterns
- * and provides support for
+ * Utility functions for HTTP and HTTPS GET, PUT, and POST. The module wraps a standard `XMLHttpRequest` and provides support for
  * - simple authentication methods, 
- * - local caching,  
- * - decoding of received comntent.
+ * - decoding of received content.
  * - request pacing
  * 
  * ### Authentication
@@ -12,17 +10,6 @@
  * The following authentication schemes are currently supported:
  * - Basic
  * - Digest
- * 
- * ### Caching
- * If caching is enabled, `GET` requests will attempt to return an available cached content
- * before issuing the request to the server.
- * Caching is disabled by default and can be enabled by setting a caching directory location before any `GET` call
- * `request.cache = './data'`.
- * Once set, individual `request.get(url)` requests will by default use caching. This can be 
- * disabled on a per call basis by providing `false` as a second parameter:
- * `request.get(url, false)` behaves as if `cache` is undefined.
- * Likewise, to disable all caching on future `GET` calls, set 
- * `request.cache = undefined`.
  * 
  * ### Decoding
  * Content received from a server or a cache can be decoded before returning the result. 
@@ -117,7 +104,7 @@ export interface Decoder {
 
 
 export class Request {
-    public static decoders = {
+    public static decoders:{[fn:string]: (data:string) => any} = {
         str2json:  (data:string) => { try {return JSON.parse(data)} catch(e) { return {}}},
     };
 
@@ -187,7 +174,7 @@ export class Request {
      * @param url the address to fetch from
      * @param useCached optional, defaults to `true`. Set to `false` to avoid using 
      * the cache for this call in case caching is enabled.
-     * @return a promise that resolves to a {@link Response Response} if the reuqest is successful
+     * @return a promise that resolves to a `Response` if the reuqest is successful
      * and that rejects with an error message if not.
      */
     public async get(url:string|URL, useCached=true):Promise<Response> {
@@ -199,6 +186,8 @@ export class Request {
      * posts the content in `postData` to the server at the address specified by `url`.
      * @param url the address to post to
      * @param postData the data to post
+     * @return a promise that resolves to a `Response` if the reuqest is successful
+     * and that rejects with an error message if not.
      */
     public async put(url:string|URL, postData:any):Promise<Response> {
         const options = this.getOptions(url, 'PUT');
@@ -209,6 +198,8 @@ export class Request {
      * posts the content in `postData` to the server at the address specified by `url`.
      * @param url the address to post to
      * @param postData the data to post
+     * @return a promise that resolves to a `Response` if the reuqest is successful
+     * and that rejects with an error message if not.
      */
     public async post(url:string|URL, postData:any):Promise<Response> {
         const options = this.getOptions(url, 'POST');
@@ -279,15 +270,17 @@ export class Request {
             if (result !== undefined) { return result; }
         }
 
-        let response: Response;
-        this.log.info(`(${this.pace.inQueue()} | ${this.pace.inProgress()}) requesting ${options.url}`); 
-        const request = this.pace? 
-            this.pace.add(() => this.request(options, postData), `${options.method} ${options.url}`) : 
-            this.request(options, postData);
-        this.log.debug(()=>`requesting ${options.method} ${options.url}`); 
-        response = await request;
-        this.log.transient(`(${this.pace.inQueue()} | ${this.pace.inProgress()}) received ${options.url} `); 
-        this.log.debug(()=>`received ${response.response.statusMessage} ${options.method} ${options.url}`); 
+        let request: Promise<Response>;
+        if (this.pace) {
+            this.log.info(`(${this.pace.inQueue()} | ${this.pace.inProgress()}) ${options.method}-ing ${options.url}`); 
+            request = this.pace.add(() => this.request(options, postData), `${options.method} ${options.url}`);
+        } else {
+            request = this.request(options, postData);
+        }
+        this.log.debug(()=>`${options.method}-ing ${options.url}`); 
+        const response = await request;
+        if (this.pace) { this.log.transient(`(${this.pace.inQueue()} | ${this.pace.inProgress()}) received ${options.method} ${options.url} `); }
+        this.log.debug(()=>`received ${options.method} ${response.response.statusMessage} ${options.method} ${options.url}`); 
 
         const code = response.response.statusCode||response.response.status;
         if(code >= 200 && code < 300) {
@@ -398,10 +391,4 @@ export class Request {
         return ['json', 'txt', 'html'].some(ext => pathName.indexOf(ext) >= 0);
     }
 }
-
-
-
-
-//----------- Local functions ------------------------------
-
 

@@ -3398,8 +3398,8 @@
 			},
 			"originalName": "/Users/sth1pal/Documents/Development/JavaScript/nodejs/ts6/dev/hsLibs/standalone/hsUtil/src/Request.ts",
 			"comment": {
-				"shortText": "Utility functions for HTTP and HTTPS GET and POST. The module wraps the respective `Node` calls in async/await patterns\nand provides support for\n- simple authentication methods,\n- local caching,\n- decoding of received comntent.\n- request pacing",
-				"text": "### Authentication\nAuthentication is enabled by setting {@link Request.Request.setCredentials `request.setCredentials`} before any call to\n{@link Request.Request.get `request.get`} or {@link Request.Request.post `request.post`}.\nThe following authentication schemes are currently supported:\n- Basic\n- Digest\n\n### Caching\nIf caching is enabled, `GET` requests will attempt to return an available cached content\nbefore issuing the request to the server.\nCaching is disabled by default and can be enabled by setting a caching directory location before any `GET` call\n`request.cache = './data'`.\nOnce set, individual `request.get(url)` requests will by default use caching. This can be\ndisabled on a per call basis by providing `false` as a second parameter:\n`request.get(url, false)` behaves as if `cache` is undefined.\nLikewise, to disable all caching on future `GET` calls, set\n`request.cache = undefined`.\n\n### Decoding\nContent received from a server or a cache can be decoded before returning the result.\nDecoding is disabled by default and can be enabled by setting a `Decoder` function:\n`request.decode = Request.decoders.str2json`\n\nFor convenience, the following predefined decoder functions are provided as static members of `Request.decoders`:\n- str2json applies JSON.parse to the content to return an object literal\n- html2json applies (html2json)[https://github.com/jxck/html2json#readme] to the content\n\n### Pacing\nEnable request pacing via `request.setPace(ms, max)`. When enabled, requests will be issued with a minimal\namount of `ms` milliseconds between them, and there will never be more than `max` number of calls pending.\nAll additional calls will be placed in a queue until the `ms` abd `max` conditions allow calling them.\n\n### Usage:\n```\nimport { Request } from 'hsnode';\nconst request = new Request.Request();\nrequest.cache = __dirname + '/../_data/cache';\nrequest.decode = (options:http.Options) => options.path.indexOf('binData?id=') < 0;\nrequest.setAuthToken(apptokens.token);\nconst content = await request.get('http://...');\n```\n"
+				"shortText": "Utility functions for HTTP and HTTPS GET, PUT, and POST. The module wraps a standard `XMLHttpRequest` and provides support for\n- simple authentication methods,\n- decoding of received content.\n- request pacing",
+				"text": "### Authentication\nAuthentication is enabled by setting {@link Request.Request.setCredentials `request.setCredentials`} before any call to\n{@link Request.Request.get `request.get`} or {@link Request.Request.post `request.post`}.\nThe following authentication schemes are currently supported:\n- Basic\n- Digest\n\n### Decoding\nContent received from a server or a cache can be decoded before returning the result.\nDecoding is disabled by default and can be enabled by setting a `Decoder` function:\n`request.decode = Request.decoders.str2json`\n\nFor convenience, the following predefined decoder functions are provided as static members of `Request.decoders`:\n- str2json applies JSON.parse to the content to return an object literal\n- html2json applies (html2json)[https://github.com/jxck/html2json#readme] to the content\n\n### Pacing\nEnable request pacing via `request.setPace(ms, max)`. When enabled, requests will be issued with a minimal\namount of `ms` milliseconds between them, and there will never be more than `max` number of calls pending.\nAll additional calls will be placed in a queue until the `ms` abd `max` conditions allow calling them.\n\n### Usage:\n```\nimport { Request } from 'hsnode';\nconst request = new Request.Request();\nrequest.cache = __dirname + '/../_data/cache';\nrequest.decode = (options:http.Options) => options.path.indexOf('binData?id=') < 0;\nrequest.setAuthToken(apptokens.token);\nconst content = await request.get('http://...');\n```\n"
 			},
 			"children": [
 				{
@@ -3426,7 +3426,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 134,
+									"line": 121,
 									"character": 21
 								}
 							],
@@ -3450,7 +3450,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 141,
+									"line": 128,
 									"character": 16
 								}
 							],
@@ -3474,7 +3474,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 131,
+									"line": 118,
 									"character": 23
 								}
 							],
@@ -3500,7 +3500,7 @@
 											"sources": [
 												{
 													"fileName": "Request.ts",
-													"line": 131,
+													"line": 118,
 													"character": 47
 												}
 											],
@@ -3520,7 +3520,7 @@
 											"sources": [
 												{
 													"fileName": "Request.ts",
-													"line": 131,
+													"line": 118,
 													"character": 30
 												}
 											],
@@ -3543,7 +3543,7 @@
 									"sources": [
 										{
 											"fileName": "Request.ts",
-											"line": 131,
+											"line": 118,
 											"character": 24
 										}
 									]
@@ -3565,7 +3565,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 172,
+									"line": 159,
 									"character": 17
 								}
 							],
@@ -3591,7 +3591,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 125,
+									"line": 112,
 									"character": 17
 								}
 							],
@@ -3617,7 +3617,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 128,
+									"line": 115,
 									"character": 18
 								}
 							],
@@ -3679,7 +3679,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 181,
+									"line": 168,
 									"character": 20
 								}
 							]
@@ -3770,7 +3770,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 252,
+									"line": 243,
 									"character": 34
 								}
 							]
@@ -3795,7 +3795,7 @@
 									},
 									"comment": {
 										"shortText": "gets the content for the addressed `url`. `HTTP` and `HTTPS` are supported.",
-										"returns": "a promise that resolves to a {@link Response Response} if the reuqest is successful\nand that rejects with an error message if not.\n"
+										"returns": "a promise that resolves to a `Response` if the reuqest is successful\nand that rejects with an error message if not.\n"
 									},
 									"parameters": [
 										{
@@ -3857,7 +3857,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 193,
+									"line": 180,
 									"character": 20
 								}
 							]
@@ -3928,7 +3928,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 222,
+									"line": 213,
 									"character": 24
 								}
 							]
@@ -3984,7 +3984,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 218,
+									"line": 209,
 									"character": 20
 								}
 							]
@@ -4031,7 +4031,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 369,
+									"line": 362,
 									"character": 30
 								}
 							]
@@ -4078,7 +4078,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 397,
+									"line": 390,
 									"character": 30
 								}
 							]
@@ -4147,7 +4147,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 327,
+									"line": 320,
 									"character": 32
 								}
 							]
@@ -4171,7 +4171,8 @@
 										"isExported": true
 									},
 									"comment": {
-										"shortText": "posts the content in `postData` to the server at the address specified by `url`."
+										"shortText": "posts the content in `postData` to the server at the address specified by `url`.",
+										"returns": "a promise that resolves to a `Response` if the reuqest is successful\nand that rejects with an error message if not.\n"
 									},
 									"parameters": [
 										{
@@ -4208,7 +4209,7 @@
 												"isExported": true
 											},
 											"comment": {
-												"text": "the data to post\n"
+												"text": "the data to post"
 											},
 											"type": {
 												"type": "intrinsic",
@@ -4232,7 +4233,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 213,
+									"line": 204,
 									"character": 21
 								}
 							]
@@ -4256,7 +4257,8 @@
 										"isExported": true
 									},
 									"comment": {
-										"shortText": "posts the content in `postData` to the server at the address specified by `url`."
+										"shortText": "posts the content in `postData` to the server at the address specified by `url`.",
+										"returns": "a promise that resolves to a `Response` if the reuqest is successful\nand that rejects with an error message if not.\n"
 									},
 									"parameters": [
 										{
@@ -4293,7 +4295,7 @@
 												"isExported": true
 											},
 											"comment": {
-												"text": "the data to post\n"
+												"text": "the data to post"
 											},
 											"type": {
 												"type": "intrinsic",
@@ -4317,7 +4319,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 203,
+									"line": 192,
 									"character": 20
 								}
 							]
@@ -4377,7 +4379,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 268,
+									"line": 259,
 									"character": 30
 								}
 							]
@@ -4446,7 +4448,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 301,
+									"line": 294,
 									"character": 27
 								}
 							]
@@ -4528,7 +4530,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 275,
+									"line": 266,
 									"character": 34
 								}
 							]
@@ -4582,7 +4584,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 153,
+									"line": 140,
 									"character": 23
 								}
 							]
@@ -4656,7 +4658,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 148,
+									"line": 135,
 									"character": 25
 								}
 							]
@@ -4717,7 +4719,7 @@
 															"sources": [
 																{
 																	"fileName": "Request.ts",
-																	"line": 162,
+																	"line": 149,
 																	"character": 56
 																}
 															],
@@ -4738,7 +4740,7 @@
 															"sources": [
 																{
 																	"fileName": "Request.ts",
-																	"line": 162,
+																	"line": 149,
 																	"character": 35
 																}
 															],
@@ -4759,7 +4761,7 @@
 															"sources": [
 																{
 																	"fileName": "Request.ts",
-																	"line": 162,
+																	"line": 149,
 																	"character": 27
 																}
 															],
@@ -4784,7 +4786,7 @@
 													"sources": [
 														{
 															"fileName": "Request.ts",
-															"line": 162,
+															"line": 149,
 															"character": 22
 														}
 													]
@@ -4802,7 +4804,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 162,
+									"line": 149,
 									"character": 18
 								}
 							]
@@ -4869,7 +4871,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 272,
+									"line": 263,
 									"character": 31
 								}
 							]
@@ -4926,7 +4928,7 @@
 									"sources": [
 										{
 											"fileName": "Request.ts",
-											"line": 121,
+											"line": 108,
 											"character": 16
 										}
 									]
@@ -4944,7 +4946,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 120,
+									"line": 107,
 									"character": 26
 								}
 							],
@@ -5001,7 +5003,7 @@
 					"sources": [
 						{
 							"fileName": "Request.ts",
-							"line": 119,
+							"line": 106,
 							"character": 20
 						}
 					]
@@ -5074,7 +5076,7 @@
 					"sources": [
 						{
 							"fileName": "Request.ts",
-							"line": 108,
+							"line": 95,
 							"character": 24
 						}
 					]
@@ -5102,7 +5104,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 92,
+									"line": 79,
 									"character": 11
 								}
 							],
@@ -5128,7 +5130,7 @@
 											"sources": [
 												{
 													"fileName": "Request.ts",
-													"line": 92,
+													"line": 79,
 													"character": 35
 												}
 											],
@@ -5150,7 +5152,7 @@
 									"sources": [
 										{
 											"fileName": "Request.ts",
-											"line": 92,
+											"line": 79,
 											"character": 12
 										}
 									]
@@ -5168,7 +5170,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 94,
+									"line": 81,
 									"character": 10
 								}
 							],
@@ -5188,7 +5190,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 97,
+									"line": 84,
 									"character": 10
 								}
 							],
@@ -5208,7 +5210,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 98,
+									"line": 85,
 									"character": 14
 								}
 							],
@@ -5228,7 +5230,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 99,
+									"line": 86,
 									"character": 17
 								}
 							],
@@ -5248,7 +5250,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 91,
+									"line": 78,
 									"character": 7
 								}
 							],
@@ -5268,7 +5270,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 100,
+									"line": 87,
 									"character": 7
 								}
 							],
@@ -5296,7 +5298,7 @@
 					"sources": [
 						{
 							"fileName": "Request.ts",
-							"line": 90,
+							"line": 77,
 							"character": 32
 						}
 					]
@@ -5321,7 +5323,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 75,
+									"line": 62,
 									"character": 11
 								}
 							],
@@ -5341,7 +5343,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 70,
+									"line": 57,
 									"character": 8
 								}
 							],
@@ -5361,7 +5363,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 71,
+									"line": 58,
 									"character": 12
 								}
 							],
@@ -5381,7 +5383,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 68,
+									"line": 55,
 									"character": 10
 								}
 							],
@@ -5402,7 +5404,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 74,
+									"line": 61,
 									"character": 8
 								}
 							],
@@ -5422,7 +5424,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 73,
+									"line": 60,
 									"character": 12
 								}
 							],
@@ -5442,7 +5444,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 72,
+									"line": 59,
 									"character": 8
 								}
 							],
@@ -5462,7 +5464,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 69,
+									"line": 56,
 									"character": 12
 								}
 							],
@@ -5482,7 +5484,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 76,
+									"line": 63,
 									"character": 22
 								}
 							],
@@ -5502,7 +5504,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 67,
+									"line": 54,
 									"character": 7
 								}
 							],
@@ -5533,7 +5535,7 @@
 					"sources": [
 						{
 							"fileName": "Request.ts",
-							"line": 66,
+							"line": 53,
 							"character": 24
 						}
 					]
@@ -5561,7 +5563,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 84,
+									"line": 71,
 									"character": 8
 								}
 							],
@@ -5590,7 +5592,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 83,
+									"line": 70,
 									"character": 12
 								}
 							],
@@ -5614,7 +5616,7 @@
 					"sources": [
 						{
 							"fileName": "Request.ts",
-							"line": 82,
+							"line": 69,
 							"character": 25
 						}
 					]
@@ -5630,7 +5632,7 @@
 					"sources": [
 						{
 							"fileName": "Request.ts",
-							"line": 62,
+							"line": 49,
 							"character": 18
 						}
 					],
@@ -5663,7 +5665,7 @@
 					"sources": [
 						{
 							"fileName": "Request.ts",
-							"line": 54,
+							"line": 41,
 							"character": 49
 						}
 					],
@@ -8547,7 +8549,7 @@
 			"originalName": "/Users/sth1pal/Documents/Development/JavaScript/nodejs/ts6/dev/hsLibs/standalone/hsUtil/src/overview.ts",
 			"comment": {
 				"shortText": "# hsUtil",
-				"text": "Helpful Scripts utility functions for use in both browser and `node` environments\n<a href=\"./data/src/hsUtil/coverage/\" target=\"_blank\">[Coverage Info]</a>\n\n[![npm version](https://badge.fury.io/js/hsutil.svg)](https://badge.fury.io/js/hsutil)\n[![GitHub](https://img.shields.io/badge/GitHub-hsUtil-blue.svg)](https://github.com/helpfulscripts/hsutil)\n[![docs](https://img.shields.io/badge/hsDocs-hsUtil-blue.svg)](https://helpfulscripts.github.io/hsUtil/#!/api/hsUtil/0)\n[![Build Status](https://travis-ci.org/HelpfulScripts/hsUtil.svg?branch=master)](https://travis-ci.org/HelpfulScripts/hsUtil)\n[![Dependencies Status](https://david-dm.org/helpfulscripts/hsutil.svg)](https://david-dm.org/helpfulscripts/hsutil)\n[![codecov](https://codecov.io/gh/HelpfulScripts/hsUtil/branch/master/graph/badge.svg)](https://codecov.io/gh/HelpfulScripts/hsUtil)\n[![Known Vulnerabilities](https://snyk.io/test/github/HelpfulScripts/hsUtil/badge.svg?targetFile=package.json)](https://snyk.io/test/github/HelpfulScripts/hsUtil?targetFile=package.json)\n[![NPM License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://www.npmjs.com/package/hsutil)\n\n___\n\n## Index - no external dependencies:\n- &nbsp; {@link log log} module-level logging\n- &nbsp; {@link Pacing Pacing} functions that provide delays and timeouts for promises.\n- &nbsp; {@link Date Date} printf-style date formatting function\n- &nbsp; {@link Checksum Checksum} a quick checksum implementation for small strings\n"
+				"text": "Helpful Scripts utility functions for use in both browser and `node` environments\n<a href=\"./data/src/hsUtil/coverage/\" target=\"_blank\">[Coverage Info]</a>\n\n[![npm version](https://badge.fury.io/js/hsutil.svg)](https://badge.fury.io/js/hsutil)\n[![GitHub](https://img.shields.io/badge/GitHub-hsUtil-blue.svg)](https://github.com/helpfulscripts/hsutil)\n[![docs](https://img.shields.io/badge/hsDocs-hsUtil-blue.svg)](https://helpfulscripts.github.io/hsUtil/#!/api/hsUtil/0)\n[![Build Status](https://travis-ci.org/HelpfulScripts/hsUtil.svg?branch=master)](https://travis-ci.org/HelpfulScripts/hsUtil)\n[![Dependencies Status](https://david-dm.org/helpfulscripts/hsutil.svg)](https://david-dm.org/helpfulscripts/hsutil)\n[![codecov](https://codecov.io/gh/HelpfulScripts/hsUtil/branch/master/graph/badge.svg)](https://codecov.io/gh/HelpfulScripts/hsUtil)\n[![Known Vulnerabilities](https://snyk.io/test/github/HelpfulScripts/hsUtil/badge.svg?targetFile=package.json)](https://snyk.io/test/github/HelpfulScripts/hsUtil?targetFile=package.json)\n[![NPM License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://www.npmjs.com/package/hsutil)\n\n___\n\n## Index - no external dependencies:\n- &nbsp; {@link log log} module-level logging\n- &nbsp; {@link Pacing Pacing} functions that provide delays and timeouts for promises.\n- &nbsp; {@link Date Date} printf-style date formatting function\n- &nbsp; {@link Checksum Checksum} a quick checksum implementation for small strings\n- &nbsp; {@link Request Request} a wrapper for HTTP and HTTPS requests with optional authentication, pacing, and decoding\n\n"
 			},
 			"sources": [
 				{
