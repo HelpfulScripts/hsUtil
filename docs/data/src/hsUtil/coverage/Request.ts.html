@@ -451,7 +451,8 @@
 <a name='L392'></a><a href='#L392'>392</a>
 <a name='L393'></a><a href='#L393'>393</a>
 <a name='L394'></a><a href='#L394'>394</a>
-<a name='L395'></a><a href='#L395'>395</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L395'></a><a href='#L395'>395</a>
+<a name='L396'></a><a href='#L396'>396</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -559,6 +560,7 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -951,8 +953,9 @@ export interface Decoder {
 &nbsp;
 &nbsp;
 export class Request {
-    public static decoders:{[fn:string]: (data:string) =&gt; any} = {
+    public static decoders = {
         str2json:  (data:string) =&gt; { try {return JSON.parse(data)} catch(e) { <span class="cstat-no" title="statement not covered" >return {}}}</span>,
+        html2json: &lt;(data:string) =&gt; any&gt;undefined
     };
 &nbsp;
     /** the `log` facility to use */

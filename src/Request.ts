@@ -104,8 +104,9 @@ export interface Decoder {
 
 
 export class Request {
-    public static decoders:{[fn:string]: (data:string) => any} = {
+    public static decoders = {
         str2json:  (data:string) => { try {return JSON.parse(data)} catch(e) { return {}}},
+        html2json: <(data:string) => any>undefined
     };
 
     /** the `log` facility to use */
