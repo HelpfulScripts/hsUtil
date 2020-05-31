@@ -178,9 +178,9 @@ export class Request {
      * @return a promise that resolves to a `Response` if the reuqest is successful
      * and that rejects with an error message if not.
      */
-    public async get(url:string|URL, useCached=true):Promise<Response> {
+    public async get(url:string|URL, {useCached=true, headers={}}={}):Promise<Response> {
         const options = this.getOptions(url, 'GET');
-        return this.decodedRequest(options, useCached);
+        return this.decodedRequest(options, useCached, headers);
     }
 
     /**
@@ -190,9 +190,9 @@ export class Request {
      * @return a promise that resolves to a `Response` if the reuqest is successful
      * and that rejects with an error message if not.
      */
-    public async put(url:string|URL, postData:any):Promise<Response> {
+    public async put(url:string|URL, postData:any, {useCached=false, headers={}}={}):Promise<Response> {
         const options = this.getOptions(url, 'PUT');
-        return this.decodedRequest(options, false, postData);
+        return this.decodedRequest(options, useCached, headers, postData);
     }
 
     /**
@@ -202,9 +202,9 @@ export class Request {
      * @return a promise that resolves to a `Response` if the reuqest is successful
      * and that rejects with an error message if not.
      */
-    public async post(url:string|URL, postData:any):Promise<Response> {
+    public async post(url:string|URL, postData:any, {useCached=false, headers={}}={}):Promise<Response> {
         const options = this.getOptions(url, 'POST');
-        return this.decodedRequest(options, false, postData);
+        return this.decodedRequest(options, useCached, headers, postData);
     }
 
     protected getURL(url:string|URL):URL { 
@@ -241,7 +241,7 @@ export class Request {
      * exists, a remote call will be attempted.
      * @param postData data to submit for a `POST` call
      */
-    protected async decodedRequest(options:Options, useCached:boolean, postData?:any):Promise<Response> {
+    protected async decodedRequest(options:Options, useCached:boolean, headers:any, postData?:any):Promise<Response> {
         const result = await this.requestOptions(options, useCached, postData); 
         if (this.decode && result.response.txt && options.method==='GET') {
             result.data = this.decode(<string>result.data, options);

@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">53.09% </span>
+                <span class="strong">50.56% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>43/81</span>
+                <span class='fraction'>45/89</span>
             </div>
         
             
@@ -1027,9 +1027,9 @@ export class Request {
      * @return a promise that resolves to a `Response` if the reuqest is successful
      * and that rejects with an error message if not.
      */
-    public async get(url:string|URL, useCached=true):Promise&lt;Response&gt; {
+    public async get(url:string|URL, {useCached=true, headers={}}={}):Promise&lt;Response&gt; {
         const options = this.getOptions(url, 'GET');
-        return this.decodedRequest(options, useCached);
+        return this.decodedRequest(options, useCached, headers);
     }
 &nbsp;
     /**
@@ -1039,9 +1039,9 @@ export class Request {
      * @return a promise that resolves to a `Response` if the reuqest is successful
      * and that rejects with an error message if not.
      */
-    public async <span class="fstat-no" title="function not covered" >put(</span>url:string|URL, postData:any):Promise&lt;Response&gt; {
+    public async <span class="fstat-no" title="function not covered" >put(</span>url:string|URL, postData:any, {useCached=<span class="branch-0 cbranch-no" title="branch not covered" >false,</span> headers=<span class="branch-0 cbranch-no" title="branch not covered" >{}}</span>=<span class="branch-0 cbranch-no" title="branch not covered" >{})</span>:Promise&lt;Response&gt; {
         const options = <span class="cstat-no" title="statement not covered" >this.getOptions(url, 'PUT');</span>
-<span class="cstat-no" title="statement not covered" >        return this.decodedRequest(options, false, postData);</span>
+<span class="cstat-no" title="statement not covered" >        return this.decodedRequest(options, useCached, headers, postData);</span>
     }
 &nbsp;
     /**
@@ -1051,9 +1051,9 @@ export class Request {
      * @return a promise that resolves to a `Response` if the reuqest is successful
      * and that rejects with an error message if not.
      */
-    public async <span class="fstat-no" title="function not covered" >post(</span>url:string|URL, postData:any):Promise&lt;Response&gt; {
+    public async <span class="fstat-no" title="function not covered" >post(</span>url:string|URL, postData:any, {useCached=<span class="branch-0 cbranch-no" title="branch not covered" >false,</span> headers=<span class="branch-0 cbranch-no" title="branch not covered" >{}}</span>=<span class="branch-0 cbranch-no" title="branch not covered" >{})</span>:Promise&lt;Response&gt; {
         const options = <span class="cstat-no" title="statement not covered" >this.getOptions(url, 'POST');</span>
-<span class="cstat-no" title="statement not covered" >        return this.decodedRequest(options, false, postData);</span>
+<span class="cstat-no" title="statement not covered" >        return this.decodedRequest(options, useCached, headers, postData);</span>
     }
 &nbsp;
     protected getURL(url:string|URL):URL { 
@@ -1090,7 +1090,7 @@ export class Request {
      * exists, a remote call will be attempted.
      * @param postData data to submit for a `POST` call
      */
-    protected async decodedRequest(options:Options, useCached:boolean, postData?:any):Promise&lt;Response&gt; {
+    protected async decodedRequest(options:Options, useCached:boolean, headers:any, postData?:any):Promise&lt;Response&gt; {
         const result = await this.requestOptions(options, useCached, postData); 
         if (this.decode &amp;&amp; result.response.txt &amp;&amp; options.method==='GET') {
             result.data = this.decode(&lt;string&gt;result.data, options);
