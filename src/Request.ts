@@ -321,13 +321,8 @@ export class Request {
     protected async issueRequest(options:Options, postData?:any):Promise<Response> {
         const request = this;
         return new Promise((resolve:(out:Response)=>void, reject:(e:Response)=>void) => { try {
-            const xhr = new XMLHttpRequest();
-            const txt = request.isTextualRequest(options.pathname);
-            this.log.debug(()=>`requesting ${options.method} ${this.log.inspect(options, {depth:4})}`);
-            xhr.open(options.method, options.url, true);
-            Object.keys(options.headers).forEach(h => xhr.setRequestHeader(h, options.headers[h]));
-            xhr.responseType = txt? 'text' : 'arraybuffer';
-            xhr.onload = async function() {
+            function confirmRequest(e:any) {
+                if (e) { log.info(''); }
                 const headersText = xhr.getAllResponseHeaders();
                 const headers = {'content-type':''};
                 headersText.split('\r\n').map(h => {
@@ -353,7 +348,14 @@ export class Request {
                     }
                 };
                 resolve(response);
-            };
+            }
+            const xhr = new XMLHttpRequest();
+            const txt = request.isTextualRequest(options.pathname);
+            this.log.debug(()=>`requesting ${options.method} ${this.log.inspect(options, {depth:4})}`);
+            xhr.open(options.method, options.url, true);
+            Object.keys(options.headers).forEach(h => xhr.setRequestHeader(h, options.headers[h]));
+            xhr.responseType = txt? 'text' : 'arraybuffer';
+            xhr.onload = confirmRequest;
             xhr.send(postData?JSON.stringify(postData):undefined);
         } catch(e) {
             reject(e);
