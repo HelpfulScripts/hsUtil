@@ -1040,8 +1040,8 @@ const COLOR = {
 export interface LevelDesc { importance:number; sym:string; desc:string; }
 &nbsp;
 interface Msg {
-    color: string[];
-    msg:   any;
+    color?: string[];
+    lf?:    string;
 }
 &nbsp;
 /**
@@ -1139,7 +1139,7 @@ export class Log {
      * @param msg the message to report. For msg types, refer to {@link Log.info `info()`}.
      * @return the message printed
      */
-    public debug(msg:any):string { return this.out(Log.DEBUG, { color: ['gray'], msg:msg }); }
+    public debug(msg:any):string { return this.out(Log.DEBUG, msg, { color: ['gray'] }); }
 &nbsp;
     /**
      * reports an debug message to the log. 
@@ -1148,7 +1148,7 @@ export class Log {
      * @param msg the message to report. For msg types, refer to {@link Log.info `info()`}.
      * @return the message printed
      */
-    public transient(msg:any):string { return this.out(Log.INFO, { color: ['darkgreen'], msg:msg+'\r' }); }
+    public transient(msg:any):string { return this.out(Log.INFO, msg, { color: ['darkgreen'], lf:'\r' }); }
 &nbsp;
     /**
      * reports an informational message to the log. 
@@ -1157,7 +1157,7 @@ export class Log {
      * @param msg the message to report. For msg types, refer to {@link Log.info `info()`}.
      * @return the message printed
      */
-    public <span class="fstat-no" title="function not covered" >progress(</span>msg:any):string { <span class="cstat-no" title="statement not covered" >return this.out(Log.INFO, { color: ['darkblue'], msg:msg }); </span>}
+    public <span class="fstat-no" title="function not covered" >progress(</span>msg:any):string { <span class="cstat-no" title="statement not covered" >return this.out(Log.INFO, msg, { color: ['darkblue'] }); </span>}
 &nbsp;
     /**
      * reports an informational message to the log. 
@@ -1170,7 +1170,7 @@ export class Log {
      * - `object literal` - `{...}`:  prints a deep inspection of the object.
      * @return the message printed
      */
-    public info(msg:any):string { return this.out(Log.INFO, { color: ['darkgreen'], msg:msg }); }
+    public info(msg:any):string { return this.out(Log.INFO, msg, { color: ['darkgreen'] }); }
 &nbsp;
     /**
      * reports an warning message to the log. 
@@ -1179,7 +1179,7 @@ export class Log {
      * @param msg the message to report. For msg types, refer to {@link Log.info `info()`}.
      * @return the message printed
      */
-    public warn(msg:any):string { return this.out(Log.WARN, { color: ['darkyellow', 'bold'], msg:msg }); }
+    public warn(msg:any):string { return this.out(Log.WARN, msg, { color: ['darkyellow', 'bold'] }); }
 &nbsp;
     /**
      * reports an error message to the log. 
@@ -1192,11 +1192,11 @@ export class Log {
     public error(msg:any):string { 
         const color = ['darkred', 'bold'];
         <span class="missing-if-branch" title="if path not taken" >I</span>if (msg.message) { // special treatment for Errors
-<span class="cstat-no" title="statement not covered" >            this.out(Log.ERROR, { color: color, msg:msg.message });</span>
-<span class="cstat-no" title="statement not covered" >            this.out(Log.ERROR, { color: color, msg:msg.stack });</span>
+<span class="cstat-no" title="statement not covered" >            this.out(Log.ERROR, msg.message, { color: color });</span>
+<span class="cstat-no" title="statement not covered" >            this.out(Log.ERROR, msg.stack, { color: color });</span>
 <span class="cstat-no" title="statement not covered" >            return msg.message;</span>
         } else {
-            return this.out(Log.ERROR, { color: color, msg:msg }); 
+            return this.out(Log.ERROR, msg, { color: color }); 
         } 
     }
 &nbsp;
@@ -1211,25 +1211,25 @@ export class Log {
      * prefix.
      * @return the message printed
      */
-    protected out(lvl:string, msg:Msg): string {	
+    protected out(lvl:string, msg:any, options:Msg): string {	
         let desc:LevelDesc = Log.levels[lvl];
         const filterLevel = this.reportLevel || Log.globalLevel;
         if (desc.importance &gt;= filterLevel.importance) {
             let line;
-            switch(typeof msg.msg) {
-<span class="branch-0 cbranch-no" title="branch not covered" >                case 'function': <span class="cstat-no" title="statement not covered" >line = msg.msg(); <span class="cstat-no" title="statement not covered" ></span>break;</span></span>
-                case 'string':   line = msg.msg; break;
+            switch(typeof msg) {
+<span class="branch-0 cbranch-no" title="branch not covered" >                case 'function': <span class="cstat-no" title="statement not covered" >line = msg(); <span class="cstat-no" title="statement not covered" ></span>break;</span></span>
+                case 'string':   line = msg; break;
                 case 'object':
-                default: line = this.inspect(msg.msg); 
+                default: line = this.inspect(msg); 
             }
             const dateStr = date(Log.dateFormat);
             if (line.length &gt; this.maxLength &amp;&amp; this.maxLength&gt;0) { 
                 line = `${line.slice(0, this.maxLength/2-2)}...${line.slice(-this.maxLength/2+2)}`
             }
-            <span class="missing-if-branch" title="if path not taken" >I</span>if (msg &amp;&amp; msg.msg.stack) { <span class="cstat-no" title="statement not covered" >line = `${line}\n${msg.msg.stack}`; </span>}
+            <span class="missing-if-branch" title="if path not taken" >I</span>if (msg.stack) { <span class="cstat-no" title="statement not covered" >line = `${line}\n${msg.stack}`; </span>}
             const header = `${dateStr} ${this.reportPrefix} ${desc.desc}`;
-            this.output(msg.color, header, line);
-            return line;
+            this.output(options.color, header, line);
+            return line + (options.lf||'');
         }
         return undefined;
     }

@@ -129,8 +129,8 @@ const COLOR = {
 export interface LevelDesc { importance:number; sym:string; desc:string; }
 
 interface Msg {
-    color: string[];
-    msg:   any;
+    color?: string[];
+    lf?:    string;
 }
 
 /**
@@ -228,7 +228,7 @@ export class Log {
      * @param msg the message to report. For msg types, refer to {@link Log.info `info()`}.
      * @return the message printed
      */
-    public debug(msg:any):string { return this.out(Log.DEBUG, { color: ['gray'], msg:msg }); }
+    public debug(msg:any):string { return this.out(Log.DEBUG, msg, { color: ['gray'] }); }
 
     /**
      * reports an debug message to the log. 
@@ -237,7 +237,7 @@ export class Log {
      * @param msg the message to report. For msg types, refer to {@link Log.info `info()`}.
      * @return the message printed
      */
-    public transient(msg:any):string { return this.out(Log.INFO, { color: ['darkgreen'], msg:msg+'\r' }); }
+    public transient(msg:any):string { return this.out(Log.INFO, msg, { color: ['darkgreen'], lf:'\r' }); }
 
     /**
      * reports an informational message to the log. 
@@ -246,7 +246,7 @@ export class Log {
      * @param msg the message to report. For msg types, refer to {@link Log.info `info()`}.
      * @return the message printed
      */
-    public progress(msg:any):string { return this.out(Log.INFO, { color: ['darkblue'], msg:msg }); }
+    public progress(msg:any):string { return this.out(Log.INFO, msg, { color: ['darkblue'] }); }
 
     /**
      * reports an informational message to the log. 
@@ -259,7 +259,7 @@ export class Log {
      * - `object literal` - `{...}`:  prints a deep inspection of the object.
      * @return the message printed
      */
-    public info(msg:any):string { return this.out(Log.INFO, { color: ['darkgreen'], msg:msg }); }
+    public info(msg:any):string { return this.out(Log.INFO, msg, { color: ['darkgreen'] }); }
 
     /**
      * reports an warning message to the log. 
@@ -268,7 +268,7 @@ export class Log {
      * @param msg the message to report. For msg types, refer to {@link Log.info `info()`}.
      * @return the message printed
      */
-    public warn(msg:any):string { return this.out(Log.WARN, { color: ['darkyellow', 'bold'], msg:msg }); }
+    public warn(msg:any):string { return this.out(Log.WARN, msg, { color: ['darkyellow', 'bold'] }); }
 
     /**
      * reports an error message to the log. 
@@ -281,11 +281,11 @@ export class Log {
     public error(msg:any):string { 
         const color = ['darkred', 'bold'];
         if (msg.message) { // special treatment for Errors
-            this.out(Log.ERROR, { color: color, msg:msg.message });
-            this.out(Log.ERROR, { color: color, msg:msg.stack });
+            this.out(Log.ERROR, msg.message, { color: color });
+            this.out(Log.ERROR, msg.stack, { color: color });
             return msg.message;
         } else {
-            return this.out(Log.ERROR, { color: color, msg:msg }); 
+            return this.out(Log.ERROR, msg, { color: color }); 
         } 
     }
 
@@ -300,25 +300,25 @@ export class Log {
      * prefix.
      * @return the message printed
      */
-    protected out(lvl:string, msg:Msg): string {	
+    protected out(lvl:string, msg:any, options:Msg): string {	
         let desc:LevelDesc = Log.levels[lvl];
         const filterLevel = this.reportLevel || Log.globalLevel;
         if (desc.importance >= filterLevel.importance) {
             let line;
-            switch(typeof msg.msg) {
-                case 'function': line = msg.msg(); break;
-                case 'string':   line = msg.msg; break;
+            switch(typeof msg) {
+                case 'function': line = msg(); break;
+                case 'string':   line = msg; break;
                 case 'object':
-                default: line = this.inspect(msg.msg); 
+                default: line = this.inspect(msg); 
             }
             const dateStr = date(Log.dateFormat);
             if (line.length > this.maxLength && this.maxLength>0) { 
                 line = `${line.slice(0, this.maxLength/2-2)}...${line.slice(-this.maxLength/2+2)}`
             }
-            if (msg && msg.msg.stack) { line = `${line}\n${msg.msg.stack}`; }
+            if (msg.stack) { line = `${line}\n${msg.stack}`; }
             const header = `${dateStr} ${this.reportPrefix} ${desc.desc}`;
-            this.output(msg.color, header, line);
-            return line;
+            this.output(options.color, header, line);
+            return line + (options.lf||'');
         }
         return undefined;
     }

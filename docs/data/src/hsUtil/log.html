@@ -152,8 +152,8 @@
 <p id=129 class="line"><span>&nbsp;129</span>export&nbsp;interface&nbsp;LevelDesc&nbsp;{&nbsp;importance:number;&nbsp;sym:string;&nbsp;desc:string;&nbsp;}</p>
 <p id=130 class="line"><span>&nbsp;130</span></p>
 <p id=131 class="line"><span>&nbsp;131</span>interface&nbsp;Msg&nbsp;{</p>
-<p id=132 class="line"><span>&nbsp;132</span>&nbsp;&nbsp;&nbsp;&nbsp;color:&nbsp;string[];</p>
-<p id=133 class="line"><span>&nbsp;133</span>&nbsp;&nbsp;&nbsp;&nbsp;msg:&nbsp;&nbsp;&nbsp;any;</p>
+<p id=132 class="line"><span>&nbsp;132</span>&nbsp;&nbsp;&nbsp;&nbsp;color?:&nbsp;string[];</p>
+<p id=133 class="line"><span>&nbsp;133</span>&nbsp;&nbsp;&nbsp;&nbsp;lf?:&nbsp;&nbsp;&nbsp;&nbsp;string;</p>
 <p id=134 class="line"><span>&nbsp;134</span>}</p>
 <p id=135 class="line"><span>&nbsp;135</span></p>
 <p id=136 class="line"><span>&nbsp;136</span><comment>/**</comment></p>
@@ -251,7 +251,7 @@
 <p id=228 class="line"><span>&nbsp;228</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;msg&nbsp;the&nbsp;message&nbsp;to&nbsp;report.&nbsp;For&nbsp;msg&nbsp;types,&nbsp;refer&nbsp;to&nbsp;{@link&nbsp;Log.info&nbsp;`info()`}.</comment></p>
 <p id=229 class="line"><span>&nbsp;229</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;the&nbsp;message&nbsp;printed</comment></p>
 <p id=230 class="line"><span>&nbsp;230</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</comment></p>
-<p id=231 class="line"><span>&nbsp;231</span>&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;debug(msg:any):string&nbsp;{&nbsp;return&nbsp;this.out(Log.DEBUG,&nbsp;{&nbsp;color:&nbsp;['</quote>gray<quote>'],&nbsp;msg:msg&nbsp;});&nbsp;}</p>
+<p id=231 class="line"><span>&nbsp;231</span>&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;debug(msg:any):string&nbsp;{&nbsp;return&nbsp;this.out(Log.DEBUG,&nbsp;msg,&nbsp;{&nbsp;color:&nbsp;['</quote>gray<quote>']&nbsp;});&nbsp;}</p>
 <p id=232 class="line"><span>&nbsp;232</span></p>
 <p id=233 class="line"><span>&nbsp;233</span>&nbsp;&nbsp;&nbsp;&nbsp;<comment>/**</comment></p>
 <p id=234 class="line"><span>&nbsp;234</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;reports&nbsp;an&nbsp;debug&nbsp;message&nbsp;to&nbsp;the&nbsp;log.&nbsp;</comment></p>
@@ -260,7 +260,7 @@
 <p id=237 class="line"><span>&nbsp;237</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;msg&nbsp;the&nbsp;message&nbsp;to&nbsp;report.&nbsp;For&nbsp;msg&nbsp;types,&nbsp;refer&nbsp;to&nbsp;{@link&nbsp;Log.info&nbsp;`info()`}.</comment></p>
 <p id=238 class="line"><span>&nbsp;238</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;the&nbsp;message&nbsp;printed</comment></p>
 <p id=239 class="line"><span>&nbsp;239</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</comment></p>
-<p id=240 class="line"><span>&nbsp;240</span>&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;transient(msg:any):string&nbsp;{&nbsp;return&nbsp;this.out(Log.INFO,&nbsp;{&nbsp;color:&nbsp;['</quote>darkgreen<quote>'],&nbsp;msg:msg+'</quote>\r<quote>'&nbsp;});&nbsp;}</p>
+<p id=240 class="line"><span>&nbsp;240</span>&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;transient(msg:any):string&nbsp;{&nbsp;return&nbsp;this.out(Log.INFO,&nbsp;msg,&nbsp;{&nbsp;color:&nbsp;['</quote>darkgreen<quote>'],&nbsp;lf:'</quote>\r<quote>'&nbsp;});&nbsp;}</p>
 <p id=241 class="line"><span>&nbsp;241</span></p>
 <p id=242 class="line"><span>&nbsp;242</span>&nbsp;&nbsp;&nbsp;&nbsp;<comment>/**</comment></p>
 <p id=243 class="line"><span>&nbsp;243</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;reports&nbsp;an&nbsp;informational&nbsp;message&nbsp;to&nbsp;the&nbsp;log.&nbsp;</comment></p>
@@ -269,7 +269,7 @@
 <p id=246 class="line"><span>&nbsp;246</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;msg&nbsp;the&nbsp;message&nbsp;to&nbsp;report.&nbsp;For&nbsp;msg&nbsp;types,&nbsp;refer&nbsp;to&nbsp;{@link&nbsp;Log.info&nbsp;`info()`}.</comment></p>
 <p id=247 class="line"><span>&nbsp;247</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;the&nbsp;message&nbsp;printed</comment></p>
 <p id=248 class="line"><span>&nbsp;248</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</comment></p>
-<p id=249 class="line"><span>&nbsp;249</span>&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;progress(msg:any):string&nbsp;{&nbsp;return&nbsp;this.out(Log.INFO,&nbsp;{&nbsp;color:&nbsp;['</quote>darkblue<quote>'],&nbsp;msg:msg&nbsp;});&nbsp;}</p>
+<p id=249 class="line"><span>&nbsp;249</span>&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;progress(msg:any):string&nbsp;{&nbsp;return&nbsp;this.out(Log.INFO,&nbsp;msg,&nbsp;{&nbsp;color:&nbsp;['</quote>darkblue<quote>']&nbsp;});&nbsp;}</p>
 <p id=250 class="line"><span>&nbsp;250</span></p>
 <p id=251 class="line"><span>&nbsp;251</span>&nbsp;&nbsp;&nbsp;&nbsp;<comment>/**</comment></p>
 <p id=252 class="line"><span>&nbsp;252</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;reports&nbsp;an&nbsp;informational&nbsp;message&nbsp;to&nbsp;the&nbsp;log.&nbsp;</comment></p>
@@ -282,7 +282,7 @@
 <p id=259 class="line"><span>&nbsp;259</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;-&nbsp;`object&nbsp;literal`&nbsp;-&nbsp;`{...}`:&nbsp;&nbsp;prints&nbsp;a&nbsp;deep&nbsp;inspection&nbsp;of&nbsp;the&nbsp;object.</comment></p>
 <p id=260 class="line"><span>&nbsp;260</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;the&nbsp;message&nbsp;printed</comment></p>
 <p id=261 class="line"><span>&nbsp;261</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</comment></p>
-<p id=262 class="line"><span>&nbsp;262</span>&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;info(msg:any):string&nbsp;{&nbsp;return&nbsp;this.out(Log.INFO,&nbsp;{&nbsp;color:&nbsp;['</quote>darkgreen<quote>'],&nbsp;msg:msg&nbsp;});&nbsp;}</p>
+<p id=262 class="line"><span>&nbsp;262</span>&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;info(msg:any):string&nbsp;{&nbsp;return&nbsp;this.out(Log.INFO,&nbsp;msg,&nbsp;{&nbsp;color:&nbsp;['</quote>darkgreen<quote>']&nbsp;});&nbsp;}</p>
 <p id=263 class="line"><span>&nbsp;263</span></p>
 <p id=264 class="line"><span>&nbsp;264</span>&nbsp;&nbsp;&nbsp;&nbsp;<comment>/**</comment></p>
 <p id=265 class="line"><span>&nbsp;265</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;reports&nbsp;an&nbsp;warning&nbsp;message&nbsp;to&nbsp;the&nbsp;log.&nbsp;</comment></p>
@@ -291,7 +291,7 @@
 <p id=268 class="line"><span>&nbsp;268</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;msg&nbsp;the&nbsp;message&nbsp;to&nbsp;report.&nbsp;For&nbsp;msg&nbsp;types,&nbsp;refer&nbsp;to&nbsp;{@link&nbsp;Log.info&nbsp;`info()`}.</comment></p>
 <p id=269 class="line"><span>&nbsp;269</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;the&nbsp;message&nbsp;printed</comment></p>
 <p id=270 class="line"><span>&nbsp;270</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</comment></p>
-<p id=271 class="line"><span>&nbsp;271</span>&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;warn(msg:any):string&nbsp;{&nbsp;return&nbsp;this.out(Log.WARN,&nbsp;{&nbsp;color:&nbsp;['</quote>darkyellow<quote>',&nbsp;'</quote>bold<quote>'],&nbsp;msg:msg&nbsp;});&nbsp;}</p>
+<p id=271 class="line"><span>&nbsp;271</span>&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;warn(msg:any):string&nbsp;{&nbsp;return&nbsp;this.out(Log.WARN,&nbsp;msg,&nbsp;{&nbsp;color:&nbsp;['</quote>darkyellow<quote>',&nbsp;'</quote>bold<quote>']&nbsp;});&nbsp;}</p>
 <p id=272 class="line"><span>&nbsp;272</span></p>
 <p id=273 class="line"><span>&nbsp;273</span>&nbsp;&nbsp;&nbsp;&nbsp;<comment>/**</comment></p>
 <p id=274 class="line"><span>&nbsp;274</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;reports&nbsp;an&nbsp;error&nbsp;message&nbsp;to&nbsp;the&nbsp;log.&nbsp;</comment></p>
@@ -304,11 +304,11 @@
 <p id=281 class="line"><span>&nbsp;281</span>&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;error(msg:any):string&nbsp;{&nbsp;</p>
 <p id=282 class="line"><span>&nbsp;282</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;color&nbsp;=&nbsp;['</quote>darkred<quote>',&nbsp;'</quote>bold<quote>'];</p>
 <p id=283 class="line"><span>&nbsp;283</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(msg.message)&nbsp;{&nbsp;<comment>//&nbsp;special&nbsp;treatment&nbsp;for&nbsp;Errors</comment></p>
-<p id=284 class="line"><span>&nbsp;284</span><comment></comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.out(Log.ERROR,&nbsp;{&nbsp;color:&nbsp;color,&nbsp;msg:msg.message&nbsp;});</p>
-<p id=285 class="line"><span>&nbsp;285</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.out(Log.ERROR,&nbsp;{&nbsp;color:&nbsp;color,&nbsp;msg:msg.stack&nbsp;});</p>
+<p id=284 class="line"><span>&nbsp;284</span><comment></comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.out(Log.ERROR,&nbsp;msg.message,&nbsp;{&nbsp;color:&nbsp;color&nbsp;});</p>
+<p id=285 class="line"><span>&nbsp;285</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.out(Log.ERROR,&nbsp;msg.stack,&nbsp;{&nbsp;color:&nbsp;color&nbsp;});</p>
 <p id=286 class="line"><span>&nbsp;286</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;msg.message;</p>
 <p id=287 class="line"><span>&nbsp;287</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;else&nbsp;{</p>
-<p id=288 class="line"><span>&nbsp;288</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;this.out(Log.ERROR,&nbsp;{&nbsp;color:&nbsp;color,&nbsp;msg:msg&nbsp;});&nbsp;</p>
+<p id=288 class="line"><span>&nbsp;288</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;this.out(Log.ERROR,&nbsp;msg,&nbsp;{&nbsp;color:&nbsp;color&nbsp;});&nbsp;</p>
 <p id=289 class="line"><span>&nbsp;289</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;</p>
 <p id=290 class="line"><span>&nbsp;290</span>&nbsp;&nbsp;&nbsp;&nbsp;}</p>
 <p id=291 class="line"><span>&nbsp;291</span></p>
@@ -323,25 +323,25 @@
 <p id=300 class="line"><span>&nbsp;300</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;prefix.</comment></p>
 <p id=301 class="line"><span>&nbsp;301</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;the&nbsp;message&nbsp;printed</comment></p>
 <p id=302 class="line"><span>&nbsp;302</span><comment>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</comment></p>
-<p id=303 class="line"><span>&nbsp;303</span>&nbsp;&nbsp;&nbsp;&nbsp;protected&nbsp;out(lvl:string,&nbsp;msg:Msg):&nbsp;string&nbsp;{	</p>
+<p id=303 class="line"><span>&nbsp;303</span>&nbsp;&nbsp;&nbsp;&nbsp;protected&nbsp;out(lvl:string,&nbsp;msg:any,&nbsp;options:Msg):&nbsp;string&nbsp;{	</p>
 <p id=304 class="line"><span>&nbsp;304</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;let&nbsp;desc:LevelDesc&nbsp;=&nbsp;Log.levels[lvl];</p>
 <p id=305 class="line"><span>&nbsp;305</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;filterLevel&nbsp;=&nbsp;this.reportLevel&nbsp;||&nbsp;Log.globalLevel;</p>
 <p id=306 class="line"><span>&nbsp;306</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(desc.importance&nbsp;>=&nbsp;filterLevel.importance)&nbsp;{</p>
 <p id=307 class="line"><span>&nbsp;307</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;let&nbsp;line;</p>
-<p id=308 class="line"><span>&nbsp;308</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;switch(typeof&nbsp;msg.msg)&nbsp;{</p>
-<p id=309 class="line"><span>&nbsp;309</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;'</quote>function<quote>':&nbsp;line&nbsp;=&nbsp;msg.msg();&nbsp;break;</p>
-<p id=310 class="line"><span>&nbsp;310</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;'</quote>string<quote>':&nbsp;&nbsp;&nbsp;line&nbsp;=&nbsp;msg.msg;&nbsp;break;</p>
+<p id=308 class="line"><span>&nbsp;308</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;switch(typeof&nbsp;msg)&nbsp;{</p>
+<p id=309 class="line"><span>&nbsp;309</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;'</quote>function<quote>':&nbsp;line&nbsp;=&nbsp;msg();&nbsp;break;</p>
+<p id=310 class="line"><span>&nbsp;310</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;'</quote>string<quote>':&nbsp;&nbsp;&nbsp;line&nbsp;=&nbsp;msg;&nbsp;break;</p>
 <p id=311 class="line"><span>&nbsp;311</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;'</quote>object<quote>':</p>
-<p id=312 class="line"><span>&nbsp;312</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default:&nbsp;line&nbsp;=&nbsp;this.inspect(msg.msg);&nbsp;</p>
+<p id=312 class="line"><span>&nbsp;312</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default:&nbsp;line&nbsp;=&nbsp;this.inspect(msg);&nbsp;</p>
 <p id=313 class="line"><span>&nbsp;313</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</p>
 <p id=314 class="line"><span>&nbsp;314</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;dateStr&nbsp;=&nbsp;date(Log.dateFormat);</p>
 <p id=315 class="line"><span>&nbsp;315</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(line.length&nbsp;>&nbsp;this.maxLength&nbsp;&&&nbsp;this.maxLength>0)&nbsp;{&nbsp;</p>
 <p id=316 class="line"><span>&nbsp;316</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;line&nbsp;=&nbsp;`${line.slice(0,&nbsp;this.maxLength/2-2)}...${line.slice(-this.maxLength/2+2)}`</p>
 <p id=317 class="line"><span>&nbsp;317</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</p>
-<p id=318 class="line"><span>&nbsp;318</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(msg&nbsp;&&&nbsp;msg.msg.stack)&nbsp;{&nbsp;line&nbsp;=&nbsp;`${line}\n${msg.msg.stack}`;&nbsp;}</p>
+<p id=318 class="line"><span>&nbsp;318</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(msg.stack)&nbsp;{&nbsp;line&nbsp;=&nbsp;`${line}\n${msg.stack}`;&nbsp;}</p>
 <p id=319 class="line"><span>&nbsp;319</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;header&nbsp;=&nbsp;`${dateStr}&nbsp;${this.reportPrefix}&nbsp;${desc.desc}`;</p>
-<p id=320 class="line"><span>&nbsp;320</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.output(msg.color,&nbsp;header,&nbsp;line);</p>
-<p id=321 class="line"><span>&nbsp;321</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;line;</p>
+<p id=320 class="line"><span>&nbsp;320</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.output(options.color,&nbsp;header,&nbsp;line);</p>
+<p id=321 class="line"><span>&nbsp;321</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;line&nbsp;+&nbsp;(options.lf||'</quote><quote>');</p>
 <p id=322 class="line"><span>&nbsp;322</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</p>
 <p id=323 class="line"><span>&nbsp;323</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;undefined;</p>
 <p id=324 class="line"><span>&nbsp;324</span>&nbsp;&nbsp;&nbsp;&nbsp;}</p>
