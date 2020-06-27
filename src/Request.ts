@@ -77,10 +77,7 @@ export interface Response {
 export interface IncomingMessage { 
     txt:            boolean; 
     headers:        {'content-type': string; };
-    // httpVersion:    string;
     method:         string;
-    // rawHeaders:     string[];    
-    // rawTrailers:    string[];
     status:         number;
     statusCode:     number;
     statusMessage:  string;
@@ -322,14 +319,12 @@ export class Request {
         const request = this;
         return new Promise((resolve:(out:Response)=>void, reject:(e:Response)=>void) => { try {
             function confirmRequest(e:any) {
-                if (e) { log.info(''); }
                 const headersText = xhr.getAllResponseHeaders();
                 const headers = {'content-type':''};
                 headersText.split('\r\n').map(h => {
                     const kv = h.split(':').map(p => p.trim());
                     if (kv[0].length) { headers[kv[0]] = kv[1]; }
                 })
-                // const contentType = (this.response.type && this.response.type.length>0)? this.response.type : '';
                 const contentType = this.responseType;
                 const txt = request.isTextualContent(contentType);
 

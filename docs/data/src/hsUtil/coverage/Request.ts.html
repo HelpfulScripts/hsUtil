@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">73.85% </span>
+                <span class="strong">74.22% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>96/130</span>
+                <span class='fraction'>95/128</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50.55% </span>
+                <span class="strong">50.56% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>46/91</span>
+                <span class='fraction'>45/89</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">77.48% </span>
+                <span class="strong">77.27% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>86/111</span>
+                <span class='fraction'>85/110</span>
             </div>
         
             
@@ -451,10 +451,7 @@
 <a name='L392'></a><a href='#L392'>392</a>
 <a name='L393'></a><a href='#L393'>393</a>
 <a name='L394'></a><a href='#L394'>394</a>
-<a name='L395'></a><a href='#L395'>395</a>
-<a name='L396'></a><a href='#L396'>396</a>
-<a name='L397'></a><a href='#L397'>397</a>
-<a name='L398'></a><a href='#L398'>398</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L395'></a><a href='#L395'>395</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -501,9 +498,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -778,7 +772,7 @@
 <span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-yes">8x</span>
@@ -930,10 +924,7 @@ export interface Response {
 export interface IncomingMessage { 
     txt:            boolean; 
     headers:        {'content-type': string; };
-    // httpVersion:    string;
     method:         string;
-    // rawHeaders:     string[];    
-    // rawTrailers:    string[];
     status:         number;
     statusCode:     number;
     statusMessage:  string;
@@ -1175,7 +1166,7 @@ export class Request {
         const request = this;
         return new Promise((resolve:(out:Response)=&gt;void, reject:(e:Response)=&gt;void) =&gt; { try {
             function confirmRequest(e:any) {
-                <span class="missing-if-branch" title="if path not taken" >I</span>if (e) { <span class="cstat-no" title="statement not covered" >log.info(''); </span>}
+                // if (e) { log.info(''); }
                 const headersText = xhr.getAllResponseHeaders();
                 const headers = {'content-type':''};
                 headersText.split('\r\n').map(h =&gt; {
