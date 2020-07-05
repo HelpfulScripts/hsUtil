@@ -258,6 +258,7 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
 								"isAbstract": true
 							},
@@ -333,7 +334,7 @@
 								{
 									"fileName": "Auth.ts",
 									"line": 13,
-									"character": 21
+									"character": 28
 								}
 							]
 						}
@@ -4121,7 +4122,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 362,
+									"line": 360,
 									"character": 30
 								}
 							]
@@ -4168,7 +4169,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 390,
+									"line": 388,
 									"character": 30
 								}
 							]

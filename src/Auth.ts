@@ -10,5 +10,5 @@ export abstract class Auth {
         this.password = password;
     }
 
-    abstract testAuth(options:Options, data:string|ArrayBuffer, response:IncomingMessage): Options;
+    public abstract testAuth(options:Options, data:string|ArrayBuffer, response:IncomingMessage): Options;
 }
