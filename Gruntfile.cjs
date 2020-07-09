@@ -135,6 +135,9 @@ function make(grunt) {
             bin:{ files: [
                 { expand:true, cwd: 'src/bin',              // if present, scaffolding for bin distribution
                     src:['**/*', '!**/*.ts'], dest:'bin' 
+                },{ 
+                    expand:true, cwd: '.',              // if present, scaffolding for bin distribution
+                    src:['package.json'], dest:'bin' 
                 }
             ]},
             // create docs/html files
