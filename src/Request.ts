@@ -27,7 +27,7 @@
  * 
  * ### Usage:
  * ```
- * import { Request } from 'hsnode';
+ * import { Request } from 'hsutil';
  * const request = new Request.Request();
  * request.cache = __dirname + '/../_data/cache';
  * request.decode = (options:http.Options) => options.path.indexOf('binData?id=') < 0;
