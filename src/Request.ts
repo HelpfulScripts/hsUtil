@@ -221,7 +221,8 @@ export class Request {
             pathname:   prefix + url.pathname,
             path:       prefix + url.pathname + (url.search || ''),
             headers:    <any>{},
-            url:        `${url.protocol}//${url.host}${url.port?':'+url.port : ''}${prefix + url.pathname + (url.search || '')}`,
+            // url:        `${url.protocol}//${url.host}${url.port?':'+url.port : ''}${prefix + url.pathname + (url.search || '')}`,
+            url:        `${url.protocol}//${url.host}${prefix + url.pathname + (url.search || '')}`,
         };  
         if (this.authToken) { options.headers.AuthToken = this.authToken; }
         return options;  

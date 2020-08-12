@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50.56% </span>
+                <span class="strong">50.57% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>45/89</span>
+                <span class='fraction'>44/87</span>
             </div>
         
             
@@ -449,7 +449,8 @@
 <a name='L390'></a><a href='#L390'>390</a>
 <a name='L391'></a><a href='#L391'>391</a>
 <a name='L392'></a><a href='#L392'>392</a>
-<a name='L393'></a><a href='#L393'>393</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L393'></a><a href='#L393'>393</a>
+<a name='L394'></a><a href='#L394'>394</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -663,6 +664,7 @@
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1064,7 +1066,8 @@ export class Request {
             pathname:   prefix + url.pathname,
             path:       prefix + url.pathname + (url.search || ''),
             headers:    &lt;any&gt;{},
-            url:        `${url.protocol}//${url.host}${url.port?<span class="branch-0 cbranch-no" title="branch not covered" >':'+url.port </span>: ''}${prefix + url.pathname + (url.search || '')}`,
+            // url:        `${url.protocol}//${url.host}${url.port?':'+url.port : ''}${prefix + url.pathname + (url.search || '')}`,
+            url:        `${url.protocol}//${url.host}${prefix + url.pathname + (url.search || '')}`,
         };  
         <span class="missing-if-branch" title="if path not taken" >I</span>if (this.authToken) { <span class="cstat-no" title="statement not covered" >options.headers.AuthToken = this.authToken; </span>}
         return options;  
