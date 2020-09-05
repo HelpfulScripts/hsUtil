@@ -1,5 +1,7 @@
-import { Log }          from './index';  const log = new Log('Request.jest');
+import { Log }          from './index';  
 import { Request }      from "./Request";
+
+const log = new Log('Request.jest');
 
 const XHR = require('./__mocks__/XMLHttpRequest.js');
 
@@ -24,11 +26,16 @@ XHR.load = jest.fn(xhr => xhr.onload());
 
 describe('Request', ()=>{
     beforeEach(() => {
+        log.level(Log.DEBUG, true);
         request.decode = undefined;
         request.cache = undefined;
         request.setPace();
         request.setCredentials();
         request.setAuthToken();
+    });
+
+    afterEach(() => {
+        log.level(Log.INFO, true);
     });
 
     test(`myPath.json should have one`, (done) => {

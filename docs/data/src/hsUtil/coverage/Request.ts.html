@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">74.22% </span>
+                <span class="strong">76.56% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>95/128</span>
+                <span class='fraction'>98/128</span>
             </div>
         
             
@@ -37,9 +37,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">72.41% </span>
+                <span class="strong">82.76% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>21/29</span>
+                <span class='fraction'>24/29</span>
             </div>
         
             
@@ -1121,10 +1121,10 @@ export class Request {
         } else {
 <span class="cstat-no" title="statement not covered" >            request = this.request(options, postData);</span>
         }
-        this.log.debug(<span class="fstat-no" title="function not covered" >()=</span>&gt;<span class="cstat-no" title="statement not covered" >`${options.method}-ing ${options.url}`)</span>; 
+        this.log.debug(()=&gt;`${options.method}-ing ${options.url}`); 
         const response = await request;
         <span class="missing-if-branch" title="else path not taken" >E</span>if (this.pace) { this.log.transient(`(${this.pace.inQueue()} | ${this.pace.inProgress()}) received ${options.method} ${options.url} `); }
-        this.log.debug(<span class="fstat-no" title="function not covered" >()=</span>&gt;<span class="cstat-no" title="statement not covered" >`received ${options.method} ${response.response.statusMessage} ${options.method} ${options.url}`)</span>; 
+        this.log.debug(()=&gt;`received ${options.method} ${response.response.statusMessage} ${options.method} ${options.url}`); 
 &nbsp;
         const code = response.response.statusCode||<span class="branch-1 cbranch-no" title="branch not covered" >response.response.status;</span>
         <span class="missing-if-branch" title="else path not taken" >E</span>if(code &gt;= 200 &amp;&amp; code &lt; 300) {
@@ -1192,7 +1192,7 @@ export class Request {
             }
             const xhr = new XMLHttpRequest();
             const txt = request.isTextualRequest(options.pathname);
-            this.log.debug(<span class="fstat-no" title="function not covered" >()=</span>&gt;<span class="cstat-no" title="statement not covered" >`requesting ${options.method} ${this.log.inspect(options, {depth:4})}`)</span>;
+            this.log.debug(()=&gt;`requesting ${options.method} ${this.log.inspect(options, {depth:4})}`);
             xhr.open(options.method, options.url, true);
             Object.keys(options.headers).forEach(h =&gt; xhr.setRequestHeader(h, options.headers[h]));
             xhr.responseType = txt? 'text' : <span class="branch-1 cbranch-no" title="branch not covered" >'arraybuffer';</span>

@@ -141,14 +141,17 @@
 <p id=118 class="line"><span>&nbsp;118</span>function&nbsp;parseDigestResponse(digestHeader:string)&nbsp;{</p>
 <p id=119 class="line"><span>&nbsp;119</span>&nbsp;&nbsp;&nbsp;&nbsp;digestHeader&nbsp;=&nbsp;digestHeader.split(<quote>'Digest&nbsp;'</quote>)[1];</p>
 <p id=120 class="line"><span>&nbsp;120</span>&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;params&nbsp;=&nbsp;{};</p>
-<p id=121 class="line"><span>&nbsp;121</span>&nbsp;&nbsp;&nbsp;&nbsp;digestHeader.replace(/(([^<quote>"]|"</quote>[^<quote>"]*"</quote>)*?)(,)/g,&nbsp;(...rest:string[])&nbsp;=>&nbsp;{</p>
-<p id=122 class="line"><span>&nbsp;122</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;part&nbsp;=&nbsp;rest[1];</p>
-<p id=123 class="line"><span>&nbsp;123</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;kv&nbsp;=&nbsp;part.split(<quote>'='</quote>).map((v:string)&nbsp;=>&nbsp;v.trim());</p>
-<p id=124 class="line"><span>&nbsp;124</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;params[kv[0]]&nbsp;=&nbsp;kv[1].replace(/\"/g,&nbsp;<quote>''</quote>);</p>
-<p id=125 class="line"><span>&nbsp;125</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;<quote>''</quote>;</p>
-<p id=126 class="line"><span>&nbsp;126</span>&nbsp;&nbsp;&nbsp;&nbsp;});</p>
-<p id=127 class="line"><span>&nbsp;127</span>&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;params;</p>
-<p id=128 class="line"><span>&nbsp;128</span>}</p>
-<p id=129 class="line"><span>&nbsp;129</span></p></code></div>
+<p id=121 class="line"><span>&nbsp;121</span>&nbsp;&nbsp;&nbsp;&nbsp;<comment>//&nbsp;digestHeader.replace(/(([^<quote>"]|"</quote>[^<quote>"]*"</quote>)*?)(,)/g,&nbsp;(...rest:string[])&nbsp;=>&nbsp;{</comment></p>
+<p id=122 class="line"><span>&nbsp;122</span><comment></comment>&nbsp;&nbsp;&nbsp;&nbsp;digestHeader.replace(/([^,]*)/g,&nbsp;(...rest:string[])&nbsp;=>&nbsp;{</p>
+<p id=123 class="line"><span>&nbsp;123</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;part&nbsp;=&nbsp;rest[1];</p>
+<p id=124 class="line"><span>&nbsp;124</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(part)&nbsp;{</p>
+<p id=125 class="line"><span>&nbsp;125</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;kv&nbsp;=&nbsp;part.split(<quote>'='</quote>).map((v:string)&nbsp;=>&nbsp;v.trim());</p>
+<p id=126 class="line"><span>&nbsp;126</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;params[kv[0]]&nbsp;=&nbsp;kv[1].replace(/\"/g,&nbsp;<quote>''</quote>);</p>
+<p id=127 class="line"><span>&nbsp;127</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</p>
+<p id=128 class="line"><span>&nbsp;128</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;<quote>''</quote>;</p>
+<p id=129 class="line"><span>&nbsp;129</span>&nbsp;&nbsp;&nbsp;&nbsp;});</p>
+<p id=130 class="line"><span>&nbsp;130</span>&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;params;</p>
+<p id=131 class="line"><span>&nbsp;131</span>}</p>
+<p id=132 class="line"><span>&nbsp;132</span></p></code></div>
                 </body>
             

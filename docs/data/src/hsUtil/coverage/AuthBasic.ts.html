@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">81.82% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>9/11</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/4</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">88.89% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>8/9</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
@@ -102,7 +102,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -115,7 +115,7 @@ import { Auth }             from './Auth';
 &nbsp;
 export class AuthBasic extends Auth {
     testAuth(options:Options, data:string, response:IncomingMessage): Options {
-        log.debug(<span class="fstat-no" title="function not covered" >()=</span>&gt;<span class="cstat-no" title="statement not covered" >`received www-authenticate request for ${options.host}`)</span>;
+        log.debug(()=&gt;`received www-authenticate request for ${options.host}`);
         options.headers.Authorization = 'Basic ' + _btoa(`${this.username}:${this.password}`);
         return options;
     }
@@ -126,9 +126,9 @@ function _btoa(str:string|Buffer):string {
     return buffer.toString('base64');
 }
 &nbsp;
-function <span class="fstat-no" title="function not covered" >_atob(</span>str:string):string {
-<span class="cstat-no" title="statement not covered" >    return Buffer.from(str, 'base64').toString('binary');</span>
-}
+// function _atob(str:string):string {
+//     return Buffer.from(str, 'base64').toString('binary');
+// }
   
   
 &nbsp;
