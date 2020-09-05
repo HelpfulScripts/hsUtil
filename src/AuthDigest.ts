@@ -118,10 +118,13 @@ function putDoubleQuotes(entry:string) {
 function parseDigestResponse(digestHeader:string) {
     digestHeader = digestHeader.split('Digest ')[1];
     const params = {};
-    digestHeader.replace(/(([^"]|"[^"]*")*?)(,)/g, (...rest:string[]) => {
+    // digestHeader.replace(/(([^"]|"[^"]*")*?)(,)/g, (...rest:string[]) => {
+    digestHeader.replace(/([^,]*)/g, (...rest:string[]) => {
         const part = rest[1];
-        const kv = part.split('=').map((v:string) => v.trim());
-        params[kv[0]] = kv[1].replace(/\"/g, '');
+            if (part) {
+            const kv = part.split('=').map((v:string) => v.trim());
+            params[kv[0]] = kv[1].replace(/\"/g, '');
+        }
         return '';
     });
     return params;

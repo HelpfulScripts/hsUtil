@@ -17,9 +17,9 @@ function _btoa(str:string|Buffer):string {
     return buffer.toString('base64');
 }
 
-function _atob(str:string):string {
-    return Buffer.from(str, 'base64').toString('binary');
-}
+// function _atob(str:string):string {
+//     return Buffer.from(str, 'base64').toString('binary');
+// }
   
   
 
