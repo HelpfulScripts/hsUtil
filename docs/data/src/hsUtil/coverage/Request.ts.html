@@ -1116,7 +1116,7 @@ export class Request {
 &nbsp;
         let request: Promise&lt;Response&gt;;
         <span class="missing-if-branch" title="else path not taken" >E</span>if (this.pace) {
-            this.log.info(`(${this.pace.inQueue()} | ${this.pace.inProgress()}) ${options.method}-ing ${options.url}`); 
+            this.log.transient(`(${this.pace.inQueue()} | ${this.pace.inProgress()}) ${options.method}-ing ${options.url}`); 
             request = this.pace.add(() =&gt; this.request(options, postData), `${options.method} ${options.url}`);
         } else {
 <span class="cstat-no" title="statement not covered" >            request = this.request(options, postData);</span>

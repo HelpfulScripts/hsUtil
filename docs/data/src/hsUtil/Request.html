@@ -294,7 +294,7 @@
 <p id=271 class="line"><span>&nbsp;271</span></p>
 <p id=272 class="line"><span>&nbsp;272</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;let&nbsp;request:&nbsp;Promise<Response>;</p>
 <p id=273 class="line"><span>&nbsp;273</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(this.pace)&nbsp;{</p>
-<p id=274 class="line"><span>&nbsp;274</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.log.info(`(${this.pace.inQueue()}&nbsp;|&nbsp;${this.pace.inProgress()})&nbsp;${options.method}-ing&nbsp;${options.url}`);&nbsp;</p>
+<p id=274 class="line"><span>&nbsp;274</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.log.transient(`(${this.pace.inQueue()}&nbsp;|&nbsp;${this.pace.inProgress()})&nbsp;${options.method}-ing&nbsp;${options.url}`);&nbsp;</p>
 <p id=275 class="line"><span>&nbsp;275</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;request&nbsp;=&nbsp;this.pace.add(()&nbsp;=>&nbsp;this.request(options,&nbsp;postData),&nbsp;`${options.method}&nbsp;${options.url}`);</p>
 <p id=276 class="line"><span>&nbsp;276</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;else&nbsp;{</p>
 <p id=277 class="line"><span>&nbsp;277</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;request&nbsp;=&nbsp;this.request(options,&nbsp;postData);</p>

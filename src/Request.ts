@@ -271,7 +271,7 @@ export class Request {
 
         let request: Promise<Response>;
         if (this.pace) {
-            this.log.info(`(${this.pace.inQueue()} | ${this.pace.inProgress()}) ${options.method}-ing ${options.url}`); 
+            this.log.transient(`(${this.pace.inQueue()} | ${this.pace.inProgress()}) ${options.method}-ing ${options.url}`); 
             request = this.pace.add(() => this.request(options, postData), `${options.method} ${options.url}`);
         } else {
             request = this.request(options, postData);
