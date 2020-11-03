@@ -31,7 +31,7 @@
 <p id=8 class="line"><span>&nbsp;&nbsp;&nbsp;8</span><comment>&nbsp;&nbsp;*/</comment></p>
 <p id=9 class="line"><span>&nbsp;&nbsp;&nbsp;9</span>&nbsp;export&nbsp;function&nbsp;shortCheckSum(s:string):string&nbsp;{</p>
 <p id=10 class="line"><span>&nbsp;&nbsp;10</span>&nbsp;&nbsp;&nbsp;&nbsp;let&nbsp;chk&nbsp;=&nbsp;0x12345678;</p>
-<p id=11 class="line"><span>&nbsp;&nbsp;11</span>&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;(let&nbsp;i=0;&nbsp;i<s.length;&nbsp;i++)&nbsp;{</p>
+<p id=11 class="line"><span>&nbsp;&nbsp;11</span>&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;(let&nbsp;i=0;&nbsp;i&lt;s.length;&nbsp;i++)&nbsp;{</p>
 <p id=12 class="line"><span>&nbsp;&nbsp;12</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;chk&nbsp;+=&nbsp;(s.charCodeAt(i)&nbsp;*&nbsp;(i&nbsp;+&nbsp;1));</p>
 <p id=13 class="line"><span>&nbsp;&nbsp;13</span>&nbsp;&nbsp;&nbsp;&nbsp;}</p>
 <p id=14 class="line"><span>&nbsp;&nbsp;14</span>&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;(chk&nbsp;&&nbsp;0xffffffff).toString(16);&nbsp;</p>
