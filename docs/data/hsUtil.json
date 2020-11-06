@@ -133,7 +133,7 @@
 			]
 		},
 		{
-			"id": 417,
+			"id": 412,
 			"name": "\"Auth\"",
 			"kind": 1,
 			"kindString": "Module",
@@ -143,7 +143,7 @@
 			"originalName": "/Users/sth1pal/Documents/Development/JavaScript/nodejs/ts6/dev/hsLibs/standalone/hsUtil/src/Auth.ts",
 			"children": [
 				{
-					"id": 418,
+					"id": 413,
 					"name": "Auth",
 					"kind": 128,
 					"kindString": "Class",
@@ -153,7 +153,7 @@
 					},
 					"children": [
 						{
-							"id": 421,
+							"id": 416,
 							"name": "constructor",
 							"kind": 512,
 							"kindString": "Constructor",
@@ -162,7 +162,7 @@
 							},
 							"signatures": [
 								{
-									"id": 422,
+									"id": 417,
 									"name": "new Auth",
 									"kind": 16384,
 									"kindString": "Constructor signature",
@@ -171,7 +171,7 @@
 									},
 									"parameters": [
 										{
-											"id": 423,
+											"id": 418,
 											"name": "username",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -184,7 +184,7 @@
 											}
 										},
 										{
-											"id": 424,
+											"id": 419,
 											"name": "password",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -199,7 +199,7 @@
 									],
 									"type": {
 										"type": "reference",
-										"id": 418,
+										"id": 413,
 										"name": "Auth"
 									}
 								}
@@ -213,7 +213,7 @@
 							]
 						},
 						{
-							"id": 420,
+							"id": 415,
 							"name": "password",
 							"kind": 1024,
 							"kindString": "Property",
@@ -233,7 +233,7 @@
 							}
 						},
 						{
-							"id": 419,
+							"id": 414,
 							"name": "username",
 							"kind": 1024,
 							"kindString": "Property",
@@ -253,7 +253,7 @@
 							}
 						},
 						{
-							"id": 425,
+							"id": 420,
 							"name": "testAuth",
 							"kind": 2048,
 							"kindString": "Method",
@@ -264,7 +264,7 @@
 							},
 							"signatures": [
 								{
-									"id": 426,
+									"id": 421,
 									"name": "testAuth",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -273,7 +273,7 @@
 									},
 									"parameters": [
 										{
-											"id": 427,
+											"id": 422,
 											"name": "options",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -287,7 +287,7 @@
 											}
 										},
 										{
-											"id": 428,
+											"id": 423,
 											"name": "data",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -309,7 +309,7 @@
 											}
 										},
 										{
-											"id": 429,
+											"id": 424,
 											"name": "response",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -344,22 +344,22 @@
 							"title": "Constructors",
 							"kind": 512,
 							"children": [
-								421
+								416
 							]
 						},
 						{
 							"title": "Properties",
 							"kind": 1024,
 							"children": [
-								420,
-								419
+								415,
+								414
 							]
 						},
 						{
 							"title": "Methods",
 							"kind": 2048,
 							"children": [
-								425
+								420
 							]
 						}
 					],
@@ -389,7 +389,7 @@
 					"title": "Classes",
 					"kind": 128,
 					"children": [
-						418
+						413
 					]
 				}
 			],
@@ -607,7 +607,7 @@
 									},
 									"overwrites": {
 										"type": "reference",
-										"id": 425,
+										"id": 420,
 										"name": "Auth.testAuth"
 									}
 								}
@@ -621,7 +621,7 @@
 							],
 							"overwrites": {
 								"type": "reference",
-								"id": 425,
+								"id": 420,
 								"name": "Auth.testAuth"
 							}
 						}
@@ -660,7 +660,7 @@
 					"extendedTypes": [
 						{
 							"type": "reference",
-							"id": 418,
+							"id": 413,
 							"name": "Auth"
 						}
 					]
@@ -1118,7 +1118,7 @@
 									},
 									"overwrites": {
 										"type": "reference",
-										"id": 425,
+										"id": 420,
 										"name": "Auth.testAuth"
 									}
 								}
@@ -1132,7 +1132,7 @@
 							],
 							"overwrites": {
 								"type": "reference",
-								"id": 425,
+								"id": 420,
 								"name": "Auth.testAuth"
 							}
 						},
@@ -1208,7 +1208,7 @@
 					"extendedTypes": [
 						{
 							"type": "reference",
-							"id": 418,
+							"id": 413,
 							"name": "Auth"
 						}
 					]
@@ -1455,7 +1455,7 @@
 			]
 		},
 		{
-			"id": 430,
+			"id": 425,
 			"name": "\"Checksum\"",
 			"kind": 1,
 			"kindString": "Module",
@@ -1468,7 +1468,7 @@
 			},
 			"children": [
 				{
-					"id": 431,
+					"id": 426,
 					"name": "shortCheckSum",
 					"kind": 64,
 					"kindString": "Function",
@@ -1477,7 +1477,7 @@
 					},
 					"signatures": [
 						{
-							"id": 432,
+							"id": 427,
 							"name": "shortCheckSum",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -1489,7 +1489,7 @@
 							},
 							"parameters": [
 								{
-									"id": 433,
+									"id": 428,
 									"name": "s",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -1522,7 +1522,7 @@
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						431
+						426
 					]
 				}
 			],
@@ -3487,7 +3487,7 @@
 							}
 						},
 						{
-							"id": 351,
+							"id": 353,
 							"name": "decode",
 							"kind": 1024,
 							"kindString": "Property",
@@ -3501,7 +3501,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 150,
+									"line": 155,
 									"character": 17
 								}
 							],
@@ -3564,7 +3564,45 @@
 							}
 						},
 						{
-							"id": 383,
+							"id": 351,
+							"name": "clearPace",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isPublic": true,
+								"isExported": true
+							},
+							"comment": {
+								"shortText": "clears a `Pace`."
+							},
+							"signatures": [
+								{
+									"id": 352,
+									"name": "clearPace",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {
+										"isExported": true
+									},
+									"comment": {
+										"shortText": "clears a `Pace`."
+									},
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "Request.ts",
+									"line": 147,
+									"character": 20
+								}
+							]
+						},
+						{
+							"id": 385,
 							"name": "decodedRequest",
 							"kind": 2048,
 							"kindString": "Method",
@@ -3574,7 +3612,7 @@
 							},
 							"signatures": [
 								{
-									"id": 384,
+									"id": 386,
 									"name": "decodedRequest",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -3586,7 +3624,7 @@
 									},
 									"parameters": [
 										{
-											"id": 385,
+											"id": 387,
 											"name": "options",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -3600,7 +3638,7 @@
 											}
 										},
 										{
-											"id": 386,
+											"id": 388,
 											"name": "useCached",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -3616,7 +3654,7 @@
 											}
 										},
 										{
-											"id": 387,
+											"id": 389,
 											"name": "headers",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -3629,7 +3667,7 @@
 											}
 										},
 										{
-											"id": 388,
+											"id": 390,
 											"name": "postData",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -3662,13 +3700,13 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 224,
+									"line": 229,
 									"character": 34
 								}
 							]
 						},
 						{
-							"id": 352,
+							"id": 354,
 							"name": "get",
 							"kind": 2048,
 							"kindString": "Method",
@@ -3678,7 +3716,7 @@
 							},
 							"signatures": [
 								{
-									"id": 353,
+									"id": 355,
 									"name": "get",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -3691,7 +3729,7 @@
 									},
 									"parameters": [
 										{
-											"id": 354,
+											"id": 356,
 											"name": "url",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -3716,7 +3754,7 @@
 											}
 										},
 										{
-											"id": 355,
+											"id": 357,
 											"name": "__namedParameters",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -3727,7 +3765,7 @@
 											"type": {
 												"type": "reflection",
 												"declaration": {
-													"id": 356,
+													"id": 358,
 													"name": "__type",
 													"kind": 65536,
 													"kindString": "Type literal",
@@ -3736,7 +3774,7 @@
 													},
 													"children": [
 														{
-															"id": 358,
+															"id": 360,
 															"name": "headers",
 															"kind": 32,
 															"kindString": "Variable",
@@ -3746,14 +3784,14 @@
 															"sources": [
 																{
 																	"fileName": "Request.ts",
-																	"line": 160,
+																	"line": 165,
 																	"character": 61
 																}
 															],
 															"type": {
 																"type": "reflection",
 																"declaration": {
-																	"id": 359,
+																	"id": 361,
 																	"name": "__type",
 																	"kind": 65536,
 																	"kindString": "Type literal",
@@ -3764,7 +3802,7 @@
 															}
 														},
 														{
-															"id": 357,
+															"id": 359,
 															"name": "useCached",
 															"kind": 32,
 															"kindString": "Variable",
@@ -3777,7 +3815,7 @@
 															"sources": [
 																{
 																	"fileName": "Request.ts",
-																	"line": 160,
+																	"line": 165,
 																	"character": 47
 																}
 															],
@@ -3793,15 +3831,15 @@
 															"title": "Variables",
 															"kind": 32,
 															"children": [
-																358,
-																357
+																360,
+																359
 															]
 														}
 													],
 													"sources": [
 														{
 															"fileName": "Request.ts",
-															"line": 160,
+															"line": 165,
 															"character": 36
 														}
 													]
@@ -3826,13 +3864,13 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 160,
+									"line": 165,
 									"character": 20
 								}
 							]
 						},
 						{
-							"id": 379,
+							"id": 381,
 							"name": "getOptions",
 							"kind": 2048,
 							"kindString": "Method",
@@ -3842,7 +3880,7 @@
 							},
 							"signatures": [
 								{
-									"id": 380,
+									"id": 382,
 									"name": "getOptions",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -3851,7 +3889,7 @@
 									},
 									"parameters": [
 										{
-											"id": 381,
+											"id": 383,
 											"name": "url",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -3873,7 +3911,7 @@
 											}
 										},
 										{
-											"id": 382,
+											"id": 384,
 											"name": "method",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -3882,7 +3920,7 @@
 											},
 											"type": {
 												"type": "reference",
-												"id": 416,
+												"id": 411,
 												"name": "Method"
 											}
 										}
@@ -3897,13 +3935,13 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 193,
+									"line": 198,
 									"character": 24
 								}
 							]
 						},
 						{
-							"id": 376,
+							"id": 378,
 							"name": "getURL",
 							"kind": 2048,
 							"kindString": "Method",
@@ -3913,7 +3951,7 @@
 							},
 							"signatures": [
 								{
-									"id": 377,
+									"id": 379,
 									"name": "getURL",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -3922,7 +3960,7 @@
 									},
 									"parameters": [
 										{
-											"id": 378,
+											"id": 380,
 											"name": "url",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -3953,13 +3991,13 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 189,
+									"line": 194,
 									"character": 20
 								}
 							]
 						},
 						{
-							"id": 409,
+							"id": 404,
 							"name": "isTextualContent",
 							"kind": 2048,
 							"kindString": "Method",
@@ -3969,7 +4007,7 @@
 							},
 							"signatures": [
 								{
-									"id": 410,
+									"id": 405,
 									"name": "isTextualContent",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -3978,7 +4016,7 @@
 									},
 									"parameters": [
 										{
-											"id": 411,
+											"id": 406,
 											"name": "contentType",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -4000,13 +4038,13 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 330,
+									"line": 320,
 									"character": 30
 								}
 							]
 						},
 						{
-							"id": 412,
+							"id": 407,
 							"name": "isTextualRequest",
 							"kind": 2048,
 							"kindString": "Method",
@@ -4016,7 +4054,7 @@
 							},
 							"signatures": [
 								{
-									"id": 413,
+									"id": 408,
 									"name": "isTextualRequest",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -4025,7 +4063,7 @@
 									},
 									"parameters": [
 										{
-											"id": 414,
+											"id": 409,
 											"name": "pathName",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -4047,13 +4085,13 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 358,
+									"line": 348,
 									"character": 30
 								}
 							]
 						},
 						{
-							"id": 405,
+							"id": 400,
 							"name": "issueRequest",
 							"kind": 2048,
 							"kindString": "Method",
@@ -4063,7 +4101,7 @@
 							},
 							"signatures": [
 								{
-									"id": 406,
+									"id": 401,
 									"name": "issueRequest",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -4072,7 +4110,7 @@
 									},
 									"parameters": [
 										{
-											"id": 407,
+											"id": 402,
 											"name": "options",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -4086,7 +4124,7 @@
 											}
 										},
 										{
-											"id": 408,
+											"id": 403,
 											"name": "postData",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -4116,13 +4154,13 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 288,
+									"line": 278,
 									"character": 32
 								}
 							]
 						},
 						{
-							"id": 368,
+							"id": 370,
 							"name": "post",
 							"kind": 2048,
 							"kindString": "Method",
@@ -4132,7 +4170,7 @@
 							},
 							"signatures": [
 								{
-									"id": 369,
+									"id": 371,
 									"name": "post",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -4145,7 +4183,7 @@
 									},
 									"parameters": [
 										{
-											"id": 370,
+											"id": 372,
 											"name": "url",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -4170,7 +4208,7 @@
 											}
 										},
 										{
-											"id": 371,
+											"id": 373,
 											"name": "postData",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -4186,7 +4224,7 @@
 											}
 										},
 										{
-											"id": 372,
+											"id": 374,
 											"name": "__namedParameters",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -4197,7 +4235,7 @@
 											"type": {
 												"type": "reflection",
 												"declaration": {
-													"id": 373,
+													"id": 375,
 													"name": "__type",
 													"kind": 65536,
 													"kindString": "Type literal",
@@ -4206,7 +4244,7 @@
 													},
 													"children": [
 														{
-															"id": 374,
+															"id": 376,
 															"name": "headers",
 															"kind": 32,
 															"kindString": "Variable",
@@ -4216,14 +4254,14 @@
 															"sources": [
 																{
 																	"fileName": "Request.ts",
-																	"line": 184,
+																	"line": 189,
 																	"character": 60
 																}
 															],
 															"type": {
 																"type": "reflection",
 																"declaration": {
-																	"id": 375,
+																	"id": 377,
 																	"name": "__type",
 																	"kind": 65536,
 																	"kindString": "Type literal",
@@ -4239,14 +4277,14 @@
 															"title": "Variables",
 															"kind": 32,
 															"children": [
-																374
+																376
 															]
 														}
 													],
 													"sources": [
 														{
 															"fileName": "Request.ts",
-															"line": 184,
+															"line": 189,
 															"character": 51
 														}
 													]
@@ -4271,13 +4309,13 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 184,
+									"line": 189,
 									"character": 21
 								}
 							]
 						},
 						{
-							"id": 360,
+							"id": 362,
 							"name": "put",
 							"kind": 2048,
 							"kindString": "Method",
@@ -4287,7 +4325,7 @@
 							},
 							"signatures": [
 								{
-									"id": 361,
+									"id": 363,
 									"name": "put",
 									"kind": 4096,
 									"kindString": "Call signature",
@@ -4300,7 +4338,7 @@
 									},
 									"parameters": [
 										{
-											"id": 362,
+											"id": 364,
 											"name": "url",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -4325,7 +4363,7 @@
 											}
 										},
 										{
-											"id": 363,
+											"id": 365,
 											"name": "postData",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -4341,7 +4379,7 @@
 											}
 										},
 										{
-											"id": 364,
+											"id": 366,
 											"name": "__namedParameters",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -4352,7 +4390,7 @@
 											"type": {
 												"type": "reflection",
 												"declaration": {
-													"id": 365,
+													"id": 367,
 													"name": "__type",
 													"kind": 65536,
 													"kindString": "Type literal",
@@ -4361,7 +4399,7 @@
 													},
 													"children": [
 														{
-															"id": 366,
+															"id": 368,
 															"name": "headers",
 															"kind": 32,
 															"kindString": "Variable",
@@ -4371,14 +4409,14 @@
 															"sources": [
 																{
 																	"fileName": "Request.ts",
-																	"line": 172,
+																	"line": 177,
 																	"character": 59
 																}
 															],
 															"type": {
 																"type": "reflection",
 																"declaration": {
-																	"id": 367,
+																	"id": 369,
 																	"name": "__type",
 																	"kind": 65536,
 																	"kindString": "Type literal",
@@ -4394,14 +4432,14 @@
 															"title": "Variables",
 															"kind": 32,
 															"children": [
-																366
+																368
 															]
 														}
 													],
 													"sources": [
 														{
 															"fileName": "Request.ts",
-															"line": 172,
+															"line": 177,
 															"character": 50
 														}
 													]
@@ -4426,73 +4464,13 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 172,
+									"line": 177,
 									"character": 20
 								}
 							]
 						},
 						{
-							"id": 389,
-							"name": "readCached",
-							"kind": 2048,
-							"kindString": "Method",
-							"flags": {
-								"isProtected": true,
-								"isExported": true
-							},
-							"signatures": [
-								{
-									"id": 390,
-									"name": "readCached",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {
-										"isExported": true
-									},
-									"comment": {
-										"shortText": "attempts to read a cached file and returns `undefined` if none is found.\nThe attempt consists of two steps:\n- return a file named `<fname>.txt` as a text file, if available\n- return a file names `<fname>.bin` as a binary file, if available"
-									},
-									"parameters": [
-										{
-											"id": 391,
-											"name": "fname",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {
-												"isExported": true
-											},
-											"comment": {
-												"text": "the path and name of the file, without extension\n\n"
-											},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										}
-									],
-									"type": {
-										"type": "reference",
-										"typeArguments": [
-											{
-												"type": "reference",
-												"id": 304,
-												"name": "Response"
-											}
-										],
-										"name": "Promise"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "Request.ts",
-									"line": 240,
-									"character": 30
-								}
-							]
-						},
-						{
-							"id": 401,
+							"id": 396,
 							"name": "request",
 							"kind": 2048,
 							"kindString": "Method",
@@ -4502,77 +4480,8 @@
 							},
 							"signatures": [
 								{
-									"id": 402,
-									"name": "request",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {
-										"isExported": true
-									},
-									"parameters": [
-										{
-											"id": 403,
-											"name": "options",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {
-												"isExported": true
-											},
-											"type": {
-												"type": "reference",
-												"id": 293,
-												"name": "Options"
-											}
-										},
-										{
-											"id": 404,
-											"name": "postData",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {
-												"isExported": true,
-												"isOptional": true
-											},
-											"type": {
-												"type": "intrinsic",
-												"name": "any"
-											}
-										}
-									],
-									"type": {
-										"type": "reference",
-										"typeArguments": [
-											{
-												"type": "reference",
-												"id": 304,
-												"name": "Response"
-											}
-										],
-										"name": "Promise"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "Request.ts",
-									"line": 262,
-									"character": 27
-								}
-							]
-						},
-						{
-							"id": 396,
-							"name": "requestOptions",
-							"kind": 2048,
-							"kindString": "Method",
-							"flags": {
-								"isProtected": true,
-								"isExported": true
-							},
-							"signatures": [
-								{
 									"id": 397,
-									"name": "requestOptions",
+									"name": "request",
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {
@@ -4595,19 +4504,6 @@
 										},
 										{
 											"id": 399,
-											"name": "useCached",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {
-												"isExported": true
-											},
-											"type": {
-												"type": "intrinsic",
-												"name": "boolean"
-											}
-										},
-										{
-											"id": 400,
 											"name": "postData",
 											"kind": 32768,
 											"kindString": "Parameter",
@@ -4637,7 +4533,89 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 247,
+									"line": 252,
+									"character": 27
+								}
+							]
+						},
+						{
+							"id": 391,
+							"name": "requestOptions",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isProtected": true,
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 392,
+									"name": "requestOptions",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {
+										"isExported": true
+									},
+									"parameters": [
+										{
+											"id": 393,
+											"name": "options",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {
+												"isExported": true
+											},
+											"type": {
+												"type": "reference",
+												"id": 293,
+												"name": "Options"
+											}
+										},
+										{
+											"id": 394,
+											"name": "useCached",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {
+												"isExported": true
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "boolean"
+											}
+										},
+										{
+											"id": 395,
+											"name": "postData",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {
+												"isExported": true,
+												"isOptional": true
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "any"
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"typeArguments": [
+											{
+												"type": "reference",
+												"id": 304,
+												"name": "Response"
+											}
+										],
+										"name": "Promise"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "Request.ts",
+									"line": 237,
 									"character": 34
 								}
 							]
@@ -4780,7 +4758,7 @@
 								"isExported": true
 							},
 							"comment": {
-								"shortText": "sets a `Pace` for the requests:"
+								"shortText": "sets a `Pace` for the requests. Call `request.setPace()` to remove pacing."
 							},
 							"signatures": [
 								{
@@ -4792,7 +4770,7 @@
 										"isExported": true
 									},
 									"comment": {
-										"shortText": "sets a `Pace` for the requests:"
+										"shortText": "sets a `Pace` for the requests. Call `request.setPace()` to remove pacing."
 									},
 									"parameters": [
 										{
@@ -4899,7 +4877,7 @@
 													]
 												}
 											},
-											"defaultValue": "{pace:<any>undefined}"
+											"defaultValue": "{pace:<any>null}"
 										}
 									],
 									"type": {
@@ -4913,73 +4891,6 @@
 									"fileName": "Request.ts",
 									"line": 140,
 									"character": 18
-								}
-							]
-						},
-						{
-							"id": 392,
-							"name": "writeCached",
-							"kind": 2048,
-							"kindString": "Method",
-							"flags": {
-								"isProtected": true,
-								"isExported": true
-							},
-							"signatures": [
-								{
-									"id": 393,
-									"name": "writeCached",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {
-										"isExported": true
-									},
-									"parameters": [
-										{
-											"id": 394,
-											"name": "fname",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {
-												"isExported": true
-											},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 395,
-											"name": "response",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {
-												"isExported": true
-											},
-											"type": {
-												"type": "reference",
-												"id": 304,
-												"name": "Response"
-											}
-										}
-									],
-									"type": {
-										"type": "reference",
-										"typeArguments": [
-											{
-												"type": "intrinsic",
-												"name": "void"
-											}
-										],
-										"name": "Promise"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "Request.ts",
-									"line": 244,
-									"character": 31
 								}
 							]
 						},
@@ -5136,7 +5047,7 @@
 							"children": [
 								336,
 								332,
-								351,
+								353,
 								330,
 								331
 							]
@@ -5145,22 +5056,21 @@
 							"title": "Methods",
 							"kind": 2048,
 							"children": [
-								383,
-								352,
-								379,
-								376,
-								409,
-								412,
-								405,
-								368,
-								360,
-								389,
-								401,
+								351,
+								385,
+								354,
+								381,
+								378,
+								404,
+								407,
+								400,
+								370,
+								362,
 								396,
+								391,
 								341,
 								337,
-								344,
-								392
+								344
 							]
 						},
 						{
@@ -5560,7 +5470,7 @@
 							],
 							"type": {
 								"type": "reference",
-								"id": 416,
+								"id": 411,
 								"name": "Method"
 							}
 						},
@@ -5793,7 +5703,7 @@
 					]
 				},
 				{
-					"id": 416,
+					"id": 411,
 					"name": "Method",
 					"kind": 4194304,
 					"kindString": "Type alias",
@@ -5826,7 +5736,7 @@
 					}
 				},
 				{
-					"id": 415,
+					"id": 410,
 					"name": "log",
 					"kind": 32,
 					"kindString": "Variable",
@@ -5870,14 +5780,14 @@
 					"title": "Type aliases",
 					"kind": 4194304,
 					"children": [
-						416
+						411
 					]
 				},
 				{
 					"title": "Variables",
 					"kind": 32,
 					"children": [
-						415
+						410
 					]
 				}
 			],
@@ -5890,7 +5800,7 @@
 			]
 		},
 		{
-			"id": 434,
+			"id": 429,
 			"name": "\"index\"",
 			"kind": 1,
 			"kindString": "Module",
@@ -5900,7 +5810,7 @@
 			"originalName": "/Users/sth1pal/Documents/Development/JavaScript/nodejs/ts6/dev/hsLibs/standalone/hsUtil/src/index.ts",
 			"children": [
 				{
-					"id": 442,
+					"id": 437,
 					"name": "Decoder",
 					"kind": 16777216,
 					"kindString": "Reference",
@@ -5910,7 +5820,7 @@
 					"target": 317
 				},
 				{
-					"id": 441,
+					"id": 436,
 					"name": "IncomingMessage",
 					"kind": 16777216,
 					"kindString": "Reference",
@@ -5920,7 +5830,7 @@
 					"target": 307
 				},
 				{
-					"id": 447,
+					"id": 442,
 					"name": "LevelDesc",
 					"kind": 16777216,
 					"kindString": "Reference",
@@ -5930,7 +5840,7 @@
 					"target": 44
 				},
 				{
-					"id": 448,
+					"id": 443,
 					"name": "Log",
 					"kind": 16777216,
 					"kindString": "Reference",
@@ -5940,17 +5850,17 @@
 					"target": 51
 				},
 				{
-					"id": 438,
+					"id": 433,
 					"name": "Method",
 					"kind": 16777216,
 					"kindString": "Reference",
 					"flags": {
 						"isExported": true
 					},
-					"target": 416
+					"target": 411
 				},
 				{
-					"id": 439,
+					"id": 434,
 					"name": "Options",
 					"kind": 16777216,
 					"kindString": "Reference",
@@ -5960,7 +5870,7 @@
 					"target": 293
 				},
 				{
-					"id": 437,
+					"id": 432,
 					"name": "Pace",
 					"kind": 16777216,
 					"kindString": "Reference",
@@ -5970,7 +5880,7 @@
 					"target": 180
 				},
 				{
-					"id": 443,
+					"id": 438,
 					"name": "Request",
 					"kind": 16777216,
 					"kindString": "Reference",
@@ -5980,7 +5890,7 @@
 					"target": 321
 				},
 				{
-					"id": 440,
+					"id": 435,
 					"name": "Response",
 					"kind": 16777216,
 					"kindString": "Reference",
@@ -5990,7 +5900,7 @@
 					"target": 304
 				},
 				{
-					"id": 445,
+					"id": 440,
 					"name": "date",
 					"kind": 16777216,
 					"kindString": "Reference",
@@ -6000,7 +5910,7 @@
 					"target": 14
 				},
 				{
-					"id": 436,
+					"id": 431,
 					"name": "delay",
 					"kind": 16777216,
 					"kindString": "Reference",
@@ -6010,7 +5920,7 @@
 					"target": 232
 				},
 				{
-					"id": 446,
+					"id": 441,
 					"name": "ms",
 					"kind": 16777216,
 					"kindString": "Reference",
@@ -6020,17 +5930,17 @@
 					"target": 18
 				},
 				{
-					"id": 444,
+					"id": 439,
 					"name": "shortCheckSum",
 					"kind": 16777216,
 					"kindString": "Reference",
 					"flags": {
 						"isExported": true
 					},
-					"target": 431
+					"target": 426
 				},
 				{
-					"id": 435,
+					"id": 430,
 					"name": "timeout",
 					"kind": 16777216,
 					"kindString": "Reference",
@@ -6040,7 +5950,7 @@
 					"target": 228
 				},
 				{
-					"id": 449,
+					"id": 444,
 					"name": "uniquefy",
 					"kind": 16777216,
 					"kindString": "Reference",
@@ -6055,21 +5965,21 @@
 					"title": "References",
 					"kind": 16777216,
 					"children": [
-						442,
-						441,
-						447,
-						448,
-						438,
-						439,
 						437,
-						443,
-						440,
-						445,
 						436,
-						446,
-						444,
+						442,
+						443,
+						433,
+						434,
+						432,
+						438,
 						435,
-						449
+						440,
+						431,
+						441,
+						439,
+						430,
+						444
 					]
 				}
 			],
@@ -8940,7 +8850,7 @@
 			]
 		},
 		{
-			"id": 450,
+			"id": 445,
 			"name": "\"overview\"",
 			"kind": 1,
 			"kindString": "Module",
@@ -8967,16 +8877,16 @@
 			"kind": 1,
 			"children": [
 				1,
-				417,
+				412,
 				275,
 				238,
-				430,
+				425,
 				7,
 				179,
 				292,
-				434,
+				429,
 				43,
-				450
+				445
 			]
 		}
 	]

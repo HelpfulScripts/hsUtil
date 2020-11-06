@@ -132,14 +132,19 @@ export class Request {
         this.authToken = token
     
     /**
-     * sets a `Pace` for the requests: 
+     * sets a `Pace` for the requests. Call `request.setPace()` to remove pacing.
      * @param pace number of ms between requests.
      * @param max upper limit of concurrent outstanding requests.
      * @param collectionPeriod time in ms to wait before executing call.
      */
-    public setPace = ({pace=50, max=10, collectionPeriod=100}={pace:<any>undefined}) => {
-        this.pace = pace===undefined? undefined : new Pace({pace:pace, maxConcurrent:max, collectionPeriod:collectionPeriod});
+    public setPace = ({pace=50, max=10, collectionPeriod=100}={pace:<any>null}) => {
+        this.pace = (!pace || pace<0)? undefined : new Pace({pace:pace, maxConcurrent:max, collectionPeriod:collectionPeriod});
     }
+    
+    /**
+     * clears a `Pace`.
+     */
+    public clearPace = () => this.setPace();
     
     /** 
      * sets an optional decode function for retrieved content. The function will be 
@@ -229,21 +234,6 @@ export class Request {
         return result;
     }
 
-    /**
-     * attempts to read a cached file and returns `undefined` if none is found.
-     * The attempt consists of two steps:
-     * - return a file named `<fname>.txt` as a text file, if available
-     * - return a file names `<fname>.bin` as a binary file, if available
-     * @param fname the path and name of the file, without extension
-     * 
-     */
-    protected async readCached(fname:string):Promise<Response> {
-        return undefined;   // no cache found
-    }
-
-    protected async writeCached(fname:string, response:Response) {
-    }
-
     protected async requestOptions(options:Options, useCached:boolean, postData?:any):Promise<Response> {
         let request: Promise<Response>;
         if (this.pace) {
@@ -252,10 +242,10 @@ export class Request {
         } else {
             request = this.request(options, postData);
         }
-        this.log.debug(()=>`${options.method}-ing ${options.url}`); 
+        // this.log.debug(()=>`${options.method}-ing ${options.url}`); 
         const response = await request;
         if (this.pace) { this.log.transient(`(${this.pace.inQueue()} | ${this.pace.inProgress()}) received ${options.method} ${options.url} `); }
-        this.log.debug(()=>`received ${options.method} ${response.response.statusMessage} ${options.method} ${options.url}`); 
+        // this.log.debug(()=>`received ${options.method} ${response.response.statusMessage} ${options.method} ${options.url}`); 
         return response;
     }
 
@@ -316,7 +306,7 @@ export class Request {
             }
             const xhr = new XMLHttpRequest();
             const txt = request.isTextualRequest(options.pathname);
-            this.log.debug(()=>`requesting ${options.method} ${this.log.inspect(options, {depth:4})}`);
+            // this.log.debug(()=>`requesting ${options.method} ${this.log.inspect(options, {depth:4})}`);
             xhr.open(options.method, options.url, true);
             Object.keys(options.headers).forEach(h => xhr.setRequestHeader(h, options.headers[h]));
             xhr.responseType = txt? 'text' : 'arraybuffer';

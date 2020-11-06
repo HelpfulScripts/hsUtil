@@ -10,6 +10,8 @@ const XHR = require('./__mocks__/XMLHttpRequest.js');
 const payloads = [
     { path: '/myPath?query=value', code:200, content: '<html><body id="theBody"><h1 id=main>The Content</h1>the Body<p></body></html>' },
     { path: '/myPath.json', code:200, content: '{"first":"one", "second":"two"}' },
+    { path: '/myPath_put.json', code:200, content: '' },
+    { path: '/myPath_post.json', code:200, content: '' },
     { path: '/myCached.txt', code:200, content: '<html><body id="theBody"><h1 id=main>The Content</h1>the Body<p></body></html>' },
     { path: '/myCached.jpg', code:200, content: 'garykxxrgQWV ZHDOGILFTEFVXCFGADcstjukjcr' },
     { path: '/myAuth.txt', code:403, authenticate: 'Basic', content: '<html><body><h1>403 - Forbidden</h1></body></html>' },
@@ -28,7 +30,7 @@ describe('Request', ()=>{
     beforeEach(() => {
         // log.level(Log.DEBUG, true);
         request.decode = undefined;
-        request.setPace();
+        request.clearPace();
         request.setCredentials();
         request.setAuthToken();
     });
@@ -37,7 +39,7 @@ describe('Request', ()=>{
         // log.level(Log.INFO, true);
     });
 
-    test(`myPath.json should have property 'first' = 'one'`, async () => {
+    test(`myPath.json should get property 'first' = 'one'`, async () => {
         expect.assertions(3);
         const url = 'http://my.space.com/myPath.json';
         request.decode = Request.decoders.str2json;
@@ -45,6 +47,29 @@ describe('Request', ()=>{
         expect(json.data).toHaveProperty('first');
         expect((<any>json.data).first).toBe('one');
         expect(XHR.load.mock.calls.length).toBe(1);
+    });
+
+    test(`myPath.json should post 'my content'`, async () => {
+        expect.assertions(1);
+        const url = 'http://my.space.com/myPath_post.json';
+        request.decode = Request.decoders.str2json;
+        const json = await request.post(url, 'my content');
+        expect(XHR.__posts[url]).toBe('\"my content\"');
+    });
+
+    test(`myPath.json should put 'my content2'`, async () => {
+        expect.assertions(1);
+        const url = 'http://my.space.com/myPath_put.json';
+        request.decode = Request.decoders.str2json;
+        const json = await request.put(url, 'my content2');
+        expect(XHR.__posts[url]).toBe('\"my content2\"');
+    });
+
+    it('should pass auth token', ()=>{
+        expect.assertions(1);
+        request.setAuthToken('12345');
+        const url = 'http://my.space.com/myAuth.txt';  
+        return expect(request.get(url)).rejects.toBe(`error requesting ${url}: authentication missing; call 'setCredentials' before calling 'get'`);
     });
 
     it('should ask for Basic authentication', ()=>{

@@ -11,13 +11,12 @@ const payLoad = {
 };
 
 
-function __setPayLoads(payloads) {
-    payloads.forEach(p => payLoad[p.path] = p);
-}
-
 
 class XHR {
-    static __setPayLoads = __setPayLoads;
+    static __setPayLoads(payloads) {
+        payloads.forEach(p => payLoad[p.path] = p);
+    };
+    static __posts = {};
     static load(xhr) { xhr.onload(); }
     responseType = '';
     reqHeaders = {};
@@ -30,12 +29,13 @@ class XHR {
         this.pathname = _url.pathname;
         this.path = _url.pathname+_url.search;
     }
-    onload = async () => undefined;
+    // onload = async () => undefined;
     setRequestHeader(key, value) { this.reqHeaders[key] = value; }
     getAllResponseHeaders() { 
         return Object.keys(this.resHeaders).map(k => `${k}:${this.resHeaders[k]}`).join('\r\n');
     }
     send(postData) {
+        XHR.__posts[this.url] = postData;
         const buffer = new ArrayBuffer(8);
         const view = new Uint8Array(buffer);    
         const file = this.path;
