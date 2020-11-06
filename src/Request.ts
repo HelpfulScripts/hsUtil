@@ -2,7 +2,7 @@
  * Utility functions for HTTP and HTTPS GET, PUT, and POST. The module wraps a standard `XMLHttpRequest` and provides support for
  * - simple authentication methods, 
  * - decoding of received content.
- * - request pacing
+ * - request pacing,
  * 
  * ### Authentication
  * Authentication is enabled by setting {@link Request.Request.setCredentials `request.setCredentials`} before any call to 
@@ -118,13 +118,6 @@ export class Request {
     /** the `AuthToken` to set in the header */
     private authToken: string;
 
-    /** 
-     * the location to use for caching. Set this property to the caching directory, e.g.:
-     * `request.cache = './bin'`, ommitting a trailing `/`. 
-     * To disable caching, set it to `undefined`.
-     */
-    public cache:string;
-
     /**
      * sets the credentials for `Basic` and `Digest` authentications.
      * @param user the username to use; if `undefined`, then authentication will be disabled.
@@ -157,17 +150,6 @@ export class Request {
     public decode = <Decoder>undefined;
 
     /**
-     * constructs the cache name to use. The function call can be overwritten with 
-     * a custom function to modify cache locations. 
-     * This default implementation uses the `path` element in `Options` to create 
-     * required subdirectories underneath the `cache` location.
-     * @param options the request options
-     */
-    public cacheName = (options:Options):string =>
-        this.cache===undefined? undefined :  //   'q=.../' --> 'q=...-'    remove ?
-            `${this.cache}/${options.path.replace(/q=(.*?)\//g,'q=$1-').replace(/\?/g,'')}`
-
-    /**
      * gets the content for the addressed `url`. `HTTP` and `HTTPS` are supported.
      * @param url the address to fetch from
      * @param useCached optional, defaults to `true`. Set to `false` to avoid using 
@@ -187,9 +169,9 @@ export class Request {
      * @return a promise that resolves to a `Response` if the reuqest is successful
      * and that rejects with an error message if not.
      */
-    public async put(url:string|URL, postData:any, {useCached=false, headers={}}={}):Promise<Response> {
+    public async put(url:string|URL, postData:any, {headers={}}={}):Promise<Response> {
         const options = this.getOptions(url, 'PUT');
-        return this.decodedRequest(options, useCached, headers, postData);
+        return this.decodedRequest(options, false, headers, postData);
     }
 
     /**
@@ -199,9 +181,9 @@ export class Request {
      * @return a promise that resolves to a `Response` if the reuqest is successful
      * and that rejects with an error message if not.
      */
-    public async post(url:string|URL, postData:any, {useCached=false, headers={}}={}):Promise<Response> {
+    public async post(url:string|URL, postData:any, {headers={}}={}):Promise<Response> {
         const options = this.getOptions(url, 'POST');
-        return this.decodedRequest(options, useCached, headers, postData);
+        return this.decodedRequest(options, false, headers, postData);
     }
 
     protected getURL(url:string|URL):URL { 
@@ -263,12 +245,6 @@ export class Request {
     }
 
     protected async requestOptions(options:Options, useCached:boolean, postData?:any):Promise<Response> {
-        const fname = this.cache? this.cacheName(options) : undefined;
-        if (fname && useCached && options.method === 'GET') { 
-            const result = await this.readCached(fname); 
-            if (result !== undefined) { return result; }
-        }
-
         let request: Promise<Response>;
         if (this.pace) {
             this.log.transient(`(${this.pace.inQueue()} | ${this.pace.inProgress()}) ${options.method}-ing ${options.url}`); 
@@ -280,13 +256,6 @@ export class Request {
         const response = await request;
         if (this.pace) { this.log.transient(`(${this.pace.inQueue()} | ${this.pace.inProgress()}) received ${options.method} ${options.url} `); }
         this.log.debug(()=>`received ${options.method} ${response.response.statusMessage} ${options.method} ${options.url}`); 
-
-        const code = response.response.statusCode||response.response.status;
-        if(code >= 200 && code < 300) {
-            if (fname && options.method === 'GET') {
-                await this.writeCached(fname, response);
-            }
-        }
         return response;
     }
 

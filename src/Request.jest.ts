@@ -26,31 +26,25 @@ XHR.load = jest.fn(xhr => xhr.onload());
 
 describe('Request', ()=>{
     beforeEach(() => {
-        log.level(Log.DEBUG, true);
+        // log.level(Log.DEBUG, true);
         request.decode = undefined;
-        request.cache = undefined;
         request.setPace();
         request.setCredentials();
         request.setAuthToken();
     });
 
     afterEach(() => {
-        log.level(Log.INFO, true);
+        // log.level(Log.INFO, true);
     });
 
-    test(`myPath.json should have one`, (done) => {
-        expect.assertions(2);
-        const test = async () => {
-            try { 
-                const url = 'http://my.space.com/myPath.json';
-                request.decode = Request.decoders.str2json;
-                const json = await request.get(url);
-                expect(json.data).toHaveProperty('first');
-                expect((<any>json.data).first).toBe('one');
-                done();
-            } catch(e) { done(e); }
-        };
-        test();
+    test(`myPath.json should have property 'first' = 'one'`, async () => {
+        expect.assertions(3);
+        const url = 'http://my.space.com/myPath.json';
+        request.decode = Request.decoders.str2json;
+        const json = await request.get(url);
+        expect(json.data).toHaveProperty('first');
+        expect((<any>json.data).first).toBe('one');
+        expect(XHR.load.mock.calls.length).toBe(1);
     });
 
     it('should ask for Basic authentication', ()=>{
@@ -88,7 +82,6 @@ describe('Request', ()=>{
 
     describe('pacing', () => {
         beforeEach(() => {
-            request.cache = undefined;
             request.setPace({pace:50, max:10});
             request.setCredentials();
         });
