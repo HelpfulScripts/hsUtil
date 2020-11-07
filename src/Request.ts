@@ -101,6 +101,11 @@ export interface Decoder {
 
 
 export class Request {
+    private static contentTypes = <{subTypes:string[], isText:boolean}[]>[];
+    public static addContentType(type:string, isText:boolean) {
+        const subTypes = type.split('/');
+        Request.contentTypes.push({subTypes:subTypes, isText:isText});
+    }
     public static decoders = {
         str2json:  (data:string) => { try {return JSON.parse(data)} catch(e) { return {}}},
         html2json: <(data:string) => any>undefined
@@ -318,35 +323,34 @@ export class Request {
     }
 
     protected isTextualContent(contentType:string):boolean {
-        let txt = false;
-        if (contentType===undefined) { contentType = 'text/html'; }
-        else { contentType = contentType.split(';')[0]; }
         const subTypes = contentType.split('/');
-        switch (subTypes[0]) {
-            case '':       
-            case 'text':        txt = true; break;
-            case 'image':       
-            case 'audio':
-            case 'font':        break;
-            case 'application': switch(subTypes[1]) {
-                case 'json':    txt = true; break;
-                case 'pdf':     break;
-                case 'vnd.openxmlformats-officedocument.presentationml.presentation': break;
-                case 'vnd.openxmlformats-officedocument.spreadsheetml.sheet': break;
-                case 'vnd.ms-powerpoint': break;
-                case 'vnd.ms-excel': break;
-                case 'octet-stream': break;
-                case 'vnd.ms-excel.sheet.macroenabled.12': break;
-                default: this.log.info(`caching ${contentType} as binary`);
-            }
-            break;
-            default: this.log.warn(`caching '${contentType}' as binary`);    
+        const match = Request.contentTypes.filter(entry => entry.subTypes.every((st, i) => subTypes[i] === st));
+        if (match.length>0) {
+            return match[0].isText;
+        } else {
+            this.log.warn(`no match found for '${contentType}'; caching as binary`);  
+            return false;
         }
-        return txt;
     }
 
     protected isTextualRequest(pathName:string):boolean {
         return ['json', 'txt', 'html'].some(ext => pathName.indexOf(ext) >= 0);
     }
 }
+
+[
+    ['text', true],
+    ['text/html', true],
+    ['image', false],
+    ['audio', false],
+    ['font', false],
+    ['application/json', true],
+    ['application/pdf', false],
+    ['application/vnd.openxmlformats-officedocument.presentationml.presentation', false],
+    ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', false],
+    ['application/vnd.ms-powerpoint', false],
+    ['application/vnd.ms-excel', false],
+    ['application/vnd.ms-excel.sheet.macroenabled.12', false],
+    ['application/octet-stream', false],
+].forEach(e => Request.addContentType(<string>e[0], <boolean>e[1]));
 
