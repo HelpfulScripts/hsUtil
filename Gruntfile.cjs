@@ -253,6 +253,11 @@ function make(grunt) {
                 entry: {
                     main: './bin/esm/index.js'
                 },
+                module: {
+                    rules:[
+                        { test: /\.m?js/, resolve: { fullySpecified: false  } }
+                    ]
+                },
                 // optimization: {
                 //     splitChunks: {
                 //         chunks: 'all'
@@ -282,6 +287,11 @@ function make(grunt) {
                 mode: 'development',
                 entry: './bin/esm/index.js',
                 devtool: "inline-source-map",
+                module: {
+                    rules:[
+                        { test: /\.m?js/, resolve: { fullySpecified: false  } }
+                    ]
+                },
                 output: {
                     filename: `${lib}.js`,
                     path: path.resolve(dir, './bin'),
