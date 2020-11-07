@@ -49,11 +49,23 @@ describe('log', () => {
             expect(gMsg).toMatch(/INFO.*yes/); 
         });
         
+        it('should print info as function', () => {
+            log.info(() => "yes");
+            expect(log.level()).toBe(Log.INFO);
+            expect(gMsg).toMatch(/INFO.*yes/); 
+        });
+        
         it('should print warning', () => {
             log.warn("alert"); 
             expect(log.level()).toBe(Log.INFO);
             expect(gMsg).toMatch(/WARN.*alert/);  
-
+        });
+        
+        it('should print warning stack for Error object', () => {
+            log.warn(new Error("alert")); 
+            expect(log.level()).toBe(Log.INFO);
+            expect(gMsg).toMatch(/Error: alert/);  
+            expect(gMsg).toMatch(/at Object.<anonymous>/);  
         });
         
         it('should not print debug at INFO level', () => {
@@ -95,10 +107,21 @@ describe('log', () => {
             return expect(gMsg).toMatch(/ERROR.*yes/);
         });
         
+        it('should print stack trace for Error object', () => {
+            log.error(new Error('yes'));
+            expect(gMsg).toMatch(/ERROR.*yes/);
+            expect(gMsg).toMatch(/at Object.<anonymous>/);
+        });
+        
+        it('should print progress', () => {
+            log.progress('yes');
+            return expect(gMsg).toMatch(/%c\d\d\d\d\d\d\d\d \d\d:\d\d:\d\d.\d\d\d log.jest INFO%c yes/);
+        });
+        
         it('should print long lines', () => {
             log.messageLength = 50;
-            log.info('farg faega ar faweawg gfWE ewf weG eGERG EGwew Eegw Gerwgw weg EWGwe gEG');
-            return expect(gMsg).toMatch(/farg faega ar faweawg g\.\.\.gw Gerwgw weg EWGwe gEG/);
+            log.info(`${log.messageLength} farg faega ar faweawg gfWE ewf weG eGERG EGwew Eegw Gerwgw weg EWGwe gEG`);
+            return expect(gMsg).toMatch(/.*?50 farg faega ar faweaw\.\.\.gw Gerwgw weg EWGwe gEG/);
         });
     });
 

@@ -46,8 +46,6 @@ export class AuthDigest extends Auth {
      * @param response 
      */
     testAuth(options:Options, data:string, response:IncomingMessage): Options {
-        log.debug(()=>`received www-authenticate request for ${options.host}`);
-
         let challenge:any = parseDigestResponse(response.headers['www-authenticate']);
         let ha1 = createHash('md5');
         let _str = `${this.username}:${challenge.realm}:${this.password}`;

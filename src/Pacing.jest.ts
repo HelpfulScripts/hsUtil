@@ -109,6 +109,8 @@ describe('Promise', () => {
             */
         
             const queue = new tp.Pace({pace:wait, maxConcurrent:3});
+            queue.setPace(wait);
+            queue.setMaxConcurrent(3);
             let results:any[];
         
             // add a call for each element in calls, then wait for all to have beed called.

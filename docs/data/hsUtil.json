@@ -731,7 +731,7 @@
 					"sources": [
 						{
 							"fileName": "AuthBasic.ts",
-							"line": 15,
+							"line": 14,
 							"character": 14
 						}
 					]
@@ -1276,7 +1276,7 @@
 					"sources": [
 						{
 							"fileName": "AuthDigest.ts",
-							"line": 99,
+							"line": 97,
 							"character": 22
 						}
 					]
@@ -1322,7 +1322,7 @@
 					"sources": [
 						{
 							"fileName": "AuthDigest.ts",
-							"line": 87,
+							"line": 85,
 							"character": 17
 						}
 					]
@@ -1368,7 +1368,7 @@
 					"sources": [
 						{
 							"fileName": "AuthDigest.ts",
-							"line": 118,
+							"line": 116,
 							"character": 28
 						}
 					]
@@ -1414,7 +1414,7 @@
 					"sources": [
 						{
 							"fileName": "AuthDigest.ts",
-							"line": 114,
+							"line": 112,
 							"character": 24
 						}
 					]
