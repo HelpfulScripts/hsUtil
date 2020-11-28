@@ -3,9 +3,7 @@
     "version": "3.6.9",
     "main": "./bin/cjs/index.js",
     "module": "./bin/esm/index.js",
-    "files": [
-        "bin/"
-    ],
+    "files": ["bin/"],
     "types": "./bin/esm/index.d.ts",
     "type": "module",
     "scripts": {
@@ -53,7 +51,7 @@
         "ts-jest": "26.x.x",
         "typedoc": "^0.17.6",
         "typescript": "4.x.x",
-        "terser-webpack-plugin": "3.0.x",
+        "terser-webpack-plugin": "5.x.x",
         "webpack": "5.x.x"
     },
     "dependencies": {}
