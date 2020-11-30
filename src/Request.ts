@@ -323,6 +323,10 @@ export class Request {
     }
 
     protected isTextualContent(contentType:string):boolean {
+        if (contentType===undefined) {
+            log.warn(`undefined contentType; assuming binary`)
+            return false;
+        }
         const subTypes = contentType.split('/');
         const match = Request.contentTypes.filter(entry => entry.subTypes.every((st, i) => subTypes[i] === st));
         if (match.length>0) {
