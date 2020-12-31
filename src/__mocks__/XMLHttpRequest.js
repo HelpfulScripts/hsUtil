@@ -7,14 +7,13 @@ const contentTypes = {
     'json': 'application/json'
 }
 
-const payLoad = {
-};
+let payLoad = undefined;
 
 
 
 class XHR {
-    static __setPayLoads(payloads) {
-        payloads.forEach(p => payLoad[p.path] = p);
+    static __setPayLoads(payloadFn) {
+        payLoad = payloadFn;
     };
     static __posts = {};
     static load(xhr) { xhr.onload(); }
@@ -43,7 +42,7 @@ class XHR {
         const fileExt = (extIndex>0)? file.substr(extIndex+1) : '';
         const cType = contentTypes[fileExt];
         if (!cType) { console.log(`http mock encountered unknown filetype '${fileExt}' for path '${this.path}'`); }
-        const pl = payLoad[this.path];
+        const pl = payLoad(this.path, this.reqHeaders);
         if (!pl) { console.log(`no payload entry found for '${this.path}'`); }
     
         const authenticated = this.reqHeaders['Authorization'];

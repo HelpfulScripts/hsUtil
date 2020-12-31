@@ -5,7 +5,7 @@ import { Auth }             from './Auth';
 
 
 export class AuthBasic extends Auth {
-    testAuth(options:Options, data:string, response:IncomingMessage): Options {
+    testAuth(options:Options): Options {
         options.headers.Authorization = 'Basic ' + _btoa(`${this.username}:${this.password}`);
         return options;
     }

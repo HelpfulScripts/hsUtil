@@ -5,18 +5,43 @@ const log = new Log('Request.jest');
 
 const XHR = require('./__mocks__/XMLHttpRequest.js');
 
-// const Digest = `Digest realm="testrealm@host.com", qop="auth,auth-int", nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093", opaque="5ccc069c403ebaf9f0171e9517f40e41"`
+interface Payload {
+    code:       number;
+    content:    string;
+    authenticate?: 'Digest'|'Basic'
+}
 
-const payloads = [
-    { path: '/myPath?query=value', code:200, content: '<html><body id="theBody"><h1 id=main>The Content</h1>the Body<p></body></html>' },
-    { path: '/myPath.json', code:200, content: '{"first":"one", "second":"two"}' },
-    { path: '/myPath_put.json', code:200, content: '' },
-    { path: '/myPath_post.json', code:200, content: '' },
-    { path: '/myCached.txt', code:200, content: '<html><body id="theBody"><h1 id=main>The Content</h1>the Body<p></body></html>' },
-    { path: '/myCached.jpg', code:200, content: 'garykxxrgQWV ZHDOGILFTEFVXCFGADcstjukjcr' },
-    { path: '/myAuth.txt', code:403, authenticate: 'Basic', content: '<html><body><h1>403 - Forbidden</h1></body></html>' },
-    { path: '/myDigest.txt', code:401, authenticate: 'Digest', content: '<html><body><h1>Show me the goods</h1></body></html>' },
-];
+const validBody  = '<html><body id="theBody"><h1 id=main>The Content</h1>the Body<p></body></html>'
+const errorBody  = '<html><body><h1>403 - Forbidden</h1></body></html>' 
+const binaryBody = 'garykxxrgQWV ZHDOGILFTEFVXCFGADcstjukjcr'
+const jsonBody   = '{"first":"one", "second":"two"}'
+const emptyBody  = ''
+
+const payloads = (path:string, headers:{[header:string]:string}):Payload => {
+    switch(path) {
+        case '/myPath?query=value': 
+            return { code:200, content: validBody};
+        case '/myPath.json': 
+            return { code:200, content: jsonBody };
+        case '/myPath_put.json': 
+            return { code:200, content: emptyBody };
+        case '/myPath_post.json': 
+            return { code:200, content: emptyBody };
+        case '/myCached.txt': 
+            return { code:200, content: validBody };
+        case '/myCached.jpg': 
+            return { code:200, content: binaryBody };
+        case '/myAuthToken.txt': 
+            return (headers.AuthToken === '12345')?
+                { code:200, content: validBody } :
+                { code:403, content: errorBody};
+        case '/myAuthBasic.txt': 
+            return { code:403, authenticate: 'Basic', content: errorBody };
+        case '/myAuthDigest.txt': 
+            return { code:401, authenticate: 'Digest', content: validBody };
+        default: throw  `unrecognized paylod path ${path}`
+    }
+}
 
 XHR.__setPayLoads(payloads);
 
@@ -65,43 +90,65 @@ describe('Request', ()=>{
         expect(XHR.__posts[url]).toBe('\"my content2\"');
     });
 
-    it('should pass auth token', ()=>{
+    it('should not pass without auth token', ()=>{
+        expect.assertions(1);
+        const url = 'http://my.space.com/myAuthToken.txt';  
+        return expect(request.get(url)).resolves.toStrictEqual({
+            "data": errorBody, 
+            "response": {
+                "headers": {"content-type": "text/plain"}, 
+                "method": "GET", 
+                "status": 403, "statusCode": 403, "statusMessage": "403 ERROR", 
+                "txt": true, 
+                "url": "http://my.space.com/myAuthToken.txt"
+            }});
+    });
+
+    it('should pass with auth token', ()=>{
         expect.assertions(1);
         request.setAuthToken('12345');
-        const url = 'http://my.space.com/myAuth.txt';  
-        return expect(request.get(url)).rejects.toBe(`error requesting ${url}: authentication missing; call 'setCredentials' before calling 'get'`);
+        const url = 'http://my.space.com/myAuthToken.txt';  
+        return expect(request.get(url)).resolves.toStrictEqual({
+            "data": validBody, // "<html><body id=\"theBody\"><h1 id=main>The Content</h1>the Body<p></body></html>", 
+            "response": {
+                "headers": {"AuthToken": "12345", "content-type": "text/plain"}, 
+                "method": "GET", 
+                "status": 200, "statusCode": 200, "statusMessage": "200 OK", 
+                "txt": true, 
+                "url": "http://my.space.com/myAuthToken.txt"
+            }});
     });
 
     it('should ask for Basic authentication', ()=>{
         expect.assertions(1);
-        const url = 'http://my.space.com/myAuth.txt';  
-        return expect(request.get(url)).rejects.toBe(`error requesting ${url}: authentication missing; call 'setCredentials' before calling 'get'`);
+        const url = 'http://my.space.com/myAuthBasic.txt';  
+        return expect(request.get(url)).rejects.toBe(`error requesting ${url}: authentication missing; call 'setCredentials' before calling 'get' for url http://my.space.com/myAuthBasic.txt`);
     });
 
     it('should return with Basic authentication', async (done)=>{
         expect.assertions(1);
-        const url = 'http://my.space.com/myAuth.txt';  
+        const url = 'http://my.space.com/myAuthBasic.txt';  
         request.setCredentials('me', 'mysecret');
         const r = await request.get(url);
         const data = <string>r.data;
         try {
-            expect(data).toBe('<html><body><h1>403 - Forbidden</h1></body></html>');
+            expect(data).toBe(errorBody);
             done();
         } catch(e) { done(e)}
     });
 
     it('should ask for Digest authentication', ()=>{
         expect.assertions(1);
-        const url = 'http://my.space.com/myDigest.txt';
-        return expect(request.get(url)).rejects.toBe(`error requesting ${url}: authentication missing; call 'setCredentials' before calling 'get'`);
+        const url = 'http://my.space.com/myAuthDigest.txt';
+        return expect(request.get(url)).rejects.toBe(`error requesting ${url}: authentication missing; call 'setCredentials' before calling 'get' for url http://my.space.com/myAuthDigest.txt`);
     });
 
     it('should return with Digest authentication', async (done)=>{
-        const url = 'http://my.space.com/myDigest.txt';
+        const url = 'http://my.space.com/myAuthDigest.txt';
         request.setCredentials('admin', 'littleSecret');
         const r = await request.get(url);
         const data = <string>r.data;
-        expect(data).toBe('<html><body><h1>Show me the goods</h1></body></html>');
+        expect(data).toBe(validBody);
         done();
     });
 

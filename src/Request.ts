@@ -84,6 +84,7 @@ export interface IncomingMessage {
     url:            string;
 }
 
+interface Credentials {user:string; password:string}
 
 /** 
  * decoder function interface. For the given `Options` and data a function implementation  
@@ -97,6 +98,28 @@ export interface Decoder {
      * @return a decoded version of `data`
      */
     (data:string, options:Options):any;
+}
+
+class Authenticators {
+    static auths:{[url:string]:Auth} = {}
+    public static get(authRequest:string, credentials:Credentials, url:string):Auth {
+        if (!authRequest) { // no request for authorization: return undefined
+            return undefined
+        } else if (!credentials) { 
+            throw `authentication missing; call 'setCredentials' before calling 'get' for url ${url}`;
+        }
+        let auth = Authenticators.auths[url];
+        if (!auth) {
+            if (authRequest.indexOf('Digest') === 0) {
+                auth = Authenticators.auths[url] = new AuthDigest(credentials.user, credentials.password);
+            } else if (authRequest.indexOf('Basic') === 0) {
+                auth = Authenticators.auths[url] = new AuthBasic(credentials.user, credentials.password);
+            } else {
+                throw `unimplemented authentication request ${authRequest} for '${url}'`;
+            }
+        }
+        return auth
+    }
 }
 
 
@@ -118,7 +141,7 @@ export class Request {
     protected pace:Pace;
 
     /** the credentials to use for authentication, or `undefined` */
-    private credentials: {user:string; password:string};
+    private credentials: Credentials;
     
     /** the `AuthToken` to set in the header */
     private authToken: string;
@@ -257,31 +280,15 @@ export class Request {
     protected async request(options:Options, postData?:any):Promise<Response> {
         try {
             const response = await this.issueRequest(options, postData);        
-            let authenticate = response.response.headers['www-authenticate'];
-            if (!authenticate) { 
-                return response;
-            } else if (this.credentials) { 
-                    authenticate = authenticate.trim();
-                    let auth: Auth;
-                    if (authenticate.indexOf('Digest') === 0) {
-                        auth = new AuthDigest(this.credentials.user, this.credentials.password);
-                    } else if (authenticate.indexOf('Basic') === 0) {
-                        auth = new AuthBasic(this.credentials.user, this.credentials.password);
-                    } else {
-                        throw `unimplemented authentication request ${authenticate} for '${options.url}'`;
-                    }
-                    auth.testAuth(options, response.data, response.response);
-                    return this.request(options);
-            } else {
-                throw `authentication missing; call 'setCredentials' before calling 'get'`;
-            }
+            const auth = Authenticators.get(response.response.headers['www-authenticate'], this.credentials, options.url);
+            return auth? this.request(auth.testAuth(options, response.response)) : response;
         } catch(e) {
+            log.error(`request: ${e}\n${Object.entries(options.headers).join('\n')}`)
             throw `error requesting ${options.url}: ${e}`;
         }
     }
 
     protected async issueRequest(options:Options, postData?:any):Promise<Response> {
-        const request = this;
         return new Promise((resolve:(out:Response)=>void, reject:(e:Response)=>void) => { try {
             function confirmRequest(e:any) {
                 const headersText = xhr.getAllResponseHeaders();
@@ -291,7 +298,7 @@ export class Request {
                     if (kv[0].length) { headers[kv[0]] = kv[1]; }
                 })
                 const contentType = this.responseType;
-                const txt = request.isTextualContent(contentType);
+                const txt = Request.isTextualContent(contentType);
 
                 // const data = this.responseType==='arraybuffer'? (txt? await this.response.text() : await this.response.arrayBuffer()) : this.response;
                 const data = this.response;
@@ -310,7 +317,7 @@ export class Request {
                 resolve(response);
             }
             const xhr = new XMLHttpRequest();
-            const txt = request.isTextualRequest(options.pathname);
+            const txt = Request.isTextualRequest(options.pathname);
             // this.log.debug(()=>`requesting ${options.method} ${this.log.inspect(options, {depth:4})}`);
             xhr.open(options.method, options.url, true);
             Object.keys(options.headers).forEach(h => xhr.setRequestHeader(h, options.headers[h]));
@@ -322,7 +329,7 @@ export class Request {
         }})
     }
 
-    protected isTextualContent(contentType:string):boolean {
+    protected static isTextualContent(contentType:string):boolean {
         if (contentType===undefined) {
             log.warn(`undefined contentType; assuming binary`)
             return false;
@@ -332,12 +339,12 @@ export class Request {
         if (match.length>0) {
             return match[0].isText;
         } else {
-            this.log.warn(`no match found for '${contentType}'; caching as binary`);  
+            log.warn(`no match found for '${contentType}'; caching as binary`);  
             return false;
         }
     }
 
-    protected isTextualRequest(pathName:string):boolean {
+    protected static isTextualRequest(pathName:string):boolean {
         return ['json', 'txt', 'html'].some(ext => pathName.indexOf(ext) >= 0);
     }
 }

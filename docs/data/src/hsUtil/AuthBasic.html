@@ -28,7 +28,7 @@
 <p id=5 class="line"><span>&nbsp;&nbsp;&nbsp;5</span></p>
 <p id=6 class="line"><span>&nbsp;&nbsp;&nbsp;6</span></p>
 <p id=7 class="line"><span>&nbsp;&nbsp;&nbsp;7</span>export&nbsp;class&nbsp;AuthBasic&nbsp;extends&nbsp;Auth&nbsp;{</p>
-<p id=8 class="line"><span>&nbsp;&nbsp;&nbsp;8</span>&nbsp;&nbsp;&nbsp;&nbsp;testAuth(options:Options,&nbsp;data:string,&nbsp;response:IncomingMessage):&nbsp;Options&nbsp;{</p>
+<p id=8 class="line"><span>&nbsp;&nbsp;&nbsp;8</span>&nbsp;&nbsp;&nbsp;&nbsp;testAuth(options:Options):&nbsp;Options&nbsp;{</p>
 <p id=9 class="line"><span>&nbsp;&nbsp;&nbsp;9</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;options.headers.Authorization&nbsp;=&nbsp;<quote>'Basic&nbsp;'</quote>&nbsp;+&nbsp;_btoa(`${this.username}:${this.password}`);</p>
 <p id=10 class="line"><span>&nbsp;&nbsp;10</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;options;</p>
 <p id=11 class="line"><span>&nbsp;&nbsp;11</span>&nbsp;&nbsp;&nbsp;&nbsp;}</p>

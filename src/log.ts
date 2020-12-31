@@ -312,9 +312,6 @@ export class Log {
                 default: line = this.inspect(msg); 
             }
             const dateStr = date(Log.dateFormat);
-            if (line.length > this.maxLength && this.maxLength>0) { 
-                line = `${line.slice(0, this.maxLength/2-2)}...${line.slice(-this.maxLength/2+2)}`
-            }
             if (msg.stack) { line = `${line}\n${msg.stack}`; }
             const header = `${dateStr} ${this.reportPrefix} ${desc.desc}`;
             this.output(options.color, header, line);
@@ -326,7 +323,12 @@ export class Log {
     /** 
      */
     protected output(color:string[], header:string, line:string) {
-        console.log(`%c${header}%c ${line}`, color.map(c =>COLOR[c]).join(' '), COLOR['clear']);
+        const lines = line.split('\n')
+        if (this.maxLength>0) {
+            lines.forEach((l,i) => l.length <= this.maxLength? '' :
+                lines[i] = `${line.slice(0, this.maxLength/2-2)}...${line.slice(-this.maxLength/2+2)}`)
+        }
+        console.log(`%c${header}%c ${lines.join('\n')}`, color.map(c =>COLOR[c]).join(' '), COLOR['clear']);
     }
 
     /**

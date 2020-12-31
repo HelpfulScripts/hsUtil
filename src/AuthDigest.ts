@@ -1,4 +1,4 @@
-import { Log }              from './log';   const log = new Log('RequestDigest');
+import { Log }              from './log';   const log = new Log('AuthDigest');
 import { createHash }       from 'crypto';
 import { Options }          from './Request';
 import { IncomingMessage }  from './Request';
@@ -26,17 +26,13 @@ export class AuthDigest extends Auth {
      * Parse challenge digest
      * @param qop 
      */
-    generateCNONCE(qop:string) {
-        let cnonce:any;
-        let nc:string;
-
-        if (typeof qop === 'string') {
+    generateCNONCE(qop:string, cnonce?:string) {
+        if (!qop || qop === 'auth') {
             let cnonceHash = createHash('md5');
             cnonceHash.update(Math.random().toString(36));
-            cnonce = cnonceHash.digest('hex').substr(0, 16);
-            nc = this.updateNC();
+            cnonce = cnonce ?? cnonceHash.digest('hex').substr(0, 16);
         }
-        return {cnonce: cnonce, nc: nc};
+        return {cnonce: cnonce, nc: this.updateNC()};
     }
 
     /**
@@ -45,19 +41,15 @@ export class AuthDigest extends Auth {
      * @param data 
      * @param response 
      */
-    testAuth(options:Options, data:string, response:IncomingMessage): Options {
-        let challenge:any = parseDigestResponse(response.headers['www-authenticate']);
-        let ha1 = createHash('md5');
-        let _str = `${this.username}:${challenge.realm}:${this.password}`;
-        ha1.update(_str);
-        let ha2 = createHash('md5');
-        _str = `${options.method}:${options.path}`;
-        ha2.update(_str);
-    
-        let {nc, cnonce} = this.generateCNONCE(challenge.qop);
-        let hash = createHash('md5');
-        _str = `${ha1.digest('hex')}:${challenge.nonce}:${nc}:${cnonce}:${challenge.qop}:${ha2.digest('hex')}`;
-        hash.update(_str);
+    testAuth(options:Options, response:IncomingMessage, CNonce?:string): Options {
+        const challenge:any = parseDigestResponse(response.headers['www-authenticate']);
+        const ha1 = createHash('md5');
+        const ha2 = createHash('md5');
+        const hash = createHash('md5');
+        ha1.update(`${this.username}:${challenge.realm}:${this.password}`);
+        ha2.update(`${options.method}:${options.path}`);
+        const {nc, cnonce} = this.generateCNONCE(challenge.qop, CNonce);
+        hash.update(`${ha1.digest('hex')}:${challenge.nonce}:${nc}:${cnonce}:${challenge.qop}:${ha2.digest('hex')}`);
     
         // Setup response parameters
         let authParams:any = {
@@ -75,18 +67,19 @@ export class AuthDigest extends Auth {
         if (cnonce) {
             authParams.nc = nc;
             authParams.cnonce = cnonce;
+            log.info(`digest nc=${nc}`)
         }
     
         options.headers.Authorization = compileParams(authParams);
+        options.headers.Accept = 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
+        options.headers['Accept-Encoding'] = 'gzip, deflate';
         return options;
     }
 }
 
 function omitNull(data:any) {
     let newObject = {};
-    Object.keys(data).forEach((k:string) => {
-        if (data[k] !== null && data[k] !== undefined) { newObject[k] = data[k]; }
-    });
+    Object.keys(data).forEach((k:string) => data[k]? newObject[k] = data[k] : '');
     return newObject;
 }
 
@@ -95,6 +88,7 @@ function omitNull(data:any) {
  * @param params 
  */
 function compileParams(params:any) {
+    const putDoubleQuotes = (entry:string) => ['qop', 'nc'].indexOf(entry)<0;
     let parts = [];
     for (let i in params) {
         if (typeof params[i] !== 'function') {
@@ -105,21 +99,13 @@ function compileParams(params:any) {
     return 'Digest ' + parts.join(',');
 }
 
-/**
- * return `true` if double quotes are needed for `entry`
- * @param entry
- */
-function putDoubleQuotes(entry:string) {
-    return ['qop', 'nc'].indexOf(entry)<0;
-}
 
 function parseDigestResponse(digestHeader:string) {
     digestHeader = digestHeader.split('Digest ')[1];
     const params = {};
-    // digestHeader.replace(/(([^"]|"[^"]*")*?)(,)/g, (...rest:string[]) => {
     digestHeader.replace(/([^,]*)/g, (...rest:string[]) => {
         const part = rest[1];
-            if (part) {
+        if (part) {
             const kv = part.split('=').map((v:string) => v.trim());
             params[kv[0]] = kv[1].replace(/\"/g, '');
         }
