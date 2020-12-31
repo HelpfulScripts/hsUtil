@@ -1,6 +1,6 @@
 {
     "name": "hsutil",
-    "version": "3.6.10",
+    "version": "3.6.11",
     "main": "./bin/cjs/index.js",
     "module": "./bin/esm/index.js",
     "files": [
