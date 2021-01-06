@@ -36,7 +36,6 @@ class XHR {
     send(postData) {
         XHR.__posts[this.url] = postData;
         const buffer = new ArrayBuffer(8);
-        const view = new Uint8Array(buffer);    
         const file = this.path;
         const extIndex = file.lastIndexOf('.');
         const fileExt = (extIndex>0)? file.substr(extIndex+1) : '';
@@ -47,7 +46,6 @@ class XHR {
     
         const authenticated = this.reqHeaders['Authorization'];
         const authenticate = 
-            pl.authenticate==='Digest'? 'Digest realm="IPCamera Login", nonce="cc6e4ead42917cb50548b4f94b4752fd", qop="auth"' :
             pl.authenticate==='Basic'? 'Basic realm="User Visible Realm"' : undefined; 
 
         this.status = pl? pl.code : undefined;

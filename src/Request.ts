@@ -40,8 +40,6 @@
 
 import { Log }          from './log';   const log = new Log('Request');
 import { Pace }         from './Pacing';
-import { AuthDigest }   from './AuthDigest';
-import { AuthBasic }    from './AuthBasic';
 import { Auth }         from './Auth';
 
 log.messageLength = 120;
@@ -84,7 +82,7 @@ export interface IncomingMessage {
     url:            string;
 }
 
-interface Credentials {user:string; password:string}
+export interface Credentials {user:string; password:string}
 
 /** 
  * decoder function interface. For the given `Options` and data a function implementation  
@@ -100,23 +98,25 @@ export interface Decoder {
     (data:string, options:Options):any;
 }
 
-class Authenticators {
-    static auths:{[url:string]:Auth} = {}
+
+export class Authenticators {
+    private static auths:{[url:string]:Auth} = {}
+    private static authProviders:{name:string, provider:(credentials:Credentials)=>Auth}[] = []
+    public static addAuthProvider(name:string, provider:(credentials:Credentials)=>Auth) {
+        Authenticators.authProviders.push({name:name, provider:provider})
+    }
     public static get(authRequest:string, credentials:Credentials, url:string):Auth {
         if (!authRequest) { // no request for authorization: return undefined
             return undefined
         } else if (!credentials) { 
-            throw `authentication missing; call 'setCredentials' before calling 'get' for url ${url}`;
+            throw `credentials missing; call 'setCredentials' before calling 'get' for url ${url}`;
         }
         let auth = Authenticators.auths[url];
         if (!auth) {
-            if (authRequest.indexOf('Digest') === 0) {
-                auth = Authenticators.auths[url] = new AuthDigest(credentials.user, credentials.password);
-            } else if (authRequest.indexOf('Basic') === 0) {
-                auth = Authenticators.auths[url] = new AuthBasic(credentials.user, credentials.password);
-            } else {
-                throw `unimplemented authentication request ${authRequest} for '${url}'`;
-            }
+            const method = authRequest.split(' ')?.[0];
+            if (!Authenticators.authProviders.some(entry => {
+                if (method === entry.name) return auth = entry.provider(credentials)
+            })) throw `unimplemented authentication method ${authRequest} for '${url}'; ensure the proper authentication model is imported`;
         }
         return auth
     }

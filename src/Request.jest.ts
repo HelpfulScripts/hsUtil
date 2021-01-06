@@ -1,7 +1,4 @@
-import { Log }          from './index';  
 import { Request }      from "./Request";
-
-const log = new Log('Request.jest');
 
 const XHR = require('./__mocks__/XMLHttpRequest.js');
 
@@ -117,39 +114,6 @@ describe('Request', ()=>{
                 "txt": true, 
                 "url": "http://my.space.com/myAuthToken.txt"
             }});
-    });
-
-    it('should ask for Basic authentication', ()=>{
-        expect.assertions(1);
-        const url = 'http://my.space.com/myAuthBasic.txt';  
-        return expect(request.get(url)).rejects.toBe(`error requesting ${url}: authentication missing; call 'setCredentials' before calling 'get' for url http://my.space.com/myAuthBasic.txt`);
-    });
-
-    it('should return with Basic authentication', async (done)=>{
-        expect.assertions(1);
-        const url = 'http://my.space.com/myAuthBasic.txt';  
-        request.setCredentials('me', 'mysecret');
-        const r = await request.get(url);
-        const data = <string>r.data;
-        try {
-            expect(data).toBe(errorBody);
-            done();
-        } catch(e) { done(e)}
-    });
-
-    it('should ask for Digest authentication', ()=>{
-        expect.assertions(1);
-        const url = 'http://my.space.com/myAuthDigest.txt';
-        return expect(request.get(url)).rejects.toBe(`error requesting ${url}: authentication missing; call 'setCredentials' before calling 'get' for url http://my.space.com/myAuthDigest.txt`);
-    });
-
-    it('should return with Digest authentication', async (done)=>{
-        const url = 'http://my.space.com/myAuthDigest.txt';
-        request.setCredentials('admin', 'littleSecret');
-        const r = await request.get(url);
-        const data = <string>r.data;
-        expect(data).toBe(validBody);
-        done();
     });
 
     describe('pacing', () => {

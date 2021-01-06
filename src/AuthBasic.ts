@@ -1,7 +1,6 @@
-import { Log }              from './log';   const log = new Log('RequestBasic');
-import { Options }          from './Request';
-import { IncomingMessage }  from './Request';
-import { Auth }             from './Auth';
+import { Options, Authenticators, Credentials }          
+                    from './Request';
+import { Auth }     from './Auth';
 
 
 export class AuthBasic extends Auth {
@@ -15,3 +14,5 @@ function _btoa(str:string|Buffer):string {
     const buffer = str instanceof Buffer? str : Buffer.from(str.toString(), 'binary');
     return buffer.toString('base64');
 }
+
+Authenticators.addAuthProvider('Basic', (credentials:Credentials):Auth => new AuthBasic(credentials.user, credentials.password))
