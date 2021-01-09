@@ -113,9 +113,8 @@ export class Authenticators {
         }
         let auth = Authenticators.auths[url];
         if (!auth) {
-            const method = authRequest.split(' ')?.[0];
             if (!Authenticators.authProviders.some(entry => {
-                if (method === entry.name) return auth = entry.provider(credentials)
+                if (authRequest.indexOf(entry.name)===0) return auth = entry.provider(credentials)
             })) throw `unimplemented authentication method ${authRequest} for '${url}'; ensure the proper authentication model is imported`;
         }
         return auth
