@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">93.46% </span>
+                <span class="strong">93.52% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>100/107</span>
+                <span class='fraction'>101/108</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">83.93% </span>
+                <span class="strong">82.76% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>47/56</span>
+                <span class='fraction'>48/58</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">93.48% </span>
+                <span class="strong">93.62% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>86/92</span>
+                <span class='fraction'>88/94</span>
             </div>
         
             
@@ -423,7 +423,8 @@
 <a name='L364'></a><a href='#L364'>364</a>
 <a name='L365'></a><a href='#L365'>365</a>
 <a name='L366'></a><a href='#L366'>366</a>
-<a name='L367'></a><a href='#L367'>367</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L367'></a><a href='#L367'>367</a>
+<a name='L368'></a><a href='#L368'>368</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -650,8 +651,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -697,7 +696,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -713,6 +713,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
@@ -722,6 +723,7 @@
 <span class="cline-any cline-yes">13x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -759,7 +761,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-yes">126x</span>
+<span class="cline-any cline-yes">147x</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1015,7 +1017,6 @@ export class Request {
 &nbsp;
     protected getOptions(url:string|URL, method:Method):Options {
         url = this.getURL(url);
-        const prefix = /*(method==='POST')? `/cgi/save.js/` :*/ '';
         const options = {
             rejectUnauthorized: false,
             method:     method,
@@ -1023,11 +1024,10 @@ export class Request {
             host:       url.host,
             hostname:   url.hostname,
             port:       url.port,
-            pathname:   prefix + url.pathname,
-            path:       prefix + url.pathname + (url.search || ''),
+            pathname:   url.pathname,
+            path:       url.pathname + (url.search || ''),
             headers:    &lt;any&gt;{},
-            // url:        `${url.protocol}//${url.host}${url.port?':'+url.port : ''}${prefix + url.pathname + (url.search || '')}`,
-            url:        `${url.protocol}//${url.host}${prefix + url.pathname + (url.search || '')}`,
+            url:        `${url.protocol}//${url.host}${url.pathname + (url.search || '')}`,
         };  
         if (this.authToken) { options.headers.AuthToken = this.authToken; }
         return options;  
@@ -1062,8 +1062,9 @@ export class Request {
         }
         // this.log.debug(()=&gt;`${options.method}-ing ${options.url}`); 
         const response = await request;
-        if (this.pace) { this.log.transient(`(${this.pace.inQueue()} | ${this.pace.inProgress()}) received ${options.method} ${options.url} `); }
-        // this.log.debug(()=&gt;`received ${options.method} ${response.response.statusMessage} ${options.method} ${options.url}`); 
+        const httpCode = response.response.statusCode||<span class="branch-1 cbranch-no" title="branch not covered" >response.response.status;</span>
+        const queueInfo = this.pace? `(${this.pace.inQueue()} | ${this.pace.inProgress()}) ` : ''
+        this.log.transient(`${queueInfo}received ${options.method} ${httpCode} ${options.url} `);
         return response;
     }
 &nbsp;
@@ -1073,12 +1074,13 @@ export class Request {
             const auth = Authenticators.get(response.response.headers['www-authenticate'], this.credentials, options.url);
             return auth? this.request(auth.testAuth(options, response.response)) : response;
         } catch(e) {
-            log.error(`request: ${e}\n${Object.entries(options.headers).join('\n')}`)
+            this.log.error(`request: ${e}\n${Object.entries(options.headers).join('\n')}`)
             throw `error requesting ${options.url}: ${e}`;
         }
     }
 &nbsp;
     protected async issueRequest(options:Options, postData?:any):Promise&lt;Response&gt; {
+        const isTextualContent = this.isTextualContent.bind(this)
         return new Promise((resolve:(out:Response)=&gt;void, reject:(e:Response)=&gt;void) =&gt; { try {
             function confirmRequest(e:any) {
                 const headersText = xhr.getAllResponseHeaders();
@@ -1088,7 +1090,8 @@ export class Request {
                     <span class="missing-if-branch" title="else path not taken" >E</span>if (kv[0].length) { headers[kv[0]] = kv[1]; }
                 })
                 const contentType = this.responseType;
-                const txt = Request.isTextualContent(contentType);
+                // const txt = isTextualContent(contentType);
+                const txt = isTextualContent(headers['content-type'], headers['content-length'], options.url);
 &nbsp;
                 // const data = this.responseType==='arraybuffer'? (txt? await this.response.text() : await this.response.arrayBuffer()) : this.response;
                 const data = this.response;
@@ -1119,9 +1122,9 @@ export class Request {
         }})
     }
 &nbsp;
-    protected static isTextualContent(contentType:string):boolean {
+    protected isTextualContent(contentType:string, contentLength:number, url:string):boolean {
         <span class="missing-if-branch" title="if path not taken" >I</span>if (contentType===undefined) {
-<span class="cstat-no" title="statement not covered" >            log.warn(`undefined contentType; assuming binary`)</span>
+<span class="cstat-no" title="statement not covered" >            this.log.warn(`undefined contentType; assuming binary for len=${contentLength} for '${url}'`)</span>
 <span class="cstat-no" title="statement not covered" >            return false;</span>
         }
         const subTypes = contentType.split('/');
@@ -1129,7 +1132,7 @@ export class Request {
         <span class="missing-if-branch" title="else path not taken" >E</span>if (match.length&gt;0) {
             return match[0].isText;
         } else {
-<span class="cstat-no" title="statement not covered" >            log.warn(`no match found for '${contentType}'; caching as binary`);  </span>
+<span class="cstat-no" title="statement not covered" >            this.log.warn(`no match found for '${contentType}'; caching as binary`);  </span>
 <span class="cstat-no" title="statement not covered" >            return false;</span>
         }
     }

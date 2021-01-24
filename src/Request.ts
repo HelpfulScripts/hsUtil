@@ -224,7 +224,6 @@ export class Request {
 
     protected getOptions(url:string|URL, method:Method):Options {
         url = this.getURL(url);
-        const prefix = /*(method==='POST')? `/cgi/save.js/` :*/ '';
         const options = {
             rejectUnauthorized: false,
             method:     method,
@@ -232,11 +231,10 @@ export class Request {
             host:       url.host,
             hostname:   url.hostname,
             port:       url.port,
-            pathname:   prefix + url.pathname,
-            path:       prefix + url.pathname + (url.search || ''),
+            pathname:   url.pathname,
+            path:       url.pathname + (url.search || ''),
             headers:    <any>{},
-            // url:        `${url.protocol}//${url.host}${url.port?':'+url.port : ''}${prefix + url.pathname + (url.search || '')}`,
-            url:        `${url.protocol}//${url.host}${prefix + url.pathname + (url.search || '')}`,
+            url:        `${url.protocol}//${url.host}${url.pathname + (url.search || '')}`,
         };  
         if (this.authToken) { options.headers.AuthToken = this.authToken; }
         return options;  
@@ -271,8 +269,9 @@ export class Request {
         }
         // this.log.debug(()=>`${options.method}-ing ${options.url}`); 
         const response = await request;
-        if (this.pace) { this.log.transient(`(${this.pace.inQueue()} | ${this.pace.inProgress()}) received ${options.method} ${options.url} `); }
-        // this.log.debug(()=>`received ${options.method} ${response.response.statusMessage} ${options.method} ${options.url}`); 
+        const httpCode = response.response.statusCode||response.response.status;
+        const queueInfo = this.pace? `(${this.pace.inQueue()} | ${this.pace.inProgress()}) ` : ''
+        this.log.transient(`${queueInfo}received ${options.method} ${httpCode} ${options.url} `);
         return response;
     }
 
@@ -282,12 +281,13 @@ export class Request {
             const auth = Authenticators.get(response.response.headers['www-authenticate'], this.credentials, options.url);
             return auth? this.request(auth.testAuth(options, response.response)) : response;
         } catch(e) {
-            log.error(`request: ${e}\n${Object.entries(options.headers).join('\n')}`)
+            this.log.error(`request: ${e}\n${Object.entries(options.headers).join('\n')}`)
             throw `error requesting ${options.url}: ${e}`;
         }
     }
 
     protected async issueRequest(options:Options, postData?:any):Promise<Response> {
+        const isTextualContent = this.isTextualContent.bind(this)
         return new Promise((resolve:(out:Response)=>void, reject:(e:Response)=>void) => { try {
             function confirmRequest(e:any) {
                 const headersText = xhr.getAllResponseHeaders();
@@ -296,8 +296,9 @@ export class Request {
                     const kv = h.split(':').map(p => p.trim());
                     if (kv[0].length) { headers[kv[0]] = kv[1]; }
                 })
-                const contentType = this.responseType;
-                const txt = Request.isTextualContent(contentType);
+                // const contentType = this.responseType;
+                // const txt = isTextualContent(contentType);
+                const txt = isTextualContent(headers['content-type'], headers['content-length'], options.url);
 
                 // const data = this.responseType==='arraybuffer'? (txt? await this.response.text() : await this.response.arrayBuffer()) : this.response;
                 const data = this.response;
@@ -328,9 +329,9 @@ export class Request {
         }})
     }
 
-    protected static isTextualContent(contentType:string):boolean {
+    protected isTextualContent(contentType:string, contentLength:number, url:string):boolean {
         if (contentType===undefined) {
-            log.warn(`undefined contentType; assuming binary`)
+            this.log.warn(`undefined contentType; assuming binary for len=${contentLength} for '${url}'`)
             return false;
         }
         const subTypes = contentType.split('/');
@@ -338,7 +339,7 @@ export class Request {
         if (match.length>0) {
             return match[0].isText;
         } else {
-            log.warn(`no match found for '${contentType}'; caching as binary`);  
+            this.log.warn(`no match found for '${contentType}'; caching as binary`);  
             return false;
         }
     }
