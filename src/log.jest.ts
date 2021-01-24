@@ -68,6 +68,14 @@ describe('log', () => {
             expect(gMsg).toMatch(/at Object.<anonymous>/);  
         });
         
+        xit('should print structue for object', () => {
+            const t = {a: 'aa', b: {c:()=>'result'}};
+            log.info(t); 
+            expect(log.level()).toBe(Log.INFO);
+            expect(gMsg).toMatch(/Error: alert/);  
+            expect(gMsg).toMatch(/at Object.<anonymous>/);  
+        });
+        
         it('should not print debug at INFO level', () => {
             setLevel(Log.INFO);
             log.debug('yes');
@@ -180,7 +188,7 @@ describe('log', () => {
         );
     });  
 
-    describe('inspect', () => {
+    xdescribe('inspect', () => {
         const t = {a: 'aa', b: {c:()=>'result'}};
         it('should inspect via out()', () => {
             log.info(t);

@@ -128,31 +128,36 @@ const COLOR = {
  */
 export interface LevelDesc { importance:number; sym:string; desc:string; }
 
-interface Msg {
+export interface Msg {
     color?: string[];
     lf?:    string;
+    maxLen?:number;
 }
 
 /**
  * main logging class. See {@link log log overview} for usage.
  */
 export class Log {
-    protected static INDENT_COLORS = ['darkblue', 'darkgreen', 'darkred', 'darkcyan', 'darkyellow', 'darkmagenta'];
-    /** current date format string. See [date module]('_date_.html') */
-    protected static defDateFormat = '%YYYY%MM%DD %hh:%mm:%ss.%jjj';
-    protected static dateFormat    = Log.defDateFormat;
-
+    protected static readonly defDateFormat = '%YYYY%MM%DD %hh:%mm:%ss.%jjj';
     /** Debug reporting level with importance 0 */
-    public static DEBUG = 'DEBUG';
+    public static readonly DEBUG = 'DEBUG';
 
     /** Info reporting level with importance 1 */
-    public static INFO   = 'INFO';
+    public static readonly INFO   = 'INFO';
 
     /** Info reporting level with importance 2 */
-    public static WARN   = 'WARN';
+    public static readonly WARN   = 'WARN';
 
     /** Warning reporting level with importance 3 */
-    public static ERROR  = 'ERROR';
+    public static readonly ERROR  = 'ERROR';
+
+    /** the default max length of transient messages. Can be overwritten by setting `messageLength` */
+    public static readonly transientLength = 120;
+
+    protected static INDENT_COLORS = ['darkblue', 'darkgreen', 'darkred', 'darkcyan', 'darkyellow', 'darkmagenta'];
+
+    /** current date format string. See [date module]('_date_.html') */
+    protected static dateFormat    = Log.defDateFormat;
     
     /** map of valid reporting levels */
     protected static levels = {
@@ -161,19 +166,27 @@ export class Log {
         [Log.WARN]:     {importance: 2, sym: Log.WARN,  desc: 'WARN'},
         [Log.ERROR]:    {importance: 3, sym: Log.ERROR, desc: 'ERROR'}
     };
+    protected static colors     = true;
+    protected static maxLength  = 0;
+
 
     /** the global `log` object. */
-    public static log = new Log('');
+    public static log:Log = Log.globalLog(Log);
+    protected static globalLog(L:typeof Log) {
+        Log.log = new L('');
+        Log.log.local = false;
+        return Log.log
+    }
 
     /** current reporting level, same across all modules */
     protected static globalLevel:LevelDesc = Log.levels[Log.INFO]; 
 
     protected reportLevel   = <LevelDesc>undefined;
     protected reportPrefix  = '';
-    protected maxLength     = -1;
-    protected colors        = true;
+    /** indicates that this is not the global instance */
+    protected local         = true;
 
-    constructor(prefix:string) { this.reportPrefix = prefix; }
+    public constructor(prefix:string) { this.reportPrefix = prefix; }
 
     /** 
      * sets the maximum length of a message. 
@@ -181,10 +194,10 @@ export class Log {
      * overall message does not exceed this length
      * Negative values avoid shortening.
      * */
-    public set messageLength(max:number) { this.maxLength = max; }
+    public set messageLength(max:number) { Log.maxLength = max; }
     
     /** gets the current maximum length of a message */
-    public get messageLength() { return this.maxLength; }
+    public get messageLength() { return Log.maxLength; }
     
 
     /**
@@ -237,7 +250,7 @@ export class Log {
      * @param msg the message to report. For msg types, refer to {@link Log.info `info()`}.
      * @return the message printed
      */
-    public transient(msg:any):string { return this.out(Log.INFO, msg, { color: ['darkgreen'], lf:'\r' }); }
+    public transient(msg:any):string { return this.out(Log.INFO, msg, { color: ['darkgreen'], lf:'\r', maxLen:Log.maxLength || Log.transientLength }); }
 
     /**
      * reports an informational message to the log. 
@@ -301,20 +314,19 @@ export class Log {
      * @return the message printed
      */
     protected out(lvl:string, msg:any, options:Msg): string {	
-        let desc:LevelDesc = Log.levels[lvl];
+        let lvlDesc:LevelDesc = Log.levels[lvl];
         const filterLevel = this.reportLevel || Log.globalLevel;
-        if (desc.importance >= filterLevel.importance) {
+        if (lvlDesc.importance >= filterLevel.importance) {
             let line;
             switch(typeof msg) {
                 case 'function': line = msg(); break;
                 case 'string':   line = msg; break;
-                case 'object':
+                case 'object':   if (!msg.stack) { console.dir(msg); return undefined; }
                 default: line = this.inspect(msg); 
             }
             const dateStr = date(Log.dateFormat);
             if (msg.stack) { line = `${line}\n${msg.stack}`; }
-            const header = `${dateStr} ${this.reportPrefix} ${desc.desc}`;
-            this.output(options.color, header, line);
+            this.output(options, [dateStr, this.reportPrefix, lvlDesc.desc], line);
             return line + (options.lf||'');
         }
         return undefined;
@@ -322,13 +334,21 @@ export class Log {
 
     /** 
      */
-    protected output(color:string[], header:string, line:string) {
+    protected output(options:Msg, headerParts:string[], line:string) {
+        const color = options.color
+        const lines = this.limitLength(line, options.maxLen)
+        console.log(`%c${headerParts.join(' ')}%c ${lines.join('\n')}`, color.map(c =>COLOR[c]).join(' '), COLOR['clear']);
+    }
+
+    protected limitLength(line:string, maxLen:number) {
         const lines = line.split('\n')
-        if (this.maxLength>0) {
-            lines.forEach((l,i) => l.length <= this.maxLength? '' :
-                lines[i] = `${line.slice(0, this.maxLength/2-2)}...${line.slice(-this.maxLength/2+2)}`)
+        maxLen = maxLen || Log.maxLength || Log.transientLength;
+        if (maxLen>0) {
+            lines.forEach((l,i) => lines[i] = l.length <= maxLen? 
+                lines[i].padEnd(maxLen, ' ') :
+                `${line.slice(0, maxLen/2-2)}...${line.slice(-maxLen/2+2)}`)
         }
-        console.log(`%c${header}%c ${lines.join('\n')}`, color.map(c =>COLOR[c]).join(' '), COLOR['clear']);
+        return lines
     }
 
     /**
@@ -360,15 +380,14 @@ export class Log {
     /**
      * configures the log facility.
      * - cfg.colors: boolean, determines if output is colored
-     * - cfg.logfile: sets the naming template for the logfile. Set logFile=null to disable.
      * - cfg.format: sets the format for the timestamp for each log entry
      * - cfg.level: sets the reporting level (same as calling log.level())
      * @param cfg 
      */
     public config(cfg:{colors?:boolean, format?:string, level?:string }) {
-        if (cfg.format!==undefined) { this.format(cfg.format); }    // e.g. '%YYYY%MM%DD %hh:%mm:%ss.%jjj'
-        if (cfg.level!==undefined)  { this.level(cfg.level); }      // e.g. INFO
-        if (cfg.colors!==undefined) { this.colors = cfg.colors; }   // true / false
+        if (cfg.format!==undefined) { Log.log.format(cfg.format); }     // e.g. '%YYYY%MM%DD %hh:%mm:%ss.%jjj'
+        if (cfg.level!==undefined)  { this.level(cfg.level); }          // e.g. INFO
+        if (cfg.colors!==undefined) { Log.colors = cfg.colors; }    // true / false
     }
 
     /**
@@ -399,14 +418,14 @@ export class Log {
                 if (msg.map !== undefined) { // --> an array
                     return `[${msg.map((e:any)=>(e===undefined)?'':_inspect(e, depth-1, level+1, currIndent)).join(', ')}]`;
                 }
-                const [prefix, postfix, lf, postIndent] = log.getPrePostfix(indent, level, currIndent, colors);
+                const [prefix, postfix, lf, postIndent] = aLog.getPrePostfix(indent, level, currIndent, colors);
                 return `{${lf}` + Object.keys(msg).map(k => `${prefix}${k}${postfix}: ${
                     _inspect(msg[k], depth-1, level+1, currIndent+indent)
                 }`).join(`,${lf}`) + `${lf}${postIndent}}`;
             } 
             return msg.toString();
         }
-        const log = this;
+        const aLog = this;
         // if (colors) { indent = indent.replace(/ /g, '&nbsp;'); }
         return _inspect(msg, (depth!==undefined && depth!==null && depth>=0) ? depth : 999, 0, '');
     }
