@@ -1,1 +1,0 @@
-src/Array.ts src/Auth.ts src/AuthBasic.ts src/AuthDigest.ts src/Checksum.ts src/Date.ts src/index.ts src/log.ts src/overview.ts src/Pacing.ts src/Request.ts --declaration --removeComments --noImplicitAny --suppressImplicitAnyIndexErrors --inlineSourceMap --moduleResolution node --rootDir ./src --esModuleInterop --target ES6 --module es6 --outDir bin
