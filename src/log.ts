@@ -326,8 +326,9 @@ export class Log {
             }
             const dateStr = date(Log.dateFormat);
             if (msg.stack) { line = `${line}\n${msg.stack}`; }
-            this.output(options, [dateStr, this.reportPrefix, lvlDesc.desc], line);
-            return line + (options.lf||'');
+            const headerParts = [dateStr, this.reportPrefix, lvlDesc.desc]
+            this.output(options, headerParts, line);
+            return `${headerParts.join(' ')} ${line}${(options.lf||'')}`;
         }
         return undefined;
     }

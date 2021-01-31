@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">97.56% </span>
+                <span class="strong">97.58% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>120/123</span>
+                <span class='fraction'>121/124</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>101/101</span>
+                <span class='fraction'>102/102</span>
             </div>
         
             
@@ -504,7 +504,8 @@
 <a name='L445'></a><a href='#L445'>445</a>
 <a name='L446'></a><a href='#L446'>446</a>
 <a name='L447'></a><a href='#L447'>447</a>
-<a name='L448'></a><a href='#L448'>448</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L448'></a><a href='#L448'>448</a>
+<a name='L449'></a><a href='#L449'>449</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -830,6 +831,7 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">41x</span>
 <span class="cline-any cline-yes">41x</span>
 <span class="cline-any cline-yes">41x</span>
 <span class="cline-any cline-yes">41x</span>
@@ -1279,8 +1281,9 @@ export class Log {
             }
             const dateStr = date(Log.dateFormat);
             if (msg.stack) { line = `${line}\n${msg.stack}`; }
-            this.output(options, [dateStr, this.reportPrefix, lvlDesc.desc], line);
-            return line + (options.lf||'');
+            const headerParts = [dateStr, this.reportPrefix, lvlDesc.desc]
+            this.output(options, headerParts, line);
+            return `${headerParts.join(' ')} ${line}${(options.lf||'')}`;
         }
         return undefined;
     }
