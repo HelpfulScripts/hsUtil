@@ -147,8 +147,8 @@ export class Request {
     /** the `AuthToken` to set in the header */
     private authToken: string;
 
-    public constructor(_Log=Log) {
-        this.log = new _Log('Request')
+    public constructor(_Log=Log, prefix='Request') {
+        this.log = new _Log(prefix)
         this.log.messageLength = 120;
     }
 
