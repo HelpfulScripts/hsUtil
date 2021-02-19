@@ -38,15 +38,13 @@
 
 /** */
 
-import { Log }          from './log';   const log = new Log('Request');
+import { Log }          from './log';  
 import { Pace }         from './Pacing';
 import { Auth }         from './Auth';
 
-log.messageLength = 120;
 
 export type Method = 'GET'|'POST'|'PUT';
 
-// log.level(log.DEBUG);
 
 export interface Options {
     url:        string;
@@ -67,6 +65,7 @@ export interface Options {
 export interface Response {
     response:   IncomingMessage;
     data:       string|ArrayBuffer;
+    cached?: boolean;
 }
 
 /**
@@ -129,12 +128,15 @@ export class Request {
         Request.contentTypes.push({subTypes:subTypes, isText:isText});
     }
     public static decoders = {
-        str2json:  (data:string) => { try {return JSON.parse(data)} catch(e) { return {}}},
+        str2json:  (data:string) => JSON.parse(data.replace(/\p{Control}/gu,"")),
         html2json: <(data:string) => any>undefined
     };
 
-    /** the `log` facility to use */
-    protected log: Log = log;
+    /** 
+     * the `log` facility to use. This allows derivative classes to overwrite the 
+     * browser-compatible log a more suitable `log` version, e.g. in `Node` environments.
+     */
+    private readonly log: Log;
 
     /** the pacing queue used to manage request flow */
     protected pace:Pace;
@@ -144,6 +146,11 @@ export class Request {
     
     /** the `AuthToken` to set in the header */
     private authToken: string;
+
+    public constructor(_Log=Log) {
+        this.log = new _Log('Request')
+        this.log.messageLength = 120;
+    }
 
     /**
      * sets the credentials for `Basic` and `Digest` authentications.
@@ -253,9 +260,12 @@ export class Request {
      */
     protected async decodedRequest(options:Options, useCached:boolean, headers:any, postData?:any):Promise<Response> {
         const result = await this.requestOptions(options, useCached, postData); 
-        if (this.decode && result.response.txt && options.method==='GET') {
+        if (this.decode && result.response.txt && options.method==='GET') { try {
             result.data = this.decode(<string>result.data, options);
-        }
+        } catch(e) {
+            this.log.error(`decoding ${result.cached?'cached ':''}${options.url}:`)
+            this.log.error(`${e}`)
+        }}
         return result;
     }
 
@@ -276,14 +286,18 @@ export class Request {
     }
 
     protected async request(options:Options, postData?:any):Promise<Response> {
+        let response:Response;
         try {
-            const response = await this.issueRequest(options, postData);        
+            response = await this.issueRequest(options, postData);        
             const auth = Authenticators.get(response.response.headers['www-authenticate'], this.credentials, options.url);
-            return auth? this.request(auth.testAuth(options, response.response)) : response;
+            response =  auth? await this.request(auth.testAuth(options, response.response)) : response;
         } catch(e) {
             this.log.error(`request: ${e}\n${Object.entries(options.headers).join('\n')}`)
             throw `error requesting ${options.url}: ${e}`;
         }
+        const len = typeof response.data === 'string'? response.data.length : response.data.byteLength
+        this.log.info(`received ${options.method} ${response.response.statusCode||response.response.status} ${(''+len).padStart(5,' ')} bytes ${options.url} `);
+        return response
     }
 
     protected async issueRequest(options:Options, postData?:any):Promise<Response> {
