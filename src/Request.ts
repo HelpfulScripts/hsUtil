@@ -136,7 +136,7 @@ export class Request {
      * the `log` facility to use. This allows derivative classes to overwrite the 
      * browser-compatible log a more suitable `log` version, e.g. in `Node` environments.
      */
-    private readonly log: Log;
+    protected readonly log: Log;
 
     /** the pacing queue used to manage request flow */
     protected pace:Pace;
