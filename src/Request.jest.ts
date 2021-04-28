@@ -91,6 +91,7 @@ describe('Request', ()=>{
         expect.assertions(1);
         const url = 'http://my.space.com/myAuthToken.txt';  
         return expect(request.get(url)).resolves.toStrictEqual({
+            "cached": false,
             "data": errorBody, 
             "response": {
                 "headers": {"content-type": "text/plain"}, 
@@ -106,6 +107,7 @@ describe('Request', ()=>{
         request.setAuthToken('12345');
         const url = 'http://my.space.com/myAuthToken.txt';  
         return expect(request.get(url)).resolves.toStrictEqual({
+            "cached": false,
             "data": validBody, // "<html><body id=\"theBody\"><h1 id=main>The Content</h1>the Body<p></body></html>", 
             "response": {
                 "headers": {"AuthToken": "12345", "content-type": "text/plain"}, 

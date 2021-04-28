@@ -65,7 +65,7 @@ export interface Options {
 export interface Response {
     response:   IncomingMessage;
     data:       string|ArrayBuffer;
-    cached?: boolean;
+    cached?:    boolean;
 }
 
 /**
@@ -269,6 +269,13 @@ export class Request {
         return result;
     }
 
+    /**
+     * Queue, or pass through, the request 
+     * @param options 
+     * @param useCached 
+     * @param postData 
+     * @returns 
+     */
     protected async requestOptions(options:Options, useCached:boolean, postData?:any):Promise<Response> {
         let request: Promise<Response>;
         if (this.pace) {
@@ -285,6 +292,12 @@ export class Request {
         return response;
     }
 
+    /**
+     * Issue actual server request and resolve any authentication responses
+     * @param options 
+     * @param postData 
+     * @returns 
+     */
     protected async request(options:Options, postData?:any):Promise<Response> {
         let response:Response;
         try {
@@ -318,6 +331,7 @@ export class Request {
                 const data = this.response;
                 const response:Response = {
                     data:               data,
+                    cached:             false,
                     response: {
                         txt:            txt,
                         headers:        headers,
