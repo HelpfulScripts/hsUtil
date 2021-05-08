@@ -3826,7 +3826,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 347,
+									"line": 360,
 									"character": 30
 								}
 							]
@@ -3895,7 +3895,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 303,
+									"line": 316,
 									"character": 32
 								}
 							]
@@ -4228,6 +4228,10 @@
 									"flags": {
 										"isExported": true
 									},
+									"comment": {
+										"shortText": "Issue actual server request and resolve any authentication responses",
+										"returns": "\n"
+									},
 									"parameters": [
 										{
 											"id": 391,
@@ -4237,6 +4241,7 @@
 											"flags": {
 												"isExported": true
 											},
+											"comment": {},
 											"type": {
 												"type": "reference",
 												"id": 249,
@@ -4252,6 +4257,7 @@
 												"isExported": true,
 												"isOptional": true
 											},
+											"comment": {},
 											"type": {
 												"type": "intrinsic",
 												"name": "any"
@@ -4274,7 +4280,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 288,
+									"line": 301,
 									"character": 27
 								}
 							]
@@ -4297,6 +4303,10 @@
 									"flags": {
 										"isExported": true
 									},
+									"comment": {
+										"shortText": "Queue, or pass through, the request",
+										"returns": "\n"
+									},
 									"parameters": [
 										{
 											"id": 386,
@@ -4306,6 +4316,7 @@
 											"flags": {
 												"isExported": true
 											},
+											"comment": {},
 											"type": {
 												"type": "reference",
 												"id": 249,
@@ -4320,6 +4331,7 @@
 											"flags": {
 												"isExported": true
 											},
+											"comment": {},
 											"type": {
 												"type": "intrinsic",
 												"name": "boolean"
@@ -4334,6 +4346,7 @@
 												"isExported": true,
 												"isOptional": true
 											},
+											"comment": {},
 											"type": {
 												"type": "intrinsic",
 												"name": "any"
@@ -4356,7 +4369,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 272,
+									"line": 279,
 									"character": 34
 								}
 							]
@@ -4739,7 +4752,7 @@
 							"sources": [
 								{
 									"fileName": "Request.ts",
-									"line": 362,
+									"line": 375,
 									"character": 37
 								}
 							]
@@ -6544,7 +6557,7 @@
 															"sources": [
 																{
 																	"fileName": "log.ts",
-																	"line": 388,
+																	"line": 385,
 																	"character": 29
 																}
 															],
@@ -6565,7 +6578,7 @@
 															"sources": [
 																{
 																	"fileName": "log.ts",
-																	"line": 388,
+																	"line": 385,
 																	"character": 46
 																}
 															],
@@ -6586,7 +6599,7 @@
 															"sources": [
 																{
 																	"fileName": "log.ts",
-																	"line": 388,
+																	"line": 385,
 																	"character": 61
 																}
 															],
@@ -6610,7 +6623,7 @@
 													"sources": [
 														{
 															"fileName": "log.ts",
-															"line": 388,
+															"line": 385,
 															"character": 22
 														}
 													]
@@ -6627,7 +6640,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 388,
+									"line": 385,
 									"character": 17
 								}
 							]
@@ -6657,18 +6670,19 @@
 									"parameters": [
 										{
 											"id": 101,
-											"name": "msg",
+											"name": "msgs",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {
-												"isExported": true
-											},
-											"comment": {
-												"text": "the message to report. For msg types, refer to {@link Log.info `info()`}."
+												"isExported": true,
+												"isRest": true
 											},
 											"type": {
-												"type": "intrinsic",
-												"name": "any"
+												"type": "array",
+												"elementType": {
+													"type": "intrinsic",
+													"name": "any"
+												}
 											}
 										}
 									],
@@ -6711,18 +6725,19 @@
 									"parameters": [
 										{
 											"id": 116,
-											"name": "msg",
+											"name": "msgs",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {
-												"isExported": true
-											},
-											"comment": {
-												"text": "the message to report. For msg types, For msg types, refer to {@link Log.info `info()`}.\nIn addition:\n- `Error` - if msg is an Error (e.g. from a catch statement), prints the error message as well as a stack trace."
+												"isExported": true,
+												"isRest": true
 											},
 											"type": {
-												"type": "intrinsic",
-												"name": "any"
+												"type": "array",
+												"elementType": {
+													"type": "intrinsic",
+													"name": "any"
+												}
 											}
 										}
 									],
@@ -6736,7 +6751,7 @@
 								{
 									"fileName": "log.ts",
 									"line": 294,
-									"character": 16
+									"character": 17
 								}
 							]
 						},
@@ -6790,7 +6805,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 365,
+									"line": 362,
 									"character": 17
 								}
 							]
@@ -6896,7 +6911,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 434,
+									"line": 431,
 									"character": 27
 								}
 							]
@@ -6926,18 +6941,19 @@
 									"parameters": [
 										{
 											"id": 110,
-											"name": "msg",
+											"name": "msgs",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {
-												"isExported": true
-											},
-											"comment": {
-												"text": "the message to report. The following types are supported:\n- `string` - `'...'`: prints the string\n- `function` - `() => '...'`: if the message level is above the threshold level, calls the function\n   to produce the string to be printed\n- `object literal` - `{...}`:  prints a deep inspection of the object."
+												"isExported": true,
+												"isRest": true
 											},
 											"type": {
-												"type": "intrinsic",
-												"name": "any"
+												"type": "array",
+												"elementType": {
+													"type": "intrinsic",
+													"name": "any"
+												}
 											}
 										}
 									],
@@ -7025,7 +7041,7 @@
 															"sources": [
 																{
 																	"fileName": "log.ts",
-																	"line": 409,
+																	"line": 406,
 																	"character": 59
 																}
 															],
@@ -7052,7 +7068,7 @@
 															"sources": [
 																{
 																	"fileName": "log.ts",
-																	"line": 409,
+																	"line": 406,
 																	"character": 34
 																}
 															],
@@ -7076,7 +7092,7 @@
 															"sources": [
 																{
 																	"fileName": "log.ts",
-																	"line": 409,
+																	"line": 406,
 																	"character": 45
 																}
 															],
@@ -7101,7 +7117,7 @@
 													"sources": [
 														{
 															"fileName": "log.ts",
-															"line": 409,
+															"line": 406,
 															"character": 27
 														}
 													]
@@ -7119,7 +7135,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 409,
+									"line": 406,
 									"character": 18
 								}
 							]
@@ -7255,7 +7271,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 344,
+									"line": 341,
 									"character": 25
 								}
 							]
@@ -7311,8 +7327,20 @@
 												"text": "the message to report. If `msg` is an object literal, a deep inspection will be printed.\nElse if `msg` is a function, it will be called to return the string to print or object to inspect. This\navoids constructing a potentially expensive message string if the level is below the current reporting level.\nFinally, if `msg` is a string, it will be printed with appropriate decoration, e.g. a date string and\nprefix."
 											},
 											"type": {
-												"type": "intrinsic",
-												"name": "any"
+												"type": "union",
+												"types": [
+													{
+														"type": "intrinsic",
+														"name": "any"
+													},
+													{
+														"type": "array",
+														"elementType": {
+															"type": "intrinsic",
+															"name": "any"
+														}
+													}
+												]
 											}
 										},
 										{
@@ -7339,7 +7367,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 316,
+									"line": 307,
 									"character": 17
 								}
 							]
@@ -7417,7 +7445,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 338,
+									"line": 335,
 									"character": 20
 								}
 							]
@@ -7472,7 +7500,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 376,
+									"line": 373,
 									"character": 17
 								}
 							]
@@ -7502,18 +7530,19 @@
 									"parameters": [
 										{
 											"id": 107,
-											"name": "msg",
+											"name": "msgs",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {
-												"isExported": true
-											},
-											"comment": {
-												"text": "the message to report. For msg types, refer to {@link Log.info `info()`}."
+												"isExported": true,
+												"isRest": true
 											},
 											"type": {
-												"type": "intrinsic",
-												"name": "any"
+												"type": "array",
+												"elementType": {
+													"type": "intrinsic",
+													"name": "any"
+												}
 											}
 										}
 									],
@@ -7556,18 +7585,19 @@
 									"parameters": [
 										{
 											"id": 104,
-											"name": "msg",
+											"name": "msgs",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {
-												"isExported": true
-											},
-											"comment": {
-												"text": "the message to report. For msg types, refer to {@link Log.info `info()`}."
+												"isExported": true,
+												"isRest": true
 											},
 											"type": {
-												"type": "intrinsic",
-												"name": "any"
+												"type": "array",
+												"elementType": {
+													"type": "intrinsic",
+													"name": "any"
+												}
 											}
 										}
 									],
@@ -7610,18 +7640,19 @@
 									"parameters": [
 										{
 											"id": 113,
-											"name": "msg",
+											"name": "msgs",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {
-												"isExported": true
-											},
-											"comment": {
-												"text": "the message to report. For msg types, refer to {@link Log.info `info()`}."
+												"isExported": true,
+												"isRest": true
 											},
 											"type": {
-												"type": "intrinsic",
-												"name": "any"
+												"type": "array",
+												"elementType": {
+													"type": "intrinsic",
+													"name": "any"
+												}
 											}
 										}
 									],

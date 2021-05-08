@@ -238,69 +238,60 @@ export class Log {
      * reports an debug message to the log. 
      * The message will actually be reported to the log only if the current 
      * reporting level is DEBUG or lower.
-     * @param msg the message to report. For msg types, refer to {@link Log.info `info()`}.
+     * @param msgs the message to report. For msg types, refer to [[Log.info]].
      * @return the message printed
      */
-    public debug(msg:any):string { return this.out(Log.DEBUG, msg, { color: ['gray'] }); }
+    public debug(...msgs:any[]):string { return this.out(Log.DEBUG, msgs, { color: ['gray'] }); }
 
     /**
      * reports an debug message to the log. 
      * The message will actually be reported to the log only if the current 
      * reporting level is DEBUG or lower.
-     * @param msg the message to report. For msg types, refer to {@link Log.info `info()`}.
+     * @param msgs the message to report. For msg types, refer to [[Log.info]].
      * @return the message printed
      */
-    public transient(msg:any):string { return this.out(Log.INFO, msg, { color: ['darkgreen'], lf:'\r', maxLen:Log.maxLength || Log.transientLength }); }
+    public transient(...msgs:any[]):string { return this.out(Log.INFO, msgs, { color: ['darkgreen'], lf:'\r', maxLen:Log.maxLength || Log.transientLength }); }
 
     /**
      * reports an informational message to the log. 
      * The message will actually be reported to the log only if the current 
      * reporting level is INFO or lower.
-     * @param msg the message to report. For msg types, refer to {@link Log.info `info()`}.
+     * @param msgs the message to report. For msg types, refer to [[Log.info]].
      * @return the message printed
      */
-    public progress(msg:any):string { return this.out(Log.INFO, msg, { color: ['darkblue'] }); }
+    public progress(...msgs:any[]):string { return this.out(Log.INFO, msgs, { color: ['darkblue'] }); }
 
     /**
      * reports an informational message to the log. 
      * The message will actually be reported to the log only if the current 
      * reporting level is INFO or lower.
-     * @param msg the message to report. The following types are supported:
+     * @param msgs a list of message to report. The following types are supported:
      * - `string` - `'...'`: prints the string
      * - `function` - `() => '...'`: if the message level is above the threshold level, calls the function 
      *    to produce the string to be printed
      * - `object literal` - `{...}`:  prints a deep inspection of the object.
+     * - `Error` - if msg is an Error (e.g. from a catch statement), prints the error message as well as a stack trace.
      * @return the message printed
      */
-    public info(msg:any):string { return this.out(Log.INFO, msg, { color: ['darkgreen'] }); }
+    public info(...msgs:any[]):string { return this.out(Log.INFO, msgs, { color: ['darkgreen'] }); }
 
     /**
      * reports an warning message to the log. 
      * The message will actually be reported to the log only if the current 
      * reporting level is WARN or lower.
-     * @param msg the message to report. For msg types, refer to {@link Log.info `info()`}.
+     * @param msg the message to report. For msg types, refer to [[Log.info]].
      * @return the message printed
      */
-    public warn(msg:any):string { return this.out(Log.WARN, msg, { color: ['darkyellow', 'bold'] }); }
+    public warn(...msgs:any[]):string { return this.out(Log.WARN, msgs, { color: ['darkyellow', 'bold'] }); }
 
     /**
      * reports an error message to the log. 
      * The message will always be reported to the log.
-     * @param msg the message to report. For msg types, For msg types, refer to {@link Log.info `info()`}. 
+     * @param msg the message to report. For msg types, For msg types, refer to [[Log.info]]. 
      * In addition:
-     * - `Error` - if msg is an Error (e.g. from a catch statement), prints the error message as well as a stack trace.
      * @return the message printed
      */
-    public error(msg:any):string { 
-        const color = ['darkred', 'bold'];
-        if (msg.message) { // special treatment for Errors
-            this.out(Log.ERROR, msg.message, { color: color });
-            this.out(Log.ERROR, msg.stack, { color: color });
-            return msg.message;
-        } else {
-            return this.out(Log.ERROR, msg, { color: color }); 
-        } 
-    }
+     public error(...msgs:any[]):string { return this.out(Log.ERROR, msgs, { color: ['darkred', 'bold'] }); }
 
     /**
      * reports an error message to the log. 
@@ -313,15 +304,21 @@ export class Log {
      * prefix.
      * @return the message printed
      */
-    protected out(lvl:string, msg:any, options:Msg): string {	
+    protected out(lvl:string, msg:any|any[], options:Msg): string {	
+        if (msg instanceof Array) return msg.map(m => this.out(lvl, m, options)).join('\n')
+
         let lvlDesc:LevelDesc = Log.levels[lvl];
         const filterLevel = this.reportLevel || Log.globalLevel;
         if (lvlDesc.importance >= filterLevel.importance) {
-            let line;
+            let line = '';
             switch(typeof msg) {
-                case 'function': line = msg(); break;
+                case 'function': return this.out(lvl, msg(), options)
                 case 'string':   line = msg; break;
-                case 'object':   if (!msg.stack) { console.dir(msg); return undefined; }
+                case 'object':   
+                    if (msg.message) line += this.out(Log.ERROR, msg.message, options);
+                    if (msg.stack) line += this.out(Log.ERROR, msg.stack, options);
+                    else console.dir(msg);
+                    return line
                 default: line = this.inspect(msg); 
             }
             const dateStr = date(Log.dateFormat);

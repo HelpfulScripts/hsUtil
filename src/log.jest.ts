@@ -117,7 +117,7 @@ describe('log', () => {
         
         it('should print stack trace for Error object', () => {
             log.error(new Error('yes'));
-            expect(gMsg).toMatch(/ERROR.*yes/);
+            expect(gMsg).toContain('log.jest ERROR%c Error: yes');
             expect(gMsg).toMatch(/at Object.<anonymous>/);
         });
         
