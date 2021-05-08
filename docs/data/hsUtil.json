@@ -6677,6 +6677,9 @@
 												"isExported": true,
 												"isRest": true
 											},
+											"comment": {
+												"text": "the message to report. For msg types, refer to [[Log.info]]."
+											},
 											"type": {
 												"type": "array",
 												"elementType": {
@@ -6948,6 +6951,9 @@
 												"isExported": true,
 												"isRest": true
 											},
+											"comment": {
+												"text": "a list of message to report. The following types are supported:\n- `string` - `'...'`: prints the string\n- `function` - `() => '...'`: if the message level is above the threshold level, calls the function\n   to produce the string to be printed\n- `object literal` - `{...}`:  prints a deep inspection of the object.\n- `Error` - if msg is an Error (e.g. from a catch statement), prints the error message as well as a stack trace."
+											},
 											"type": {
 												"type": "array",
 												"elementType": {
@@ -6966,7 +6972,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 275,
+									"line": 276,
 									"character": 15
 								}
 							]
@@ -7537,6 +7543,9 @@
 												"isExported": true,
 												"isRest": true
 											},
+											"comment": {
+												"text": "the message to report. For msg types, refer to [[Log.info]]."
+											},
 											"type": {
 												"type": "array",
 												"elementType": {
@@ -7591,6 +7600,9 @@
 											"flags": {
 												"isExported": true,
 												"isRest": true
+											},
+											"comment": {
+												"text": "the message to report. For msg types, refer to [[Log.info]]."
 											},
 											"type": {
 												"type": "array",
@@ -7665,7 +7677,7 @@
 							"sources": [
 								{
 									"fileName": "log.ts",
-									"line": 284,
+									"line": 285,
 									"character": 15
 								}
 							]

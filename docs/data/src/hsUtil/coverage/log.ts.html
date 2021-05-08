@@ -776,6 +776,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">32x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -786,7 +787,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1187,7 +1187,7 @@ export class Log {
      * reports an debug message to the log. 
      * The message will actually be reported to the log only if the current 
      * reporting level is DEBUG or lower.
-     * @param msg the message to report. For msg types, refer to {@link Log.info `info()`}.
+     * @param msgs the message to report. For msg types, refer to [[Log.info]].
      * @return the message printed
      */
     public debug(...msgs:any[]):string { return this.out(Log.DEBUG, msgs, { color: ['gray'] }); }
@@ -1196,7 +1196,7 @@ export class Log {
      * reports an debug message to the log. 
      * The message will actually be reported to the log only if the current 
      * reporting level is DEBUG or lower.
-     * @param msg the message to report. For msg types, refer to {@link Log.info `info()`}.
+     * @param msgs the message to report. For msg types, refer to [[Log.info]].
      * @return the message printed
      */
     public transient(...msgs:any[]):string { return this.out(Log.INFO, msgs, { color: ['darkgreen'], lf:'\r', maxLen:Log.maxLength || <span class="branch-1 cbranch-no" title="branch not covered" >Log.transientLength </span>}); }
@@ -1205,7 +1205,7 @@ export class Log {
      * reports an informational message to the log. 
      * The message will actually be reported to the log only if the current 
      * reporting level is INFO or lower.
-     * @param msg the message to report. For msg types, refer to {@link Log.info `info()`}.
+     * @param msgs the message to report. For msg types, refer to [[Log.info]].
      * @return the message printed
      */
     public progress(...msgs:any[]):string { return this.out(Log.INFO, msgs, { color: ['darkblue'] }); }
@@ -1214,11 +1214,12 @@ export class Log {
      * reports an informational message to the log. 
      * The message will actually be reported to the log only if the current 
      * reporting level is INFO or lower.
-     * @param msg the message to report. The following types are supported:
+     * @param msgs a list of message to report. The following types are supported:
      * - `string` - `'...'`: prints the string
      * - `function` - `() =&gt; '...'`: if the message level is above the threshold level, calls the function 
      *    to produce the string to be printed
      * - `object literal` - `{...}`:  prints a deep inspection of the object.
+     * - `Error` - if msg is an Error (e.g. from a catch statement), prints the error message as well as a stack trace.
      * @return the message printed
      */
     public info(...msgs:any[]):string { return this.out(Log.INFO, msgs, { color: ['darkgreen'] }); }
@@ -1227,7 +1228,7 @@ export class Log {
      * reports an warning message to the log. 
      * The message will actually be reported to the log only if the current 
      * reporting level is WARN or lower.
-     * @param msg the message to report. For msg types, refer to {@link Log.info `info()`}.
+     * @param msg the message to report. For msg types, refer to [[Log.info]].
      * @return the message printed
      */
     public warn(...msgs:any[]):string { return this.out(Log.WARN, msgs, { color: ['darkyellow', 'bold'] }); }
@@ -1235,9 +1236,8 @@ export class Log {
     /**
      * reports an error message to the log. 
      * The message will always be reported to the log.
-     * @param msg the message to report. For msg types, For msg types, refer to {@link Log.info `info()`}. 
+     * @param msg the message to report. For msg types, For msg types, refer to [[Log.info]]. 
      * In addition:
-     * - `Error` - if msg is an Error (e.g. from a catch statement), prints the error message as well as a stack trace.
      * @return the message printed
      */
      public error(...msgs:any[]):string { return this.out(Log.ERROR, msgs, { color: ['darkred', 'bold'] }); }
