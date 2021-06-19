@@ -184,7 +184,7 @@ export class Request {
      * sets an optional decode function for retrieved content. The function will be 
      * applied to content retrieved either from the cache or from the server response.
      * Convenience function are available via the static list `Request.decoders`.
-     * For example, `request.decode = Request.decoders.str2json
+     * For example, `request.decode = Request.decoders.str2json`
      */
     public decode = <Decoder>undefined;
 
